@@ -1,6 +1,6 @@
-﻿# 3D torsion benchmark
+# 3D torsion benchmark
 
-This folder contains the 3D notched-beam torsion benchmark used in the FRACMAT paper.
+This folder contains the 3D notched-beam torsion benchmark used in the FRACMATH paper.
 
 ## Folder map
 

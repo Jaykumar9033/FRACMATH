@@ -1,6 +1,6 @@
-﻿# 3D Nooru-Mohamed benchmark
+# 3D Nooru-Mohamed benchmark
 
-This folder contains the 3D Nooru-Mohamed validation case used in the FRACMAT paper.
+This folder contains the 3D Nooru-Mohamed validation case used in the FRACMATH paper.
 
 ## Folder map
 

@@ -1,6 +1,6 @@
-﻿# Repository manifest
+# Repository manifest
 
-This file lists the main source-code, input-data, and generated-result locations for the FRACMAT JOSS repository.
+This file lists the main source-code, input-data, and generated-result locations for the FRACMATH JOSS repository.
 
 ## Root files
 
