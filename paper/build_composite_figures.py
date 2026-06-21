@@ -151,34 +151,30 @@ def grid(
 
 
 def nooru_mesh_layout(output: str) -> None:
-    width = 1500
+    width = 1650
     margin = 34
-    gap = 34
-    top_h = 520
-    bottom_h = 270
+    gap = 42
+    panel_w = (width - 2 * margin - gap) // 2
+    panel_h = 650
 
-    panel_a = fit(load("nooru_BC_2D.png"), 520, top_h)
-    panel_b = fit(load("nooru_mesh_3D.png"), 520, top_h)
-    # The source experimental figure contains large blank specimen regions; crop
-    # to the crack-path band so the panel is readable in the JOSS column.
-    panel_c = fit(crop_fraction(load("Exp_noor.png"), (0.0, 0.15, 1.0, 0.75)), 900, bottom_h)
+    bc = fit(load("nooru_BC_2D.png"), panel_w, 430)
+    mesh = fit(load("nooru_mesh_3D.png"), panel_w, panel_h)
+    # Keep the experimental crack-path reference as an inset while making the
+    # main Nooru figure a large 1x2 layout.
+    crack = fit(crop_fraction(load("Exp_noor.png"), (0.0, 0.12, 1.0, 0.76)), panel_w, 170)
 
-    height = 2 * margin + top_h + gap + bottom_h
+    height = 2 * margin + panel_h
     canvas = Image.new("RGB", (width, height), WHITE)
 
-    top_width = panel_a.width + gap + panel_b.width
-    x = (width - top_width) // 2
-    y = margin + (top_h - max(panel_a.height, panel_b.height)) // 2
-    canvas.paste(panel_a, (x, y + (max(panel_a.height, panel_b.height) - panel_a.height) // 2))
+    x = margin
+    y = margin
+    canvas.paste(bc, (x + (panel_w - bc.width) // 2, y))
+    canvas.paste(crack, (x + (panel_w - crack.width) // 2, y + panel_h - crack.height))
     label_panel(canvas, (x + 10, y + 10), "(a)")
-    x += panel_a.width + gap
-    canvas.paste(panel_b, (x, y + (max(panel_a.height, panel_b.height) - panel_b.height) // 2))
-    label_panel(canvas, (x + 10, y + 10), "(b)")
 
-    x = (width - panel_c.width) // 2
-    y = margin + top_h + gap + (bottom_h - panel_c.height) // 2
-    canvas.paste(panel_c, (x, y))
-    label_panel(canvas, (x + 10, y + 10), "(c)")
+    x = margin + panel_w + gap
+    canvas.paste(mesh, (x + (panel_w - mesh.width) // 2, y + (panel_h - mesh.height) // 2))
+    label_panel(canvas, (x + 10, y + 10), "(b)")
     canvas.save(IMG / output, optimize=True)
 
 
@@ -252,16 +248,21 @@ def main() -> None:
     grid(
         [
             ("nooru_inc_0029.png", "(a)"),
-            ("nooru_inc_0053.png", "(b)"),
-            ("nooru_inc_0127.png", "(c)"),
-            ("nooru_inc_0900.png", "(d)"),
+            ("nooru_inc_0037.png", "(b)"),
+            ("nooru_inc_0041.png", "(c)"),
+            ("nooru_inc_0053.png", "(d)"),
+            ("nooru_inc_0075.png", "(e)"),
+            ("nooru_inc_0127.png", "(f)"),
+            ("nooru_inc_0275.png", "(g)"),
+            ("nooru_inc_0407.png", "(h)"),
+            ("nooru_inc_0900.png", "(i)"),
         ],
-        "nooru_damage_evolution_selected.png",
-        cols=2,
-        panel_w=730,
-        panel_h=335,
-        gap=20,
-        margin=22,
+        "nooru_damage_evolution_3x3.png",
+        cols=3,
+        panel_w=510,
+        panel_h=330,
+        gap=18,
+        margin=20,
     )
     row_equal_height(
         [
@@ -276,16 +277,21 @@ def main() -> None:
     grid(
         [
             ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0001_theta_2_143e-05.png", "(a)"),
-            ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0041_theta_8_786e-04.png", "(b)"),
-            ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0080_theta_1_714e-03.png", "(c)"),
-            ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0140_theta_3_000e-03.png", "(d)"),
+            ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0021_theta_4_500e-04.png", "(b)"),
+            ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0041_theta_8_786e-04.png", "(c)"),
+            ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0061_theta_1_307e-03.png", "(d)"),
+            ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0080_theta_1_714e-03.png", "(e)"),
+            ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0100_theta_2_143e-03.png", "(f)"),
+            ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0120_theta_2_571e-03.png", "(g)"),
+            ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0140_theta_3_000e-03.png", "(h)"),
+            ("torsion_max_damage.png", "(i)"),
         ],
         "fig_b3_damage_evolution.png",
-        cols=2,
-        panel_w=760,
-        panel_h=350,
-        gap=22,
-        margin=24,
+        cols=3,
+        panel_w=520,
+        panel_h=300,
+        gap=18,
+        margin=20,
     )
 
 
