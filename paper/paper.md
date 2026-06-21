@@ -80,9 +80,9 @@ Table: Updated 2D 3PB comparison using the same mesh, material law, and Oliver T
 
 The Nooru-Mohamed benchmark checks mixed-mode 3D cracking in a double-edge-notched concrete panel loaded by combined tension and shear [@nooru1992]. The same scalar CDM routine is used with TET4 elements and Oliver crack-band scaling. The simulated damage bands initiate at the two notch tips and coalesce across the ligament, matching the experimental crack-path pattern.
 
-This example is included because mixed-mode response is a common failure point for simplified fracture implementations. The loading combines a horizontal prescribed displacement, a vertical prescribed displacement, and fixed supports on the opposite edges. In the simulation, the crack-band direction changes as the principal strain field evolves, so the projected bandwidth is recomputed rather than assigned from a constant element size. The resulting band does not remain a straight mode-I notch extension; it bends across the ligament in the same qualitative direction as the reported experimental crack path.
+![Nooru-Mohamed mixed-mode benchmark: boundary conditions, 3D mesh, and experimental crack path. \label{fig:b2-mesh}](images/fig_b2_mesh.png){ width=92% }
 
-![Nooru-Mohamed mixed-mode benchmark: boundary conditions, 3D mesh, and experimental crack path. \label{fig:b2-mesh}](images/fig_b2_mesh.png){ width=100% }
+This example is included because mixed-mode response is a common failure point for simplified fracture implementations. The loading combines a horizontal prescribed displacement, a vertical prescribed displacement, and fixed supports on the opposite edges. In the simulation, the crack-band direction changes as the principal strain field evolves, so the projected bandwidth is recomputed rather than assigned from a constant element size. The resulting band does not remain a straight mode-I notch extension; it bends across the ligament in the same qualitative direction as the reported experimental crack path.
 
 ![Nooru-Mohamed damage evolution from first localization to coalescence. \label{fig:b2-damage-evolution}](images/nooru_damage_evolution_3x3.png){ width=100% }
 
