@@ -180,13 +180,13 @@ def nooru_mesh_layout(output: str) -> None:
 
 def three_pb_layout(output: str) -> None:
     """Compact 3PB validation panel for the JOSS page width."""
-    width = 1680
-    margin = 34
-    gap = 28
+    width = 1580
+    margin = 30
+    gap = 22
 
-    damage = fit(load("abaqus_fig_damage_last_step.png"), width - 2 * margin, 470)
-    response = fit(load("load_cmod_comparison.png"), 760, 470)
-    timing = fit(load("time_comparison_bar.png"), 800, 470)
+    damage = fit(load("abaqus_fig_damage_last_step.png"), width - 2 * margin, 375)
+    response = fit(load("load_cmod_comparison.png"), 710, 390)
+    timing = fit(load("time_comparison_bar.png"), 760, 390)
 
     bottom_h = max(response.height, timing.height)
     height = 2 * margin + damage.height + gap + bottom_h
