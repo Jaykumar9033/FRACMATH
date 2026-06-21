@@ -29,7 +29,7 @@ def _font(size: int, bold: bool = False) -> ImageFont.FreeTypeFont | ImageFont.I
     return ImageFont.load_default()
 
 
-LABEL_FONT = _font(28, bold=True)
+LABEL_FONT = _font(30, bold=True)
 
 
 def trim_white(im: Image.Image, pad: int = 18, threshold: int = 248) -> Image.Image:
@@ -125,46 +125,52 @@ def grid(
     width = 2 * margin + cols * panel_w + (cols - 1) * gap
     height = 2 * margin + rows * panel_h + (rows - 1) * gap
     canvas = Image.new("RGB", (width, height), WHITE)
-    for idx, (name, label) in enumerate(panels):
-        row, col = divmod(idx, cols)
-        x = margin + col * (panel_w + gap)
-        y = margin + row * (panel_h + gap)
-        im = fit(load(name), panel_w, panel_h)
-        canvas.paste(im, (x + (panel_w - im.width) // 2, y + (panel_h - im.height) // 2))
-        label_panel(canvas, (x + 10, y + 10), label)
+    for row in range(rows):
+        row_panels = panels[row * cols : (row + 1) * cols]
+        row_width = len(row_panels) * panel_w + max(0, len(row_panels) - 1) * gap
+        x0 = (width - row_width) // 2
+        for col, (name, label) in enumerate(row_panels):
+            x = x0 + col * (panel_w + gap)
+            y = margin + row * (panel_h + gap)
+            im = fit(load(name), panel_w, panel_h)
+            canvas.paste(im, (x + (panel_w - im.width) // 2, y + (panel_h - im.height) // 2))
+            label_panel(canvas, (x + 10, y + 10), label)
     canvas.save(IMG / output, optimize=True)
 
 
 def main() -> None:
-    row_equal_height(
+    stack_vertical(
         [
             ("fig_mesh.png", "(a)"),
             ("abaqus_fig_damage_last_step.png", "(b)"),
         ],
         "fig_b1_mesh_abq.png",
-        height=390,
-        gap=26,
-        margin=32,
+        width=1650,
+        max_panel_h=520,
+        gap=24,
+        margin=30,
     )
-    row_equal_height(
+    stack_vertical(
         [
             ("fig_damage_peak.png", "(a)"),
             ("fig_damage_postpeak.png", "(b)"),
         ],
         "fig_b1_damage.png",
-        height=300,
-        gap=24,
+        width=1650,
+        max_panel_h=390,
+        gap=22,
         margin=28,
     )
-    row_equal_height(
+    stack_vertical(
         [
             ("load_cmod_comparison.png", "(a)"),
             ("time_comparison_bar.png", "(b)"),
         ],
         "fig_b1_results.png",
-        height=420,
-        gap=28,
-        margin=32,
+        width=1500,
+        max_panel_h=520,
+        gap=24,
+        margin=30,
     )
     row_equal_height(
         [
@@ -173,8 +179,8 @@ def main() -> None:
             ("Exp_noor.png", "(c)"),
         ],
         "fig_b2_mesh.png",
-        height=430,
-        gap=28,
+        height=520,
+        gap=32,
         margin=32,
     )
     row_equal_height(
@@ -183,8 +189,8 @@ def main() -> None:
             ("Exp_torsion.png", "(b)"),
         ],
         "fig_b3_mesh.png",
-        height=430,
-        gap=28,
+        height=520,
+        gap=32,
         margin=32,
     )
     grid(
@@ -199,10 +205,10 @@ def main() -> None:
             ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0140_theta_3_000e-03.png", "(h)"),
         ],
         "fig_b3_damage_evolution.png",
-        cols=4,
-        panel_w=430,
-        panel_h=310,
-        gap=24,
+        cols=3,
+        panel_w=560,
+        panel_h=380,
+        gap=26,
         margin=30,
     )
 
