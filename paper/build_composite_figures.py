@@ -182,6 +182,37 @@ def nooru_mesh_layout(output: str) -> None:
     canvas.save(IMG / output, optimize=True)
 
 
+def three_pb_layout(output: str) -> None:
+    """Compact 3PB validation panel for the JOSS page width."""
+    width = 1680
+    margin = 34
+    gap = 28
+
+    damage = fit(load("abaqus_fig_damage_last_step.png"), width - 2 * margin, 470)
+    response = fit(load("load_cmod_comparison.png"), 760, 470)
+    timing = fit(load("time_comparison_bar.png"), 800, 470)
+
+    bottom_h = max(response.height, timing.height)
+    height = 2 * margin + damage.height + gap + bottom_h
+    canvas = Image.new("RGB", (width, height), WHITE)
+
+    x = (width - damage.width) // 2
+    y = margin
+    canvas.paste(damage, (x, y))
+    label_panel(canvas, (x + 12, y + 12), "(a)")
+
+    bottom_w = response.width + gap + timing.width
+    x = (width - bottom_w) // 2
+    y = margin + damage.height + gap
+    canvas.paste(response, (x, y + (bottom_h - response.height) // 2))
+    label_panel(canvas, (x + 12, y + 12), "(b)")
+    x += response.width + gap
+    canvas.paste(timing, (x, y + (bottom_h - timing.height) // 2))
+    label_panel(canvas, (x + 12, y + 12), "(c)")
+
+    canvas.save(IMG / output, optimize=True)
+
+
 def main() -> None:
     stack_vertical(
         [
@@ -216,6 +247,7 @@ def main() -> None:
         gap=24,
         margin=30,
     )
+    three_pb_layout("fig_b1_compact.png")
     nooru_mesh_layout("fig_b2_mesh.png")
     row_equal_height(
         [
@@ -223,27 +255,23 @@ def main() -> None:
             ("Exp_torsion.png", "(b)"),
         ],
         "fig_b3_mesh.png",
-        height=520,
+        height=430,
         gap=32,
         margin=32,
     )
     grid(
         [
             ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0001_theta_2_143e-05.png", "(a)"),
-            ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0021_theta_4_500e-04.png", "(b)"),
-            ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0041_theta_8_786e-04.png", "(c)"),
-            ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0061_theta_1_307e-03.png", "(d)"),
-            ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0080_theta_1_714e-03.png", "(e)"),
-            ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0100_theta_2_143e-03.png", "(f)"),
-            ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0120_theta_2_571e-03.png", "(g)"),
-            ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0140_theta_3_000e-03.png", "(h)"),
+            ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0041_theta_8_786e-04.png", "(b)"),
+            ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0080_theta_1_714e-03.png", "(c)"),
+            ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0140_theta_3_000e-03.png", "(d)"),
         ],
         "fig_b3_damage_evolution.png",
         cols=2,
-        panel_w=720,
-        panel_h=360,
-        gap=24,
-        margin=28,
+        panel_w=760,
+        panel_h=350,
+        gap=22,
+        margin=24,
     )
 
 

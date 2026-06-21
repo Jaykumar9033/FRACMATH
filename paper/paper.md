@@ -64,13 +64,9 @@ For the Abaqus comparison, `FRACMATH` includes the input deck, the Fortran UMAT,
 
 The main benchmark is the Gregoire notched 3PB beam [@gregoire2013], with $D=100$ mm, $a/D=0.2$, span $S=250$ mm, thickness 50 mm, and a refined CPS3 triangular mesh. The final mesh has 14,268 elements, 7,319 nodes, and 14,638 in-plane displacement degrees of freedom. MATLAB and Abaqus use the same mesh, material constants, loading, scalar damage model, and Oliver crack-band formula.
 
-![3PB benchmark: (a) CPS3 mesh and boundary conditions; (b) Abaqus UMAT damage field using the same Oliver bandwidth threshold. \label{fig:b1-mesh-abq}](images/fig_b1_mesh_abq.png){ width=100% }
-
 The updated results show close agreement in peak response and crack localization. MATLAB predicts a peak load of 3.64 kN at CMOD 0.0228 mm; Abaqus predicts 3.61 kN at CMOD 0.0225 mm. The ratio of the peak loads is 1.009, and the ratio of CMOD values at peak is 1.014. Both simulations localize damage upward from the notch, which is the expected mode-I crack path for this geometry. The agreement is important because the Abaqus UMAT independently evaluates the same damage law and Oliver bandwidth inside a commercial finite-element environment.
 
 On the test workstation, MATLAB used one thread and Abaqus used four threads. The MATLAB solver wall-clock time was 547.58 s, while the Abaqus submit-to-completion time was 1996.25 s. MATLAB time was dominated by stiffness assembly, not by the sparse solve. The timing should not be read as a universal speed claim, because solver settings, output requests, hardware, and Abaqus licensing can all change wall-clock time. It does show that a readable MATLAB implementation can still be practical for research-scale 2D crack-band studies.
-
-![3PB result summary: load-CMOD comparison and wall-clock breakdown. \label{fig:b1-results}](images/fig_b1_results.png){ width=98% }
 
 | Quantity | MATLAB | Abaqus + UMAT | Ratio |
 |---|---:|---:|---:|
@@ -79,6 +75,8 @@ On the test workstation, MATLAB used one thread and Abaqus used four threads. Th
 | Solver wall-clock (s) | 547.58 | 1996.25 | 0.274 |
 
 Table: Updated 2D 3PB comparison using the same mesh, material law, and Oliver T3 crack-band bandwidth. \label{tab:abqcompare}
+
+![3PB validation using the updated Abaqus damage image: (a) final fully damaged elements from the Abaqus UMAT; (b) MATLAB and Abaqus load-CMOD response; (c) wall-clock and MATLAB timing breakdown. \label{fig:b1-compact}](images/fig_b1_compact.png){ width=92% }
 
 The Nooru-Mohamed benchmark checks mixed-mode 3D cracking in a double-edge-notched concrete panel loaded by combined tension and shear [@nooru1992]. The same scalar CDM routine is used with TET4 elements and Oliver crack-band scaling. The simulated damage bands initiate at the two notch tips and coalesce across the ligament, matching the experimental crack-path pattern.
 
@@ -90,11 +88,11 @@ This example is included because mixed-mode response is a common failure point f
 
 Brokenshire's torsion benchmark tests whether the same formulation can recover a curved 3D fracture surface [@jefferson_torsion]. The model uses a prescribed twist, TET4 elements, and the same damage update. The computed band nucleates at the notch front and rotates toward the loaded corner, consistent with the experimentally recovered fracture surface.
 
+![Brokenshire torsion benchmark: geometry and experimental fractured specimen. \label{fig:b3-mesh}](images/fig_b3_mesh.png){ width=88% }
+
 The torsion case is deliberately different from the 3PB validation. It contains out-of-plane cracking, a nonuniform stress state, and a visibly curved fracture surface. It therefore checks whether the implementation remains useful beyond a single 2D benchmark. The code stores intermediate damage snapshots, allowing users to inspect how the localized zone grows rather than seeing only the final fully damaged band.
 
-![Brokenshire torsion benchmark: geometry and experimental fractured specimen. \label{fig:b3-mesh}](images/fig_b3_mesh.png){ width=100% }
-
-![Torsion damage evolution over the imposed twist history. \label{fig:b3-damage-evolution}](images/fig_b3_damage_evolution.png){ width=100% }
+![Selected torsion damage evolution over the imposed twist history. \label{fig:b3-damage-evolution}](images/fig_b3_damage_evolution.png){ width=88% }
 
 # Software availability
 
