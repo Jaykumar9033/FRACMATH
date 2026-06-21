@@ -47,7 +47,7 @@ p.OMEGA_MAX = 1 - 1e-12;
 p.eps0      = p.ft / p.E;
 
 p.max_disp  = -0.2;        % mm  total midspan deflection
-p.num_steps = 1000;    % MATCH Abaqus N_INC for fair timing (was 10000)
+p.num_steps = 10000;    % MATCH Abaqus N_INC for fair timing (was 10000)
 p.tol       = 1e-6;
 p.max_iter  = 30;
 p.cmod_limit = 0.5;

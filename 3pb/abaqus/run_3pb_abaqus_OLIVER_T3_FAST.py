@@ -57,6 +57,7 @@ if not PLOT_MODE:
     try:
         from abaqus import mdb
         from abaqusConstants import *
+        from caeModules import *
         import mesh as abqMesh
         from odbAccess import openOdb
     except Exception as e:
@@ -94,7 +95,7 @@ E_C, NU_C, FT, GF, FCFT = 37000.0, 0.20, 3.5, 0.090, 10.0
 
 # Loading
 U_FINAL = -0.2
-N_INC   = int(os.environ.get('ABQ_N_INC', '1000'))  # use 1000 for MATLAB comparison
+N_INC   = int(os.environ.get('ABQ_N_INC', '1000'))  # match MATLAB p.num_steps
 CPUS    = int(os.environ.get('ABQ_CPUS', '4'))       # set ABQ_CPUS=1 for fair MATLAB timing
 
 # Field output: SDV only, coarse frequency (damage snapshots only).
@@ -997,7 +998,7 @@ def _fig_damage(np, plt, PolyCollection, cmap, nodes, elems, omega, label, base)
     handles = [
         Line2D([0], [0], color=mesh_ec, lw=7, solid_capstyle='butt', label='FE mesh'),
         Line2D([0], [0], color=crack_fc, lw=7, solid_capstyle='butt',
-               label=r'$\omega \ge %.2f$' % th)
+               label=r'$\omega \geq %.2f$' % th)
     ]
     axp.legend(handles=handles,
                loc='upper left',

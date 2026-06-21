@@ -193,9 +193,9 @@ C=======================================================================
       REAL*8 G1X, G1Y, G2X, G2Y, G3X, G3Y
       LOGICAL HAVE
 
-      INTEGER MAXE, I, IE, IOS, IOS2, NREAD, LU
+      INTEGER MAXE, I, IE, IOS, IOS2, NREAD, LU, LOUT
       PARAMETER (MAXE = 1000000)
-      CHARACTER*256 LINE
+      CHARACTER*256 LINE, TABLEPATH, OUTDIR
       LOGICAL INIT, READY, HAS(MAXE), WARNED
       REAL*8 AG1X(MAXE), AG1Y(MAXE), AG2X(MAXE), AG2Y(MAXE)
       REAL*8 AG3X(MAXE), AG3Y(MAXE)
@@ -216,8 +216,26 @@ C=======================================================================
          END DO
 
          LU = 97
-         OPEN(UNIT=LU, FILE='oliver_t3_gradN.dat', STATUS='OLD',
-     &        IOSTAT=IOS)
+         IOS = 1
+         TABLEPATH = ' '
+         OUTDIR = ' '
+         CALL GETENV('ABQ_OLIVER_TABLE', TABLEPATH)
+         IF (TABLEPATH .NE. ' ') THEN
+            OPEN(UNIT=LU, FILE=TABLEPATH, STATUS='OLD',
+     &           IOSTAT=IOS)
+         END IF
+         IF (IOS .NE. 0) THEN
+            CALL GETOUTDIR(OUTDIR, LOUT)
+            IF (LOUT .GT. 0) THEN
+               TABLEPATH = OUTDIR(1:LOUT) // '/oliver_t3_gradN.dat'
+               OPEN(UNIT=LU, FILE=TABLEPATH, STATUS='OLD',
+     &              IOSTAT=IOS)
+            END IF
+         END IF
+         IF (IOS .NE. 0) THEN
+            OPEN(UNIT=LU, FILE='oliver_t3_gradN.dat', STATUS='OLD',
+     &           IOSTAT=IOS)
+         END IF
          IF (IOS .NE. 0) THEN
             OPEN(UNIT=LU, FILE='oliver_gradN.dat', STATUS='OLD',
      &           IOSTAT=IOS)
@@ -255,7 +273,8 @@ C=======================================================================
          END IF
 
          IF (.NOT. READY) THEN
-            WRITE(6,*) 'UMAT WARNING: oliver_t3_gradN.dat not found.'
+            WRITE(6,*) 'UMAT WARNING: Oliver table not found.'
+            WRITE(6,*) 'UMAT WARNING: ABQ_OLIVER_TABLE=', TABLEPATH
             WRITE(6,*) 'UMAT WARNING: using Abaqus CELENT fallback.'
          END IF
       END IF
