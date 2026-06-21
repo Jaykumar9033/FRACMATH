@@ -23,8 +23,7 @@ This file lists the main source-code, input-data, and generated-result locations
 | --- | --- | --- |
 | `paper/paper.md` | manuscript | JOSS paper in Markdown format |
 | `paper/paper.bib` | bibliography | BibTeX references cited in the paper |
-| `paper/*.png` | figure | Main JOSS figures referenced directly by `paper.md` |
-| `paper/joss_1/joss_updated/joss/*.png` | figure | Additional JOSS figures referenced by existing paper paths |
+| `paper/images/*.png` | figure | JOSS figures referenced by `paper.md` |
 
 ## Reviewer checks
 
