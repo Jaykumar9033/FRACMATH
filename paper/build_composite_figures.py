@@ -53,6 +53,18 @@ def load(name: str) -> Image.Image:
     return trim_white(Image.open(IMG / name))
 
 
+def crop_fraction(im: Image.Image, box: tuple[float, float, float, float]) -> Image.Image:
+    left, top, right, bottom = box
+    return im.crop(
+        (
+            int(left * im.width),
+            int(top * im.height),
+            int(right * im.width),
+            int(bottom * im.height),
+        )
+    )
+
+
 def fit(im: Image.Image, max_w: int, max_h: int) -> Image.Image:
     out = im.copy()
     out.thumbnail((max_w, max_h), Image.Resampling.LANCZOS)
@@ -138,6 +150,38 @@ def grid(
     canvas.save(IMG / output, optimize=True)
 
 
+def nooru_mesh_layout(output: str) -> None:
+    width = 1500
+    margin = 34
+    gap = 34
+    top_h = 520
+    bottom_h = 270
+
+    panel_a = fit(load("nooru_BC_2D.png"), 520, top_h)
+    panel_b = fit(load("nooru_mesh_3D.png"), 520, top_h)
+    # The source experimental figure contains large blank specimen regions; crop
+    # to the crack-path band so the panel is readable in the JOSS column.
+    panel_c = fit(crop_fraction(load("Exp_noor.png"), (0.0, 0.15, 1.0, 0.75)), 900, bottom_h)
+
+    height = 2 * margin + top_h + gap + bottom_h
+    canvas = Image.new("RGB", (width, height), WHITE)
+
+    top_width = panel_a.width + gap + panel_b.width
+    x = (width - top_width) // 2
+    y = margin + (top_h - max(panel_a.height, panel_b.height)) // 2
+    canvas.paste(panel_a, (x, y + (max(panel_a.height, panel_b.height) - panel_a.height) // 2))
+    label_panel(canvas, (x + 10, y + 10), "(a)")
+    x += panel_a.width + gap
+    canvas.paste(panel_b, (x, y + (max(panel_a.height, panel_b.height) - panel_b.height) // 2))
+    label_panel(canvas, (x + 10, y + 10), "(b)")
+
+    x = (width - panel_c.width) // 2
+    y = margin + top_h + gap + (bottom_h - panel_c.height) // 2
+    canvas.paste(panel_c, (x, y))
+    label_panel(canvas, (x + 10, y + 10), "(c)")
+    canvas.save(IMG / output, optimize=True)
+
+
 def main() -> None:
     stack_vertical(
         [
@@ -172,17 +216,7 @@ def main() -> None:
         gap=24,
         margin=30,
     )
-    row_equal_height(
-        [
-            ("nooru_BC_2D.png", "(a)"),
-            ("nooru_mesh_3D.png", "(b)"),
-            ("Exp_noor.png", "(c)"),
-        ],
-        "fig_b2_mesh.png",
-        height=520,
-        gap=32,
-        margin=32,
-    )
+    nooru_mesh_layout("fig_b2_mesh.png")
     row_equal_height(
         [
             ("torsion.png", "(a)"),
@@ -205,11 +239,11 @@ def main() -> None:
             ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0140_theta_3_000e-03.png", "(h)"),
         ],
         "fig_b3_damage_evolution.png",
-        cols=3,
-        panel_w=560,
-        panel_h=380,
-        gap=26,
-        margin=30,
+        cols=2,
+        panel_w=720,
+        panel_h=360,
+        gap=24,
+        margin=28,
     )
 
 

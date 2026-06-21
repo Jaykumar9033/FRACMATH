@@ -165,7 +165,7 @@ The Nooru-Mohamed specimen is a square double-edge-notched concrete panel, $200 
 
 The panel is discretized in full 3D with four-node linear tetrahedral elements (TET4), refined through the ligament between the two notches where the cracks form and eventually interact; the geometry and the boundary grips are shown in Figure \ref{fig:b2-mesh}. The solver is the same vectorized modified Newton--Raphson used for Benchmark 1: a secant stiffness is assembled from the current damage state at the start of each load increment and its factorization is reused during the equilibrium iterations. The same modified von Mises constitutive routine is used, so nothing in the material model changes between 2D and 3D. The history variable $\kappa$ is committed once per converged increment, which keeps the secant system well conditioned as the two bands localize and compete for the same ligament. Crack band regularization uses Oliver's projected characteristic length for each tetrahedron. Figure \ref{fig:b2-damage-evolution} traces the predicted response from the first localization at the notch tips (increment 29) through to full coalescence of the two bands (increment 900); only elements with $\omega \ge 0.95$ are shaded, so the crack path itself stands out from the diffuse process zone around it. The two curved bands and their final separation reproduces the experimentally observed mixed-mode crack pattern, which confirms that the scalar damage model with crack band regularization carries over from the planar mode-I case to a fully three-dimensional mixed-mode setting without any change to the constitutive routine.
 
-![Damage evolution $\omega$ for the Nooru-Mohamed run, from first localization at the notches (inc 29) to coalescence (inc 900). Only $\omega \ge 0.95$ is shaded. \label{fig:b2-damage-evolution}](images/nooru_damage_evolution_3x3.png){ width=95% }
+![Damage evolution $\omega$ for the Nooru-Mohamed run, from first localization at the notches (inc 29) to coalescence (inc 900). Only $\omega \ge 0.95$ is shaded. \label{fig:b2-damage-evolution}](images/nooru_damage_evolution_3x3.png){ width=100% }
 
 ## Benchmark 3: 3D notched beam torsion
 
@@ -173,13 +173,13 @@ Brokenshire's torsion test [@jefferson_torsion] uses a $400 \times 250 \times 10
 
 ![Brokenshire torsion test: (a) specimen geometry in mm with three supports at the bottom corners and one end of the top edge, and a single point load at the remaining top corner; (b) the experimental fracture pattern recovered from the broken specimen, used as the reference against which the simulated damage evolution in Figure \ref{fig:b3-damage-evolution} is compared. \label{fig:b3-mesh}](images/fig_b3_mesh.png){ width=100% }
 
-![Damage evolution $\omega$ over the torsion run, labelled by twist $\theta$ and increment. The band nucleates at the notch front and spirals toward the loaded corner. \label{fig:b3-damage-evolution}](images/fig_b3_damage_evolution.png){ width=100% }
-
 In the model the loaded end is driven directly: one end face is fully fixed while the opposite end face is given a prescribed rigid-body twist $\theta$ about the beam axis under rotation control, ramped to $\theta_{\mathrm{end}} = 3.0\times10^{-3}$ rad over 140 increments. The reaction torque is recovered from the twisted end, and an equivalent applied load follows from the lever arm $a = 100$ mm.
 
 The material is plain concrete with $E = 35{,}000$ MPa, $\nu = 0.20$, $f_t = 3.0$ MPa, $G_F = 0.080$ N/mm ($= 80$ N/m), $\kappa_0 = 6.0\times10^{-5}$, and $k = f_c/f_t = 10$, so $f_c = 30$ MPa. Softening is exponential, as in the other benchmarks, with the softening parameter scaled element by element through the crack band length.
 
 The mesh is built from four-node linear tetrahedral elements (TET4) with a refined layer around the notch front. The equivalent strain is the same modified von Mises measure used throughout, and the damage update is under-relaxed with a factor of 0.35 to keep the staggered fixed-point iteration stable through the steep post-peak branch; each linear solve reuses a single AMD ordering with a Cholesky factorization. Two points, A and B, are monitored on opposite sides of the notch at midspan ($x = 200$ mm, $z = \pm 25$ mm), and their relative displacement across the notch gives the crack opening, as shown in Figure \ref{fig:b3-mesh}.
+
+![Damage evolution $\omega$ over the torsion run, labelled by twist $\theta$ and increment. The band nucleates at the notch front and spirals toward the loaded corner. \label{fig:b3-damage-evolution}](images/fig_b3_damage_evolution.png){ width=100% }
 
 # Software availability
 
