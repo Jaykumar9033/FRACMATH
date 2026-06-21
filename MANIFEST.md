@@ -23,6 +23,7 @@ This file lists the main source-code, input-data, and generated-result locations
 | --- | --- | --- |
 | `paper/paper.md` | manuscript | JOSS paper in Markdown format |
 | `paper/paper.bib` | bibliography | BibTeX references cited in the paper |
+| `paper/build_composite_figures.py` | source | Rebuilds the JOSS composite panel figures from source images |
 | `paper/images/*.png` | figure | JOSS figures referenced by `paper.md` |
 
 ## Reviewer checks
