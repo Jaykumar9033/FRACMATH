@@ -84,7 +84,7 @@ The Nooru-Mohamed benchmark checks mixed-mode 3D cracking in a double-edge-notch
 
 This example is included because mixed-mode response is a common failure point for simplified fracture implementations. The loading combines a horizontal prescribed displacement, a vertical prescribed displacement, and fixed supports on the opposite edges. In the simulation, the crack-band direction changes as the principal strain field evolves, so the projected bandwidth is recomputed rather than assigned from a constant element size. The resulting band does not remain a straight mode-I notch extension; it bends across the ligament in the same qualitative direction as the reported experimental crack path.
 
-![Nooru-Mohamed damage evolution from first localization to coalescence. \label{fig:b2-damage-evolution}](images/nooru_damage_evolution_3x3.png){ width=100% }
+![Selected Nooru-Mohamed damage evolution from first localization to coalescence. \label{fig:b2-damage-evolution}](images/nooru_damage_evolution_selected.png){ width=80% }
 
 Brokenshire's torsion benchmark tests whether the same formulation can recover a curved 3D fracture surface [@jefferson_torsion]. The model uses a prescribed twist, TET4 elements, and the same damage update. The computed band nucleates at the notch front and rotates toward the loaded corner, consistent with the experimentally recovered fracture surface.
 

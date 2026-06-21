@@ -18,6 +18,7 @@ requiredFiles = {
     'paper/images/fig_b1_results.png'
     'paper/images/fig_b1_compact.png'
     'paper/images/fig_b2_mesh.png'
+    'paper/images/nooru_damage_evolution_selected.png'
     'paper/images/fig_b3_mesh.png'
     'paper/images/fig_b3_damage_evolution.png'
     'paper/images/load_cmod_comparison.png'

@@ -249,6 +249,20 @@ def main() -> None:
     )
     three_pb_layout("fig_b1_compact.png")
     nooru_mesh_layout("fig_b2_mesh.png")
+    grid(
+        [
+            ("nooru_inc_0029.png", "(a)"),
+            ("nooru_inc_0053.png", "(b)"),
+            ("nooru_inc_0127.png", "(c)"),
+            ("nooru_inc_0900.png", "(d)"),
+        ],
+        "nooru_damage_evolution_selected.png",
+        cols=2,
+        panel_w=730,
+        panel_h=335,
+        gap=20,
+        margin=22,
+    )
     row_equal_height(
         [
             ("torsion.png", "(a)"),
