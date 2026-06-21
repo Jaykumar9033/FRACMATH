@@ -29,7 +29,7 @@ def _font(size: int, bold: bool = False) -> ImageFont.FreeTypeFont | ImageFont.I
     return ImageFont.load_default()
 
 
-LABEL_FONT = _font(34, bold=True)
+LABEL_FONT = _font(28, bold=True)
 
 
 def trim_white(im: Image.Image, pad: int = 18, threshold: int = 248) -> Image.Image:
@@ -136,32 +136,35 @@ def grid(
 
 
 def main() -> None:
-    stack_vertical(
+    row_equal_height(
         [
             ("fig_mesh.png", "(a)"),
             ("abaqus_fig_damage_last_step.png", "(b)"),
         ],
         "fig_b1_mesh_abq.png",
-        width=1800,
-        max_panel_h=680,
+        height=390,
+        gap=26,
+        margin=32,
     )
-    stack_vertical(
+    row_equal_height(
         [
             ("fig_damage_peak.png", "(a)"),
             ("fig_damage_postpeak.png", "(b)"),
         ],
         "fig_b1_damage.png",
-        width=1800,
-        max_panel_h=520,
+        height=300,
+        gap=24,
+        margin=28,
     )
-    stack_vertical(
+    row_equal_height(
         [
             ("load_cmod_comparison.png", "(a)"),
             ("time_comparison_bar.png", "(b)"),
         ],
         "fig_b1_results.png",
-        width=1550,
-        max_panel_h=720,
+        height=420,
+        gap=28,
+        margin=32,
     )
     row_equal_height(
         [
@@ -170,7 +173,9 @@ def main() -> None:
             ("Exp_noor.png", "(c)"),
         ],
         "fig_b2_mesh.png",
-        height=580,
+        height=430,
+        gap=28,
+        margin=32,
     )
     row_equal_height(
         [
@@ -178,7 +183,9 @@ def main() -> None:
             ("Exp_torsion.png", "(b)"),
         ],
         "fig_b3_mesh.png",
-        height=560,
+        height=430,
+        gap=28,
+        margin=32,
     )
     grid(
         [
@@ -192,9 +199,11 @@ def main() -> None:
             ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0140_theta_3_000e-03.png", "(h)"),
         ],
         "fig_b3_damage_evolution.png",
-        cols=2,
-        panel_w=760,
-        panel_h=530,
+        cols=4,
+        panel_w=430,
+        panel_h=310,
+        gap=24,
+        margin=30,
     )
 
 
