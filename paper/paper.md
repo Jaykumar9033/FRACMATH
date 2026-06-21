@@ -21,8 +21,6 @@ affiliations:
     index: 1
 date: 20 June 2026
 bibliography: paper.bib
-header-includes:
-  - \usepackage{subcaption}
 ---
 
 # Summary
@@ -113,75 +111,21 @@ Each load step is solved with a modified Newton--Raphson scheme. At a prescribed
 
 ## Benchmark 1: Notched 2D three-point bending
 
-The specimen is a concrete beam following the Grégoire geometry [@gregoire2013]: depth $D = 100$ mm, support span $S = 250$ mm, so $S/D = 2.5$, two overhangs of $0.5D$ each, and an overall length of $350$ mm. The out-of-plane thickness is $50$ mm. A single vertical notch is placed at midspan with an initial notch depth $a_0 = 0.2D = 20$ mm and a notch width of $D/40 = 2.5$ mm. The geometry, mesh, and boundary conditions are shown in Figure \ref{fig:b1-mesh}. The material is concrete with $E = 37{,}000$ MPa, $\nu = 0.20$, $f_t = 3.5$ MPa, $f_c = 35.0$ MPa, and $G_F = 0.090$ N/mm.
+The specimen is a concrete beam following the Grégoire geometry [@gregoire2013]: depth $D = 100$ mm, support span $S = 250$ mm, so $S/D = 2.5$, two overhangs of $0.5D$ each, and an overall length of $350$ mm. The out-of-plane thickness is $50$ mm. A single vertical notch is placed at midspan with an initial notch depth $a_0 = 0.2D = 20$ mm and a notch width of $D/40 = 2.5$ mm. The geometry, mesh, and boundary conditions are shown in Figure \ref{fig:b1-mesh-abq}. The material is concrete with $E = 37{,}000$ MPa, $\nu = 0.20$, $f_t = 3.5$ MPa, $f_c = 35.0$ MPa, and $G_F = 0.090$ N/mm.
 
 The mesh consists of CPS3 elements, i.e., three-node linear plane-stress triangles. The same Abaqus-generated mesh is used by both solvers. It is a free triangular mesh with local refinement in a rectangular zone of width $D/2$ and height $D$ centred on the notch. The final mesh contains 14,268 CPS3 elements and 7,319 nodes, corresponding to 14,638 in-plane displacement degrees of freedom in the MATLAB run. Load is applied under displacement control at the three top-edge nodes nearest midspan, with a final vertical displacement of $-0.2$ mm. The left support is pinned, the right support is a roller, and the crack mouth opening displacement (CMOD) is computed as the horizontal displacement difference between the two node sets on the notch mouth at $y=0$.
 
 For a fair timing comparison, MATLAB was run in single-thread mode and the Abaqus workflow script was configured with one CPU. The single-thread configuration is used here only so that the two implementations can be compared on equal footing; it is not a limitation of `FRACMATH`, which can also run multi-threaded through MATLAB's built-in BLAS, the threaded UMFPACK back end, and `parfor` workers around the element-loop helpers. The timing values reported below were measured on the development workstation: a Dell Precision 3660 desktop running Windows 11 (64-bit), with a 13th Generation Intel Core i9-13900 processor (24 cores / 32 threads, 2.00 GHz base clock), 64 GB of system RAM, and a 1 TB NVMe SSD; MATLAB R2024a was used for the `FRACMATH` runs and Abaqus/Standard 2023 was used for the UMAT comparison.
 
-\begin{figure*}[htbp]
-  \centering
+![Notched 3PB specimen ($D=100$ mm): (a) the CPS3 mesh used by both MATLAB and Abaqus, with supports and the displacement-controlled load applied at midspan; (b) the Abaqus damage field obtained from the Oliver-matched UMAT on the same mesh, with the black band matching the threshold used for the MATLAB damage figures. \label{fig:b1-mesh-abq}](images/fig_b1_mesh_abq.png){ width=100% }
 
-  \begin{subfigure}[t]{0.48\textwidth}
-    \centering
-    \includegraphics[width=\linewidth]{images/fig_mesh.png}
-    \caption{Geometry, refined CPS3 mesh, and support/load layout.}
-    \label{fig:b1-mesh}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}[t]{0.48\textwidth}
-    \centering
-    \includegraphics[width=\linewidth]{images/abaqus_fig_damage_last_step.png}
-    \caption{Abaqus damage field (SDV2) at the final step, $\omega \ge 0.99$.}
-    \label{fig:b1-abqdamage}
-  \end{subfigure}
+The simulated MATLAB peak load is 3.90 kN (3904 N) at a CMOD of about 0.026 mm. The full load--CMOD response is shown in Figure \ref{fig:b1-results}. The MATLAB and Abaqus curves agree closely up to peak load. The two post-peak branches are similar in shape but not identical; the remaining differences are attributed to the different global solution procedures, convergence paths, increment histories, and state-variable update order in MATLAB and Abaqus.
 
-  \caption{Notched 3PB specimen ($D=100$ mm): (a) the CPS3 mesh used by both MATLAB and Abaqus, with supports and the displacement-controlled load applied at midspan; (b) the Abaqus damage field obtained from the Oliver-matched UMAT on the same mesh, with the black band matching the threshold used for the MATLAB damage figures.}
-  \label{fig:b1-mesh-abq}
-\end{figure*}
+![MATLAB fully damaged band ($\omega \ge 0.99$) at (a) peak load and (b) post-peak. The damaged band grows upward from the notch tip. \label{fig:b1-damage}](images/fig_b1_damage.png){ width=100% }
 
-The simulated MATLAB peak load is 3.90 kN (3904 N) at a CMOD of about 0.026 mm. The full load--CMOD response is shown in Figure \ref{fig:b1-results-cmod}. The MATLAB and Abaqus curves agree closely up to peak load. The two post-peak branches are similar in shape but not identical; the remaining differences are attributed to the different global solution procedures, convergence paths, increment histories, and state-variable update order in MATLAB and Abaqus.
+![2D 3PB result summary: (a) the global load--CMOD response of the two solvers; the curves track each other closely up to peak and the small post-peak gap is attributed to the different nonlinear solution and state-update paths. (b) wall-clock cost; MATLAB finishes about 13 times faster, with the run dominated by stiffness assembly rather than the sparse linear solve. \label{fig:b1-results}](images/fig_b1_results.png){ width=95% }
 
-\begin{figure*}[htbp]
-  \centering
-
-  \begin{subfigure}[t]{0.48\textwidth}
-    \centering
-    \includegraphics[width=\linewidth]{images/fig_damage_peak.png}
-    \caption{Peak load: $P=3.90$ kN, 15 fully damaged elements.}
-    \label{fig:b1-damage-peak}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}[t]{0.48\textwidth}
-    \centering
-    \includegraphics[width=\linewidth]{images/fig_damage_postpeak.png}
-    \caption{Post-peak: $P=0.14$ kN, CMOD $\approx$ 0.30 mm, 118 fully damaged elements.}
-    \label{fig:b1-damage-postpeak}
-  \end{subfigure}
-
-  \caption{MATLAB fully damaged band ($\omega \ge 0.99$) at (a) peak load and (b) post-peak. The damaged band grows upward from the notch tip.}
-  \label{fig:b1-damage}
-\end{figure*}
-
-\begin{figure}[htbp]
-  \centering
-  \begin{subfigure}{0.98\linewidth}
-    \centering
-    \includegraphics[width=0.75\linewidth]{images/load_cmod_comparison.png}
-    \caption{Load--CMOD response; MATLAB vs. Oliver-matched Abaqus UMAT.}
-    \label{fig:b1-results-cmod}
-  \end{subfigure}\\[0.6em]
-  \begin{subfigure}{0.98\linewidth}
-    \centering
-    \includegraphics[width=0.95\linewidth]{images/time_comparison_bar.png}
-    \caption{Wall-clock comparison; left bar chart, right MATLAB time-split pie.}
-    \label{fig:b1-results-time}
-  \end{subfigure}
-  \caption{2D 3PB result summary: (a) the global load--CMOD response of the two solvers; the curves track each other closely up to peak and the small post-peak gap is attributed to the different nonlinear solution and state-update paths. (b) wall-clock cost; MATLAB finishes about 13 times faster, with the run dominated by stiffness assembly rather than the sparse linear solve.}
-  \label{fig:b1-results}
-\end{figure}
-
-For an Oliver-matched check on the crack location and width, the same case was also run in Abaqus/Standard using the updated UMAT. The Abaqus damage variable is stored as SDV2 and is plotted on the undeformed mesh in Figure \ref{fig:b1-abqdamage}. The black band corresponds to elements with $\omega \ge 0.99$, which is the same threshold used in the MATLAB damage figures. With the same mesh, same constitutive law, and same direction-dependent Oliver bandwidth formula, the relevant comparison is the predicted crack path, peak response, and post-peak load--CMOD trend.
+For an Oliver-matched check on the crack location and width, the same case was also run in Abaqus/Standard using the updated UMAT. The Abaqus damage variable is stored as SDV2 and is plotted on the undeformed mesh in Figure \ref{fig:b1-mesh-abq}. The black band corresponds to elements with $\omega \ge 0.99$, which is the same threshold used in the MATLAB damage figures. With the same mesh, same constitutive law, and same direction-dependent Oliver bandwidth formula, the relevant comparison is the predicted crack path, peak response, and post-peak load--CMOD trend.
 
 The wall-clock breakdown of the MATLAB run is given in Table \ref{tab:walltime}.
 
@@ -201,7 +145,7 @@ The Abaqus comparison uses the same geometry, mesh, material constants, loading,
 
 The two implementations should still not be described as bitwise identical. MATLAB and Abaqus use different global solution procedures, increment control, convergence checks, floating-point operation order, and state-variable update paths. Therefore, small differences may remain in the peak load, post-peak branch, and residual tail even when the same Oliver bandwidth formula is used.
 
-Figure \ref{fig:b1-results-time} compares the wall-clock cost of the two runs. Using the measured wall-clock values in Table \ref{tab:abqcompare}, MATLAB finishes the same benchmark about 13 times faster than the Abaqus/Standard UMAT workflow, and the pie chart shows that MATLAB time is dominated by assembly rather than by the sparse linear solve.
+Figure \ref{fig:b1-results} compares the wall-clock cost of the two runs. Using the measured wall-clock values in Table \ref{tab:abqcompare}, MATLAB finishes the same benchmark about 13 times faster than the Abaqus/Standard UMAT workflow, and the pie chart shows that MATLAB time is dominated by assembly rather than by the sparse linear solve.
 
 | Quantity | MATLAB | Abaqus + UMAT | Ratio |
 |---|---:|---:|---:|
@@ -215,128 +159,27 @@ Table: MATLAB vs. Abaqus on the 2D 3PB case using the same geometry, mesh, mater
 
 The Nooru-Mohamed specimen is a square double-edge-notched concrete panel, $200 \times 200 \times 50$ mm, with two horizontal notches 25 mm long cut from opposite edges at mid height [@nooru1992]. The two notches leave a central ligament that is loaded in a combination of in-plane shear and tension, so its tips experience a genuinely mixed-mode stress state rather than the pure mode-I opening of the three-point bending test. We follow load path 4a: a vertical (mode-I) displacement is prescribed on the top edge while a proportional horizontal (shear) displacement is imposed on the side edges, with a shear-to-tension ratio $\gamma = 0.6$, and the bottom edge held fixed. Both components are ramped together under displacement control over 900 increments to a top displacement of 0.5 mm. The material is concrete with $E = 29{,}000$ MPa, $\nu = 0.20$, $f_t = 3.0$ MPa, $G_F = 0.110$ N/mm, and $k = f_c/f_t = 10$, so $f_c = 30$ MPa.
 
-\begin{figure}[htbp]
-  \centering
+![Nooru-Mohamed benchmark: (a) the 2D boundary conditions, (b) the 3D tetrahedral mesh through the central ligament, and (c) the experimentally observed front- and rear-face crack paths reported by Nooru-Mohamed [@nooru1992] for load path 4a, with notches at D--A and C--B. The experimental crack curves from one notch tip to the opposite notch tip across the ligament, which is the pattern the simulation is expected to recover. \label{fig:b2-mesh}](images/fig_b2_mesh.png){ width=100% }
 
-  \begin{subfigure}{0.32\linewidth}
-    \centering
-    \includegraphics[width=\linewidth]{images/nooru_BC_2D.png}
-    \caption{2D boundary conditions.}
-    \label{fig:b2-nooru-bc-2d}
-  \end{subfigure}\hfill
-  \begin{subfigure}{0.32\linewidth}
-    \centering
-    \includegraphics[width=\linewidth]{images/nooru_mesh_3D.png}
-    \caption{3D mesh.}
-    \label{fig:b2-nooru-mesh-3d}
-  \end{subfigure}\hfill
-  \begin{subfigure}{0.32\linewidth}
-    \centering
-    \includegraphics[width=\linewidth]{images/Exp_noor.png}
-    \caption{Experimental crack path.}
-    \label{fig:b2-nooru-exp}
-  \end{subfigure}
-
-  \caption{Nooru-Mohamed benchmark: (a) the 2D boundary conditions, (b) the 3D tetrahedral mesh through the central ligament, and (c) the experimentally observed front- and rear-face crack paths reported by Nooru-Mohamed \citep{nooru1992} for load path 4a, with notches at D--A and C--B. The experimental crack curves from one notch tip to the opposite notch tip across the ligament, which is the pattern the simulation is expected to recover.}
-  \label{fig:b2-mesh}
-\end{figure}
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=\linewidth]{images/nooru_damage_evolution_3x3.png}
-  \caption{Damage evolution $\omega$ for the Nooru-Mohamed run, from first localization at the notches (inc 29) to coalescence (inc 900). Only $\omega \ge 0.95$ is shaded.}
-  \label{fig:b2-damage-evolution}
-\end{figure}
+![Damage evolution $\omega$ for the Nooru-Mohamed run, from first localization at the notches (inc 29) to coalescence (inc 900). Only $\omega \ge 0.95$ is shaded. \label{fig:b2-damage-evolution}](images/nooru_damage_evolution_3x3.png){ width=95% }
 
 <!-- TODO: add a results table (peak load, comparison with Nooru-Mohamed experimental data) before submission. -->
 
-The panel is discretized in full 3D with four-node linear tetrahedral elements (TET4), refined through the ligament between the two notches where the cracks form and eventually interact; the geometry and the boundary grips are shown in Figures \ref{fig:b2-nooru-bc-2d} and \ref{fig:b2-nooru-mesh-3d}. The solver is the same vectorized modified Newton--Raphson used for Benchmark 1: a secant stiffness is assembled from the current damage state at the start of each load increment and its factorization is reused during the equilibrium iterations. The same modified von Mises constitutive routine is used, so nothing in the material model changes between 2D and 3D. The history variable $\kappa$ is committed once per converged increment, which keeps the secant system well conditioned as the two bands localize and compete for the same ligament. Crack band regularization uses Oliver's projected characteristic length for each tetrahedron. Figure \ref{fig:b2-damage-evolution} traces the predicted response from the first localization at the notch tips (increment 29) through to full coalescence of the two bands (increment 900); only elements with $\omega \ge 0.95$ are shaded, so the crack path itself stands out from the diffuse process zone around it. The two curved bands and their final separation reproduces the experimentally observed mixed-mode crack pattern, which confirms that the scalar damage model with crack band regularization carries over from the planar mode-I case to a fully three-dimensional mixed-mode setting without any change to the constitutive routine.
+The panel is discretized in full 3D with four-node linear tetrahedral elements (TET4), refined through the ligament between the two notches where the cracks form and eventually interact; the geometry and the boundary grips are shown in Figure \ref{fig:b2-mesh}. The solver is the same vectorized modified Newton--Raphson used for Benchmark 1: a secant stiffness is assembled from the current damage state at the start of each load increment and its factorization is reused during the equilibrium iterations. The same modified von Mises constitutive routine is used, so nothing in the material model changes between 2D and 3D. The history variable $\kappa$ is committed once per converged increment, which keeps the secant system well conditioned as the two bands localize and compete for the same ligament. Crack band regularization uses Oliver's projected characteristic length for each tetrahedron. Figure \ref{fig:b2-damage-evolution} traces the predicted response from the first localization at the notch tips (increment 29) through to full coalescence of the two bands (increment 900); only elements with $\omega \ge 0.95$ are shaded, so the crack path itself stands out from the diffuse process zone around it. The two curved bands and their final separation reproduces the experimentally observed mixed-mode crack pattern, which confirms that the scalar damage model with crack band regularization carries over from the planar mode-I case to a fully three-dimensional mixed-mode setting without any change to the constitutive routine.
 
 ## Benchmark 3: 3D notched beam torsion
 
-Brokenshire's torsion test [@jefferson_torsion] uses a $400 \times 250 \times 100$ mm plain concrete beam with a diagonal notch cut through the thickness (depth 25 mm, width 5 mm) across the bottom face at midspan. In the physical test three supports sit at the bottom corners and one end of the top edge, and a single point load goes on the remaining top corner, so the beam is twisted and the plane of maximum principal tension turns in space around the notch front, lining up with no face of the mesh. The experimental fracture pattern recovered from the broken specimen is reproduced in Figure \ref{fig:b3-exp-photo}: the two halves expose a single curved fracture surface that initiates at the notch front and twists around the beam axis toward the loaded corner, which is the pattern that the simulated damage field has to recover.
+Brokenshire's torsion test [@jefferson_torsion] uses a $400 \times 250 \times 100$ mm plain concrete beam with a diagonal notch cut through the thickness (depth 25 mm, width 5 mm) across the bottom face at midspan. In the physical test three supports sit at the bottom corners and one end of the top edge, and a single point load goes on the remaining top corner, so the beam is twisted and the plane of maximum principal tension turns in space around the notch front, lining up with no face of the mesh. The experimental fracture pattern recovered from the broken specimen is reproduced in Figure \ref{fig:b3-mesh}: the two halves expose a single curved fracture surface that initiates at the notch front and twists around the beam axis toward the loaded corner, which is the pattern that the simulated damage field has to recover.
 
-\begin{figure}[htbp]
-  \centering
-  \begin{subfigure}{0.55\linewidth}
-    \centering
-    \includegraphics[width=\linewidth]{images/torsion.png}
-    \caption{Specimen geometry, supports (blue), load (red), and the two monitored points A and B across the notch.}
-    \label{fig:b3-mesh-geom}
-  \end{subfigure}\hfill
-  \begin{subfigure}{0.42\linewidth}
-    \centering
-    \includegraphics[width=\linewidth]{images/Exp_torsion.png}
-    \caption{Experimentally fractured specimen; the two halves expose a single curved fracture surface twisting around the beam axis.}
-    \label{fig:b3-exp-photo}
-  \end{subfigure}
-  \caption{Brokenshire torsion test: (a) specimen geometry in mm with three supports at the bottom corners and one end of the top edge, and a single point load at the remaining top corner; (b) the experimental fracture pattern recovered from the broken specimen, used as the reference against which the simulated damage evolution in Figure \ref{fig:b3-damage-evolution} is compared.}
-  \label{fig:b3-mesh}
-\end{figure}
+![Brokenshire torsion test: (a) specimen geometry in mm with three supports at the bottom corners and one end of the top edge, and a single point load at the remaining top corner; (b) the experimental fracture pattern recovered from the broken specimen, used as the reference against which the simulated damage evolution in Figure \ref{fig:b3-damage-evolution} is compared. \label{fig:b3-mesh}](images/fig_b3_mesh.png){ width=100% }
 
-\newcommand{\torsnap}[1]{%
-  \includegraphics[width=\linewidth]%
-    {images/Job-1_StaticFast_mod_vm_LIVE_snap_inc_#1.png}}
-
-\begin{figure}[htbp]
-  \centering
-  \begin{subfigure}{0.32\linewidth}\centering
-    \torsnap{0001_theta_2_143e-05}
-    \caption{$\theta=2.14\times10^{-5}$, inc 1}
-    \label{fig:b3-damage-0001}
-  \end{subfigure}\hfill
-  \begin{subfigure}{0.32\linewidth}\centering
-    \torsnap{0021_theta_4_500e-04}
-    \caption{$\theta=4.50\times10^{-4}$, inc 21}
-    \label{fig:b3-damage-0021}
-  \end{subfigure}\hfill
-  \begin{subfigure}{0.32\linewidth}\centering
-    \torsnap{0041_theta_8_786e-04}
-    \caption{$\theta=8.79\times10^{-4}$, inc 41}
-    \label{fig:b3-damage-0041}
-  \end{subfigure}
-
-  \vspace{0.6em}
-  \begin{subfigure}{0.32\linewidth}\centering
-    \torsnap{0061_theta_1_307e-03}
-    \caption{$\theta=1.31\times10^{-3}$, inc 61}
-    \label{fig:b3-damage-0061}
-  \end{subfigure}\hfill
-  \begin{subfigure}{0.32\linewidth}\centering
-    \torsnap{0080_theta_1_714e-03}
-    \caption{$\theta=1.71\times10^{-3}$, inc 80}
-    \label{fig:b3-damage-0080}
-  \end{subfigure}\hfill
-  \begin{subfigure}{0.32\linewidth}\centering
-    \torsnap{0100_theta_2_143e-03}
-    \caption{$\theta=2.14\times10^{-3}$, inc 100}
-    \label{fig:b3-damage-0100}
-  \end{subfigure}
-
-  \vspace{0.6em}
-  \begin{subfigure}{0.32\linewidth}\centering
-    \torsnap{0120_theta_2_571e-03}
-    \caption{$\theta=2.57\times10^{-3}$, inc 120}
-    \label{fig:b3-damage-0120}
-  \end{subfigure}\hfill
-  \begin{subfigure}{0.32\linewidth}\centering
-    \torsnap{0140_theta_3_000e-03}
-    \caption{$\theta=3.00\times10^{-3}$, inc 140}
-    \label{fig:b3-damage-0140}
-  \end{subfigure}\hfill
-  \begin{subfigure}{0.32\linewidth}
-    \phantom{\rule{\linewidth}{0pt}}
-  \end{subfigure}
-
-  \caption{Damage evolution $\omega$ over the torsion run, labelled by twist $\theta$ and increment. The band nucleates at the notch front and spirals toward the loaded corner.}
-  \label{fig:b3-damage-evolution}
-\end{figure}
+![Damage evolution $\omega$ over the torsion run, labelled by twist $\theta$ and increment. The band nucleates at the notch front and spirals toward the loaded corner. \label{fig:b3-damage-evolution}](images/fig_b3_damage_evolution.png){ width=100% }
 
 In the model the loaded end is driven directly: one end face is fully fixed while the opposite end face is given a prescribed rigid-body twist $\theta$ about the beam axis under rotation control, ramped to $\theta_{\mathrm{end}} = 3.0\times10^{-3}$ rad over 140 increments. The reaction torque is recovered from the twisted end, and an equivalent applied load follows from the lever arm $a = 100$ mm.
 
 The material is plain concrete with $E = 35{,}000$ MPa, $\nu = 0.20$, $f_t = 3.0$ MPa, $G_F = 0.080$ N/mm ($= 80$ N/m), $\kappa_0 = 6.0\times10^{-5}$, and $k = f_c/f_t = 10$, so $f_c = 30$ MPa. Softening is exponential, as in the other benchmarks, with the softening parameter scaled element by element through the crack band length.
 
-The mesh is built from four-node linear tetrahedral elements (TET4) with a refined layer around the notch front. The equivalent strain is the same modified von Mises measure used throughout, and the damage update is under-relaxed with a factor of 0.35 to keep the staggered fixed-point iteration stable through the steep post-peak branch; each linear solve reuses a single AMD ordering with a Cholesky factorization. Two points, A and B, are monitored on opposite sides of the notch at midspan ($x = 200$ mm, $z = \pm 25$ mm), and their relative displacement across the notch gives the crack opening, as shown in Figure \ref{fig:b3-mesh-geom}.
+The mesh is built from four-node linear tetrahedral elements (TET4) with a refined layer around the notch front. The equivalent strain is the same modified von Mises measure used throughout, and the damage update is under-relaxed with a factor of 0.35 to keep the staggered fixed-point iteration stable through the steep post-peak branch; each linear solve reuses a single AMD ordering with a Cholesky factorization. Two points, A and B, are monitored on opposite sides of the notch at midspan ($x = 200$ mm, $z = \pm 25$ mm), and their relative displacement across the notch gives the crack opening, as shown in Figure \ref{fig:b3-mesh}.
 
 # Software availability
 
