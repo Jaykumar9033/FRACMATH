@@ -16,8 +16,12 @@ The GitHub repository is `Jaykumar9033/FRACMATH`, and the software described in 
 | `Noor mohammad/` | 3D Nooru-Mohamed mesh, MATLAB solver, and saved damage outputs | 3D mixed-mode validation case |
 | `Torsion/` | 3D torsion mesh, MATLAB solver, visualization scripts, and outputs | 3D notched beam torsion validation case |
 | `doc/` | Theory manual in LaTeX and PDF form | Formulation, derivations, and solver notes |
+| `paper/` | JOSS manuscript, bibliography, and figures | Submission paper package |
+| `tests/` | Lightweight MATLAB smoke checks | Fast repository completeness check |
 | `MANIFEST.md` | File map for code, inputs, and generated outputs | Helps reviewers locate each item |
 | `REPRODUCIBILITY.md` | One-by-one analysis instructions | Main reviewer run guide |
+| `CONTRIBUTING.md` | Issue, support, and contribution guidance | Open-source workflow guidance |
+| `CHANGELOG.md` | Version and submission-preparation notes | Release history |
 | `CITATION.cff` | Citation metadata | Software citation |
 | `requirements.txt` | Python plotting dependencies | Used by comparison and plotting scripts |
 
@@ -61,6 +65,13 @@ Run scripts from the folders listed above. Several scripts use relative paths to
    The Abaqus 3PB run requires a Fortran compiler configured for Abaqus UMAT compilation.
 
 5. Read `REPRODUCIBILITY.md` for the complete step-by-step run order.
+
+6. Optionally run the lightweight MATLAB smoke check from the repository root.
+
+   ```matlab
+   addpath('tests')
+   run_smoke_checks
+   ```
 
 ## Analysis overview
 

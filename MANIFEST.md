@@ -9,10 +9,29 @@ This file lists the main source-code, input-data, and generated-result locations
 | `README.md` | Main repository overview and quick start |
 | `REPRODUCIBILITY.md` | Step-by-step run guide for each analysis |
 | `CITATION.cff` | Citation metadata for the software archive |
+| `CONTRIBUTING.md` | Issue, support, and contribution guidance |
+| `CHANGELOG.md` | Version and submission-preparation history |
 | `LICENSE` | MIT License |
 | `requirements.txt` | Python plotting dependencies |
 | `.gitattributes` | Git LFS tracking for large Abaqus `.odb` files |
 | `.gitignore` | Local scratch-file ignore rules |
+| `.github/workflows/draft-pdf.yml` | GitHub Actions workflow for compiling the JOSS draft PDF |
+
+## JOSS paper package
+
+| Path | Type | Description |
+| --- | --- | --- |
+| `paper/paper.md` | manuscript | JOSS paper in Markdown format |
+| `paper/paper.bib` | bibliography | BibTeX references cited in the paper |
+| `paper/*.png` | figure | Main JOSS figures referenced directly by `paper.md` |
+| `paper/joss_1/joss_updated/joss/*.png` | figure | Additional JOSS figures referenced by existing paper paths |
+
+## Reviewer checks
+
+| Path | Type | Description |
+| --- | --- | --- |
+| `tests/README.md` | documentation | Smoke-check instructions |
+| `tests/run_smoke_checks.m` | source | MATLAB check for key files, paper assets, and sample result tables |
 
 ## 2D three-point bending benchmark
 
