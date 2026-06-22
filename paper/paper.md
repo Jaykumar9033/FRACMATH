@@ -31,9 +31,11 @@ The package includes a two-dimensional (2D) notched three-point bending (3PB) be
 
 # Statement of need
 
-Open-source finite-element tools already cover many research needs, including OOFEM in C++ [@oofem], FEniCS for Python/C++ workflows [@fenics], Akantu for high-performance fracture simulations [@akantu], and CALFEM as a MATLAB teaching toolbox [@calfem]. These projects are valuable, but extending them for a new damage formulation can require learning a larger architecture, templated interface, wrapper layer, or compiled user-material workflow. Commercial tools such as Abaqus/Standard are also powerful, but custom CDM models generally require user-material subroutines, such as UMAT for Abaqus/Standard or VUMAT for Abaqus/Explicit, plus careful state-variable handling [@abaqus].
-
 MATLAB remains useful in engineering research because students already know its matrix syntax, plotting tools, debugger, profiler, and sparse linear algebra. This matters for fracture modeling, where a user often needs to inspect element-level strain histories, change a softening law, compare crack-band lengths, and immediately visualize the damage field. `FRACMATH` uses that accessibility to provide a transparent CDM reference implementation rather than a general-purpose finite-element platform.
+
+# State of the field
+
+Open-source finite-element tools already cover many research needs, including OOFEM in C++ [@oofem], FEniCS for Python/C++ workflows [@fenics], Akantu for high-performance fracture simulations [@akantu], and CALFEM as a MATLAB teaching toolbox [@calfem]. These projects are valuable, but extending them for a new damage formulation can require learning a larger architecture, templated interface, wrapper layer, or compiled user-material workflow. Commercial tools such as Abaqus/Standard are also powerful, but custom CDM models generally require user-material subroutines, such as UMAT for Abaqus/Standard or VUMAT for Abaqus/Explicit, plus careful state-variable handling [@abaqus].
 
 The closest recent Journal of Open Source Software (JOSS) comparison is `Parallel-CDM` by Eldababy et al. [@parallelcdm], which provides a MATLAB implementation of 2D local and nonlocal CDM with parallel assembly. `FRACMATH` is complementary: its emphasis is direction-dependent Oliver crack-band scaling, the same bandwidth formula in MATLAB and Abaqus, a direct UMAT cross-check on an identical 3PB mesh, and reuse of the scalar damage routine for 3D mixed-mode and torsion-driven crack paths.
 
@@ -94,6 +96,10 @@ Brokenshire's torsion benchmark tests whether the same formulation can recover a
 The torsion case is deliberately different from the 3PB validation: it contains out-of-plane cracking, a nonuniform stress state, and a visibly curved fracture surface. The 3D examples are intended as qualitative crack-path demonstrations; only the 2D 3PB case is quantitatively cross-checked against Abaqus.
 
 ![Torsion damage evolution over the imposed twist history. \label{fig:b3-damage-evolution}](images/fig_b3_damage_evolution.png){ width=96% }
+
+# Research impact statement
+
+`FRACMATH` provides a reproducible reference workflow for CDM and crack-band studies. Its immediate scholarly value is the paired MATLAB/Abaqus 3PB benchmark, where the MATLAB solver is cross-checked against an independent Abaqus UMAT on the same mesh and material data. The repository also provides benchmark inputs, stored output data, plotting scripts, and 2D and 3D examples that can be reused for teaching, method comparison, and future extensions of crack-band regularization.
 
 # Software availability
 
