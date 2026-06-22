@@ -66,7 +66,7 @@ For the Abaqus comparison, `FRACMATH` includes the input deck, the Fortran UMAT,
 
 The main quantitative benchmark is the Gregoire notched 3PB beam [@gregoire2013], modeled with the same refined mesh, material constants, loading, scalar damage law, and Oliver crack-band formula in MATLAB and Abaqus. The 2D mesh uses Abaqus CPS3 elements, where CPS3 denotes a three-node plane-stress triangular element. MATLAB predicts a peak load of 3.63982 kN at CMOD 0.022811 mm; Abaqus predicts 3.60913 kN at CMOD 0.022485 mm. Both simulations localize damage upward from the notch, which is the expected opening-mode (mode-I) crack path for this geometry [@gregoire2013]. The Abaqus UMAT independently evaluates the same damage law and Oliver bandwidth inside a commercial finite-element environment [@abaqus; @oliver1989].
 
-On the test workstation, an Intel Core Ultra 9 285K central processing unit (CPU) with 64 GB random-access memory (RAM) and a 1 TB non-volatile memory express solid-state drive (NVMe SSD), MATLAB R2024a used one thread and Abaqus/Standard 2023 used four threads. The MATLAB solver wall-clock time was 547.58 s, while the Abaqus submit-to-completion time was 1996.25 s. MATLAB time was dominated by stiffness assembly, not by the sparse solve. The timing should not be read as a universal speed claim, because solver settings, output requests, hardware, and Abaqus licensing can all change wall-clock time.
+The stored timing logs for this benchmark run report MATLAB R2024a using one thread and Abaqus/Standard 2023 using four threads. The MATLAB solver wall-clock time was 547.58 s, while the Abaqus submit-to-completion time was 1996.25 s. MATLAB time was dominated by stiffness assembly, not by the sparse solve. The timing should not be read as a universal speed claim, because solver settings, output requests, hardware, and Abaqus licensing can all change wall-clock time.
 
 | Quantity | MATLAB | Abaqus + UMAT |
 |---|---:|---:|
@@ -75,7 +75,7 @@ On the test workstation, an Intel Core Ultra 9 285K central processing unit (CPU
 | Solver/submit wall-clock (s) | 547.58 | 1996.25 |
 | End-to-end/internal time (s) | 590.54 | 1968.00 |
 
-Table: Updated 2D 3PB comparison using the same mesh, material law, and Oliver T3 crack-band bandwidth. \label{tab:abqcompare}
+Table: 2D 3PB comparison using the same mesh, material law, and Oliver T3 crack-band bandwidth. \label{tab:abqcompare}
 
 ![3PB mesh and damage fields: (a) CPS3 mesh and support/load layout; (b) Abaqus UMAT final fully damaged elements; (c) MATLAB damage field at peak load; (d) MATLAB post-peak damage field. \label{fig:b1-compact}](images/fig_b1_compact.png){ width=100% }
 
