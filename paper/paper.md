@@ -111,7 +111,7 @@ The repository contains MATLAB source code, Abaqus UMAT files, benchmark input d
 
 # AI usage disclosure
 
-Generative AI tools were used to assist with manuscript wording, and formatting. They were not used as an authority for scientific claims. The authors reviewed and verified the equations, numerical results, figures, and references.
+Generative AI tools were used to assist with manuscript wording and formatting. They were not used as an authority for scientific claims. The authors reviewed and verified the equations, numerical results, figures, and references.
 
 # Acknowledgements
 
