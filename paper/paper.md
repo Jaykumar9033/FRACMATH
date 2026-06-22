@@ -109,6 +109,10 @@ The repository contains MATLAB source code, Abaqus UMAT files, benchmark input d
 
 `FRACMATH` is quasistatic and does not include inertia, rate effects, contact, plasticity, or unilateral crack closure. Damage is isotropic and scalar, so anisotropic stiffness recovery and cyclic loading are outside the current scope. Crack-band scaling controls mesh-objective energy dissipation but does not introduce a physical material length scale.
 
+# AI usage disclosure
+
+Generative AI tools were used to assist with manuscript wording, and formatting. They were not used as an authority for scientific claims. The authors reviewed and verified the equations, numerical results, figures, and references.
+
 # Acknowledgements
 
 The authors acknowledge support from the National Aeronautics and Space Administration, the New Mexico Space Grant Consortium under grant 80NSSC22M0044, and the New Mexico Department of Finance and Administration under grant ZI5044-MG25-109. The opinions and conclusions are those of the authors and do not necessarily reflect the views of the sponsors.
