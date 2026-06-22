@@ -1,84 +1,22 @@
 ﻿function damage_static(prefix, opts)
-% =========================================================================
-% DAMAGE_STATIC_NR_VECTORIZED_LIVE_DAMAGE.M
-% =========================================================================
-% Fast static implicit CDM damage simulation for a 3D TET4 mesh with live damage visualization.
-%
-% What this version changes from the old file:
-%   1) NO FSOLVE. Uses an internal modified Newton-Raphson loop.
-%   2) Vectorized element strain, equivalent strain, damage, and force update.
-%   3) Prebuilt global sparse triplet pattern for fast stiffness assembly.
-%   4) Live damage view updates during the simulation.
-%   5) Live view default: omega >= 0.005 to see initiation/propagation.
-%   6) Saved increment PNG default: fully damaged only, omega >= 0.95.
-%   7) Shows the mesh together with the damaged geometry.
-%   8) Saved increment PNGs can also include the mesh background.
-%   9) Added selectable damage color maps and color-limit modes so the crack
-%      can show blue/green/yellow/orange/red instead of looking all red.
-%  10) Replaced scalar h = V^(1/3) crack-band width with a
-%      direction-dependent Oliver bandwidth for TET4 elements:
-%          h_oliver = 2 / sum_a |grad(N_a) dot n_crack|.
-%      The crack normal n_crack is the current maximum principal strain direction.
-%
-% COLOR OPTIONS
-%   opts.damage_colormap = 'turbo';       % 'turbo','parula','jet','hot','cool','spring',
-%                                         % 'autumn','winter','fire','yellow_red',
-%                                         % 'blue_green_yellow_red','damage_bands'
-%   opts.damage_clim_mode = 'visible';    % 'visible','full','auto'
-%   opts.use_discrete_damage_colors = false;
-%   opts.n_damage_bands = 12;
-%
-% REQUIRED INPUT FILES IN THE MATLAB CURRENT FOLDER
-%   <prefix>_nodes.txt
-%   <prefix>_elements.txt
-%   <prefix>_top_nodes.txt
-%   <prefix>_bottom_nodes.txt
-%   <prefix>_left_nodes.txt
-%   <prefix>_right_nodes.txt
-%
-% EXAMPLE RUN
-%   opts = struct();
-%   opts.nIncr = 900;
-%   opts.load_path = '4c';
-%   opts.snapshot_stride = 1;          % 1 = try to save every increment
-%   opts.live_damage_thresh = 0.005;   % live crack initiation/propagation
-%   opts.save_damage_thresh = 0.95;    % saved PNGs: fully damaged only
-%   opts.show_live = true;             % watch damage live
-%   opts.live_stride = 1;              % 1 = update live figure every increment
-%   opts.show_mesh = true;              % show mesh behind live damage
-%   opts.save_show_mesh = true;         % save PNGs with mesh visible
-%   opts.damage_colormap = 'turbo';       % different colours for damage
-%   opts.damage_clim_mode = 'visible';    % spreads colours over visible damage range
-%   opts.bandwidth_method = 'oliver';       % direction-dependent Oliver bandwidth
-%   damage_static('Job-1', opts);
-%
-% TO SAVE EARLY CRACK PROPAGATION PNGs INSTEAD OF ONLY FULL DAMAGE:
-%   opts.save_damage_thresh = 0.005;
-% =========================================================================
 
 if nargin < 1 || isempty(prefix), prefix = 'Job-1'; end
 if nargin < 2 || isempty(opts),   opts   = struct();  end
 get_opt = @(f,def) local_get(opts,f,def);
 
-% =====================================================================
-% MATERIAL PARAMETERS
-% =====================================================================
-E      = get_opt('E',    29000.0);       % MPa = N/mm^2
+E      = get_opt('E',    29000.0);
 nu     = get_opt('nu',   0.20);
-GF     = get_opt('GF',   0.11);          % N/mm
-ft     = get_opt('ft',   3.00);          % MPa
-k_tc   = get_opt('k',    10.0);          % compression/tension ratio
+GF     = get_opt('GF',   0.11);
+ft     = get_opt('ft',   3.00);
+k_tc   = get_opt('k',    10.0);
 kappa0 = get_opt('kappa0', ft/E);
 j0     = kappa0;
 
-% =====================================================================
-% LOADING AND SOLVER CONTROLS
-% =====================================================================
 nIncr       = get_opt('nIncr',       900);
 Uy_end      = get_opt('Uy_end',      0.50);
 gamma       = get_opt('gamma',       0.60);
-load_path   = get_opt('load_path',  '4c');       % '4c' or 'shear_force'
-Fx_tot      = get_opt('Fx_tot',      1.0e4);     % only for shear_force path
+load_path   = get_opt('load_path',  '4c');
+Fx_tot      = get_opt('Fx_tot',      1.0e4);
 tol         = get_opt('tol',         1e-6);
 step_tol    = get_opt('step_tol',    1e-10);
 maxIter     = get_opt('maxIter',     40);
@@ -86,14 +24,9 @@ use_line_search = get_opt('use_line_search', false);
 maxLineSearch   = get_opt('maxLineSearch',   6);
 print_stride    = get_opt('print_stride',    10);
 
-% =====================================================================
-% LIVE DAMAGE + DAMAGED-GEOMETRY OUTPUT CONTROLS
-% =====================================================================
 def_scale       = get_opt('def_scale',       15.0);
 full_damage_thr = get_opt('full_damage_thresh', 0.95);
 
-% Live threshold should be low so you can see crack initiation and growth.
-% Saved threshold is kept high by default so saved PNGs are fully damaged only.
 live_damage_thr = get_opt('live_damage_thresh', get_opt('plot_damage_thresh', 0.005));
 save_damage_thr = get_opt('save_damage_thresh', full_damage_thr);
 
@@ -101,42 +34,30 @@ save_all_increment_geometry = get_opt('save_all_increment_geometry', true);
 snapshot_stride = max(1, round(get_opt('snapshot_stride', 1)));
 save_when_no_full_damage = get_opt('save_when_no_full_damage', false);
 
-show_live       = get_opt('show_live', true);        % true = watch damage live
+show_live       = get_opt('show_live', true);
 live_stride     = max(1, round(get_opt('live_stride', 1)));
-image_res       = get_opt('image_res', 180);         % lower = faster PNG saving
-view_angle      = get_opt('view_angle', [0 90]);     % XY/top view
+image_res       = get_opt('image_res', 180);
+view_angle      = get_opt('view_angle', [0 90]);
 damage_clim     = get_opt('damage_clim', [0.0 1.0]);
 out_dir         = get_opt('out_dir', 'out_NR_vectorized_LIVE_damage_mesh');
 
-% Mesh-visibility controls.  These are the main additions in this file.
-show_mesh       = get_opt('show_mesh', true);        % show global mesh in live figure
-save_show_mesh  = get_opt('save_show_mesh', true);   % show global mesh in saved PNGs
-mesh_alpha      = get_opt('mesh_alpha', 0.10);       % transparent mesh face background
+show_mesh       = get_opt('show_mesh', true);
+save_show_mesh  = get_opt('save_show_mesh', true);
+mesh_alpha      = get_opt('mesh_alpha', 0.10);
 mesh_edge_color = get_opt('mesh_edge_color', [0.55 0.58 0.62]);
 mesh_face_color = get_opt('mesh_face_color', [0.88 0.90 0.94]);
 mesh_line_width = get_opt('mesh_line_width', 0.12);
 
-% Damage faces can also show element edges, so you see both crack and mesh.
 damage_edge       = get_opt('damage_edge', true);
 damage_edge_color = get_opt('damage_edge_color', [0.20 0.20 0.20]);
 damage_edge_alpha = get_opt('damage_edge_alpha', 0.25);
 damage_line_width = get_opt('damage_line_width', 0.08);
 
-% Damage colour controls.
-% damage_clim_mode:
-%   'full'    -> colorbar is always [0,1].
-%   'visible' -> colorbar starts at the current plotting threshold.
-%   'auto'    -> colorbar follows the currently visible damaged faces.
-% Use 'visible' when fully damaged images look almost all red.
 damage_colormap = get_opt('damage_colormap', 'turbo');
 damage_clim_mode = lower(string(get_opt('damage_clim_mode', 'visible')));
 use_discrete_damage_colors = get_opt('use_discrete_damage_colors', false);
 n_damage_bands = max(2, round(get_opt('n_damage_bands', 12)));
 
-% Direction-dependent crack-band width.
-% 'oliver' uses h = 2/sum_a |grad(N_a) dot n_crack| with n_crack from
-% the maximum principal strain direction. This replaces the older scalar
-% V^(1/3) element-size approximation.
 bandwidth_method = lower(string(get_opt('bandwidth_method', 'oliver')));
 
 if ~exist(out_dir,'dir'), mkdir(out_dir); end
@@ -145,9 +66,6 @@ if save_all_increment_geometry && ~exist(inc_dir,'dir'), mkdir(inc_dir); end
 
 is4c = strcmpi(load_path,'4c');
 
-% =====================================================================
-% READ MESH AND NODE SETS
-% =====================================================================
 nd = readmatrix([prefix '_nodes.txt']);
 ids = nd(:,1);
 p   = nd(:,2:4);
@@ -171,9 +89,6 @@ fprintf('Nodes = %d | Elements = %d | Increments = %d\n', np, ne, nIncr);
 fprintf('Live damage threshold: omega >= %.4f\n', live_damage_thr);
 fprintf('Saved PNG damage threshold: omega >= %.4f\n', save_damage_thr);
 
-% =====================================================================
-% PRECOMPUTE TET4 MATRICES
-% =====================================================================
 fprintf('Precomputing vectorized TET4 B matrices...\n');
 [B3, V3, gradN3, valid] = precompute_TET4_vectorized(p,T);
 if any(~valid)
@@ -184,7 +99,6 @@ end
 Ke_unit3 = pagemtimes(permute(B3,[2 1 3]), pagemtimes(repmat(Dunit,[1 1 ne]), B3));
 Ke_unit3 = bsxfun(@times, Ke_unit3, reshape(V3,1,1,ne));
 
-% Element DOF table and global sparse triplet pattern
 ndof = 3*np;
 EDOF = build_edof(T);
 idx_glob = EDOF(:);
@@ -192,22 +106,15 @@ idx_glob = EDOF(:);
 fprintf('Prebuilding global sparse triplet pattern...\n');
 [I_trip, J_trip, Val_unit, eid_rep] = build_triplet_pattern(EDOF, Ke_unit3);
 
-% =====================================================================
-% DAMAGE STATE VARIABLES
-% =====================================================================
 U = zeros(ndof,1);
 kappa = j0 * ones(ne,1);
 h_band_bc = zeros(ne,1);
 
-% =====================================================================
-% BOUNDARY CONDITIONS
-% =====================================================================
 dof = @(nid,comp) 3*(double(nid)-1)+comp;
 
 fixY_bottom = dof(Nbot, 2);
 presc_top_uy = dof(Ntop, 2);
 
-% Prevent rigid-body modes.  For 4c, x is already controlled on left/right.
 xb = p(double(Nbot),1);
 [~,ib] = min(abs(xb - mean(xb)));
 fixX_pin = dof(Nbot(ib), 1);
@@ -242,9 +149,6 @@ if strcmpi(load_path,'shear_force')
     if ~isempty(Nright), Fext_base(Rx) = -Fx_tot / max(numel(Nright),1); end
 end
 
-% =====================================================================
-% RESULTS ARRAYS
-% =====================================================================
 delta_s_res = zeros(nIncr,1);
 delta_res   = zeros(nIncr,1);
 Ps_res      = zeros(nIncr,1);
@@ -262,17 +166,11 @@ min_h_res   = zeros(nIncr,1);
 max_h_res   = zeros(nIncr,1);
 saved_png   = cell(nIncr,1);
 
-% =====================================================================
-% GEOMETRY FOR DAMAGED-FACE DISPLAY
-% =====================================================================
 fprintf('Extracting faces for damaged-geometry images...\n');
 allF = [T(:,[1 2 3]); T(:,[1 2 4]); T(:,[1 3 4]); T(:,[2 3 4])];
 owner_per_face = repmat((1:ne)',4,1);
 extFaces = external_hull(T);
 
-% =====================================================================
-% LIVE FIGURE FOR DAMAGED GEOMETRY
-% =====================================================================
 if show_live
     vis_state = 'on';
 else
@@ -297,8 +195,6 @@ catch
     caxis(ax, damage_clim);
 end
 
-% Light global mesh background.  This is what lets you see the whole
-% element layout while the damaged elements grow on top.
 hHull = patch(ax, ...
     'Faces', extFaces, ...
     'Vertices', p, ...
@@ -336,7 +232,6 @@ camproj(ax,'orthographic');
 camup(ax,[0 1 0]);
 lighting(ax,'gouraud');
 
-% Use fixed limits so all increment images have the same frame.
 xyzMin = min(p,[],1);
 xyzMax = max(p,[],1);
 span = max(xyzMax - xyzMin);
@@ -350,9 +245,6 @@ axis(ax,'manual');
 
 fprintf('Starting modified Newton solver...\n');
 
-% =====================================================================
-% INCREMENT LOOP
-% =====================================================================
 tic_total = tic;
 
 for s = 1:nIncr
@@ -368,14 +260,12 @@ for s = 1:nIncr
         uxR_t = NaN;
     end
 
-    % External force for this increment
     if strcmpi(load_path,'shear_force')
         Fext = lambda_load * Fext_base;
     else
         Fext = sparse(ndof,1);
     end
 
-    % Initial guess: previous converged solution plus current prescribed values
     Utrial = U;
     Utrial(presc_top_uy) = Uy_t;
     Utrial(base_fix) = 0.0;
@@ -452,7 +342,6 @@ for s = 1:nIncr
         warning('Newton did not fully converge at increment %d. it=%d, relres=%.3e', s, it, relres);
     end
 
-    % Accept solution and enforce prescribed values exactly
     U(free) = x;
     U(presc_top_uy) = Uy_t;
     U(base_fix) = 0.0;
@@ -461,7 +350,6 @@ for s = 1:nIncr
         if ~isempty(Rx), U(Rx) = uxR_t; end
     end
 
-    % Update damage history after convergence
     [De_bc, ~, Fint_bc, eeq_bc, h_band_bc] = damage_state_and_internal_force( ...
         U, B3, EDOF, Ke_unit3, idx_glob, E, nu, k_tc, j0, GF, gradN3, bandwidth_method, kappa, ndof);
 
@@ -470,7 +358,6 @@ for s = 1:nIncr
     [De_bc, ~, Fint_bc, ~, h_band_bc] = damage_state_and_internal_force( ...
         U, B3, EDOF, Ke_unit3, idx_glob, E, nu, k_tc, j0, GF, gradN3, bandwidth_method, kappa, ndof);
 
-    % Reactions / loads
     Freac = Fint_bc - Fext;
     P_normal = double(full(sum(Freac(presc_top_uy))));
 
@@ -509,7 +396,6 @@ for s = 1:nIncr
     min_h_res(s)  = double(min(h_band_bc));
     max_h_res(s)  = double(max(h_band_bc));
 
-    % Save damaged-geometry image only.  Default save threshold is omega >= 0.95.
     do_save = save_all_increment_geometry && (mod(s,snapshot_stride)==0 || s==1 || s==nIncr);
     if do_save
         [did_save, png_name] = save_damage_geometry_snapshot( ...
@@ -522,7 +408,6 @@ for s = 1:nIncr
         end
     end
 
-    % Live update: low damage threshold so you can see crack initiation/growth.
     do_live = show_live && (mod(s,live_stride)==0 || s==1 || s==nIncr);
     if do_live
         update_damage_geometry_live( ...
@@ -539,15 +424,11 @@ end
 
 elapsed = toc(tic_total);
 
-% =====================================================================
-% FINAL DAMAGE + MESH GEOMETRY IMAGE
-% =====================================================================
 final_png = fullfile(out_dir, [prefix '_FINAL_damage_geometry_with_mesh.png']);
 [~, ~] = save_damage_geometry_snapshot( ...
     fig, ax, hHull, hDam, p, U, def_scale, allF, owner_per_face, De_bc, ...
     save_damage_thr, nIncr, nIncr, 1.0, out_dir, [prefix '_FINAL'], image_res, true, save_show_mesh, damage_clim, damage_clim_mode);
 
-% Rename predictable final file if the helper created an increment-style name.
 helper_final = fullfile(out_dir, sprintf('%s_FINAL_inc_%04d_damageMesh_omega_ge_%s.png', ...
     prefix, nIncr, fmt_underscore(save_damage_thr)));
 if exist(helper_final,'file')
@@ -560,9 +441,6 @@ end
 final_fig = fullfile(out_dir, [prefix '_FINAL_damage_geometry_with_mesh.fig']);
 savefig(fig, final_fig);
 
-% =====================================================================
-% SAVE DATA
-% =====================================================================
 out_csv = fullfile(out_dir, [prefix '_fast_NR_results.csv']);
 results = table(delta_s_res, delta_res, Ps_res, P_res, maxD_res, meanD_res, ...
                 nD005_res, nD050_res, nD950_res, nPlot_res, ...
@@ -598,9 +476,6 @@ end
 
 end
 
-% =========================================================================
-% RESIDUAL AND JACOBIAN FOR MODIFIED NEWTON
-% =========================================================================
 function [R,Jff,Fint] = residual_and_jac_NR( ...
     x, Utrial, free, B3, EDOF, Ke_unit3, idx_glob, ...
     E, nu, k_tc, j0, GF, gradN3, bandwidth_method, kappa, Fext, ...
@@ -621,7 +496,6 @@ K = 0.5*(K + K.');
 
 Jff = K(free,free);
 
-% Very small stabilization helps when many elements are almost fully damaged.
 if ~isempty(Jff)
     dmax = double(full(max(abs(diag(Jff)))));
     if isempty(dmax) || dmax <= 0 || ~isfinite(dmax)
@@ -632,9 +506,6 @@ end
 
 end
 
-% =========================================================================
-% RESIDUAL ONLY FOR OPTIONAL LINE SEARCH
-% =========================================================================
 function R = residual_only_NR( ...
     x, Utrial, free, B3, EDOF, Ke_unit3, idx_glob, ...
     E, nu, k_tc, j0, GF, gradN3, bandwidth_method, kappa, Fext, ndof)
@@ -650,9 +521,6 @@ R = Rfull(free);
 
 end
 
-% =========================================================================
-% DAMAGE STATE AND INTERNAL FORCE
-% =========================================================================
 function [De, s_e, Fint, eeq, h_band, crack_n] = damage_state_and_internal_force( ...
     U, B3, EDOF, Ke_unit3, idx_glob, E, nu, k_tc, j0, GF, gradN3, bandwidth_method, kappa_old, ndof)
 
@@ -661,17 +529,9 @@ ne = size(EDOF,2);
 ue12 = reshape(U(EDOF), 12, 1, ne);
 epsv = pagemtimes(B3, ue12);
 
-% Equivalent strain and crack normal. For the Oliver bandwidth, the
-% localization-band normal is taken as the current maximum-principal-strain
-% direction of each element.
 [eeq, crack_n] = eqv_strain_modified_vm_vec(epsv, nu, k_tc);
 eeq = reshape(eeq, [], 1);
 
-% Full direction-dependent Oliver crack-band width for linear TET4:
-%     h = 2 / sum_a |grad(N_a) dot n_crack|
-% where a = 1..4. This is recomputed from the current crack direction, so
-% the dissipated fracture energy follows the local crack orientation instead
-% of using a scalar V^(1/3) element-size approximation.
 h_band = oliver_bandwidth_TET4(gradN3, crack_n, bandwidth_method);
 be = (E * j0 ./ GF) .* h_band(:);
 
@@ -691,9 +551,6 @@ Fint = assemble_accum(idx_glob, fe12, ndof);
 
 end
 
-% =========================================================================
-% VECTORIZED TET4 PRECOMPUTATION
-% =========================================================================
 function [B_all,V_el,gradN_all,valid] = precompute_TET4_vectorized(p,T)
 
 ne = size(T,1);
@@ -716,10 +573,10 @@ safeDet = detJ;
 bad = abs(safeDet) <= eps | ~isfinite(safeDet);
 safeDet(bad) = eps;
 
-g2 = cross(b,c,2) ./ safeDet;    % grad N2
-g3 = cross(c,a,2) ./ safeDet;    % grad N3
-g4 = cross(a,b,2) ./ safeDet;    % grad N4
-g1 = -(g2 + g3 + g4);            % grad N1
+g2 = cross(b,c,2) ./ safeDet;
+g3 = cross(c,a,2) ./ safeDet;
+g4 = cross(a,b,2) ./ safeDet;
+g1 = -(g2 + g3 + g4);
 
 gx = [g1(:,1), g2(:,1), g3(:,1), g4(:,1)];
 gy = [g1(:,2), g2(:,2), g3(:,2), g4(:,2)];
@@ -749,8 +606,6 @@ end
 
 V_el(~valid) = max(V_el(~valid), eps);
 
-% Store TET4 shape-function gradients for direction-dependent Oliver bandwidth.
-% gradN_all(e,a,c) = derivative of N_a in coordinate c for element e.
 gradN_all = zeros(ne,4,3);
 gradN_all(:,:,1) = gx;
 gradN_all(:,:,2) = gy;
@@ -758,9 +613,6 @@ gradN_all(:,:,3) = gz;
 
 end
 
-% =========================================================================
-% DIRECTION-DEPENDENT OLIVER CRACK-BAND WIDTH FOR TET4
-% =========================================================================
 function h_band = oliver_bandwidth_TET4(gradN_all, crack_n, bandwidth_method)
 
 if nargin < 3 || isempty(bandwidth_method)
@@ -786,15 +638,10 @@ gz = gradN_all(:,:,3);
 proj = gx .* crack_n(:,1) + gy .* crack_n(:,2) + gz .* crack_n(:,3);
 denom = sum(abs(proj),2);
 
-% Valid TET4 elements give a positive denominator for any unit normal. The
-% eps guard only protects against degenerate imported elements.
 h_band = 2.0 ./ max(denom, eps);
 
 end
 
-% =========================================================================
-% BUILD ELEMENT DOF TABLE
-% =========================================================================
 function EDOF = build_edof(T)
 
 ne = size(T,1);
@@ -810,9 +657,6 @@ end
 
 end
 
-% =========================================================================
-% BUILD GLOBAL SPARSE TRIPLET PATTERN
-% =========================================================================
 function [I_trip, J_trip, Val_unit, eid_rep] = build_triplet_pattern(EDOF, Ke_unit3)
 
 ne = size(EDOF,2);
@@ -830,9 +674,6 @@ eid_rep = repelem((1:ne)', 144);
 
 end
 
-% =========================================================================
-% ISOTROPIC 3D ELASTIC MATRIX
-% =========================================================================
 function [D,lambda,mu] = iso3D_D(E,nu)
 
 mu = E/(2*(1+nu));
@@ -847,9 +688,6 @@ D = [lambda+2*mu, lambda,      lambda,      0,  0,  0;
 
 end
 
-% =========================================================================
-% MODIFIED VON MISES EQUIVALENT STRAIN + CRACK NORMAL
-% =========================================================================
 function [eeq, crack_n] = eqv_strain_modified_vm_vec(epsv,nu,k)
 
 exx = reshape(epsv(1,1,:),[],1);
@@ -859,7 +697,6 @@ gxy = reshape(epsv(4,1,:),[],1);
 gyz = reshape(epsv(5,1,:),[],1);
 gxz = reshape(epsv(6,1,:),[],1);
 
-% Convert engineering shear strains to tensor shear strains.
 exy = 0.5*gxy;
 eyz = 0.5*gyz;
 exz = 0.5*gxz;
@@ -883,15 +720,10 @@ term2 = (1/(2*k)) .* sqrt(rad);
 
 eeq = max(0, term1 + term2);
 
-% Crack/localization normal for the Oliver bandwidth. This is the eigenvector
-% of the maximum principal strain of the current element strain tensor.
 [~, crack_n] = max_principal_strain_direction_vec(exx, eyy, ezz, exy, eyz, exz);
 
 end
 
-% =========================================================================
-% MAXIMUM PRINCIPAL STRAIN DIRECTION, VECTORIZED FOR SYMMETRIC 3x3 TENSORS
-% =========================================================================
 function [lambda1, n1] = max_principal_strain_direction_vec(exx, eyy, ezz, exy, eyz, exz)
 
 ne = numel(exx);
@@ -916,14 +748,11 @@ r = 0.5 * (B11.*(B22.*B33 - B23.^2) ...
 r = min(max(r,-1),1);
 phi = acos(r) / 3;
 
-lambda1 = q + 2*p.*cos(phi);     % algebraically largest eigenvalue
+lambda1 = q + 2*p.*cos(phi);
 
-% Diagonal/spherical cases need direct handling because the eigenvector may
-% not be unique.
 diag_case = p1 < 1e-28;
 spherical = p < 1e-28;
 
-% Eigenvector from cross products of rows of A - lambda1 I.
 a11 = exx - lambda1;
 a22 = eyy - lambda1;
 a33 = ezz - lambda1;
@@ -949,8 +778,6 @@ n1(use23,:) = c23(use23,:);
 nrm = sqrt(sum(n1.^2,2));
 bad = ~isfinite(nrm) | nrm < 1e-20 | diag_case | spherical;
 
-% For diagonal tensors, use the coordinate direction of the largest normal
-% strain. For spherical strain, any direction is equivalent; use x.
 if any(bad)
     vals = [exx, eyy, ezz];
     [~, imax] = max(vals, [], 2);
@@ -969,18 +796,12 @@ n1 = n1 ./ max(nrm,eps);
 
 end
 
-% =========================================================================
-% FAST ACCUMULATION
-% =========================================================================
 function F = assemble_accum(idx_glob, fe12, ndof)
 
 F = accumarray(idx_glob(:), fe12(:), [ndof,1], @sum, 0, true);
 
 end
 
-% =========================================================================
-% SAVE ONE DAMAGED-GEOMETRY SNAPSHOT
-% =========================================================================
 function [did_save, png_name] = save_damage_geometry_snapshot( ...
     fig, ax, hHull, hDam, p, U, def_scale, allF, owner_per_face, De, ...
     plot_thr, inc, nIncr, lambda_load, out_folder, prefix, image_res, save_when_empty, show_mesh_in_saved, damage_clim, damage_clim_mode)
@@ -1018,9 +839,9 @@ if nargin >= 3 && ~isempty(hHull) && isgraphics(hHull)
     oldHullVis = get(hHull,'Visible');
     set(hHull,'Vertices',P_def);
     if show_mesh_in_saved
-        set(hHull,'Visible','on');     % saved PNGs include the mesh background
+        set(hHull,'Visible','on');
     else
-        set(hHull,'Visible','off');    % damaged geometry only
+        set(hHull,'Visible','off');
     end
 end
 
@@ -1073,9 +894,6 @@ did_save = true;
 
 end
 
-% =========================================================================
-% UPDATE LIVE DAMAGED GEOMETRY WITHOUT SAVING
-% =========================================================================
 function update_damage_geometry_live( ...
     fig, ax, hHull, hDam, p, U, def_scale, allF, owner_per_face, De, ...
     live_thr, inc, nIncr, lambda_load, maxD, nLive, show_mesh_live, damage_clim, damage_clim_mode)
@@ -1137,9 +955,6 @@ camup(ax,[0 1 0]);
 
 end
 
-% =========================================================================
-% EXTERNAL HULL FACES FOR LIVE OUTLINE
-% =========================================================================
 function extFaces = external_hull(T)
 
 allF = [T(:,[1 2 3]); T(:,[1 2 4]); T(:,[1 3 4]); T(:,[2 3 4])];
@@ -1150,9 +965,6 @@ extFaces = uf(cnt == 1,:);
 
 end
 
-% =========================================================================
-% SAFE GRAPHICS PROPERTY SETTER
-% =========================================================================
 function try_set(h, prop, val)
 
 if isempty(h) || ~isgraphics(h)
@@ -1162,14 +974,11 @@ end
 try
     set(h, prop, val);
 catch
-    % Some older MATLAB graphics backends may not support EdgeAlpha.
-end
 
 end
 
-% =========================================================================
-% SMALL HELPER FOR PATCH VISIBILITY
-% =========================================================================
+end
+
 function v = ternary_vis(tf)
 
 if tf
@@ -1180,9 +989,6 @@ end
 
 end
 
-% =========================================================================
-% READ NODE SET AND MAP ORIGINAL NODE IDs TO LOCAL ROW NUMBERS
-% =========================================================================
 function nodes = read_nodeset_local(file_name, ids, set_name)
 
 raw = readmatrix(file_name);
@@ -1199,9 +1005,6 @@ nodes = nodes(nodes > 0);
 
 end
 
-% =========================================================================
-% SMALL SAFE MEAN
-% =========================================================================
 function m = safe_mean(x)
 
 if isempty(x)
@@ -1212,9 +1015,6 @@ end
 
 end
 
-% =========================================================================
-% LOW-DAMAGE-TO-FULL-DAMAGE COLORMAP
-% =========================================================================
 function c = full_damage_cmap()
 
 n = 256;
@@ -1238,10 +1038,6 @@ c = min(max(c,0),1);
 
 end
 
-
-% =========================================================================
-% SELECT DAMAGE COLORMAP
-% =========================================================================
 function c = select_damage_cmap(name, n_bands, make_discrete)
 
 if nargin < 1 || isempty(name)
@@ -1276,34 +1072,34 @@ switch name
         c = builtin_colormap_safe('winter', n);
     case "fire"
         c = interp_colormap([ ...
-            0.02 0.02 0.08;   % black-blue
-            0.15 0.05 0.40;   % purple
-            0.80 0.05 0.05;   % red
-            1.00 0.55 0.00;   % orange
+            0.02 0.02 0.08;
+            0.15 0.05 0.40;
+            0.80 0.05 0.05;
+            1.00 0.55 0.00;
             1.00 0.95 0.05], n);
     case "yellow_red"
         c = interp_colormap([ ...
-            1.00 1.00 0.75;   % pale yellow
-            1.00 0.85 0.05;   % yellow
-            1.00 0.45 0.00;   % orange
-            0.85 0.05 0.02;   % red
+            1.00 1.00 0.75;
+            1.00 0.85 0.05;
+            1.00 0.45 0.00;
+            0.85 0.05 0.02;
             0.35 0.00 0.00], n);
     case "blue_green_yellow_red"
         c = interp_colormap([ ...
-            0.05 0.10 0.75;   % blue
-            0.00 0.70 0.85;   % cyan
-            0.10 0.75 0.25;   % green
-            1.00 0.92 0.05;   % yellow
-            1.00 0.42 0.00;   % orange
+            0.05 0.10 0.75;
+            0.00 0.70 0.85;
+            0.10 0.75 0.25;
+            1.00 0.92 0.05;
+            1.00 0.42 0.00;
             0.80 0.00 0.00], n);
     case "damage_bands"
         c = interp_colormap([ ...
-            0.05 0.15 0.95;   % low damage blue
-            0.00 0.70 1.00;   % cyan
-            0.00 0.75 0.20;   % green
-            0.95 0.95 0.05;   % yellow
-            1.00 0.50 0.00;   % orange
-            0.90 0.00 0.00;   % red
+            0.05 0.15 0.95;
+            0.00 0.70 1.00;
+            0.00 0.75 0.20;
+            0.95 0.95 0.05;
+            1.00 0.50 0.00;
+            0.90 0.00 0.00;
             0.35 0.00 0.00], max(n_bands,2));
         return;
     otherwise
@@ -1317,9 +1113,6 @@ end
 
 end
 
-% =========================================================================
-% BUILT-IN COLORMAP WITH FALLBACK FOR OLDER MATLAB
-% =========================================================================
 function c = builtin_colormap_safe(name, n)
 
 try
@@ -1335,9 +1128,6 @@ end
 
 end
 
-% =========================================================================
-% INTERPOLATED CUSTOM COLORMAP
-% =========================================================================
 function c = interp_colormap(stops, n)
 
 m = size(stops,1);
@@ -1353,9 +1143,6 @@ c = min(max(c,0),1);
 
 end
 
-% =========================================================================
-% MAKE A CONTINUOUS COLORMAP INTO DISTINCT COLOR BANDS
-% =========================================================================
 function c = discretize_colormap(c0, n_bands)
 
 n_bands = max(2, round(n_bands));
@@ -1364,9 +1151,6 @@ c = c0(idx,:);
 
 end
 
-% =========================================================================
-% APPLY DAMAGE COLOR LIMITS
-% =========================================================================
 function apply_damage_color_limits(ax, visible_damage, threshold, default_clim, mode)
 
 mode = lower(string(mode));
@@ -1410,9 +1194,6 @@ set_current_clim(ax, lim);
 
 end
 
-% =========================================================================
-% GET/SET CLIM COMPATIBLE WITH NEW AND OLD MATLAB
-% =========================================================================
 function lim = get_current_clim(ax)
 
 try
@@ -1433,10 +1214,6 @@ end
 
 end
 
-
-% =========================================================================
-% OPTION READER
-% =========================================================================
 function val = local_get(opts, field, default)
 
 if isstruct(opts) && isfield(opts,field) && ~isempty(opts.(field))
@@ -1447,9 +1224,6 @@ end
 
 end
 
-% =========================================================================
-% SAFE NUMBER FOR FILE NAME
-% =========================================================================
 function s = fmt_underscore(x)
 
 s = sprintf('%.4e', x);

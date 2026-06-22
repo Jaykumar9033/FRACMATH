@@ -1,25 +1,3 @@
-# -*- coding: utf-8 -*-
-#!/usr/bin/env python
-"""
-extract_plots_from_results.py
-=============================
-Regenerate Abaqus result CSVs and plots from an existing 3PB Abaqus result
-folder.
-
-Use case:
-    The Abaqus job already finished and Gregoire_3PB/Gregoire_3PB.odb exists.
-    This script extracts the load-CMOD curve and damage snapshots from that
-    ODB, then uses the normal Python plotter to write PNG/PDF figures.
-
-Recommended commands from this folder:
-
-    abaqus python extract_plots_from_results.py
-    python extract_plots_from_results.py --plot
-
-The first command needs Abaqus Python because it reads the ODB. The second
-command only needs normal Python with numpy/matplotlib and plots from the CSVs
-already present in Gregoire_3PB/results.
-"""
 
 from __future__ import print_function
 
@@ -29,24 +7,19 @@ import re
 import runpy
 import sys
 
-
 MODEL = "Gregoire_3PB"
 POSTPEAK_CMOD = 0.30
 DEFAULT_THRESHOLD = 0.99
 
-
 def script_dir():
     return os.path.abspath(os.path.dirname(__file__) if "__file__" in globals() else os.getcwd())
-
 
 def ensure_dir(path):
     if not os.path.isdir(path):
         os.makedirs(path)
 
-
 def norm_name(name):
     return str(name).strip().upper().replace("-", "_").replace(" ", "_")
-
 
 def get_by_name_ci(container, wanted):
     if wanted in container.keys():
@@ -56,7 +29,6 @@ def get_by_name_ci(container, wanted):
         if norm_name(key) == target:
             return container[key]
     return None
-
 
 def find_odb(arg=None):
     if arg and os.path.exists(arg):
@@ -72,7 +44,6 @@ def find_odb(arg=None):
     candidates.sort(key=os.path.getmtime)
     return os.path.abspath(candidates[-1])
 
-
 def _flatten_nodes(obj, out):
     if hasattr(obj, "label"):
         out.add(int(obj.label))
@@ -83,12 +54,10 @@ def _flatten_nodes(obj, out):
     except TypeError:
         pass
 
-
 def labels_from_nodeset(nodeset):
     labels = set()
     _flatten_nodes(nodeset.nodes, labels)
     return labels
-
 
 def _last_int(text):
     values = re.findall(r"\d+", str(text))
@@ -98,7 +67,6 @@ def _last_int(text):
         return int(values[-1])
     except Exception:
         return None
-
 
 def history_node_label(hkey, hreg):
     label = _last_int(hkey)
@@ -112,7 +80,6 @@ def history_node_label(hkey, hreg):
         except Exception:
             pass
     return None
-
 
 def collect_history(step, labels, component, mode):
     labels = set(int(x) for x in labels)
@@ -140,7 +107,6 @@ def collect_history(step, labels, component, mode):
         rows.append((t, value))
     return rows
 
-
 def force_positive_load(rows):
     if not rows:
         return rows
@@ -148,7 +114,6 @@ def force_positive_load(rows):
     if max(loads) <= 0.0 and min(loads) < 0.0:
         return [(cmod, -load) for cmod, load in rows]
     return rows
-
 
 def make_load_cmod_rows(rf_hist, u1_hist, u2_hist):
     rf = dict(rf_hist)
@@ -169,13 +134,11 @@ def make_load_cmod_rows(rf_hist, u1_hist, u2_hist):
         times.append(rf_hist[i][0])
     return times, force_positive_load(rows)
 
-
 def float_component(data, idx):
     try:
         return float(data[idx])
     except Exception:
         return float(data)
-
 
 def get_damage_field(frame):
     keys = frame.fieldOutputs.keys()
@@ -190,7 +153,6 @@ def get_damage_field(frame):
             return frame.fieldOutputs[key], 1, key
     return None, None, None
 
-
 def frame_has_damage(frame):
     field, _, _ = get_damage_field(frame)
     if field is None:
@@ -199,7 +161,6 @@ def frame_has_damage(frame):
         return len(field.values) > 0
     except Exception:
         return False
-
 
 def closest_damage_frame_index(step, target_time, prefer_at_or_after=False):
     candidates = []
@@ -218,13 +179,11 @@ def closest_damage_frame_index(step, target_time, prefer_at_or_after=False):
     candidates.sort()
     return candidates[0][1]
 
-
 def last_damage_frame_index(step):
     for idx in range(len(step.frames) - 1, -1, -1):
         if frame_has_damage(step.frames[idx]):
             return idx
     return len(step.frames) - 1 if len(step.frames) else None
-
 
 def write_omega_csv(frame, path):
     with open(path, "w") as handle:
@@ -247,7 +206,6 @@ def write_omega_csv(frame, path):
             if omega > max_omega:
                 max_omega = omega
     return count, max_omega if max_omega > -1.0e98 else -1.0
-
 
 def dump_mesh(odb, plotdata_dir):
     assembly = odb.rootAssembly
@@ -273,7 +231,6 @@ def dump_mesh(odb, plotdata_dir):
                              (int(elem.label), int(con[0]), int(con[1]), int(con[2])))
     return instance.name
 
-
 def parse_wall_clock(odb_path):
     base, _ = os.path.splitext(odb_path)
     for path in (base + ".msg", base + ".dat", base + ".sta"):
@@ -294,7 +251,6 @@ def parse_wall_clock(odb_path):
                         pass
     return None, None
 
-
 def previous_submit_time(results_dir):
     path = os.path.join(results_dir, "abaqus_timing.txt")
     if not os.path.exists(path):
@@ -305,7 +261,6 @@ def previous_submit_time(results_dir):
         return None
     match = re.search(r"Solver wall-clock\s*\(submit->done\):\s*([0-9.]+)\s*s", text)
     return float(match.group(1)) if match else None
-
 
 def write_timing(results_dir, odb_path, peak_load, peak_cmod, nrows):
     wall, source = parse_wall_clock(odb_path)
@@ -320,7 +275,6 @@ def write_timing(results_dir, odb_path, peak_load, peak_cmod, nrows):
         handle.write("Abaqus WALLCLOCK (.msg/.dat):     %s\n" %
                      (("%.2f s (%s)" % (wall, source)) if wall is not None else "n/a"))
 
-
 def run_plotter(results_dir):
     plotter = os.path.join(os.path.dirname(results_dir), "plot_results.py")
     if not os.path.exists(plotter):
@@ -334,7 +288,6 @@ def run_plotter(results_dir):
         return True
     finally:
         sys.argv = old_argv
-
 
 def extract_from_odb(odb_path, threshold=DEFAULT_THRESHOLD):
     try:
@@ -447,7 +400,6 @@ def extract_from_odb(odb_path, threshold=DEFAULT_THRESHOLD):
         print("Now regenerate plots with normal Python:")
         print('  python "%s" --plot "%s"' % (os.path.abspath(__file__), results_dir))
 
-
 def plot_only(results_arg=None):
     if results_arg and os.path.isdir(results_arg):
         results_dir = os.path.abspath(results_arg)
@@ -456,7 +408,6 @@ def plot_only(results_arg=None):
     if not os.path.isdir(results_dir):
         raise RuntimeError("Results folder not found: %s" % results_dir)
     return run_plotter(results_dir)
-
 
 def main():
     args = sys.argv[1:]
@@ -472,7 +423,6 @@ def main():
 
     odb_arg = args[0] if args else None
     extract_from_odb(odb_arg)
-
 
 if __name__ == "__main__":
     main()

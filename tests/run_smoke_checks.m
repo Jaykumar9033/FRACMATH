@@ -1,5 +1,4 @@
 function run_smoke_checks()
-%RUN_SMOKE_CHECKS Lightweight reviewer checks for repository completeness.
 
 root = fileparts(fileparts(mfilename('fullpath')));
 

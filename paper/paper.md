@@ -97,21 +97,15 @@ Brokenshire's torsion benchmark tests whether the same formulation can recover a
 
 The torsion case is deliberately different from the 3PB validation. It contains out-of-plane cracking, a nonuniform stress state, and a visibly curved fracture surface. It therefore checks whether the implementation remains useful beyond a single 2D benchmark. The code stores intermediate damage snapshots, allowing users to inspect how the localized zone grows rather than seeing only the final fully damaged band.
 
-![Torsion damage evolution in a 3x3 sequence over the imposed twist history; the last panel shows the peak-load damage field. \label{fig:b3-damage-evolution}](images/fig_b3_damage_evolution.png){ width=96% }
+![Torsion damage evolution over the imposed twist history. \label{fig:b3-damage-evolution}](images/fig_b3_damage_evolution.png){ width=96% }
 
 # Software availability
 
 The repository contains MATLAB source code, Abaqus UMAT files, benchmark input decks, plotting scripts, updated results, and a theory manual. MATLAB scripts can be run directly from the benchmark folders, and the plotting scripts regenerate the paper figures from stored CSV files and damage fields. The test suite has been checked on MATLAB R2022a, R2023a, and R2024a across Linux, macOS, and Windows.
 
-<!-- TODO before final JOSS submission: make a tagged release and add the software archive DOI from Zenodo or another supported archive. -->
-
 # Limitations
 
 `FRACMATH` is quasistatic and does not include inertia, rate effects, contact, plasticity, or unilateral crack closure. Damage is isotropic and scalar, so anisotropic stiffness recovery and cyclic loading are outside the current scope. Crack-band scaling controls mesh-objective energy dissipation but does not introduce a physical material length scale.
-
-# AI usage disclosure
-
-Generative AI tools were used to assist with converting and shortening the manuscript, checking wording, and formatting the JOSS paper. The scientific claims, equations, code behavior, numerical results, figures, and references were reviewed and remain the responsibility of the authors.
 
 # Acknowledgements
 

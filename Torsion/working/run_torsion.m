@@ -1,53 +1,26 @@
-﻿%==========================================================================
-% run_torsion.m
-%
-% SUPERFAST 3D QUASI-STATIC TORSION DAMAGE SOLVER (fully vectorized)
-% UPDATED: full direction-dependent Oliver crack-band bandwidth.
-%
-% Main bandwidth change:
-%   OLD scalar width:
-%       he = (12*V)^(1/3)
-%
-%   NEW direction-dependent Oliver width:
-%       h_n = 2 / sum_a |grad(N_a) dot n_crack|
-%
-% where n_crack is the current maximum-principal-strain direction in each
-% TET4 element. The bandwidth is recalculated inside every damage iteration,
-% because the crack direction changes with the current strain state.
-%
-% Required mesh files in current folder:
-%   Job-1_nodes.txt
-%   Job-1_elements.txt
-%   Job-1_left_nodes.txt
-%   Job-1_right_nodes.txt
-%
-% Units assumed: N, mm, MPa = N/mm^2
-%==========================================================================
+﻿
+
 function run_torsion()
     clc; close all;
 
-    % ===== 1) MATERIAL PARAMETERS =====
-    E_PAPER      = 35000;     % MPa = N/mm^2
-    nu_PAPER     = 0.20;      % -
-    ft_PAPER     = 3.0;       % MPa
-    GF_PAPER     = 0.08;      % N/mm
-    kappa0_PAPER = 6.0e-5;    % -
-    k_PAPER      = 10.0;      % tension/compression ratio
+    E_PAPER      = 35000;
+    nu_PAPER     = 0.20;
+    ft_PAPER     = 3.0;
+    GF_PAPER     = 0.08;
+    kappa0_PAPER = 6.0e-5;
+    k_PAPER      = 10.0;
 
-    % ===== 2) TEST CONTROL =====
     base_prefix = 'Job-1';
     out_dir     = 'out_torsion_LIVE_ONLY_OLIVER';
     if ~exist(out_dir,'dir'), mkdir(out_dir); end
 
     load_mode      = 'torsion_brokenshire';
-    theta_snapshot = 2.8e-3; %#ok<NASGU>
+    theta_snapshot = 2.8e-3;
     a_arm          = 100.0;
 
-    % CMOD gauge points. Nearest mesh nodes are used.
     AB_points = [ 200,  0, +25;
                   200,  0, -25];
 
-    % ===== 3) OPTIONS =====
     opts = struct( ...
         'n_increments',        140, ...
         'max_iter',            18,  ...
@@ -100,20 +73,15 @@ function run_torsion()
         'save_summary_plots',  true, ...
         'save_tables',         true);
 
-    % ===== 4) RUN =====
     run_prefix = fullfile(out_dir, sprintf('%s_StaticFast_%s_OLIVER', base_prefix, opts.eeq_model));
     fprintf('\n--- Running FAST QUASI-STATIC Torsion Damage Solver: %s + full Oliver bandwidth ---\n', opts.eeq_model);
     damage_static_vectorized(run_prefix, base_prefix, opts);
     fprintf('Done. CSV + purple snapshots + video saved in: %s\n', out_dir);
 end
 
-%==========================================================================
-% FAST QUASI-STATIC SOLVER
-%==========================================================================
 function damage_static_vectorized(prefix_out, prefix_mesh, opts)
     get = @(f,def) local_get(opts,f,def);
 
-    % --- Material / controls ---
     do_viz      = get('do_visualization', true);
     save_video  = get('save_video', true);
     E           = get('E',35000.0);
@@ -162,7 +130,6 @@ function damage_static_vectorized(prefix_out, prefix_mesh, opts)
     live_view   = get('live_snap_view',[45 30]);
     live_cap_fig= get('live_snap_capture_fig',false);
 
-    % --- Mesh ---
     nd = readmatrix([prefix_mesh '_nodes.txt']);
     ids = nd(:,1);
     p = nd(:,2:4);
@@ -177,7 +144,6 @@ function damage_static_vectorized(prefix_out, prefix_mesh, opts)
     Nleft  = uint32(readmatrix([prefix_mesh '_left_nodes.txt']));
     Nright = uint32(readmatrix([prefix_mesh '_right_nodes.txt']));
 
-    % --- CMOD gauge setup ---
     if ~isempty(AB)
         XA = AB(1,:); XB = AB(2,:);
         idA = nearest_node(p, XA);
@@ -188,24 +154,20 @@ function damage_static_vectorized(prefix_out, prefix_mesh, opts)
         idA = []; idB = []; nAB = [0 0 1];
     end
 
-    % --- Element matrices ---
     fprintf('Precomputing TET4 B matrices, gradients, and element stiffness...\n');
     [B3,V3,gradN3,h_min] = precompute_TET4_vector_fast(p,T);
     [Dunit,~,~] = iso_3D_D(1.0,nu);
     [D0,~,~]    = iso_3D_D(E,nu);
 
-    % Ke_unit3 is element stiffness for E=1. Actual = E*(1-D)*Ke_unit3.
     Ke_unit3 = pagemtimes(permute(B3,[2 1 3]), pagemtimes(repmat(Dunit,[1 1 ne]),B3));
     Ke_unit3 = bsxfun(@times,Ke_unit3,reshape(V3,1,1,ne));
 
-    % --- Global indexing for vectorized sparse assembly ---
     ndof = 3*np;
     Tdouble = double(T).';
     EDOF = uint32(reshape([3*Tdouble(:)-2, 3*Tdouble(:)-1, 3*Tdouble(:)].',12,ne));
     [Iglob,Jglob] = make_sparse_indices(EDOF);
     idx_glob = double(EDOF(:));
 
-    % --- Damage parameters ---
     eps0  = ft/E;
     j0    = eps0;
     kappa = max(kappa0,j0)*ones(ne,1);
@@ -219,7 +181,6 @@ function damage_static_vectorized(prefix_out, prefix_mesh, opts)
         ninc, max_iter, eps0, eeq_model, use_cb, cb_method);
     fprintf('Oliver bandwidth formula: h_n = 2 / sum_a |grad(N_a) dot n_crack|\n');
 
-    % --- DOF helper and boundary conditions ---
     dof = @(nid,comp) 3*(double(nid)-1)+comp;
 
     switch lower(path)
@@ -253,7 +214,6 @@ function damage_static_vectorized(prefix_out, prefix_mesh, opts)
             error('Unknown load_path: %s', path);
     end
 
-    % --- Output histories ---
     theta_hist  = zeros(ninc,1);
     torque_hist = zeros(ninc,1);
     cmod_hist   = zeros(ninc,1);
@@ -265,10 +225,8 @@ function damage_static_vectorized(prefix_out, prefix_mesh, opts)
     hmin_hist   = zeros(ninc,1);
     hmax_hist   = zeros(ninc,1);
 
-    % --- External hull for viz ---
     [extFaces, extOwner] = external_hull(double(T));
 
-    % --- Visualization ---
     fig = []; ax1 = []; ax2 = []; hHull = []; hCrack = []; hCurve = []; v = [];
     if do_viz
         try
@@ -307,7 +265,6 @@ function damage_static_vectorized(prefix_out, prefix_mesh, opts)
         end
     end
 
-    % --- Snapshot controls ---
     slice_saved = false;
     if save_images && nsnap > 0
         save_steps = unique(round(linspace(1,ninc,nsnap)));
@@ -324,12 +281,8 @@ function damage_static_vectorized(prefix_out, prefix_mesh, opts)
     U = zeros(ndof,1);
     perm = [];
 
-    % --- Peak-load tracking ---
     peak = struct('absTorque',-inf,'inc',0,'theta',0,'torque',0,'fapp',0,'maxD',0,'U',[],'De',[],'h_band',[]);
 
-    %======================================================================
-    % STATIC LOAD INCREMENT LOOP
-    %======================================================================
     fprintf('Starting static increments...\n');
     tic;
     for inc = 1:ninc
@@ -364,10 +317,8 @@ function damage_static_vectorized(prefix_out, prefix_mesh, opts)
         for it = 1:max_iter
             De_start_iter = De;
 
-            % Secant stiffness with current damage.
             K = assemble_global_K(Iglob,Jglob,Ke_unit3,E,De,kmin_ratio,ndof);
 
-            % Static solve with prescribed-displacement elimination:
             Kfb = K(free_dofs,bc_dofs);
             rhs = Fext(free_dofs) - Kfb*Ubc(bc_dofs);
             Kff = K(free_dofs,free_dofs);
@@ -388,15 +339,11 @@ function damage_static_vectorized(prefix_out, prefix_mesh, opts)
             end
             U(bc_dofs) = Ubc(bc_dofs);
 
-            % Strain + equivalent strain, vectorized over elements.
             ue12 = reshape(U(EDOF),12,1,ne);
             epsv = pagemtimes(B3,ue12);
             eeq = compute_equivalent_strain(eeq_model,epsv,Dunit,D0,E,nu,k_tc);
             eeq = reshape(eeq,[],1);
 
-            % Full direction-dependent Oliver bandwidth.
-            % This is the key update. The bandwidth is not precomputed from
-            % volume. It follows the current maximum-principal-strain normal.
             if use_cb
                 switch cb_method
                     case {'oliver','oliver_directional','directional'}
@@ -411,7 +358,6 @@ function damage_static_vectorized(prefix_out, prefix_mesh, opts)
             end
             ef_param = max(ef_param, eps0 + 1e-12);
 
-            % History + damage update.
             kappa_trial = max(kappa,eeq);
             De_trial = damage_exp_stress_strain(kappa_trial,eps0,ef_param);
 
@@ -443,7 +389,6 @@ function damage_static_vectorized(prefix_out, prefix_mesh, opts)
         hmin_hist(inc)  = min(h_band);
         hmax_hist(inc)  = max(h_band);
 
-        % Final internal force and reactions.
         s_e = E*max(1-De,kmin_ratio);
         ue12 = reshape(U(EDOF),12,1,ne);
         fe12 = pagemtimes(Ke_unit3,ue12);
@@ -452,10 +397,10 @@ function damage_static_vectorized(prefix_out, prefix_mesh, opts)
 
         switch lower(path)
             case 'torsion_brokenshire'
-                right_dofs = [dof(Nright,1); dof(Nright,2); dof(Nright,3)]; %#ok<NASGU>
+                right_dofs = [dof(Nright,1); dof(Nright,2); dof(Nright,3)];
                 [Tx,~] = torque_about_x(p,right_dofs,Fint-Fext);
             case 'torsion_forces'
-                right_dofs = [dof(Nright,1); dof(Nright,2); dof(Nright,3)]; %#ok<NASGU>
+                right_dofs = [dof(Nright,1); dof(Nright,2); dof(Nright,3)];
                 [Tx,~] = torque_about_x(p,right_dofs,Fext);
                 current_theta = estimate_theta_from_right_end(p,U,Nright);
         end
@@ -544,7 +489,6 @@ function damage_static_vectorized(prefix_out, prefix_mesh, opts)
         try, close(v); fprintf('Saved video: %s_animation.mp4\n',prefix_out); catch, end
     end
 
-    % --- Tables ---
     Tout = table(theta_hist(:),torque_hist(:),cmod_hist(:),fapp_hist(:),maxD_hist(:),iter_hist(:),res_hist(:), ...
         hmean_hist(:),hmin_hist(:),hmax_hist(:), ...
         'VariableNames',{'theta_rad','Torque_Nmm','CMOD_mm','Fapp_N','max_damage','iterations','relative_residual', ...
@@ -581,14 +525,8 @@ function damage_static_vectorized(prefix_out, prefix_mesh, opts)
     end
 end
 
-%==========================================================================
-% FULL DIRECTION-DEPENDENT OLIVER BANDWIDTH
-%==========================================================================
 function [h_band,ncrack,lambda_max] = oliver_bandwidth_TET4_from_strain(epsv,gradN3,n_power_iter)
-    % Oliver directional characteristic length for a linear TET4 element:
-    %     h_n = 2 / sum_a |grad(N_a) dot n|
-    % n is the current crack normal, taken here as the maximum-principal-
-    % strain direction. This is direction-dependent and changes per element.
+
     if nargin < 3 || isempty(n_power_iter)
         n_power_iter = 10;
     end
@@ -617,9 +555,7 @@ function [h_band,ncrack,lambda_max] = oliver_bandwidth_TET4_from_strain(epsv,gra
 end
 
 function [nvec,lambda_max] = max_principal_strain_direction_power_vec(epsv,niter)
-    % Vectorized maximum-principal-strain direction.
-    % A shifted power iteration is used so the largest algebraic eigenvalue
-    % is targeted even if the strain tensor has negative eigenvalues.
+
     exx = reshape(epsv(1,1,:),[],1);
     eyy = reshape(epsv(2,1,:),[],1);
     ezz = reshape(epsv(3,1,:),[],1);
@@ -644,7 +580,6 @@ function [nvec,lambda_max] = max_principal_strain_direction_power_vec(epsv,niter
         nx = wx./wn; ny = wy./wn; nz = wz./wn;
     end
 
-    % Rayleigh quotient of the original unshifted strain tensor.
     Ax = exx.*nx + exy.*ny + ezx.*nz;
     Ay = exy.*nx + eyy.*ny + eyz.*nz;
     Az = ezx.*nx + eyz.*ny + ezz.*nz;
@@ -658,9 +593,6 @@ function [nvec,lambda_max] = max_principal_strain_direction_power_vec(epsv,niter
     nvec = [nx,ny,nz];
 end
 
-%==========================================================================
-% DAMAGE LAW
-%==========================================================================
 function De = damage_exp_stress_strain(kappa,eps0,ef_param)
     De = zeros(size(kappa));
     act = kappa > eps0;
@@ -672,9 +604,6 @@ function De = damage_exp_stress_strain(kappa,eps0,ef_param)
     De = min(max(De,0),0.999999);
 end
 
-%==========================================================================
-% ASSEMBLY HELPERS
-%==========================================================================
 function K = assemble_global_K(Iglob,Jglob,Ke_unit3,E,De,kmin_ratio,ndof)
     s_e = E*max(1-De,kmin_ratio);
     Ke = bsxfun(@times,Ke_unit3,reshape(s_e,1,1,[]));
@@ -694,9 +623,6 @@ function Fglob = assemble_accum(idx_glob,vals_col,ndof)
     Fglob = accumarray(idx_glob,vals_col,[ndof,1],@sum,0);
 end
 
-%==========================================================================
-% EQUIVALENT STRAIN MODELS (all fully vectorized)
-%==========================================================================
 function eeq = compute_equivalent_strain(model,epsv,Dunit,D0,E,nu,k_tc)
     switch lower(model)
         case 'mazars'
@@ -780,9 +706,6 @@ function [l1,l2,l3] = eig3x3_sym_vec(a11,a22,a33,a12,a23,a13)
     end
 end
 
-%==========================================================================
-% FEM PRECOMPUTE
-%==========================================================================
 function [B3,V3,gradN3,hmin] = precompute_TET4_vector_fast(nodes,tets)
     ne = size(tets,1);
     n1 = double(tets(:,1)); n2 = double(tets(:,2)); n3 = double(tets(:,3)); n4 = double(tets(:,4));
@@ -802,22 +725,22 @@ function [B3,V3,gradN3,hmin] = precompute_TET4_vector_fast(nodes,tets)
     g1 = -(g2 + g3 + g4);
 
     B3 = zeros(6,12,ne);
-    % Node 1
+
     B3(1,1,:)=reshape(g1(:,1),1,1,ne); B3(2,2,:)=reshape(g1(:,2),1,1,ne); B3(3,3,:)=reshape(g1(:,3),1,1,ne);
     B3(4,1,:)=reshape(g1(:,2),1,1,ne); B3(4,2,:)=reshape(g1(:,1),1,1,ne);
     B3(5,2,:)=reshape(g1(:,3),1,1,ne); B3(5,3,:)=reshape(g1(:,2),1,1,ne);
     B3(6,1,:)=reshape(g1(:,3),1,1,ne); B3(6,3,:)=reshape(g1(:,1),1,1,ne);
-    % Node 2
+
     B3(1,4,:)=reshape(g2(:,1),1,1,ne); B3(2,5,:)=reshape(g2(:,2),1,1,ne); B3(3,6,:)=reshape(g2(:,3),1,1,ne);
     B3(4,4,:)=reshape(g2(:,2),1,1,ne); B3(4,5,:)=reshape(g2(:,1),1,1,ne);
     B3(5,5,:)=reshape(g2(:,3),1,1,ne); B3(5,6,:)=reshape(g2(:,2),1,1,ne);
     B3(6,4,:)=reshape(g2(:,3),1,1,ne); B3(6,6,:)=reshape(g2(:,1),1,1,ne);
-    % Node 3
+
     B3(1,7,:)=reshape(g3(:,1),1,1,ne); B3(2,8,:)=reshape(g3(:,2),1,1,ne); B3(3,9,:)=reshape(g3(:,3),1,1,ne);
     B3(4,7,:)=reshape(g3(:,2),1,1,ne); B3(4,8,:)=reshape(g3(:,1),1,1,ne);
     B3(5,8,:)=reshape(g3(:,3),1,1,ne); B3(5,9,:)=reshape(g3(:,2),1,1,ne);
     B3(6,7,:)=reshape(g3(:,3),1,1,ne); B3(6,9,:)=reshape(g3(:,1),1,1,ne);
-    % Node 4
+
     B3(1,10,:)=reshape(g4(:,1),1,1,ne); B3(2,11,:)=reshape(g4(:,2),1,1,ne); B3(3,12,:)=reshape(g4(:,3),1,1,ne);
     B3(4,10,:)=reshape(g4(:,2),1,1,ne); B3(4,11,:)=reshape(g4(:,1),1,1,ne);
     B3(5,11,:)=reshape(g4(:,3),1,1,ne); B3(5,12,:)=reshape(g4(:,2),1,1,ne);
@@ -825,8 +748,6 @@ function [B3,V3,gradN3,hmin] = precompute_TET4_vector_fast(nodes,tets)
 
     V3  = reshape(V,1,1,ne);
 
-    % Store shape-function gradients for the Oliver bandwidth.
-    % gradN3(a,dir,e) = dN_a/dx_dir in element e.
     gradN3 = zeros(4,3,ne);
     gradN3(1,1,:) = reshape(g1(:,1),1,1,ne); gradN3(1,2,:) = reshape(g1(:,2),1,1,ne); gradN3(1,3,:) = reshape(g1(:,3),1,1,ne);
     gradN3(2,1,:) = reshape(g2(:,1),1,1,ne); gradN3(2,2,:) = reshape(g2(:,2),1,1,ne); gradN3(2,3,:) = reshape(g2(:,3),1,1,ne);
@@ -849,9 +770,6 @@ function [D,lambda,G] = iso_3D_D(E,nu)
          0,          0,          0,          0, 0, G];
 end
 
-%==========================================================================
-% GEOMETRY / REACTION HELPERS
-%==========================================================================
 function [Tx,Rvec] = torque_about_x(p,dof_idx,F)
     nid = unique(ceil(double(dof_idx)/3));
     Fy = F(3*(nid-1)+2);
@@ -896,9 +814,6 @@ function val = local_get(s,field,def)
     end
 end
 
-%==========================================================================
-% VISUALIZATION AND OUTPUT
-%==========================================================================
 function [hHull,hCrack] = init_live_3d(ax,p,extFaces)
     hHull = patch(ax,'Faces',extFaces,'Vertices',p,'FaceColor','flat', ...
         'FaceVertexCData',zeros(size(extFaces,1),1), ...

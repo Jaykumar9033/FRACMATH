@@ -8,13 +8,11 @@ import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 import numpy as np
 
-
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 MAT_R = os.path.join(BASE, "matlab", "Gregoire_3PB", "results")
 ABQ_R = os.path.join(BASE, "abaqus", "Gregoire_3PB", "results")
 OUT = os.path.join(BASE, "comparison")
 os.makedirs(OUT, exist_ok=True)
-
 
 def read_xy(path):
     x_vals, y_vals = [], []
@@ -35,11 +33,9 @@ def read_xy(path):
         raise ValueError("No numeric data found in %s" % path)
     return np.array(x_vals), np.array(y_vals)
 
-
 def first_float(pattern, text, default=None):
     match = re.search(pattern, text, flags=re.IGNORECASE)
     return float(match.group(1)) if match else default
-
 
 def read_matlab_timing(path):
     with open(path, "r") as f:
@@ -56,7 +52,6 @@ def read_matlab_timing(path):
         "solve": first_float(r"solve:\s*([0-9.]+)\s*s", text, 0.0),
     }
 
-
 def read_abaqus_timing(path):
     with open(path, "r") as f:
         text = f.read()
@@ -71,12 +66,10 @@ def read_abaqus_timing(path):
         "rows": int(rows) if rows is not None else None,
     }
 
-
 def save(fig, stem, dpi=300):
     fig.savefig(os.path.join(OUT, stem + ".png"), dpi=dpi, facecolor="white", bbox_inches="tight")
     fig.savefig(os.path.join(OUT, stem + ".pdf"), facecolor="white", bbox_inches="tight")
     plt.close(fig)
-
 
 def plot_load_cmod(cmod_m, load_m, cmod_a, load_a):
     peak_m_i = int(np.argmax(load_m))
@@ -121,7 +114,6 @@ def plot_load_cmod(cmod_m, load_m, cmod_a, load_a):
     fig.tight_layout()
     save(fig, "comparison_load_cmod")
 
-    # Historical alias used by the old comparison folder.
     fig, ax = plt.subplots(figsize=(9, 6.5), facecolor="white")
     ax.plot(cmod_m, load_m, label="MATLAB (FRACMATH)", color="#0F4C81", linewidth=2.5)
     ax.plot(cmod_a, load_a, label="Abaqus (UMAT)", color="#F25C54", linewidth=2.0, linestyle="--")
@@ -133,7 +125,6 @@ def plot_load_cmod(cmod_m, load_m, cmod_a, load_a):
     fig.tight_layout()
     fig.savefig(os.path.join(OUT, "load_cmod_comparison.png"), dpi=300, facecolor="white", bbox_inches="tight")
     plt.close(fig)
-
 
 def plot_performance(mt, at):
     matlab_speed_ratio = at["submit"] / mt["solver"]
@@ -207,7 +198,6 @@ def plot_performance(mt, at):
     fig.tight_layout()
     save(fig, "runtime_comparison")
 
-
 def side_by_side(left_path, right_path, left_label, right_label, title, subtitle, stem):
     imgs = []
     for path in (left_path, right_path):
@@ -239,7 +229,6 @@ def side_by_side(left_path, right_path, left_label, right_label, title, subtitle
     fig.lines.extend([plt.Line2D([0.488, 0.488], [0.04, top + 0.035],
                                  transform=fig.transFigure, color="#cccccc", linewidth=1.5)])
     save(fig, stem, dpi=200)
-
 
 def plot_image_comparisons(cmod_m, load_m, cmod_a, load_a):
     sub = "Three-Point Bending - Gregoire specimen - CDM model"
@@ -310,7 +299,6 @@ def plot_image_comparisons(cmod_m, load_m, cmod_a, load_a):
     fig.tight_layout(rect=[0, 0, 1, 0.94])
     save(fig, "comparison_load_cmod_panels")
 
-
 def write_summary(cmod_m, load_m, cmod_a, load_a, mt, at):
     pm_i = int(np.argmax(load_m))
     pa_i = int(np.argmax(load_a))
@@ -349,8 +337,6 @@ End-to-end / internal time (s) & %.2f & %.2f & %.3f \\
 
 This report compares the computational results and performance of the three-point bending (3PB) simulation using Abaqus (UMAT) and the MATLAB solver (FRACMATH).
 
-## Summary Table (Markdown)
-
 | Quantity | MATLAB | Abaqus + UMAT | Ratio |
 | :--- | :---: | :---: | :---: |
 | **Peak load (kN)** | %.2f | %.2f | %.3f |
@@ -359,12 +345,10 @@ This report compares the computational results and performance of the three-poin
 | **End-to-end / internal time (s)** | %.2f | %.2f | %.3f |
 | **Load-CMOD rows** | %d | %d | - |
 
-## LaTeX Table Format
 ```latex
 %s
 ```
 
-## Visualizations
 - Combined bar and breakdown pie chart: [performance_breakdown.png](performance_breakdown.png)
 - Load vs CMOD comparison plot: [comparison_load_cmod.png](comparison_load_cmod.png)
 - Side-by-side damage/mesh panels: [comparison_damage_last_step.png](comparison_damage_last_step.png)
@@ -383,20 +367,14 @@ This report compares the computational results and performance of the three-poin
 
 This folder contains regenerated MATLAB and Abaqus/UMAT 3PB comparison figures.
 
-## Commands
-
 Run from this folder:
 
 ```bash
 python plot_comparison.py
 ```
 
-## Inputs
-
 - `../matlab/Gregoire_3PB/results/`
 - `../abaqus/Gregoire_3PB/results/`
-
-## Stored comparison values
 
 - MATLAB peak load: %.2f kN.
 - Abaqus + UMAT peak load: %.2f kN.
@@ -408,7 +386,6 @@ python plot_comparison.py
 """ % (peak_m_kn, peak_a_kn, cmod_pm, cmod_pa, mt["solver"], at["submit"], at["internal"], rows)
     with open(os.path.join(OUT, "README.md"), "w") as f:
         f.write(readme)
-
 
 def main():
     cmod_m, load_m = read_xy(os.path.join(MAT_R, "matlab_load_cmod.csv"))
@@ -425,7 +402,6 @@ def main():
     print("  %s" % OUT)
     print("Abaqus rows: %d" % (at["rows"] if at["rows"] is not None else len(cmod_a)))
     print("Abaqus submit-to-done: %.2f s" % at["submit"])
-
 
 if __name__ == "__main__":
     main()

@@ -1,10 +1,3 @@
-"""Build composite figures used by the JOSS paper.
-
-The JOSS toolchain handles simple Markdown figures reliably, but not arbitrary
-LaTeX subfigure blocks. This script creates clean multi-panel PNGs from the
-source figures so `paper.md` can stay JOSS-friendly while the PDF keeps a
-balanced panel layout.
-"""
 
 from __future__ import annotations
 
@@ -12,12 +5,10 @@ from pathlib import Path
 
 from PIL import Image, ImageChops, ImageDraw, ImageFont
 
-
 ROOT = Path(__file__).resolve().parent
 IMG = ROOT / "images"
 WHITE = (255, 255, 255)
 INK = (20, 20, 20)
-
 
 def _font(size: int, bold: bool = False) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
     names = ["arialbd.ttf" if bold else "arial.ttf", "Arial Bold.ttf" if bold else "Arial.ttf"]
@@ -28,12 +19,10 @@ def _font(size: int, bold: bool = False) -> ImageFont.FreeTypeFont | ImageFont.I
                 return ImageFont.truetype(str(path), size)
     return ImageFont.load_default()
 
-
 LABEL_FONT = _font(30, bold=True)
 
-
 def trim_white(im: Image.Image, pad: int = 18, threshold: int = 248) -> Image.Image:
-    """Trim mostly white margins while preserving a small border."""
+
     rgb = im.convert("RGB")
     mask = Image.new("RGB", rgb.size, WHITE)
     diff = ImageChops.difference(rgb, mask).convert("L")
@@ -48,10 +37,8 @@ def trim_white(im: Image.Image, pad: int = 18, threshold: int = 248) -> Image.Im
     bottom = min(rgb.height, bottom + pad)
     return rgb.crop((left, top, right, bottom))
 
-
 def load(name: str) -> Image.Image:
     return trim_white(Image.open(IMG / name))
-
 
 def crop_fraction(im: Image.Image, box: tuple[float, float, float, float]) -> Image.Image:
     left, top, right, bottom = box
@@ -64,12 +51,10 @@ def crop_fraction(im: Image.Image, box: tuple[float, float, float, float]) -> Im
         )
     )
 
-
 def fit(im: Image.Image, max_w: int, max_h: int) -> Image.Image:
     out = im.copy()
     out.thumbnail((max_w, max_h), Image.Resampling.LANCZOS)
     return out
-
 
 def label_panel(canvas: Image.Image, xy: tuple[int, int], label: str) -> None:
     draw = ImageDraw.Draw(canvas)
@@ -79,7 +64,6 @@ def label_panel(canvas: Image.Image, xy: tuple[int, int], label: str) -> None:
     rect = (x, y, x + bbox[2] + 2 * pad_x, y + bbox[3] + 2 * pad_y)
     draw.rounded_rectangle(rect, radius=8, fill=(255, 255, 255), outline=(210, 210, 210))
     draw.text((x + pad_x, y + pad_y), label, fill=INK, font=LABEL_FONT)
-
 
 def stack_vertical(
     panels: list[tuple[str, str]],
@@ -99,7 +83,6 @@ def stack_vertical(
         label_panel(canvas, (x + 14, y + 14), label)
         y += im.height + gap
     canvas.save(IMG / output, optimize=True)
-
 
 def row_equal_height(
     panels: list[tuple[str, str]],
@@ -122,7 +105,6 @@ def row_equal_height(
         label_panel(canvas, (x + 12, y + 12), label)
         x += im.width + gap
     canvas.save(IMG / output, optimize=True)
-
 
 def grid(
     panels: list[tuple[str, str]],
@@ -149,7 +131,6 @@ def grid(
             label_panel(canvas, (x + 10, y + 10), label)
     canvas.save(IMG / output, optimize=True)
 
-
 def nooru_mesh_layout(output: str) -> None:
     width = 1650
     margin = 34
@@ -159,8 +140,7 @@ def nooru_mesh_layout(output: str) -> None:
 
     bc = fit(load("nooru_BC_2D.png"), panel_w, 430)
     mesh = fit(load("nooru_mesh_3D.png"), panel_w, panel_h)
-    # Keep the experimental crack-path reference as an inset while making the
-    # main Nooru figure a large 1x2 layout.
+
     crack = fit(crop_fraction(load("Exp_noor.png"), (0.0, 0.12, 1.0, 0.76)), panel_w, 170)
 
     height = 2 * margin + panel_h
@@ -177,9 +157,8 @@ def nooru_mesh_layout(output: str) -> None:
     label_panel(canvas, (x + 10, y + 10), "(b)")
     canvas.save(IMG / output, optimize=True)
 
-
 def three_pb_layout(output: str) -> None:
-    """3PB mesh and damage-field comparison."""
+
     grid(
         [
             ("fig_mesh.png", "(a)"),
@@ -194,7 +173,6 @@ def three_pb_layout(output: str) -> None:
         gap=22,
         margin=26,
     )
-
 
 def main() -> None:
     stack_vertical(
@@ -270,7 +248,6 @@ def main() -> None:
             ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0100_theta_2_143e-03.png", "(f)"),
             ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0120_theta_2_571e-03.png", "(g)"),
             ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0140_theta_3_000e-03.png", "(h)"),
-            ("torsion_peak_damage_iso.png", "(i)"),
         ],
         "fig_b3_damage_evolution.png",
         cols=3,
@@ -279,7 +256,6 @@ def main() -> None:
         gap=18,
         margin=20,
     )
-
 
 if __name__ == "__main__":
     main()
