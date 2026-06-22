@@ -2,7 +2,7 @@
 
 This repository contains the code, input data, generated results, and documentation for the JOSS paper:
 
-**FRACMATH: A vectorized MATLAB framework for continuum damage mechanics with crack band regularization**
+**FRACMATH: A vectorized MATLAB framework for continuum damage mechanics with crack-band regularization**
 
 Authors: Jaykumar Mavani and Madura Pathirage, Department of Civil, Construction, and Environmental Engineering, University of New Mexico.
 
