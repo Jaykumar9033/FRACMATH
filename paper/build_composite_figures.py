@@ -179,34 +179,21 @@ def nooru_mesh_layout(output: str) -> None:
 
 
 def three_pb_layout(output: str) -> None:
-    """Compact 3PB validation panel for the JOSS page width."""
-    width = 1580
-    margin = 30
-    gap = 22
-
-    damage = fit(load("abaqus_fig_damage_last_step.png"), width - 2 * margin, 375)
-    response = fit(load("load_cmod_comparison.png"), 710, 390)
-    timing = fit(load("time_comparison_bar.png"), 760, 390)
-
-    bottom_h = max(response.height, timing.height)
-    height = 2 * margin + damage.height + gap + bottom_h
-    canvas = Image.new("RGB", (width, height), WHITE)
-
-    x = (width - damage.width) // 2
-    y = margin
-    canvas.paste(damage, (x, y))
-    label_panel(canvas, (x + 12, y + 12), "(a)")
-
-    bottom_w = response.width + gap + timing.width
-    x = (width - bottom_w) // 2
-    y = margin + damage.height + gap
-    canvas.paste(response, (x, y + (bottom_h - response.height) // 2))
-    label_panel(canvas, (x + 12, y + 12), "(b)")
-    x += response.width + gap
-    canvas.paste(timing, (x, y + (bottom_h - timing.height) // 2))
-    label_panel(canvas, (x + 12, y + 12), "(c)")
-
-    canvas.save(IMG / output, optimize=True)
+    """3PB mesh and damage-field comparison."""
+    grid(
+        [
+            ("fig_mesh.png", "(a)"),
+            ("abaqus_fig_damage_last_step.png", "(b)"),
+            ("fig_damage_peak.png", "(c)"),
+            ("fig_damage_postpeak.png", "(d)"),
+        ],
+        output,
+        cols=2,
+        panel_w=790,
+        panel_h=405,
+        gap=22,
+        margin=26,
+    )
 
 
 def main() -> None:
@@ -232,15 +219,14 @@ def main() -> None:
         gap=22,
         margin=28,
     )
-    stack_vertical(
+    row_equal_height(
         [
             ("load_cmod_comparison.png", "(a)"),
             ("time_comparison_bar.png", "(b)"),
         ],
         "fig_b1_results.png",
-        width=1500,
-        max_panel_h=520,
-        gap=24,
+        height=430,
+        gap=28,
         margin=30,
     )
     three_pb_layout("fig_b1_compact.png")
@@ -284,7 +270,7 @@ def main() -> None:
             ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0100_theta_2_143e-03.png", "(f)"),
             ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0120_theta_2_571e-03.png", "(g)"),
             ("Job-1_StaticFast_mod_vm_LIVE_snap_inc_0140_theta_3_000e-03.png", "(h)"),
-            ("torsion_max_damage.png", "(i)"),
+            ("torsion_peak_damage_iso.png", "(i)"),
         ],
         "fig_b3_damage_evolution.png",
         cols=3,

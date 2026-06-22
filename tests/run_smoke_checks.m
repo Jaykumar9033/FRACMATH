@@ -23,6 +23,7 @@ requiredFiles = {
     'paper/images/fig_b3_mesh.png'
     'paper/images/fig_b3_damage_evolution.png'
     'paper/images/torsion_max_damage.png'
+    'paper/images/torsion_peak_damage_iso.png'
     'paper/images/load_cmod_comparison.png'
     'paper/images/nooru_BC_2D.png'
     'doc/theory_manual.pdf'

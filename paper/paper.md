@@ -25,13 +25,15 @@ bibliography: paper.bib
 
 # Summary
 
-`FRACMATH` is an open-source MATLAB framework for finite-element simulation of crack-band-regularized continuum damage mechanics (CDM) in quasi-brittle materials. The code uses a scalar isotropic damage variable, the modified von Mises equivalent strain [@deVree], exponential softening, and Oliver's direction-dependent projected crack-band length [@bazant_oh; @oliver1989]. It is written as a compact MATLAB workflow so users can inspect the model, change the constitutive law, plot results, and debug simulations without a compiled extension layer.
+`FRACMATH` is an open-source MATLAB framework for finite-element simulation of crack-band-regularized continuum damage mechanics (CDM) in quasi-brittle materials. The code uses a scalar isotropic damage variable, the modified von Mises equivalent strain [@deVree], exponential softening, and Oliver's direction-dependent projected crack-band length [@bazant_oh; @oliver1989]. It is written as a compact MATLAB workflow so users can inspect the model, change the constitutive law, plot results, and debug simulations without a compiled extension layer. Everything stays inside MATLAB: no MEX files, no compiled extensions, and no separate build system.
 
 The package includes a two-dimensional notched three-point bending (3PB) benchmark checked against Abaqus/Standard through an Oliver-matched UMAT, plus two three-dimensional MATLAB benchmarks: the Nooru-Mohamed mixed-mode test and Brokenshire's notched beam torsion test. The repository also stores plotting scripts, benchmark inputs, comparison tables, and the figures used in this paper, so readers can trace the numerical results back to the code paths that produced them. Source code, input decks, results, and a theory manual are available at <https://github.com/Jaykumar9033/FRACMATH> under the MIT license.
 
 # Statement of need
 
 Open-source finite-element tools already cover many research needs. Examples include OOFEM in C++ [@oofem], FEniCS for Python/C++ finite-element workflows [@fenics], Akantu for high-performance fracture simulations [@akantu], and CALFEM as a MATLAB teaching toolbox [@calfem]. These projects are valuable, but using or extending them for a new damage formulation often requires learning a larger architecture, build system, or compiled user-material interface. Commercial workflows such as Abaqus/Standard are also powerful, but custom CDM models generally require UMAT/VUMAT development and careful state-variable handling [@abaqus].
+
+These tools work, but each one often asks the user to learn a new templated C++ interface, Python wrapper, Fortran subroutine, or solver-specific build workflow before changing a single softening curve [@oofem; @fenics; @abaqus]. For a graduate student learning damage mechanics, that overhead can become the project.
 
 MATLAB remains attractive in engineering research because it is easy to use: students already know its matrix syntax, plotting tools, debugger, profiler, and sparse linear algebra, and MATLAB has already supported both finite-element teaching software and CDM research codes [@calfem; @parallelcdm]. This matters for fracture modeling, where a user often needs to inspect element-level strain histories, change a softening law, compare crack-band lengths, and immediately visualize the damage field. `FRACMATH` uses that accessibility to provide a transparent CDM reference implementation rather than a large general-purpose finite-element platform. It avoids MEX files and external compiled dependencies for the MATLAB solver, which keeps installation simple and makes the implementation suitable for teaching, prototyping, and reviewer-side reproduction.
 
@@ -56,7 +58,7 @@ where $\omega\in[0,1]$ is the damage variable. A history variable stores the max
 
 The same idea is used for tetrahedra in 3D. In the Abaqus comparison, a preprocessing script writes the T3 shape-function gradients to `oliver_t3_gradN.dat`; the UMAT then recomputes Equation \ref{eq:oliver-t3} from the current principal strain direction. This avoids using Abaqus `CELENT` as a fixed crack-band length and keeps the regularization consistent with Oliver's characteristic-length construction [@oliver1989].
 
-The quasistatic solver uses displacement control and a modified Newton--Raphson loop. At each load step, a secant stiffness is assembled and factored once. Element strains, equivalent strain, history variables, damage, and crack-band lengths are updated with vectorized MATLAB operations, while linear systems use MATLAB's sparse backslash interface, which dispatches to UMFPACK [@umfpack]. The code separates mesh data, material data, state variables, the constitutive update, and postprocessing outputs, but keeps these pieces in plain MATLAB functions. This design is intentional: the routines are short enough for a user to read, yet structured enough to run the same benchmark repeatedly while changing mesh density, softening parameters, or output thresholds.
+The quasistatic solver uses displacement control and a modified Newton--Raphson loop. At each load step, a secant stiffness is assembled and factored once. Element strains, equivalent strain, history variables, damage, and crack-band lengths are updated with vectorized MATLAB operations, including batched matrix products through `pagemtimes`, while linear systems use MATLAB's sparse backslash interface, which dispatches to UMFPACK [@umfpack]. The code separates mesh data, material data, state variables, the constitutive update, and postprocessing outputs, but keeps these pieces in plain MATLAB functions. This design is intentional: the routines are short enough for a user to read, yet structured enough to run the same benchmark repeatedly while changing mesh density, softening parameters, or output thresholds.
 
 For the Abaqus comparison, `FRACMATH` includes the input deck, the Fortran UMAT, the Oliver-gradient table generator, and extraction scripts for load-CMOD and damage fields. The MATLAB and Abaqus paths therefore share the same mesh, boundary conditions, fracture energy, tensile strength, and crack-band bandwidth formula. Differences in the plotted response are primarily solver and implementation differences, not changes in the continuum model.
 
@@ -68,19 +70,20 @@ The updated results show close agreement in peak response and crack localization
 
 On the test workstation, MATLAB used one thread and Abaqus used four threads. The MATLAB solver wall-clock time was 547.58 s, while the Abaqus submit-to-completion time was 1996.25 s. MATLAB time was dominated by stiffness assembly, not by the sparse solve. The timing should not be read as a universal speed claim, because solver settings, output requests, hardware, and Abaqus licensing can all change wall-clock time. It does show that a readable MATLAB implementation can still be practical for research-scale 2D crack-band studies.
 
-| Quantity | MATLAB | Abaqus + UMAT | Ratio |
-|---|---:|---:|---:|
-| Peak load (N) | 3639.82 | 3609.13 | 1.009 |
-| CMOD at peak (mm) | 0.022811 | 0.022485 | 1.014 |
-| Solver/submit wall-clock (s) | 547.58 | 1996.25 | 0.274 |
-| End-to-end/internal time (s) | 590.54 | 1968.00 | 0.300 |
-| Load-CMOD rows | 10000 | 10001 | - |
+| Quantity | MATLAB | Abaqus + UMAT |
+|---|---:|---:|
+| Peak load (N) | 3639.82 | 3609.13 |
+| CMOD at peak (mm) | 0.022811 | 0.022485 |
+| Solver/submit wall-clock (s) | 547.58 | 1996.25 |
+| End-to-end/internal time (s) | 590.54 | 1968.00 |
 
 Table: Updated 2D 3PB comparison using the same mesh, material law, and Oliver T3 crack-band bandwidth. \label{tab:abqcompare}
 
-![3PB validation using the updated Abaqus damage image: (a) final fully damaged elements from the Abaqus UMAT; (b) MATLAB and Abaqus load-CMOD response; (c) wall-clock and MATLAB timing breakdown. \label{fig:b1-compact}](images/fig_b1_compact.png){ width=92% }
+![3PB mesh and damage fields: (a) CPS3 mesh and support/load layout; (b) Abaqus UMAT final fully damaged elements; (c) MATLAB damage field at peak load; (d) MATLAB post-peak damage field. \label{fig:b1-compact}](images/fig_b1_compact.png){ width=100% }
 
-The Nooru-Mohamed benchmark checks mixed-mode 3D cracking in a double-edge-notched concrete panel loaded by combined tension and shear [@nooru1992]. The same scalar CDM routine is used with TET4 elements and Oliver crack-band scaling. The simulated damage bands initiate at the two notch tips and coalesce across the ligament, matching the experimental crack-path pattern.
+![3PB response and timing: (a) MATLAB and Abaqus load-CMOD response; (b) wall-clock comparison and MATLAB timing breakdown. \label{fig:b1-results}](images/fig_b1_results.png){ width=94% }
+
+The Nooru-Mohamed benchmark checks mixed-mode 3D cracking in a 200 mm by 200 mm by 50 mm double-edge-notched concrete panel loaded by combined tension and shear [@nooru1992]. The model follows load path 4a from the original thesis, and the same scalar CDM routine is used with TET4 elements and Oliver crack-band scaling [@nooru1992; @oliver1989]. The simulated damage bands initiate at the two notch tips and coalesce across the ligament, matching the experimental crack-path pattern.
 
 ![Nooru-Mohamed mixed-mode benchmark: (a) boundary conditions with experimental crack-path inset; (b) 3D mesh. \label{fig:b2-mesh}](images/fig_b2_mesh.png){ width=100% }
 
@@ -88,13 +91,13 @@ This example is included because mixed-mode response is a common failure point f
 
 ![Nooru-Mohamed damage evolution from first localization to coalescence in a 3x3 sequence. \label{fig:b2-damage-evolution}](images/nooru_damage_evolution_3x3.png){ width=96% }
 
-Brokenshire's torsion benchmark tests whether the same formulation can recover a curved 3D fracture surface [@jefferson_torsion]. The model uses a prescribed twist, TET4 elements, and the same damage update. The computed band nucleates at the notch front and rotates toward the loaded corner, consistent with the experimentally recovered fracture surface.
+Brokenshire's torsion benchmark tests whether the same formulation can recover a curved 3D fracture surface in a 400 mm by 250 mm by 100 mm plain concrete beam with a 25 mm by 5 mm diagonal notch [@jefferson_torsion]. The model uses a prescribed twist, TET4 elements, and the same damage update. The computed band nucleates at the notch front and rotates toward the loaded corner, consistent with the experimentally recovered fracture surface.
 
 ![Brokenshire torsion benchmark: geometry and experimental fractured specimen. \label{fig:b3-mesh}](images/fig_b3_mesh.png){ width=88% }
 
 The torsion case is deliberately different from the 3PB validation. It contains out-of-plane cracking, a nonuniform stress state, and a visibly curved fracture surface. It therefore checks whether the implementation remains useful beyond a single 2D benchmark. The code stores intermediate damage snapshots, allowing users to inspect how the localized zone grows rather than seeing only the final fully damaged band.
 
-![Torsion damage evolution in a 3x3 sequence over the imposed twist history; the last panel reports maximum damage versus twist angle. \label{fig:b3-damage-evolution}](images/fig_b3_damage_evolution.png){ width=96% }
+![Torsion damage evolution in a 3x3 sequence over the imposed twist history; the last panel shows the peak-load damage field. \label{fig:b3-damage-evolution}](images/fig_b3_damage_evolution.png){ width=96% }
 
 # Software availability
 
