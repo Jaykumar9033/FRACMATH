@@ -1,4 +1,6 @@
-﻿MIT License
+MIT License
+
+FRACMATH SoftwareX distribution license copy.
 
 Copyright (c) 2026 Jaykumar Mavani and Madura Pathirage
 
