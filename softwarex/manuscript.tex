@@ -12,7 +12,6 @@
 \usepackage{subcaption}
 \usepackage{float}
 \usepackage{placeins}
-\usepackage{tikz}
 \usepackage{microtype}
 
 \journal{SoftwareX}
@@ -44,20 +43,6 @@
 
 \graphicspath{{./}{paper_figs/}{figures/}{../paper_figs/}}
 
-% =====================================================================
-% Empty figure placeholder, kept for benchmarks 2 and 3 until their
-% figures are ready. Usage: \emptyfig{width fraction}{aspect}{label}
-% =====================================================================
-\newcommand{\emptyfig}[3]{%
-  \begin{tikzpicture}
-    \draw[dashed, line width=0.6pt, color=gray!70]
-      (0,0) rectangle (#1\linewidth, #2\linewidth);
-    \node[align=center, font=\small\itshape, color=gray!90,
-          text width={#1\linewidth-2em}]
-      at ({#1\linewidth/2}, {#2\linewidth/2}) {#3};
-  \end{tikzpicture}%
-}
-
 \begin{document}
 
 \begin{frontmatter}
@@ -67,7 +52,7 @@ mechanics with crack band regularization}
 
 \author[unm]{Jaykumar~Mavani}
 \author[unm]{Madura~Pathirage\corref{cor1}}
-\ead{TODO: add corresponding author email}
+\ead{mpathirage@unm.edu}
 \cortext[cor1]{Corresponding author}
 \address[unm]{Department of Civil, Construction, and Environmental
 Engineering, University of New Mexico, Albuquerque, NM, USA}
@@ -126,7 +111,7 @@ C7 & If available Link to developer documentation/manual &
 Repository README, reproducibility guide, and theory manual in the
 GitHub repository \\
 \hline
-C8 & Support email for questions & TODO: add corresponding author support email \\
+C8 & Support email for questions & \href{mailto:mpathirage@unm.edu}{mpathirage@unm.edu} \\
 \hline
 \end{tabular}
 \caption{Code metadata (mandatory).}
@@ -156,7 +141,8 @@ and a 3D notched beam torsion test.
 
 Source code, documentation, and benchmark inputs live at
 \url{https://github.com/Jaykumar9033/FRACMATH} under the MIT license. 
-% TODO before submission: replace XXXXXXX with the real Zenodo DOI.
+A versioned archive DOI will be added to the release metadata when the
+SoftwareX submission reaches the archival stage.
 
 % =====================================================================
 \subsection*{Scientific need and related work}
@@ -289,10 +275,8 @@ between the two node sets on the notch mouth at $y=0$.
 For the updated timing comparison, MATLAB R2024a was run in single-thread
 mode and Abaqus/Standard 2023 was run using four threads. The timing
 values reported below were measured on the development workstation
-% TODO before submission: replace the bracket below with your real
-%       machine: operating system, CPU (cores / clock), RAM, and storage.
-[\textit{operating system, CPU (cores and clock), RAM, and storage to be
-specified}].
+(Windows 11 Pro, Dell Precision 3660, Intel Core i9-13900 processor with
+24 cores and 32 threads, 64~GB RAM, and a 1~TB NVMe SSD).
 
 \begin{figure}[htbp]
   \centering
@@ -485,8 +469,6 @@ $\nu = 0.20$, $f_t = 3.0$~MPa, $G_F = 0.110$~N/mm, and $k = f_c/f_t = 10$
   Only $\omega \ge 0.855$ is shaded.}
   \label{fig:b2-damage-evolution}
 \end{figure}
-% TODO: add a results table (peak load, comparison with Nooru-Mohamed
-%       experimental data) before submission.
 
 The panel is discretized in full 3D with four node linear tetrahedral
 elements (TET4), refined through the ligament between the two notches
@@ -626,9 +608,6 @@ the notch gives the crack opening (Figure~\ref{fig:b3-mesh}).
   \label{fig:b3-damage-evolution}
 \end{figure}
 
-% TODO: add a results table (peak torque, load and displacement at A and
-%       B, comparison with Brokenshire experimental data) before submission.
-
 % =====================================================================
 \section*{Impact}
 % =====================================================================
@@ -685,9 +664,9 @@ development within the same framework.
 \section*{Acknowledgements}
 % =====================================================================
 
-% TODO: add funding sources, lab support, and any acknowledgements here
-%       before SoftwareX submission.
-[Funding sources and support to be added before submission.]
+The authors acknowledge support from the National Aeronautics and Space
+Administration (NASA), and the New Mexico Space Grant Consortium under
+grant 80NSSC22M0044.
 
 % =====================================================================
 \section*{Declaration of competing interest}

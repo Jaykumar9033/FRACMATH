@@ -12,10 +12,8 @@ not submit anything automatically.
 
 ## Required Before Online Submission
 
-- Replace `TODO: add corresponding author email` in `manuscript.tex`.
 - Confirm the GitHub repository URL in the metadata table.
 - Add the final Zenodo or repository release DOI when available.
-- Replace the acknowledgement placeholder with the final funding/support text.
 - Compile the LaTeX source and upload the generated PDF plus a source zip in the
   SoftwareX submission system.
 
