@@ -14,6 +14,7 @@ SoftwareX manuscript locations for the FRACMATH repository.
 | `CHANGELOG.md` | Version and submission-preparation history |
 | `LICENSE` | MIT License |
 | `LICENSE.txt` | MIT License copy for SoftwareX repository checks |
+| `Licence.txt` | MIT License copy using the spelling in the SoftwareX template |
 | `requirements.txt` | Python plotting dependencies |
 | `.gitattributes` | Git LFS tracking for large Abaqus `.odb` files |
 | `.gitignore` | Local scratch-file ignore rules |

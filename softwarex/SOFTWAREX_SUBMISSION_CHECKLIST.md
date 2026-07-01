@@ -12,7 +12,7 @@ not submit anything automatically.
 
 ## Required Before Online Submission
 
-- Confirm the GitHub repository URL in the metadata table.
+- Confirm the versioned GitHub repository URL in the metadata table.
 - Add the final Zenodo or repository release DOI when available.
 - Compile the LaTeX source and upload the generated PDF plus a source zip in the
   SoftwareX submission system.
@@ -21,7 +21,7 @@ not submit anything automatically.
 
 - Public GitHub repository.
 - `README.md` with installation, examples, and test instructions.
-- `LICENSE.txt` or `Licence.txt`.
+- `LICENSE.txt` and `Licence.txt`.
 - Version tag or release matching the manuscript metadata.
 - `CITATION.cff`.
 - Reproducibility instructions and expected benchmark outputs.

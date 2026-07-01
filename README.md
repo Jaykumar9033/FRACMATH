@@ -143,5 +143,5 @@ with the SoftwareX article DOI after publication.
 
 ## License
 
-This repository is released under the MIT License. See `LICENSE` and
-`LICENSE.txt`.
+This repository is released under the MIT License. See `LICENSE`,
+`LICENSE.txt`, and `Licence.txt`.

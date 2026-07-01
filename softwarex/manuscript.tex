@@ -47,7 +47,7 @@
 
 \begin{frontmatter}
 
-\title{FRACMAT: A vectorized MATLAB framework for continuum damage
+\title{FRACMATH: A vectorized MATLAB framework for continuum damage
 mechanics with crack band regularization}
 
 \author[unm]{Jaykumar~Mavani}
@@ -58,7 +58,7 @@ mechanics with crack band regularization}
 Engineering, University of New Mexico, Albuquerque, NM, USA}
 
 \begin{abstract}
-\texttt{FRACMAT} is an open-source MATLAB framework for finite element
+\texttt{FRACMATH} is an open-source MATLAB framework for finite element
 simulation of fracture in quasibrittle materials. The software implements
 scalar isotropic continuum damage mechanics, exponential softening, and
 crack-band regularization with a direction-dependent Oliver characteristic
@@ -94,7 +94,7 @@ element method \sep MATLAB \sep Abaqus UMAT \sep quasibrittle fracture
 C1 & Current code version & v1.0.0 \\
 \hline
 C2 & Permanent GitHub link to code/repository used for this code version &
-\url{https://github.com/Jaykumar9033/FRACMATH} \\
+\url{https://github.com/Jaykumar9033/FRACMATH/tree/v1.0.0} \\
 \hline
 C3 & Legal Code License & MIT License \\
 \hline
@@ -122,7 +122,7 @@ C8 & Support email for questions & \href{mailto:mpathirage@unm.edu}{mpathirage@u
 \section*{Motivation and significance}
 % =====================================================================
 
-\texttt{FRACMAT} is an open source MATLAB framework for finite element
+\texttt{FRACMATH} is an open source MATLAB framework for finite element
 simulation of fracture in quasibrittle materials. It uses scalar
 isotropic continuum damage mechanics (CDM) built on the modified von
 Mises equivalent strain measure \citep{deVree}, exponential softening,
@@ -166,7 +166,7 @@ damage mechanics package that installs with no configuration, handles
 both 2D and 3D meshes, and can be checked against an Abaqus UMAT on a
 standard 3PB benchmark.
 
-\texttt{FRACMAT} fills that gap. The reader we have in mind is a graduate
+\texttt{FRACMATH} fills that gap. The reader we have in mind is a graduate
 student or early career researcher who needs a damage simulation running
 now and results worth publishing soon after. A second audience is
 structural engineers who want a transparent reference implementation
@@ -256,7 +256,7 @@ $S = 250$~mm (so $S/D = 2.5$), two overhangs of $0.5D$ each, and an
 overall length of $350$~mm. The out-of-plane thickness is $50$~mm. A
 single vertical notch is placed at midspan with an initial notch depth
 $a_0 = 0.2D = 20$~mm and a notch width of $D/40 = 2.5$~mm. The geometry,
-mesh, and boundary conditions are shown in Figure~\ref{fig:b1-mesh}. The
+mesh, and boundary conditions are shown in Figure~\ref{fig:b1-setup-response}(a). The
 material is concrete with $E = 37{,}000$~MPa, $\nu = 0.20$,
 $f_t = 3.5$~MPa, $f_c = 35.0$~MPa, and $G_F = 0.090$~N/mm.
 
@@ -278,18 +278,10 @@ values reported below were measured on the development workstation
 (Windows 11 Pro, Dell Precision 3660, Intel Core i9-13900 processor with
 24 cores and 32 threads, 64~GB RAM, and a 1~TB NVMe SSD).
 
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.85\linewidth]{fig_mesh.png}
-  \caption{Notched 3PB specimen ($D=100$~mm): geometry, the refined CPS3
-    mesh in the notch zone, and the support and load layout.}
-  \label{fig:b1-mesh}
-\end{figure}
-
 The simulated MATLAB peak load is 3.63982~kN (3639.82~N) at a CMOD of
 0.022811~mm. The Abaqus UMAT peak load is 3.60913~kN (3609.13~N) at a
 CMOD of 0.022485~mm. The full load--CMOD response is shown in
-Figure~\ref{fig:b1-loadcmod}. The MATLAB and Abaqus curves agree closely
+Figure~\ref{fig:b1-setup-response}(b). The MATLAB and Abaqus curves agree closely
 up to peak load. The two post-peak branches are similar in shape but not
 identical; the remaining differences are attributed to the different
 global solution procedures, convergence paths, increment histories, and
@@ -297,44 +289,59 @@ state-variable update order in MATLAB and Abaqus.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.75\linewidth]{load_cmod_comparison.png}
-  \caption{Load--CMOD response for the 2D 3PB case. The MATLAB and
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{fig_mesh.png}
+    \caption{Geometry, refined CPS3 mesh, supports, and load point.}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{load_cmod_comparison.png}
+    \caption{Load--CMOD response: MATLAB and Oliver-matched Abaqus UMAT.}
+  \end{subfigure}
+  \caption{Notched 2D three-point bending benchmark. The MATLAB and
     Oliver-matched Abaqus UMAT curves track each other closely up to the
-    peak. The post-peak branches remain close but are not bitwise
-    identical because the two solvers use different nonlinear solution
-    and state-update paths.}
-  \label{fig:b1-loadcmod}
+    peak, while the post-peak branches remain close but not bitwise
+    identical because the solvers use different nonlinear solution and
+    state-update paths.}
+  \label{fig:b1-setup-response}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.85\linewidth]{fig_damage_peak.png}\\[0.6em]
-  \includegraphics[width=0.85\linewidth]{fig_damage_postpeak.png}
-  \caption{MATLAB fully damaged band ($\omega \ge 0.99$) at peak load
-    (top, 3.64~kN, 17 elements) and post-peak (bottom, 0.13~kN,
-    CMOD~$\approx$~0.30~mm, 118 elements). The band grows upward from the
-    notch tip.}
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{fig_damage_peak.png}
+    \caption{MATLAB peak load: 3.64~kN, 17 elements.}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{fig_damage_postpeak.png}
+    \caption{MATLAB post-peak: 0.13~kN, CMOD~$\approx$~0.30~mm,
+      118 elements.}
+  \end{subfigure}
+  \vspace{0.6em}
+  \begin{subfigure}{0.78\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{abaqus_fig_damage_last_step.png}
+    \caption{Abaqus SDV2 damage field from the Oliver-matched UMAT run.}
+  \end{subfigure}
+  \caption{Fully damaged bands for the 2D 3PB benchmark. The MATLAB band
+    grows upward from the notch tip; the Abaqus panel marks the damaged
+    crack path extracted with the same threshold, $\omega \ge 0.99$.}
   \label{fig:b1-damage}
 \end{figure}
 
 For an Oliver-matched check on the crack location and width, the same
 case was also run in Abaqus/Standard using the updated UMAT. The Abaqus
 damage variable is stored as SDV2 and is plotted on the undeformed mesh
-in Figure~\ref{fig:b1-abqdamage}. The black band corresponds to elements
+in Figure~\ref{fig:b1-damage}(c). The black band corresponds to elements
 with $\omega \ge 0.99$, which is the same threshold used in the MATLAB
 damage figures. With the same mesh, same constitutive law, and same
 direction-dependent Oliver bandwidth formula, the relevant comparison is
 the predicted crack path, peak response, and post-peak load--CMOD trend.
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.85\linewidth]{abaqus_fig_damage_last_step.png}\\[0.6em]
-  \caption{Abaqus damage field (SDV2) on the undeformed mesh from the
-    Oliver-matched UMAT run. The black band marks the damaged crack path
-    extracted with the same threshold used for the MATLAB damage figures,
-    $\omega \ge 0.99$.}
-  \label{fig:b1-abqdamage}
-\end{figure}
 
 The wall-clock breakdown of the MATLAB run is given in
 Table~\ref{tab:walltime}.
@@ -457,23 +464,25 @@ $\nu = 0.20$, $f_t = 3.0$~MPa, $G_F = 0.110$~N/mm, and $k = f_c/f_t = 10$
     \label{fig:b2-nooru-mesh-3d}
   \end{subfigure}
 
-  \caption{Nooru-Mohamed benchmark: 2D boundary conditions and 3D mesh.}
-  \label{fig:b2-mesh}
-\end{figure}
+  \vspace{0.8em}
+  \begin{subfigure}{0.95\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{nooru_damage_evolution_3x3.png}
+    \caption{Damage evolution from first localization at the notches
+      (inc 29) to coalescence (inc 900).}
+    \label{fig:b2-nooru-damage}
+  \end{subfigure}
 
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=\linewidth]{nooru_damage_evolution_3x3.png}
-  \caption{Damage evolution $\omega$ for the Nooru-Mohamed run, from
-  first localization at the notches (inc 29) to coalescence (inc 900).
-  Only $\omega \ge 0.855$ is shaded.}
-  \label{fig:b2-damage-evolution}
+  \caption{Nooru-Mohamed benchmark: boundary conditions, 3D mesh, and
+    damage evolution $\omega$. Only $\omega \ge 0.855$ is shaded in the
+    damage-evolution panels.}
+  \label{fig:b2-overview}
 \end{figure}
 
 The panel is discretized in full 3D with four node linear tetrahedral
 elements (TET4), refined through the ligament between the two notches
 where the cracks form and eventually interact; the geometry and the
-boundary grips are shown in Figure~\ref{fig:b2-mesh}. The solver is the
+boundary grips are shown in Figure~\ref{fig:b2-overview}(a,b). The solver is the
 same vectorized modified Newton Raphson used for Benchmark~1: a secant
 stiffness is assembled from the current damage state at the start of each
 load increment and its factorization is reused during the equilibrium
@@ -483,7 +492,7 @@ variable $\kappa$ is committed once per converged increment, which keeps
 the secant system well conditioned as the two bands localize and compete
 for the same ligament. Crack band regularization uses Oliver's projected
 characteristic length for each tetrahedron. 
-Figure~\ref{fig:b2-damage-evolution} traces the predicted response from
+Figure~\ref{fig:b2-overview}(c) traces the predicted response from
 the first localization at the notch tips (increment~29) through to full
 coalescence of the two bands (increment~900); only elements with
 $\omega \ge 0.95$ are shaded, so the crack path itself stands out from
@@ -505,7 +514,7 @@ $400 \times 250 \times 100$~mm plain concrete beam with a diagonal notch
 cut through the thickness (depth 25~mm, width 5~mm) across the bottom
 face at midspan. In the physical test three supports sit at the bottom
 corners and one end of the top edge, and a single point load goes on the
-remaining top corner (Figure~\ref{fig:b3-mesh}), so the beam is twisted
+remaining top corner (Figure~\ref{fig:b3-overview}(a)), so the beam is twisted
 and the plane of maximum principal tension turns in space around the
 notch front, lining up with no face of the mesh. This is exactly the
 situation in which a characteristic length tied to a fixed mesh direction
@@ -535,30 +544,21 @@ iteration stable through the steep post-peak branch; each linear solve
 reuses a single AMD ordering with a Cholesky factorization. Two points, A
 and B, are monitored on opposite sides of the notch at midspan
 ($x = 200$~mm, $z = \pm 25$~mm), and their relative displacement across
-the notch gives the crack opening (Figure~\ref{fig:b3-mesh}).
+the notch gives the crack opening (Figure~\ref{fig:b3-overview}(a)).
 
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.75\linewidth]{torsion.png}
-  
-  \caption{Brokenshire torsion specimen (mm). Three supports (blue) and
-    one load (red); A and B are the two monitored points across the
-    notch.}
-  \label{fig:b3-mesh}
-\end{figure}
-
-
-
-% =====================================================================
-% Torsion damage evolution montage: 8 live snapshots, 3 per row.
-% Drop the 8 PNGs on the graphicspath (./ or paper_figs/).
-% =====================================================================
 \newcommand{\torsnap}[1]{%
   \includegraphics[width=\linewidth]%
     {Job-1_StaticFast_mod_vm_LIVE_snap_inc_#1.png}}
 
 \begin{figure}[htbp]
   \centering
+  \begin{subfigure}{0.62\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{torsion.png}
+    \caption{Brokenshire torsion specimen (mm).}
+  \end{subfigure}
+
+  \vspace{0.7em}
   % ---- row 1 ----
   \begin{subfigure}{0.32\linewidth}\centering
     \torsnap{0001_theta_2_143e-05}
@@ -602,17 +602,20 @@ the notch gives the crack opening (Figure~\ref{fig:b3-mesh}).
     \phantom{\rule{\linewidth}{0pt}}
   \end{subfigure}
 
-  \caption{Damage evolution $\omega$ over the torsion run, labelled by
-    twist $\theta$ and increment. The band nucleates at the notch front
-    and spirals toward the loaded corner.}
-  \label{fig:b3-damage-evolution}
+  \caption{Brokenshire torsion benchmark and damage evolution
+    $\omega$ over the imposed twist history. The specimen panel shows
+    the three supports (blue), one load (red), and monitored points A and
+    B; the damage panels are labelled by twist $\theta$ and increment.
+    The band nucleates at the notch front and spirals toward the loaded
+    corner.}
+  \label{fig:b3-overview}
 \end{figure}
 
 % =====================================================================
 \section*{Impact}
 % =====================================================================
 
-\texttt{FRACMAT} is intended to make continuum damage mechanics and
+\texttt{FRACMATH} is intended to make continuum damage mechanics and
 crack-band regularization easier to inspect, modify, and reproduce in a
 research workflow. The same scalar damage routine is exercised in a
 quantitative 2D Abaqus comparison and in 3D crack-path demonstrations,
@@ -654,7 +657,7 @@ and a theory manual are available at
 The test suite has been verified on MATLAB R2022a, R2023a, and R2024a,
 across Linux, macOS, and Windows.
 
-\texttt{FRACMAT} provides a compact MATLAB implementation of scalar CDM
+\texttt{FRACMATH} provides a compact MATLAB implementation of scalar CDM
 with crack-band regularization, an Oliver-matched Abaqus comparison, and
 2D/3D benchmark workflows. The current release is suitable for
 reproducible monotonic quasibrittle fracture examples and for method

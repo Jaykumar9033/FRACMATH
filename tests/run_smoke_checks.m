@@ -10,6 +10,7 @@ requiredFiles = {
     'CHANGELOG.md'
     'REPRODUCIBILITY.md'
     'LICENSE.txt'
+    'Licence.txt'
     'softwarex/manuscript.tex'
     'softwarex/paper.bib'
     'softwarex/figures/fig_mesh.png'
