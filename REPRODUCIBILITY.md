@@ -28,7 +28,7 @@ addpath('tests')
 run_smoke_checks
 ```
 
-This check verifies that key paper assets, benchmark input files, generated result files, and documentation files are present and readable. It is not a substitute for the full workflows below.
+This check verifies that key SoftwareX manuscript assets, benchmark input files, generated result files, and documentation files are present and readable. It is not a substitute for the full workflows below.
 
 ## 1. Reproduce the 2D 3PB MATLAB simulation
 

@@ -1,6 +1,6 @@
 # Theory manual
 
-This folder contains the theory manual for the FRACMATH formulation and solver implementation.
+This folder contains the theory manual for the FRACMATH formulation and solver implementation used by the SoftwareX manuscript.
 
 ## Files
 

@@ -4,6 +4,7 @@ All notable repository changes for FRACMATH are recorded here.
 
 ## Unreleased
 
+- Refreshed repository wording for SoftwareX submission readiness.
 - Replaced the old paper package with a SoftwareX source package under `softwarex/`.
 - Added `LICENSE.txt` for SoftwareX repository checks.
 - Added reviewer-facing contribution guidance in `CONTRIBUTING.md`.

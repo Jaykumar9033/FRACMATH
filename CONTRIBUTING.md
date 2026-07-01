@@ -1,6 +1,6 @@
 # Contributing to FRACMATH
 
-Thank you for your interest in improving FRACMATH. This repository is prepared for open review and for reproducible research use.
+Thank you for your interest in improving FRACMATH. This repository is prepared for SoftwareX review and for reproducible research use.
 
 ## Reporting issues
 
