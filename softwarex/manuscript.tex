@@ -91,7 +91,7 @@ element method \sep MATLAB \sep Abaqus UMAT \sep quasibrittle fracture
 \centering
 \begin{tabular}{|l|p{5.5cm}|p{6.8cm}|}
 \hline
-\textbf{Nr.} & \textbf{Code metadata description} & \textbf{Please fill in this column} \\
+\textbf{Nr.} & \textbf{Code metadata description} & \textbf{Value} \\
 \hline
 C1 & Current code version & v1.0.0 \\
 \hline
@@ -142,9 +142,7 @@ validation cases run in MATLAB only: a 3D mixed mode Nooru-Mohamed test
 and a 3D notched beam torsion test.
 
 Source code, documentation, and benchmark inputs live at
-\url{https://github.com/Jaykumar9033/FRACMATH} under the MIT license. 
-A versioned archive DOI will be added to the release metadata when the
-SoftwareX submission reaches the archival stage.
+\url{https://github.com/Jaykumar9033/FRACMATH} under the MIT license.
 
 % =====================================================================
 \subsection*{Scientific need and related work}
@@ -193,8 +191,8 @@ stiffness,
 $\boldsymbol{\sigma} = (1-\omega)\,\mathbb{C}_0:\boldsymbol{\varepsilon}$.
 The history variable $\kappa(t)=\max_{\tau\le t}\tilde{\varepsilon}(\tau)$
 tracks the largest equivalent strain ever reached, so damage cannot heal.
-The equivalent strain follows the modified von Mises measure of
-\citet{deVree},
+The equivalent strain follows the modified von Mises measure proposed by
+de Vree et al. \citep{deVree},
 \begin{equation}
 \tilde{\varepsilon} = \frac{k-1}{2k(1-2\nu)}I_1
   + \frac{1}{2k}\sqrt{\left(\frac{k-1}{1-2\nu}\right)^2 I_1^2
@@ -499,7 +497,7 @@ characteristic length for each tetrahedron.
 Figure~\ref{fig:b2-overview}(c) traces the predicted response from
 the first localization at the notch tips (increment~29) through to full
 coalescence of the two bands (increment~900); only elements with
-$\omega \ge 0.95$ are shaded, so the crack path itself stands out from
+$\omega \ge 0.855$ are shaded, so the crack path itself stands out from
 the diffuse process zone around it. The two curved bands and their final
 separation reproduce the experimentally observed mixed mode crack
 pattern, which confirms that the scalar damage model with crack band
@@ -513,7 +511,7 @@ routine.
 \subsection*{Benchmark 3: 3D Notched Beam Torsion}
 % =====================================================================
 
-Brokenshire's torsion test \citep{jefferson_torsion} uses a
+Brokenshire's torsion test \citep{brokenshire1996,jefferson_torsion} uses a
 $400 \times 250 \times 100$~mm plain concrete beam with a diagonal notch
 cut through the thickness (depth 25~mm, width 5~mm) across the bottom
 face at midspan. In the physical test three supports sit at the bottom
@@ -639,10 +637,8 @@ need a transparent baseline before extending the formulation to nonlocal
 damage, anisotropic damage, cyclic loading, or additional element types.
 
 % =====================================================================
-\section*{Conclusions}
+\section*{Limitations}
 % =====================================================================
-
-\subsection*{Limitations}
 
 The framework is quasistatic, so it includes no inertia and no rate
 effects. Damage is treated as isotropic and scalar: a single $\omega$
@@ -653,19 +649,25 @@ delivers mesh objective dissipation but introduces no material length
 scale; an integral type or gradient enhanced nonlocal extension is
 planned for a later release.
 
-\subsection*{Software availability}
-
-Source code, documentation, the benchmark input deck, the Abaqus UMAT,
-and a theory manual are available at
-\url{https://github.com/Jaykumar9033/FRACMATH} under the MIT license. 
-The test suite has been verified on MATLAB R2022a, R2023a, and R2024a,
-across Linux, macOS, and Windows.
+% =====================================================================
+\section*{Conclusions}
+% =====================================================================
 
 \texttt{FRACMATH} provides a compact MATLAB implementation of scalar CDM
 with crack-band regularization, an Oliver-matched Abaqus comparison, and
 2D/3D benchmark workflows. The current release is suitable for
 reproducible monotonic quasibrittle fracture examples and for method
 development within the same framework.
+
+% =====================================================================
+\section*{Software availability}
+% =====================================================================
+
+Source code, documentation, the benchmark input deck, the Abaqus UMAT,
+and a theory manual are available at
+\url{https://github.com/Jaykumar9033/FRACMATH} under the MIT license.
+The test suite has been verified on MATLAB R2022a, R2023a, and R2024a,
+across Linux, macOS, and Windows.
 
 % =====================================================================
 \section*{Acknowledgements}
@@ -696,7 +698,7 @@ of the authors.
 \begin{tabular}{|l|p{6.0cm}|p{6.5cm}|}
 \hline
 \textbf{Nr.} & \textbf{Executable software metadata description} &
-\textbf{Please fill in this column} \\
+\textbf{Value} \\
 \hline
 S1 & Current executable software version & v1.0.0 \\
 \hline
