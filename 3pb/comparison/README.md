@@ -1,6 +1,6 @@
 # 3PB comparison figures
 
-This folder contains the regenerated MATLAB and Abaqus/UMAT 3PB comparison figures used in the JOSS paper.
+This folder contains the regenerated MATLAB and Abaqus/UMAT 3PB comparison figures used in the SoftwareX manuscript.
 
 ## Commands
 

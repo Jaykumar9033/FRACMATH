@@ -1,4 +1,4 @@
-Gregoire 3PB job: C:\Users\jmavani\OneDrive - University of New Mexico\Desktop\JOSS\3pb\abaqus\Gregoire_3PB\Gregoire_3PB.odb
+Gregoire 3PB job: 3pb/abaqus/Gregoire_3PB/Gregoire_3PB.odb
 Peak load:  3609.13 N
 CMOD@peak:  0.022485 mm
 Rows:       10001

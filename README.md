@@ -1,6 +1,7 @@
-# FRACMATH paper repository
+# FRACMATH SoftwareX repository
 
-This repository contains the code, input data, generated results, and documentation for the JOSS paper:
+This repository contains the code, input data, generated results, documentation,
+and SoftwareX manuscript source for:
 
 **FRACMATH: A vectorized MATLAB framework for continuum damage mechanics with crack-band regularization**
 
@@ -16,7 +17,7 @@ The GitHub repository is `Jaykumar9033/FRACMATH`, and the software described in 
 | `Noor mohammad/` | 3D Nooru-Mohamed mesh, MATLAB solver, and saved damage outputs | 3D mixed-mode validation case |
 | `Torsion/` | 3D torsion mesh, MATLAB solver, visualization scripts, and outputs | 3D notched beam torsion validation case |
 | `doc/` | Theory manual in LaTeX and PDF form | Formulation, derivations, and solver notes |
-| `paper/` | JOSS manuscript, bibliography, and figures | Submission paper package |
+| `softwarex/` | SoftwareX manuscript `.tex`, bibliography, checklist, and figures | Submission source package |
 | `tests/` | Lightweight MATLAB smoke checks | Fast repository completeness check |
 | `MANIFEST.md` | File map for code, inputs, and generated outputs | Helps reviewers locate each item |
 | `REPRODUCIBILITY.md` | One-by-one analysis instructions | Main reviewer run guide |
@@ -137,8 +138,10 @@ python -m pip install -r requirements.txt
 
 ## Citation
 
-If you use this repository, cite it using `CITATION.cff`. Update `CITATION.cff` with the JOSS DOI after publication.
+If you use this repository, cite it using `CITATION.cff`. Update `CITATION.cff`
+with the SoftwareX article DOI after publication.
 
 ## License
 
-This repository is released under the MIT License. See `LICENSE`.
+This repository is released under the MIT License. See `LICENSE` and
+`LICENSE.txt`.

@@ -14,7 +14,7 @@ Please use GitHub Issues to report problems, unclear documentation, failed repro
 
 ## Asking for support
 
-For reviewer or user support, open a GitHub Issue with a short title and the workflow name, for example `3PB MATLAB solver`, `Abaqus UMAT`, `Nooru-Mohamed`, `torsion`, or `JOSS paper`.
+For reviewer or user support, open a GitHub Issue with a short title and the workflow name, for example `3PB MATLAB solver`, `Abaqus UMAT`, `Nooru-Mohamed`, `torsion`, or `SoftwareX manuscript`.
 
 ## Proposing changes
 
@@ -29,4 +29,4 @@ Small documentation fixes can be proposed directly in a pull request. For solver
 
 ## Authorship and citation
 
-Contributions will be acknowledged according to their role and scope. If you use FRACMATH in research, please cite the software metadata in `CITATION.cff` and the associated JOSS paper after publication.
+Contributions will be acknowledged according to their role and scope. If you use FRACMATH in research, please cite the software metadata in `CITATION.cff` and the associated SoftwareX paper after publication.

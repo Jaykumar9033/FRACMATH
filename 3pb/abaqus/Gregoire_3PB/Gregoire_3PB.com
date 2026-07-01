@@ -129,7 +129,7 @@ options = {
     'transientSensitivity':OFF,
     'unfold_param':OFF,
     'unsymm':OFF,
-    'user':'C:\\Users\\jmavani\\OneDrive - University of New Mexico\\Desktop\\JOSS\\3pb_2\\abaqus\\cdm_umat_2d_OLIVER_T3_FAST.for',
+    'user':'..\\cdm_umat_2d_OLIVER_T3_FAST.for',
     'visco':OFF,
     'xplSelect':OFF,
 }

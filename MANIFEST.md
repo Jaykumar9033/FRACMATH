@@ -1,6 +1,7 @@
 # Repository manifest
 
-This file lists the main source-code, input-data, and generated-result locations for the FRACMATH JOSS repository.
+This file lists the main source-code, input-data, generated-result, and
+SoftwareX manuscript locations for the FRACMATH repository.
 
 ## Root files
 
@@ -12,19 +13,19 @@ This file lists the main source-code, input-data, and generated-result locations
 | `CONTRIBUTING.md` | Issue, support, and contribution guidance |
 | `CHANGELOG.md` | Version and submission-preparation history |
 | `LICENSE` | MIT License |
+| `LICENSE.txt` | MIT License copy for SoftwareX repository checks |
 | `requirements.txt` | Python plotting dependencies |
 | `.gitattributes` | Git LFS tracking for large Abaqus `.odb` files |
 | `.gitignore` | Local scratch-file ignore rules |
-| `.github/workflows/draft-pdf.yml` | GitHub Actions workflow for compiling the JOSS draft PDF |
 
-## JOSS paper package
+## SoftwareX manuscript package
 
 | Path | Type | Description |
 | --- | --- | --- |
-| `paper/paper.md` | manuscript | JOSS paper in Markdown format |
-| `paper/paper.bib` | bibliography | BibTeX references cited in the paper |
-| `paper/build_composite_figures.py` | source | Rebuilds the JOSS composite panel figures from source images |
-| `paper/images/*.png` | figure | JOSS figures referenced by `paper.md` |
+| `softwarex/manuscript.tex` | manuscript | SoftwareX LaTeX source using the required template structure |
+| `softwarex/paper.bib` | bibliography | BibTeX references cited in the manuscript |
+| `softwarex/SOFTWAREX_SUBMISSION_CHECKLIST.md` | documentation | Source-package and submission readiness checklist |
+| `softwarex/figures/*.png` | figure | Figures referenced by `manuscript.tex` |
 
 ## Reviewer checks
 

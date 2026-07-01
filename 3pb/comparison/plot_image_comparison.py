@@ -9,10 +9,10 @@ import matplotlib.image as mpimg
 import matplotlib.patches as mpatches
 from matplotlib.lines import Line2D
 
-BASE   = r"C:\Users\jmavani\OneDrive - University of New Mexico\Desktop\JOSS\3pb_2"
+BASE   = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 MAT_R  = os.path.join(BASE, "matlab",  "Gregoire_3PB", "results")
 ABQ_R  = os.path.join(BASE, "abaqus",  "Gregoire_3PB", "results")
-OUT    = os.path.join(BASE, "comparison")
+OUT    = os.path.dirname(__file__)
 os.makedirs(OUT, exist_ok=True)
 
 DPI = 200
