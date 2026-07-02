@@ -318,10 +318,10 @@ state-variable update order in MATLAB and Abaqus.
 
 \begin{figure}[!htbp]
   \centering
-  \includegraphics[width=0.96\linewidth]{fig_b1_damage.png}
+  \includegraphics[width=\linewidth]{fig_b1_damage.png}
 
   \vspace{0.2em}
-  \includegraphics[width=0.96\linewidth]{abaqus_fig_damage_last_step.png}
+  \includegraphics[width=\linewidth]{abaqus_fig_damage_last_step.png}
 
   \caption{Fully damaged bands for the 2D 3PB benchmark: (a) MATLAB peak
     load, 3.64~kN with 17 fully damaged elements; (b) MATLAB post-peak
@@ -437,24 +437,25 @@ $\nu = 0.20$, $f_t = 3.0$~MPa, $G_F = 0.110$~N/mm, and $k = f_c/f_t = 10$
 \begin{figure}[!htbp]
   \centering
 
-  \begin{subfigure}{0.48\linewidth}
+  \makebox[\linewidth][c]{%
+  \begin{subfigure}{0.52\linewidth}
     \centering
     \includegraphics[width=\linewidth]{nooru_BC_2D.png}
     \caption{2D boundary conditions.}
     \label{fig:b2-nooru-bc-2d}
   \end{subfigure}
-  \hfill
-  \begin{subfigure}{0.48\linewidth}
+  \hspace{0.02\linewidth}
+  \begin{subfigure}{0.52\linewidth}
     \centering
-    \includegraphics[width=\linewidth]{nooru_mesh_3D.png}
+    \includegraphics[width=\linewidth]{nooru_mesh_3D_crop.png}
     \caption{3D mesh.}
     \label{fig:b2-nooru-mesh-3d}
-  \end{subfigure}
+  \end{subfigure}}
 
   \vspace{0.35em}
-  \begin{subfigure}{0.90\linewidth}
+  \begin{subfigure}{\linewidth}
     \centering
-    \includegraphics[width=\linewidth]{nooru_damage_evolution_3x3.png}
+    \makebox[\linewidth][c]{\includegraphics[width=1.12\linewidth]{nooru_damage_evolution_3x3_crop.png}}
     \caption{Damage evolution from first localization at the notches to
       coalescence; panels (a)--(i), left to right and top to bottom,
       correspond to increments 29, 37, 41, 53, 75, 127, 275, 407, and
@@ -548,62 +549,63 @@ response is left for the planned nonlocal extension of the framework.
 
 \begin{figure}[!htbp]
   \centering
-  \begin{subfigure}{0.52\linewidth}
+  \begin{subfigure}{0.65\linewidth}
     \centering
-    \includegraphics[width=\linewidth]{torsion.png}
+    \includegraphics[width=\linewidth]{torsion_crop.png}
     \caption{Brokenshire torsion specimen (mm).}
   \end{subfigure}
 
   \vspace{0.35em}
   % ---- row 1 ----
-  \begin{subfigure}{0.32\linewidth}\centering
+  \makebox[\linewidth][c]{%
+  \begin{subfigure}{0.33\linewidth}\centering
     \torsnap{0001_theta_2_143e-05}
     \caption{$\theta=2.14\!\times\!10^{-5}$, inc 1}
-  \end{subfigure}\hfill
-  \begin{subfigure}{0.32\linewidth}\centering
+  \end{subfigure}\hspace{0.01\linewidth}
+  \begin{subfigure}{0.33\linewidth}\centering
     \torsnap{0021_theta_4_500e-04}
     \caption{$\theta=4.50\!\times\!10^{-4}$, inc 21}
-  \end{subfigure}\hfill
-  \begin{subfigure}{0.32\linewidth}\centering
+  \end{subfigure}\hspace{0.01\linewidth}
+  \begin{subfigure}{0.33\linewidth}\centering
     \torsnap{0041_theta_8_786e-04}
     \caption{$\theta=8.79\!\times\!10^{-4}$, inc 41}
-  \end{subfigure}
+  \end{subfigure}}
 
   \vspace{0.35em}
   % ---- row 2 ----
-  \begin{subfigure}{0.32\linewidth}\centering
+  \makebox[\linewidth][c]{%
+  \begin{subfigure}{0.33\linewidth}\centering
     \torsnap{0061_theta_1_307e-03}
     \caption{$\theta=1.31\!\times\!10^{-3}$, inc 61}
-  \end{subfigure}\hfill
-  \begin{subfigure}{0.32\linewidth}\centering
+  \end{subfigure}\hspace{0.01\linewidth}
+  \begin{subfigure}{0.33\linewidth}\centering
     \torsnap{0080_theta_1_714e-03}
     \caption{$\theta=1.71\!\times\!10^{-3}$, inc 80}
-  \end{subfigure}\hfill
-  \begin{subfigure}{0.32\linewidth}\centering
+  \end{subfigure}\hspace{0.01\linewidth}
+  \begin{subfigure}{0.33\linewidth}\centering
     \torsnap{0100_theta_2_143e-03}
     \caption{$\theta=2.14\!\times\!10^{-3}$, inc 100}
-  \end{subfigure}
+  \end{subfigure}}
 
   \vspace{0.35em}
   % ---- row 3 ----
-  \begin{subfigure}{0.32\linewidth}\centering
+  \makebox[\linewidth][c]{%
+  \begin{subfigure}{0.33\linewidth}\centering
     \torsnap{0120_theta_2_571e-03}
     \caption{$\theta=2.57\!\times\!10^{-3}$, inc 120}
-  \end{subfigure}\hfill
-  \begin{subfigure}{0.32\linewidth}\centering
+  \end{subfigure}\hspace{0.01\linewidth}
+  \begin{subfigure}{0.33\linewidth}\centering
     \torsnap{0140_theta_3_000e-03}
     \caption{$\theta=3.00\!\times\!10^{-3}$, inc 140}
-  \end{subfigure}\hfill
-  \begin{subfigure}{0.32\linewidth}\centering
+  \end{subfigure}\hspace{0.01\linewidth}
+  \begin{subfigure}{0.33\linewidth}\centering
     \phantom{\rule{\linewidth}{0pt}}
-  \end{subfigure}
+  \end{subfigure}}
 
   \caption{Brokenshire torsion benchmark and damage evolution
-    $\omega$ over the imposed twist history. The specimen panel shows
-    the three supports (blue), one load (red), and monitored points A and
-    B; the damage panels are labelled by twist $\theta$ and increment.
-    The band nucleates at the notch front and spirals toward the loaded
-    corner.}
+    $\omega$ over the imposed twist history. Damage panels are labelled
+    by twist $\theta$ and increment; the band nucleates at the notch
+    front and spirals toward the loaded corner.}
   \label{fig:b3-overview}
 \end{figure}
 
