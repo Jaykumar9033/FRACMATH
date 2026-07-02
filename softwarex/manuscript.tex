@@ -39,6 +39,11 @@
 \setlength{\intextsep}{8pt plus 2pt minus 2pt}
 \setlength{\abovecaptionskip}{3pt}
 \setlength{\belowcaptionskip}{2pt}
+\makeatletter
+\setlength{\@fptop}{0pt}
+\setlength{\@fpsep}{8pt plus 2pt minus 2pt}
+\setlength{\@fpbot}{0pt plus 1fil}
+\makeatother
 
 \hypersetup{
   colorlinks=true,
@@ -313,29 +318,19 @@ state-variable update order in MATLAB and Abaqus.
 
 \begin{figure}[!htbp]
   \centering
-  \begin{subfigure}{0.82\linewidth}
-    \centering
-    \includegraphics[width=\linewidth]{fig_damage_peak.png}
-    \caption{MATLAB peak load: 3.64~kN, 17 elements.}
-  \end{subfigure}
+  \includegraphics[width=0.96\linewidth]{fig_b1_damage.png}
 
-  \vspace{0.15em}
-  \begin{subfigure}{0.82\linewidth}
-    \centering
-    \includegraphics[width=\linewidth]{fig_damage_postpeak.png}
-    \caption{MATLAB post-peak: 0.13~kN, CMOD~$\approx$~0.30~mm,
-      118 elements.}
-  \end{subfigure}
+  \vspace{0.2em}
+  \includegraphics[width=0.82\linewidth]{abaqus_fig_damage_last_step.png}
 
-  \vspace{0.15em}
-  \begin{subfigure}{0.82\linewidth}
-    \centering
-    \includegraphics[width=\linewidth]{abaqus_fig_damage_last_step.png}
-    \caption{Abaqus SDV2 damage field from the Oliver-matched UMAT run.}
-  \end{subfigure}
-  \caption{Fully damaged bands for the 2D 3PB benchmark. The MATLAB band
-    grows upward from the notch tip; the Abaqus panel marks the damaged
-    crack path extracted with the same threshold, $\omega \ge 0.99$.}
+  {\small (c) Abaqus SDV2 damage field from the Oliver-matched UMAT run.}
+
+  \caption{Fully damaged bands for the 2D 3PB benchmark: (a) MATLAB peak
+    load, 3.64~kN with 17 fully damaged elements; (b) MATLAB post-peak
+    state, 0.13~kN at CMOD~$\approx$~0.30~mm with 118 fully damaged
+    elements; and (c) Abaqus SDV2 damage field. The MATLAB band grows
+    upward from the notch tip; the Abaqus panel marks the damaged crack
+    path extracted with the same threshold, $\omega \ge 0.99$.}
   \label{fig:b1-damage}
 \end{figure}
 
