@@ -138,12 +138,12 @@ vectorized modified Newton Raphson scheme that uses a secant tangent and
 refactors the free-degree-of-freedom stiffness block once per load step,
 all under displacement control.
 
-The package comes with three validated cases. The main benchmark is a
+The package comes with three benchmark cases. The main benchmark is a
 notched 2D three point bending (3PB) test of a concrete beam at a depth
 of $D=100$~mm with a notch ratio of $a/D=0.2$, run in MATLAB and
 checked against Abaqus/Standard with an Oliver-matched UMAT. Two more
-validation cases run in MATLAB only: a 3D mixed mode Nooru-Mohamed test
-and a 3D notched beam torsion test.
+cases run in MATLAB only: a 3D mixed mode Nooru-Mohamed validation test
+and a 3D notched beam torsion demonstration.
 
 Source code, documentation, and benchmark inputs live at
 \url{https://github.com/Jaykumar9033/FRACMATH} under the MIT license.
@@ -316,14 +316,14 @@ state-variable update order in MATLAB and Abaqus.
   \centering
   \begin{subfigure}{0.82\linewidth}
     \centering
-    \includegraphics[width=\linewidth]{fig_damage_peak_final.png}
+    \includegraphics[width=\linewidth]{fig_damage_peak.png}
     \caption{MATLAB peak load: 3.64~kN, 17 elements.}
   \end{subfigure}
 
   \vspace{0.15em}
   \begin{subfigure}{0.82\linewidth}
     \centering
-    \includegraphics[width=\linewidth]{fig_damage_postpeak_final.png}
+    \includegraphics[width=\linewidth]{fig_damage_postpeak.png}
     \caption{MATLAB post-peak: 0.13~kN, CMOD~$\approx$~0.30~mm,
       118 elements.}
   \end{subfigure}
@@ -473,8 +473,10 @@ $\nu = 0.20$, $f_t = 3.0$~MPa, $G_F = 0.110$~N/mm, and $k = f_c/f_t = 10$
   \begin{subfigure}{0.90\linewidth}
     \centering
     \includegraphics[width=\linewidth]{nooru_damage_evolution_3x3.png}
-    \caption{Damage evolution from first localization at the notches
-      (inc 29) to coalescence (inc 900).}
+    \caption{Damage evolution from first localization at the notches to
+      coalescence; panels (a)--(i), left to right and top to bottom,
+      correspond to increments 29, 37, 41, 53, 75, 127, 275, 407, and
+      900.}
     \label{fig:b2-nooru-damage}
   \end{subfigure}
 
@@ -550,6 +552,15 @@ reuses a single AMD ordering with a Cholesky factorization. Two points, A
 and B, are monitored on opposite sides of the notch at midspan
 ($x = 200$~mm, $z = \pm 25$~mm), and their relative displacement across
 the notch gives the crack opening (Figure~\ref{fig:b3-overview}(a)).
+
+This case is included as a qualitative demonstration of
+direction-dependent crack-band regularization under nonplanar,
+torsion-driven crack growth. The predicted damage band nucleates at the
+notch front and spirals toward the loaded corner
+(Figure~\ref{fig:b3-overview}(b--i)), consistent with the fracture
+surface observed in the experiment \citep{brokenshire1996}. A
+quantitative comparison against the measured load--crack-opening
+response is left for the planned nonlocal extension of the framework.
 
 \newcommand{\torsnap}[1]{%
   \includegraphics[width=\linewidth]%
@@ -686,7 +697,7 @@ grant 80NSSC22M0044.
 
 The authors declare no conflict of interest.
 
-\section*{Declaration of generative AI and AI-assisted technologies}
+\section*{Declaration of AI-assisted technologies}
 
 Generative AI tools were used to assist with manuscript wording,
 formatting, and implementation support. The scientific claims, equations,
