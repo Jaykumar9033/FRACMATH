@@ -235,8 +235,7 @@ as the MATLAB element routine, so the Abaqus preprocessing script writes
 the element shape-function gradients to
 \texttt{oliver\_t3\_gradN.dat}. The UMAT reads this table and recomputes
 $h(\mathbf{n})$ from the current maximum principal strain direction at
-each material point. Therefore, the updated Abaqus comparison uses the
-same direction-dependent Oliver bandwidth formula as the MATLAB solver,
+each material point. The Abaqus comparison thus uses the same direction-dependent Oliver bandwidth as the MATLAB solver,
 rather than using the Abaqus characteristic element length
 \texttt{CELENT} as the crack-band length.
 
@@ -279,7 +278,7 @@ is pinned, the right support is a roller, and the crack mouth opening
 displacement (CMOD) is computed as the horizontal displacement difference
 between the two node sets on the notch mouth at $y=0$.
 
-For the updated timing comparison, MATLAB R2024a was run in single-thread
+For the timing comparison, MATLAB R2024a was run in single-thread
 mode and Abaqus/Standard 2023 was run using four threads. The timing
 values reported below were measured on the development workstation
 (Windows 11, Intel Core i9-13900, 64~GB RAM, NVMe SSD).
@@ -341,7 +340,7 @@ state-variable update order in MATLAB and Abaqus.
 \end{figure}
 
 For an Oliver-matched check on the crack location and width, the same
-case was also run in Abaqus/Standard using the updated UMAT. The Abaqus
+case was also run in Abaqus/Standard with the UMAT. The Abaqus
 damage variable is stored as SDV2 and is plotted on the undeformed mesh
 in Figure~\ref{fig:b1-damage}(c). The black band corresponds to elements
 with $\omega \ge 0.99$, which is the same threshold used in the MATLAB
@@ -387,7 +386,7 @@ the two codes use different global solution procedures, increment
 control, and floating-point operation order.
 
 Figure~\ref{fig:b1-time} compares the wall-clock cost of the two runs.
-Using the measured wall-clock values in Table~\ref{tab:abqcompare},
+From the values in Table~\ref{tab:abqcompare},
 MATLAB finishes the same benchmark about 3.6 times faster than the
 Abaqus/Standard UMAT workflow, and the pie chart shows that MATLAB time
 is dominated by assembly rather than by the sparse linear solve.
@@ -495,8 +494,8 @@ coalescence of the two bands (increment~900); only elements with
 $\omega \ge 0.99$ are shaded, so the crack path itself stands out from
 the diffuse process zone around it. The two curved bands and their final
 separation reproduce the experimentally observed mixed mode crack
-pattern, confirming that the same constitutive routine carries over
-unchanged from planar mode~I to fully three dimensional mixed mode
+pattern; the same constitutive routine carries over
+unchanged from planar mode~I to fully three-dimensional mixed mode
 loading.
 
 
