@@ -134,6 +134,33 @@ C8 & Support email for questions & \href{mailto:mpathirage@unm.edu}{mpathirage@u
 \label{tab:code-metadata}
 \end{table}
 
+\section*{Current executable software version}
+\label{sec:current-executable-version}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|l|p{6.0cm}|p{6.5cm}|}
+\hline
+\textbf{Nr.} & \textbf{Executable software metadata description} &
+\textbf{Value} \\
+\hline
+S1 & Current executable software version & v1.0.0 \\
+\hline
+S2 & Permanent link to executable software of this version &
+No separate compiled executable; MATLAB source scripts are available in
+the GitHub repository. \\
+\hline
+S3 & Legal Software License & MIT License \\
+\hline
+S4 & Computing platforms/operating systems & Linux, macOS, and Windows
+with MATLAB; Abaqus/Standard is needed only for the UMAT comparison. \\
+\hline
+\end{tabular}
+\caption{Executable software metadata.}
+\label{tab:executable-metadata}
+\end{table}
+
 % =====================================================================
 \section*{Motivation and significance}
 % =====================================================================
@@ -271,6 +298,25 @@ mesh, and boundary conditions are shown in Figure~\ref{fig:b1-setup-response}(a)
 material is concrete with $E = 37{,}000$~MPa, $\nu = 0.20$,
 $f_t = 3.5$~MPa, $f_c = 35.0$~MPa, and $G_F = 0.090$~N/mm.
 
+\begin{figure}[!htbp]
+  \centering
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{fig_mesh.png}
+    \caption{Geometry, refined CPS3 mesh, supports, and load point.}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{load_cmod_comparison.png}
+    \caption{Load--CMOD response: MATLAB and Oliver-matched Abaqus UMAT.}
+  \end{subfigure}
+  \caption{Notched 2D three-point bending benchmark. MATLAB and
+    Oliver-matched Abaqus UMAT load--CMOD curves track closely up to the
+    peak; the post-peak branches remain close but not identical.}
+  \label{fig:b1-setup-response}
+\end{figure}
+
 The mesh consists of CPS3 elements, i.e. three-node linear plane-stress
 triangles. The same Abaqus-generated mesh is used by both solvers. It is
 a free triangular mesh with local refinement in a rectangular zone of
@@ -297,41 +343,6 @@ identical; the remaining differences are attributed to the different
 global solution procedures, convergence paths, increment histories, and
 state-variable update order in MATLAB and Abaqus.
 
-\begin{figure}[!htbp]
-  \centering
-  \begin{subfigure}{0.48\linewidth}
-    \centering
-    \includegraphics[width=\linewidth]{fig_mesh.png}
-    \caption{Geometry, refined CPS3 mesh, supports, and load point.}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}{0.48\linewidth}
-    \centering
-    \includegraphics[width=\linewidth]{load_cmod_comparison.png}
-    \caption{Load--CMOD response: MATLAB and Oliver-matched Abaqus UMAT.}
-  \end{subfigure}
-  \caption{Notched 2D three-point bending benchmark. MATLAB and
-    Oliver-matched Abaqus UMAT load--CMOD curves track closely up to the
-    peak; the post-peak branches remain close but not identical.}
-  \label{fig:b1-setup-response}
-\end{figure}
-
-\begin{figure}[!htbp]
-  \centering
-  \includegraphics[width=\linewidth]{fig_b1_damage.png}
-
-  \vspace{0.2em}
-  \includegraphics[width=\linewidth]{abaqus_fig_damage_last_step.png}
-
-  \caption{Fully damaged bands for the 2D 3PB benchmark: (a) MATLAB peak
-    load, 3.64~kN with 17 fully damaged elements; (b) MATLAB post-peak
-    state, 0.13~kN at CMOD~$\approx$~0.30~mm with 118 fully damaged
-    elements; and (c) Abaqus SDV2 damage field. The MATLAB band grows
-    upward from the notch tip; the Abaqus panel marks the damaged crack
-    path extracted with the same threshold, $\omega \ge 0.99$.}
-  \label{fig:b1-damage}
-\end{figure}
-
 For an Oliver-matched check on the crack location and width, the same
 case was also run in Abaqus/Standard with the UMAT. The Abaqus
 damage variable is stored as SDV2 and is plotted on the undeformed mesh
@@ -340,6 +351,21 @@ with $\omega \ge 0.99$, which is the same threshold used in the MATLAB
 damage figures. With the same mesh, same constitutive law, and same
 direction-dependent Oliver bandwidth formula, the relevant comparison is
 the predicted crack path, peak response, and post-peak load--CMOD trend.
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=0.84\linewidth]{fig_b1_damage.png}
+
+  \vspace{0.2em}
+  \includegraphics[width=0.84\linewidth]{abaqus_fig_damage_last_step.png}
+
+  \caption{Fully damaged bands for the 2D 3PB benchmark:
+    (a) MATLAB peak load, 3.64~kN, 17 elements; (b) MATLAB post-peak,
+    0.13~kN at CMOD~$\approx$~0.30~mm, 118 elements; and (c) Abaqus SDV2
+    damage field. The damaged crack path is extracted with threshold
+    $\omega \ge 0.99$.}
+  \label{fig:b1-damage}
+\end{figure}
 
 The wall-clock breakdown of the MATLAB run is given in
 Table~\ref{tab:walltime}.
@@ -631,6 +657,8 @@ implementation for graduate students and early-career researchers who
 need a transparent baseline before extending the formulation to nonlocal
 damage, anisotropic damage, cyclic loading, or additional element types.
 
+\FloatBarrier
+
 % =====================================================================
 \section*{Limitations}
 % =====================================================================
@@ -665,51 +693,18 @@ The test suite has been verified on MATLAB R2022a, R2023a, and R2024a,
 across Linux, macOS, and Windows.
 
 % =====================================================================
-\section*{Acknowledgements}
+\section*{Declarations and acknowledgements}
 % =====================================================================
 
+\noindent\textbf{Acknowledgements.}
 The authors acknowledge support from the National Aeronautics and Space
 Administration (NASA), and the New Mexico Space Grant Consortium under
-grant 80NSSC22M0044.
-
-% =====================================================================
-\section*{Declaration of competing interest}
-% =====================================================================
-
-The authors declare no conflict of interest.
-
-\section*{Declaration of AI-assisted technologies}
-
-Generative AI tools were used to assist with manuscript wording,
-formatting, and implementation support. The scientific claims, equations,
-code, numerical results, figures, and references are the responsibility
-of the authors.
-
-\section*{Current executable software version}
-\label{sec:current-executable-version}
-
-\begin{table}[H]
-\centering
-\begin{tabular}{|l|p{6.0cm}|p{6.5cm}|}
-\hline
-\textbf{Nr.} & \textbf{Executable software metadata description} &
-\textbf{Value} \\
-\hline
-S1 & Current executable software version & v1.0.0 \\
-\hline
-S2 & Permanent link to executable software of this version &
-No separate compiled executable; MATLAB source scripts are available in
-the GitHub repository. \\
-\hline
-S3 & Legal Software License & MIT License \\
-\hline
-S4 & Computing platforms/operating systems & Linux, macOS, and Windows
-with MATLAB; Abaqus/Standard is needed only for the UMAT comparison. \\
-\hline
-\end{tabular}
-\caption{Executable software metadata.}
-\label{tab:executable-metadata}
-\end{table}
+grant 80NSSC22M0044. \textbf{Declaration of competing interest.}
+The authors declare no conflict of interest. \textbf{Declaration of
+AI-assisted technologies.} Generative AI tools were used to assist with
+manuscript wording, formatting, and implementation support. The scientific
+claims, equations, code, numerical results, figures, and references are
+the responsibility of the authors.
 
 \bibliographystyle{elsarticle-num}
 \bibliography{paper}
