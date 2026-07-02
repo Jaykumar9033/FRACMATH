@@ -288,9 +288,9 @@ mode and Abaqus/Standard 2023 was run using four threads. The timing
 values reported below were measured on the development workstation
 (Windows 11, Intel Core i9-13900, 64~GB RAM, NVMe SSD).
 
-The simulated MATLAB peak load is 3.63982~kN (3639.82~N) at a CMOD of
-0.022811~mm. The Abaqus UMAT peak load is 3.60913~kN (3609.13~N) at a
-CMOD of 0.022485~mm. The full load--CMOD response is shown in
+The simulated MATLAB peak load is 3.64~kN at a CMOD of
+0.022811~mm. The Abaqus UMAT peak load is 3.61~kN at a CMOD of
+0.022485~mm. The full load--CMOD response is shown in
 Figure~\ref{fig:b1-setup-response}(b). The MATLAB and Abaqus curves agree closely
 up to peak load. The two post-peak branches are similar in shape but not
 identical; the remaining differences are attributed to the different
@@ -321,7 +321,7 @@ state-variable update order in MATLAB and Abaqus.
   \includegraphics[width=0.96\linewidth]{fig_b1_damage.png}
 
   \vspace{0.2em}
-  \includegraphics[width=0.82\linewidth]{abaqus_fig_damage_last_step.png}
+  \includegraphics[width=0.96\linewidth]{abaqus_fig_damage_last_step.png}
 
   {\small (c) Abaqus SDV2 damage field from the Oliver-matched UMAT run.}
 
@@ -406,7 +406,7 @@ is dominated by assembly rather than by the sparse linear solve.
 \toprule
 Quantity & MATLAB & Abaqus + UMAT & Ratio \\
 \midrule
-Peak load (kN)       & 3.63982 & 3.60913 & 1.009 \\
+Peak load (kN)       & 3.64 & 3.61 & 1.008 \\
 CMOD at peak (mm)    & 0.022811 & 0.022485 & 1.015 \\
 Wall clock time (s)  & 547.58  & 1996.25 & 0.274 \\
 End-to-end/internal time (s) & 590.54 & 1968.00 & 0.300 \\
