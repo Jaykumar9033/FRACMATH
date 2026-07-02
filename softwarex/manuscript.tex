@@ -64,16 +64,21 @@ mechanics with crack band regularization}
 Engineering, University of New Mexico, Albuquerque, NM, USA}
 
 \begin{abstract}
-\texttt{FRACMATH} is an open-source MATLAB framework for finite element
-simulation of fracture in quasibrittle materials. The software implements
-scalar isotropic continuum damage mechanics, exponential softening, and
-crack-band regularization with a direction-dependent Oliver characteristic
-length. It provides a vectorized MATLAB solver, benchmark data, plotting
-scripts, and an Abaqus UMAT comparison workflow. The principal validation
-case is a notched two-dimensional three-point bending benchmark checked
-against an Oliver-matched Abaqus/Standard UMAT; additional three-dimensional
-Nooru-Mohamed and Brokenshire torsion examples demonstrate mixed-mode and
-torsion-driven crack paths.
+\texttt{FRACMATH} is an open-source MATLAB framework for the finite element
+simulation of fracture in concrete and other quasibrittle materials. The
+software implements scalar isotropic continuum damage mechanics with the
+modified von Mises equivalent strain, exponential softening, and crack-band
+regularization based on a direction-dependent Oliver characteristic length,
+and solves quasistatic problems in 2D and 3D with a vectorized modified
+Newton--Raphson scheme. The package ships with benchmark input decks,
+plotting scripts, an Abaqus/Standard UMAT, and a documented comparison
+workflow. In the principal validation case, a notched two-dimensional
+three-point bending benchmark, the MATLAB solver reproduces the
+Oliver-matched Abaqus UMAT peak load within 1\% while completing the run
+about 3.6 times faster. Two further three-dimensional examples, the
+Nooru-Mohamed mixed-mode test and the Brokenshire torsion demonstration,
+show curved and nonplanar crack paths. Source code, benchmarks, and a theory
+manual are released under the MIT license.
 \end{abstract}
 
 \begin{keyword}
@@ -120,7 +125,7 @@ GitHub repository \\
 C8 & Support email for questions & \href{mailto:mpathirage@unm.edu}{mpathirage@unm.edu} \\
 \hline
 \end{tabular}
-\caption{Code metadata (mandatory).}
+\caption{Code metadata.}
 \label{tab:code-metadata}
 \end{table}
 
