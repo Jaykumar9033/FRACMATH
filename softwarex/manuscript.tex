@@ -18,6 +18,7 @@
 
 \captionsetup{font=small,labelfont=bf,skip=4pt}
 \captionsetup[sub]{font=scriptsize,labelfont=bf}
+\raggedbottom
 
 % =====================================================================
 % Float placement tuning: keep text flowing and avoid large white gaps.
@@ -33,6 +34,11 @@
 \setcounter{topnumber}{4}
 \setcounter{bottomnumber}{4}
 \setcounter{totalnumber}{8}
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\floatsep}{8pt plus 2pt minus 2pt}
+\setlength{\intextsep}{8pt plus 2pt minus 2pt}
+\setlength{\abovecaptionskip}{3pt}
+\setlength{\belowcaptionskip}{2pt}
 
 \hypersetup{
   colorlinks=true,
@@ -41,7 +47,7 @@
   urlcolor=blue!50!black
 }
 
-\graphicspath{{./}{paper_figs/}{figures/}{../paper_figs/}}
+\graphicspath{{figures/}}
 
 \begin{document}
 
@@ -77,8 +83,6 @@ element method \sep MATLAB \sep Abaqus UMAT \sep quasibrittle fracture
 
 \end{frontmatter}
 
-\clearpage
-
 % =====================================================================
 \section*{Required Metadata}
 \label{sec:metadata}
@@ -87,7 +91,7 @@ element method \sep MATLAB \sep Abaqus UMAT \sep quasibrittle fracture
 \section*{Current code version}
 \label{sec:current-code-version}
 
-\begin{table}[!h]
+\begin{table}[H]
 \centering
 \begin{tabular}{|l|p{5.5cm}|p{6.8cm}|}
 \hline
@@ -287,7 +291,7 @@ identical; the remaining differences are attributed to the different
 global solution procedures, convergence paths, increment histories, and
 state-variable update order in MATLAB and Abaqus.
 
-\begin{figure}[htbp]
+\begin{figure}[!htbp]
   \centering
   \begin{subfigure}{0.48\linewidth}
     \centering
@@ -308,24 +312,24 @@ state-variable update order in MATLAB and Abaqus.
   \label{fig:b1-setup-response}
 \end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[!htbp]
   \centering
-  \begin{subfigure}{0.86\linewidth}
+  \begin{subfigure}{0.82\linewidth}
     \centering
     \includegraphics[width=\linewidth]{fig_damage_peak.png}
     \caption{MATLAB peak load: 3.64~kN, 17 elements.}
   \end{subfigure}
 
-  \vspace{0.45em}
-  \begin{subfigure}{0.86\linewidth}
+  \vspace{0.15em}
+  \begin{subfigure}{0.82\linewidth}
     \centering
     \includegraphics[width=\linewidth]{fig_damage_postpeak.png}
     \caption{MATLAB post-peak: 0.13~kN, CMOD~$\approx$~0.30~mm,
       118 elements.}
   \end{subfigure}
 
-  \vspace{0.45em}
-  \begin{subfigure}{0.86\linewidth}
+  \vspace{0.15em}
+  \begin{subfigure}{0.82\linewidth}
     \centering
     \includegraphics[width=\linewidth]{abaqus_fig_damage_last_step.png}
     \caption{Abaqus SDV2 damage field from the Oliver-matched UMAT run.}
@@ -398,7 +402,7 @@ MATLAB finishes the same benchmark about 3.6 times faster than the
 Abaqus/Standard UMAT workflow, and the pie chart shows that MATLAB time
 is dominated by assembly rather than by the sparse linear solve.
 
-\begin{figure}[htbp]
+\begin{figure}[!htbp]
   \centering
   \includegraphics[width=0.95\linewidth]{time_comparison_bar.png}
   \caption{Wall-clock comparison for the 2D 3PB case. Left: total time,
@@ -449,7 +453,7 @@ displacement of 0.5~mm. The material is concrete with $E = 29{,}000$~MPa,
 $\nu = 0.20$, $f_t = 3.0$~MPa, $G_F = 0.110$~N/mm, and $k = f_c/f_t = 10$
 (so $f_c = 30$~MPa).
 
-\begin{figure}[htbp]
+\begin{figure}[!htbp]
   \centering
 
   \begin{subfigure}{0.48\linewidth}
@@ -466,8 +470,8 @@ $\nu = 0.20$, $f_t = 3.0$~MPa, $G_F = 0.110$~N/mm, and $k = f_c/f_t = 10$
     \label{fig:b2-nooru-mesh-3d}
   \end{subfigure}
 
-  \vspace{0.8em}
-  \begin{subfigure}{0.95\linewidth}
+  \vspace{0.35em}
+  \begin{subfigure}{0.90\linewidth}
     \centering
     \includegraphics[width=\linewidth]{nooru_damage_evolution_3x3.png}
     \caption{Damage evolution from first localization at the notches
@@ -552,15 +556,15 @@ the notch gives the crack opening (Figure~\ref{fig:b3-overview}(a)).
   \includegraphics[width=\linewidth]%
     {Job-1_StaticFast_mod_vm_LIVE_snap_inc_#1.png}}
 
-\begin{figure}[htbp]
+\begin{figure}[!htbp]
   \centering
-  \begin{subfigure}{0.62\linewidth}
+  \begin{subfigure}{0.52\linewidth}
     \centering
     \includegraphics[width=\linewidth]{torsion.png}
     \caption{Brokenshire torsion specimen (mm).}
   \end{subfigure}
 
-  \vspace{0.7em}
+  \vspace{0.35em}
   % ---- row 1 ----
   \begin{subfigure}{0.32\linewidth}\centering
     \torsnap{0001_theta_2_143e-05}
@@ -575,7 +579,7 @@ the notch gives the crack opening (Figure~\ref{fig:b3-overview}(a)).
     \caption{$\theta=8.79\!\times\!10^{-4}$, inc 41}
   \end{subfigure}
 
-  \vspace{0.6em}
+  \vspace{0.35em}
   % ---- row 2 ----
   \begin{subfigure}{0.32\linewidth}\centering
     \torsnap{0061_theta_1_307e-03}
@@ -590,7 +594,7 @@ the notch gives the crack opening (Figure~\ref{fig:b3-overview}(a)).
     \caption{$\theta=2.14\!\times\!10^{-3}$, inc 100}
   \end{subfigure}
 
-  \vspace{0.6em}
+  \vspace{0.35em}
   % ---- row 3 ----
   \begin{subfigure}{0.32\linewidth}\centering
     \torsnap{0120_theta_2_571e-03}
@@ -693,7 +697,7 @@ of the authors.
 \section*{Current executable software version}
 \label{sec:current-executable-version}
 
-\begin{table}[!h]
+\begin{table}[H]
 \centering
 \begin{tabular}{|l|p{6.0cm}|p{6.5cm}|}
 \hline
