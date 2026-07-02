@@ -139,9 +139,7 @@ isotropic continuum damage mechanics (CDM) built on the modified von
 Mises equivalent strain measure \citep{deVree}, exponential softening,
 and crack band regularization through a characteristic crack-band length
 \citep{oliver1989,bazant_oh}. Quasistatic loading is solved with a
-vectorized modified Newton Raphson scheme that uses a secant tangent and
-refactors the free-degree-of-freedom stiffness block once per load step,
-all under displacement control.
+vectorized modified Newton--Raphson scheme under displacement control.
 
 The package comes with three benchmark cases. The main benchmark is a
 notched 2D three point bending (3PB) test of a concrete beam at a depth
@@ -161,9 +159,9 @@ CDM with crack band regularization is the usual way to run finite
 element simulations of fracture in concrete and rock at the structural
 scale \citep{bazant_planas}. The two mature tools in everyday research
 use are Abaqus driven by a UMAT or VUMAT subroutine that the user writes
-\citep{abaqus} and the C++ research code OOFEM \citep{oofem}. Both work
-well. Both also take real effort to learn for graduate students and
-engineers who do not already write Fortran or modern C++. Adapting either
+\citep{abaqus} and the C++ research code OOFEM \citep{oofem}. Both are
+powerful but take real effort to learn for anyone not already writing
+Fortran or modern C++. Adapting either
 one to a new equivalent strain measure or an unusual arc length scheme
 can eat up weeks of setup before the first curve worth reviewing appears.
 
@@ -284,8 +282,7 @@ between the two node sets on the notch mouth at $y=0$.
 For the updated timing comparison, MATLAB R2024a was run in single-thread
 mode and Abaqus/Standard 2023 was run using four threads. The timing
 values reported below were measured on the development workstation
-(Windows 11 Pro, Dell Precision 3660, Intel Core i9-13900 processor with
-24 cores and 32 threads, 64~GB RAM, and a 1~TB NVMe SSD).
+(Windows 11, Intel Core i9-13900, 64~GB RAM, NVMe SSD).
 
 The simulated MATLAB peak load is 3.63982~kN (3639.82~N) at a CMOD of
 0.022811~mm. The Abaqus UMAT peak load is 3.60913~kN (3609.13~N) at a
@@ -309,11 +306,9 @@ state-variable update order in MATLAB and Abaqus.
     \includegraphics[width=\linewidth]{load_cmod_comparison.png}
     \caption{Load--CMOD response: MATLAB and Oliver-matched Abaqus UMAT.}
   \end{subfigure}
-  \caption{Notched 2D three-point bending benchmark. The MATLAB and
-    Oliver-matched Abaqus UMAT curves track each other closely up to the
-    peak, while the post-peak branches remain close but not bitwise
-    identical because the solvers use different nonlinear solution and
-    state-update paths.}
+  \caption{Notched 2D three-point bending benchmark. MATLAB and
+    Oliver-matched Abaqus UMAT load--CMOD curves track closely up to the
+    peak; the post-peak branches remain close but not identical.}
   \label{fig:b1-setup-response}
 \end{figure}
 
@@ -376,30 +371,20 @@ Other (bookkeeping, output)   & 43.79  & 7.4\%  \\
 \end{tabular}
 \end{table}
 
-Stiffness assembly takes most of the run at about 82.5 percent, the linear
-solve about 7.9 percent, the damage update about 2.1 percent, and the rest
-goes to bookkeeping and output. At this problem size the sparse direct
-solve is cheap, so the per-element constitutive update, crack-band length
-calculation, and sparse assembly dominate the MATLAB wall-clock cost.
+At this problem size the sparse direct solve is cheap; the per-element
+constitutive update, crack-band length calculation, and sparse assembly
+dominate the MATLAB wall-clock cost.
 
-The Abaqus comparison uses the same geometry, mesh, material constants,
-loading, boundary conditions, scalar CDM law, modified von Mises
-equivalent strain, exponential softening law, and crack-band energy
-scaling as the MATLAB solver. In the updated Abaqus workflow, the UMAT no
-longer uses the Abaqus characteristic element length \texttt{CELENT} as
-the crack-band length. Instead, the preprocessing script writes the T3
-shape-function gradients to \texttt{oliver\_t3\_gradN.dat}, and the UMAT
-computes Oliver's direction-dependent projected bandwidth from the current
-maximum principal strain direction using Eq.~\eqref{eq:oliver-t3}.
-Therefore, the Abaqus run is described as an Oliver-matched UMAT
-comparison, not as a \texttt{CELENT} crack-band comparison.
+The Abaqus comparison matches the MATLAB solver in geometry, mesh,
+loading, boundary conditions, and constitutive law
+(Table~\ref{tab:abqcompare}). The UMAT applies the same Oliver bandwidth
+of Eq.~\eqref{eq:oliver-t3}, read from the precomputed gradient table
+described above, rather than the Abaqus characteristic element length
+\texttt{CELENT}.
 
-The two implementations should still not be described as bitwise
-identical. MATLAB and Abaqus use different global solution procedures,
-increment control, convergence checks, floating-point operation order, and
-state-variable update paths. Therefore, small differences may remain in
-the peak load, post-peak branch, and residual tail even when the same
-Oliver bandwidth formula is used.
+Small differences remain in the peak load and post-peak branch because
+the two codes use different global solution procedures, increment
+control, and floating-point operation order.
 
 Figure~\ref{fig:b1-time} compares the wall-clock cost of the two runs.
 Using the measured wall-clock values in Table~\ref{tab:abqcompare},
@@ -510,10 +495,9 @@ coalescence of the two bands (increment~900); only elements with
 $\omega \ge 0.99$ are shaded, so the crack path itself stands out from
 the diffuse process zone around it. The two curved bands and their final
 separation reproduce the experimentally observed mixed mode crack
-pattern, which confirms that the scalar damage model with crack band
-regularization carries over from the planar mode I case to a fully three
-dimensional mixed mode setting without any change to the constitutive
-routine.
+pattern, confirming that the same constitutive routine carries over
+unchanged from planar mode~I to fully three dimensional mixed mode
+loading.
 
 
 
@@ -528,12 +512,11 @@ face at midspan. In the physical test three supports sit at the bottom
 corners and one end of the top edge, and a single point load goes on the
 remaining top corner (Figure~\ref{fig:b3-overview}(a)), so the beam is twisted
 and the plane of maximum principal tension turns in space around the
-notch front, lining up with no face of the mesh. This is exactly the
-situation in which a characteristic length tied to a fixed mesh direction
-would lose objectivity. We avoid that by using Oliver's projected
-characteristic length, recomputed from the local principal direction at
-each integration point, so the dissipated energy stays close to $G_F$
-however the crack plane is oriented relative to the mesh.
+notch front, lining up with no face of the mesh. A characteristic length tied to a
+fixed mesh direction would lose objectivity here; Oliver's projected
+length, recomputed from the local principal direction at each
+integration point, keeps the dissipated energy close to $G_F$ for any
+crack orientation.
 
 In the model the loaded end is driven directly: one end face is fully
 fixed while the opposite end face is given a prescribed rigid-body twist
