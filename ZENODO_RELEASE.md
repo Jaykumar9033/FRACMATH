@@ -11,12 +11,11 @@ Prepared metadata for the FRACMATH `v1.0.0` software archive is stored in
 
 ## DOI Steps
 
-1. Log in to Zenodo with the GitHub-connected account.
-2. Enable the `Jaykumar9033/FRACMATH` repository under Zenodo GitHub settings.
-3. Import or publish the existing GitHub release tagged `v1.0.0`.
-4. Confirm Zenodo reads `.zenodo.json` and lists both creators correctly.
-5. Publish the record, then copy the DOI into `CITATION.cff` and the
-   GitHub README DOI section, if desired.
+The `v1.0.0` release has been archived by Zenodo.
+
+- Version DOI: `10.5281/zenodo.21297071`
+- Concept DOI: `10.5281/zenodo.21297070`
+- Record URL: `https://zenodo.org/records/21297071`
 
 Zenodo DOI badge target after publication:
 

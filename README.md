@@ -9,9 +9,8 @@ Authors: Jaykumar Mavani and Madura Pathirage, Department of Civil, Construction
 
 The GitHub repository is `Jaykumar9033/FRACMATH`, and the software described in the paper is `FRACMATH`.
 The manuscript submission targets Advances in Engineering Software. The
-software release described in the paper is `v1.0.0`; Zenodo metadata is prepared
-in `.zenodo.json` and the DOI should be added after the Zenodo record is
-published.
+software release described in the paper is `v1.0.0`; the archived Zenodo record
+is available at https://doi.org/10.5281/zenodo.21297071.
 
 ## What is included
 
@@ -143,9 +142,9 @@ python -m pip install -r requirements.txt
 
 ## Citation
 
-If you use this repository, cite it using `CITATION.cff`. Add the Zenodo
-release DOI and the Advances in Engineering Software article DOI after they are
-available.
+If you use this repository, cite it using `CITATION.cff`.
+
+Software DOI: https://doi.org/10.5281/zenodo.21297071
 
 ## License
 

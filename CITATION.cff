@@ -10,7 +10,9 @@ authors:
     given-names: Madura
     email: mpathirage@unm.edu
 repository-code: "https://github.com/Jaykumar9033/FRACMATH"
-date-released: "2026-05-31"
+doi: "10.5281/zenodo.21297071"
+url: "https://zenodo.org/records/21297071"
+date-released: "2026-07-10"
 version: "1.0.0"
 license: MIT
 keywords:
