@@ -1,0 +1,15 @@
+MATLAB 3PB solver
+Peak load:    3639.82 N
+CMOD@peak:    0.022811 mm
+Solver wall-clock: 547.58 s   <-- compare to Abaqus
+End-to-end:        590.54 s   (incl. live fig + video)
+Visualization:     42.96 s
+  assembly:   487.42 s  (89.0%)
+  damage:     12.52 s  (2.3%)
+  solve:      46.81 s  (8.5%)
+Peak RAM:     3885.0 MB
+Mesh:         14268 CPS3, 14638 DOFs
+Load steps:   10000
+Oliver h mean final: 2.071138e+00 mm
+Oliver h min final:  6.490756e-01 mm
+Oliver h max final:  6.373774e+00 mm
