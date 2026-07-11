@@ -3,7 +3,7 @@
 This repository contains the code, input data, generated results, and
 documentation for:
 
-**FRACMATH: A vectorized MATLAB framework for continuum damage mechanics with crack-band regularization**
+**FRACMATH: A fast and vectorized MATLAB framework for continuum damage simulation of quasibrittle materials with crack-band regularization**
 
 Authors: Jaykumar Mavani and Madura Pathirage, Department of Civil, Construction, and Environmental Engineering, University of New Mexico.
 

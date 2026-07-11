@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 type: software
 message: "If you use this repository, please cite the associated FRACMATH paper and this software archive."
-title: "FRACMATH: A vectorized MATLAB framework for continuum damage mechanics with crack-band regularization"
+title: "FRACMATH: A fast and vectorized MATLAB framework for continuum damage simulation of quasibrittle materials with crack-band regularization"
 authors:
   - family-names: Mavani
     given-names: Jaykumar

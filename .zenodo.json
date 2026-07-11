@@ -1,5 +1,5 @@
 {
-  "title": "FRACMATH: A vectorized MATLAB framework for continuum damage mechanics with crack-band regularization",
+  "title": "FRACMATH: A fast and vectorized MATLAB framework for continuum damage simulation of quasibrittle materials with crack-band regularization",
   "upload_type": "software",
   "description": "FRACMATH is a MATLAB framework for finite element simulation of fracture in quasibrittle materials using scalar isotropic continuum damage mechanics, modified von Mises equivalent strain, exponential softening, and direction-dependent Oliver crack-band regularization. The v1.0.0 release includes MATLAB solvers, benchmark inputs, generated results, plotting scripts, a matched Abaqus/Standard UMAT workflow, and a theory manual.",
   "creators": [
