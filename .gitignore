@@ -36,3 +36,4 @@ abaqus.rpy*
 
 # Keep scientific outputs in git unless intentionally removed.
 # Large Abaqus *.odb files are tracked through Git LFS via .gitattributes.
+*.spl

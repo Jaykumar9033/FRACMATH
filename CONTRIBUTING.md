@@ -17,7 +17,7 @@ Please use GitHub Issues to report problems, unclear documentation, failed repro
 
 For reviewer or user support, open a GitHub Issue with a short title and the
 workflow name, for example `3PB MATLAB solver`, `Abaqus UMAT`,
-`Nooru-Mohamed`, `torsion`, or `AES manuscript`.
+`Nooru-Mohamed`, `torsion`, or `SoftwareX manuscript`.
 
 ## Proposing changes
 
@@ -33,6 +33,6 @@ Small documentation fixes can be proposed directly in a pull request. For solver
 ## Authorship and citation
 
 Contributions will be acknowledged according to their role and scope. If you
-use FRACMATH in research, please cite the software metadata in `CITATION.cff`,
-the Zenodo release DOI after publication, and the associated Advances in
-Engineering Software paper after publication.
+use FRACMATH in research, please cite the software metadata in `CITATION.cff`.
+The existing `v1.0.0` Zenodo DOI identifies an earlier implementation. Cite a
+new version DOI and the SoftwareX article when they are published.

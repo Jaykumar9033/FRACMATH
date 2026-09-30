@@ -1,7 +1,7 @@
 \documentclass[11pt]{article}
 
 \usepackage[a4paper,margin=1in]{geometry}
-\usepackage{amsmath,amssymb,amsthm}
+\usepackage{amsmath,amssymb}
 \usepackage{bm}
 \usepackage{mathtools}
 \usepackage{enumitem}
@@ -20,7 +20,7 @@
 \titleformat{\subsection}{\large\bfseries\color{MidnightBlue!85!black}}{\thesubsection}{0.6em}{}
 \pagestyle{fancy}\fancyhf{}
 \lhead{\small FRACMATH --- Theory Manual}
-\rhead{\small CDM, modified von Mises, Newton--Raphson}
+\rhead{\small CDM, modified von Mises, secant update}
 \cfoot{\thepage}
 \renewcommand{\headrulewidth}{0.3pt}
 
@@ -41,7 +41,7 @@
 
 \title{\textbf{Damage Mechanics in FRACMATH}\\[2pt]
 \large A worked derivation of the scalar CDM model,\\
-the modified von Mises equivalent strain, and the Newton--Raphson solver}
+the modified von Mises equivalent strain, and the secant-update solver}
 \author{Jaykumar Mavani \quad\textbar\quad Madura Pathirage\\
 \small Dept.\ of Civil, Construction \& Environmental Engineering, University of New Mexico}
 \date{\today}
@@ -55,7 +55,7 @@ the modified von Mises equivalent strain, and the Newton--Raphson solver}
 This manual derives the constitutive model behind FRACMATH, step by step, with nothing
 swept under the rug. It covers the scalar isotropic damage law, the modified von Mises
 equivalent strain of de Vree and co-workers, exponential softening, crack band
-regularization through Oliver's characteristic length, and the modified Newton--Raphson
+regularization through Oliver's characteristic length, and the sequential secant
 scheme the code actually solves with. Where a formula looks like it was pulled from thin
 air, we check it against a uniaxial test so you can see why it has the shape it does.
 The aim is that a reader can follow every line from the free energy down to the element
@@ -89,10 +89,13 @@ J_2 = \tfrac{1}{2}\,\bm e : \bm e ,
 \label{eq:invariants}
 \end{equation}
 %
-where $\bm e$ is the deviatoric strain. The factor of one half in $J_2$ is not cosmetic; it
-is exactly what makes the equivalent strain reduce to the axial strain under uniaxial
-tension, and getting it wrong (a stray $1/6$, say) shifts the whole damage threshold. We
-verify that in Section~\ref{sec:eqstrain}.
+where $\bm e$ is the deviatoric strain. Equivalently, in terms of the three
+principal strains, $J_2=[(\varepsilon_1-\varepsilon_2)^2+
+(\varepsilon_2-\varepsilon_3)^2+(\varepsilon_3-\varepsilon_1)^2]/6$.
+The factor $1/2$ applies to $\bm e:\bm e$; the equivalent pairwise-difference
+coefficient is $1/6$. The previous 2D implementation mistakenly used $1/2$
+with the pairwise differences and was corrected for this revision. The
+uniaxial check is given in Section~\ref{sec:eqstrain}.
 
 % =====================================================================
 \section{Damage kinematics and a short thermodynamic argument}
@@ -432,7 +435,7 @@ displacement control, prescribing the loaded degrees of freedom and iterating on
 ones.
 
 % =====================================================================
-\section{The Newton--Raphson solve}
+\section{Tangent concept and implemented secant update}
 % =====================================================================
 
 \subsection{The consistent tangent, derived in full}
@@ -498,11 +501,10 @@ As $S\to 0$ near a stress-free state this expression is singular, which is harml
 damage is inactive there and the dyad term is never assembled; the code guards the divide
 with the loading check anyway.
 
-\subsection{What FRACMATH actually solves: the modified (secant) scheme}
+\subsection{What the revised 2D code actually solves}
 
-Full Newton with \eqref{eq:tangent} converges quadratically but is fragile once the dyad
-term turns the tangent unsymmetric and nearly singular. FRACMATH instead uses the
-\emph{modified} Newton--Raphson scheme: keep only the symmetric secant part,
+The consistent tangent above is included for reference. The revised 2D code
+uses the symmetric secant stiffness
 %
 \begin{equation}
 \bm D_T \approx (1-\omega)\,\C_0,
@@ -511,42 +513,38 @@ term turns the tangent unsymmetric and nearly singular. FRACMATH instead uses th
 \label{eq:secant}
 \end{equation}
 %
-This drops the rank-one term entirely. The trade is deliberate: convergence slows from
-quadratic to linear, but the tangent stays symmetric positive definite, the factorization
-is stable, and it can be reused across iterations within a step. The residual
-\eqref{eq:residual} still uses the true damaged stress, so the converged solution is the
-exact one; only the path to it is slower. On the benchmarks this buys robustness through
-the snap-back-prone softening regime at a cost of a few extra iterations per step, which
-the displacement-controlled stepping absorbs.
+At the start of each displacement step, the code holds the previous step's
+damage fixed, assembles and factors this stiffness once, and solves for the
+free displacements. It then updates damage once from those displacements,
+reassembles the stiffness, and computes the reaction. It does \emph{not}
+re-equilibrate the free degrees of freedom after this damage update. Thus the
+post-update residual need not vanish; this is a sequential lagged-damage
+scheme, not a fully converged nonlinear Newton solve. Its accuracy depends
+on the displacement increment. The preserved 1,000- and 10,000-step runs
+quantify that dependence.
 
 \subsection{Solver loop}
 
 \begin{algobox}
-\textbf{Modified Newton--Raphson, one displacement-controlled step}
+\textbf{Sequential secant update, one displacement-controlled step}
 \begin{enumerate}[leftmargin=1.4em,itemsep=2pt]
-\item Apply the prescribed displacement increment to the loaded DOFs; freeze the supports.
-\item \textbf{For} iteration $i=0,1,2,\dots$ until $\norm{\bm r}\le \texttt{tol}$:
-  \begin{enumerate}[leftmargin=1.4em,itemsep=1pt]
-  \item For every element, compute $\eps=\bm B\bm d$, then $I_1$, $J_2$, and
-        $\eqs$ from \eqref{eq:eqstrain}.
-  \item Update history $\kappa=\max(\kappa,\eqs)$ from \eqref{eq:history};
-        if $\kappa>\kappa_0$, update $\omega$ from \eqref{eq:softening} with the
-        element's $\varepsilon_f$ from \eqref{eq:epsf}.
-  \item Assemble $\sig=(1-\omega)\C_0:\eps$ and the internal force
-        $\bm f^{\text{int}}=\int\bm B^{\!\top}\sig\dd V$.
-  \item Form the residual $\bm r = \bm f^{\text{int}}-\bm f^{\text{ext}}$ on the free DOFs.
-  \item Assemble the secant tangent $\bm K_T$ from \eqref{eq:secant};
-        solve $\bm K_T\,\delta\bm d = -\bm r$ with sparse \texttt{backslash} (UMFPACK).
-  \item Update $\bm d \leftarrow \bm d + \delta\bm d$.
-  \end{enumerate}
-\item Commit the converged $\kappa$ and $\omega$ as the history for the next step.
+\item Apply the prescribed displacement increment and freeze the supports.
+\item Assemble the secant stiffness from the previous step's $\omega$ and
+      factor its free-DOF block once. Solve the resulting linear equilibrium
+      problem at fixed damage, reusing that factorization as needed.
+\item Compute element strains and equivalent strain with \eqref{eq:eqstrain};
+      update $\kappa$, Oliver bandwidth, and $\omega$ once.
+\item Reassemble the stiffness with updated $\omega$, compute reaction and
+      load--CMOD values, and record the post-update free-DOF residual.
+\item Carry the updated state and stiffness to the next load step.
 \end{enumerate}
 \end{algobox}
 
-All of step~2(a)--(c) runs over every element in one batched tensor operation
-(\texttt{pagemtimes} in MATLAB), which is where the vectorized speedup comes from. The
-sparse solve in 2(e) dominates the wall-clock time, as the timing table in the journal manuscript
-shows.
+Element stiffness and constitutive operations are vectorized with
+\texttt{pagemtimes} and array operations. In the preserved 10,000-step MATLAB
+run, sparse factorization accounts for 66.1\% of the measured solver time;
+assembly accounts for 22.3\%. These fractions describe this one mesh and
+load history and do not establish a speed advantage over Abaqus.
 
 % =====================================================================
 \section{Symbol reference}

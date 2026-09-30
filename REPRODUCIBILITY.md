@@ -1,245 +1,47 @@
-﻿# Reproducibility guide
+# Reproducing the SoftwareX revision
 
-This guide lists the reviewer-facing steps for reproducing the simulations and comparison figures stored in this repository.
+The manuscript, figures, source panels, scripts, and preserved results are in [`softwarex/`](softwarex/). The exact revision runs are documented in [`softwarex/REPRODUCE.md`](softwarex/REPRODUCE.md). Run commands below from the listed folders because the scripts use relative paths.
 
-Run each workflow from the folder listed in that section. The scripts use relative paths.
+## Environment
 
-## 0. Clone and prepare the repository
+- Windows 11; MATLAB R2024b, base MATLAB, one computational thread for the reported 2D runs.
+- Abaqus/Standard 2024 with Intel Fortran for the UMAT check. Use one Abaqus CPU until gradient-table initialization is thread-safe.
+- Python 3 with NumPy, SciPy, Matplotlib, and Pillow: `python -m pip install -r requirements.txt`.
 
-```bash
-git clone https://github.com/Jaykumar9033/FRACMATH.git
-cd FRACMATH
-git lfs install
-git lfs pull
-python -m pip install -r requirements.txt
+## MATLAB 2D notched beam
+
+From `3pb/matlab` in PowerShell:
+
+```powershell
+$env:FRACMATH_SELFTEST='1'
+matlab -batch "solver_main_3pb"
+Remove-Item Env:FRACMATH_SELFTEST
+
+$env:FRACMATH_HEADLESS='1'
+$env:FRACMATH_STEPS='1000'
+matlab -batch "solver_main_3pb"
+
+$env:FRACMATH_STEPS='10000'
+matlab -batch "solver_main_3pb"
 ```
 
-Required external software:
+Each structural run writes `3pb/matlab/Gregoire_3PB/results` and overwrites the previous history. Preserved 1,000- and 10,000-step outputs are in `softwarex/reproducibility/results_1000` and `softwarex/reproducibility/results_10000`. The current `3pb/matlab/Gregoire_3PB/results` CSVs are the corrected 10,000-step run. `FRACMATH_SELFTEST=1` writes `material_energy.csv` in the working folder.
 
-- MATLAB for all MATLAB workflows.
-- Abaqus/CAE and Abaqus/Standard for the Abaqus validation workflow.
-- A Fortran compiler configured with Abaqus for the UMAT.
-- Python with `numpy` and `matplotlib` for plotting.
+## Abaqus check
 
-Optional fast smoke check from the repository root:
+From `3pb/abaqus`:
 
-```matlab
-addpath('tests')
-run_smoke_checks
-```
-
-This check verifies that key manuscript assets, benchmark input files,
-generated result files, and documentation files are present and readable. It is
-not a substitute for the full workflows below.
-
-## 1. Reproduce the 2D 3PB MATLAB simulation
-
-Working folder:
-
-```text
-3pb/matlab
-```
-
-MATLAB command:
-
-```matlab
-solver_main_3pb
-```
-
-The solver reads:
-
-- `Gregoire_3PB/nodes.txt`
-- `Gregoire_3PB/elements.txt`
-- `Gregoire_3PB/top_nodes.txt`
-- `Gregoire_3PB/left_nodes.txt`
-- `Gregoire_3PB/right_nodes.txt`
-- `Gregoire_3PB/cmod1.txt`
-- `Gregoire_3PB/cmod2.txt`
-
-The main outputs are written to:
-
-```text
-3pb/matlab/Gregoire_3PB/results
-```
-
-Expected reviewer files:
-
-- `matlab_load_cmod.csv`
-- `matlab_timing.txt`
-- `matlab_load_cmod_fig.png`
-- `fig_damage_postpeak.png`
-- `fig_damage_last_step.png`
-- `simulation_video.mp4`
-
-## 2. Reproduce the 2D 3PB Abaqus/UMAT simulation
-
-Working folder:
-
-```text
-3pb/abaqus
-```
-
-Main command:
-
-```bash
+```powershell
+$env:ABQ_CPUS='1'
+$env:ABQ_N_INC='1000'
+$env:ABQ_AUTO_PLOT='0'
 abaqus cae noGUI=run_3pb_abaqus_OLIVER_T3_FAST.py
 ```
 
-Optional environment variables:
+The builder writes `oliver_t3_gradN.dat`; the UMAT reads it by element label. Check the new `.sta`, `.msg`, and extracted CSV before comparing runs. Abaqus may cut back increments, so `ABQ_N_INC=1000` does not enforce a fixed 1,000-increment history. The preserved corrected Abaqus CSV, damage fields, and diagnostics are in `softwarex/reproducibility/abaqus/Gregoire_3PB`.
 
-```bash
-set ABQ_CPUS=4
-set ABQ_FIELD_FREQ=100
-set ABQ_AUTO_PLOT=1
-```
+## Figures and limitations
 
-Important files:
+From `softwarex`, run `python plot_verified_figures.py` to rebuild the 2D load, timing, and damage figures from the preserved corrected data. Run `python rebuild_aes_figures.py` to recompose the archived 3D panels with their single shared color bars. The 3D numerical simulations were not rerun. The material-point test checks constitutive calibration, not structural mesh objectivity. The Abaqus timing record does not isolate UMAT and assembly time, so the repository does not claim MATLAB is faster than Abaqus.
 
-- `run_3pb_abaqus_OLIVER_T3_FAST.py`: builds the model, writes the Oliver T3 bandwidth table, runs Abaqus, extracts response data, and plots results.
-- `cdm_umat_2d_OLIVER_T3_FAST.for`: Abaqus UMAT with the same modified von Mises damage model and Oliver direction-dependent bandwidth used in MATLAB.
-- `Gregoire_3PB/Gregoire_3PB.odb`: Abaqus output database, tracked with Git LFS.
-
-The main outputs are written to:
-
-```text
-3pb/abaqus/Gregoire_3PB/results
-```
-
-Expected reviewer files:
-
-- `abaqus_load_cmod.csv`
-- `abaqus_timing.txt`
-- `abaqus_load_cmod_fig.png`
-- `abaqus_fig_damage_postpeak.png`
-- `abaqus_fig_damage_fully_cracked.png`
-- `abaqus_fig_damage_last_step.png`
-
-## 3. Recreate the MATLAB-vs-Abaqus comparison figures
-
-Working folder:
-
-```text
-3pb/comparison
-```
-
-Commands:
-
-```bash
-python plot_comparison.py
-python plot_image_comparison.py
-```
-
-Inputs are read from the MATLAB and Abaqus result folders. Outputs are written into `3pb/comparison/`.
-
-Expected reviewer files:
-
-- `comparison_summary.md`
-- `comparison_load_cmod.png`
-- `runtime_comparison.png`
-- `performance_breakdown.png`
-
-The stored summary reports peak load, CMOD at peak, wall-clock time, and total process time for MATLAB and Abaqus.
-
-## 4. Reproduce the 3D Nooru-Mohamed benchmark
-
-Working folder:
-
-```text
-Noor mohammad/Mesh
-```
-
-Optional mesh and boundary-condition visualization:
-
-```matlab
-visulizaiton
-```
-
-Damage simulation command:
-
-```matlab
-opts = struct();
-opts.nIncr = 900;
-opts.load_path = '4c';
-opts.snapshot_stride = 1;
-opts.live_damage_thresh = 0.005;
-opts.save_damage_thresh = 0.95;
-opts.show_live = true;
-opts.live_stride = 1;
-opts.show_mesh = true;
-opts.save_show_mesh = true;
-opts.damage_colormap = 'turbo';
-opts.damage_clim_mode = 'visible';
-opts.bandwidth_method = 'oliver';
-damage_static('Job-1', opts);
-```
-
-The solver reads files such as:
-
-- `Job-1_nodes.txt`
-- `Job-1_elements.txt`
-- `Job-1_top_nodes.txt`
-- `Job-1_bottom_nodes.txt`
-- `Job-1_left_nodes.txt`
-- `Job-1_right_nodes.txt`
-- `Job-1_BCs.txt`
-
-The main outputs are written to:
-
-```text
-Noor mohammad/Mesh/out_NR_vectorized_LIVE_damage_mesh
-```
-
-Additional stored snapshots are in:
-
-```text
-```
-
-## 5. Reproduce the 3D torsion benchmark
-
-Working folder:
-
-```text
-Torsion/working
-```
-
-MATLAB command:
-
-```matlab
-run_torsion
-```
-
-The solver reads:
-
-- `Job-1_nodes.txt`
-- `Job-1_elements.txt`
-- `Job-1_left_nodes.txt`
-- `Job-1_right_nodes.txt`
-
-The main outputs are written to:
-
-```text
-Torsion/working/out_torsion_LIVE_ONLY_OLIVER
-```
-
-Expected reviewer files include load/torque curves, CMOD tables, damage snapshots, and an animation MP4.
-
-## 6. Rebuild the theory manual
-
-Working folder:
-
-```text
-doc
-```
-
-The PDF is already stored as:
-
-```text
-doc/theory_manual.pdf
-```
-
-To rebuild from source with a local LaTeX installation:
-
-```bash
-pdflatex theory_manual.tex
-pdflatex theory_manual.tex
-```
+The archived [`v1.0.0`](https://github.com/Jaykumar9033/FRACMATH/tree/v1.0.0) and [Zenodo DOI](https://doi.org/10.5281/zenodo.21297071) are for the earlier implementation. Do not use that DOI as the identifier of the current SoftwareX revision.

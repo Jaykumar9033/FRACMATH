@@ -49,14 +49,14 @@ The solver expects these files in `Gregoire_3PB/`:
 | --- | --- |
 | `Gregoire_3PB/results/matlab_load_cmod.csv` | CMOD and load response |
 | `Gregoire_3PB/results/matlab_timing.txt` | Timing and peak-load information |
-| `Gregoire_3PB/results/fig_mesh.png` | Mesh and boundary-condition figure |
-| `Gregoire_3PB/results/matlab_load_cmod_fig.png` | Load-CMOD curve |
-| `Gregoire_3PB/results/fig_damage_postpeak.png` | Damage after peak |
-| `Gregoire_3PB/results/fig_damage_last_step.png` | Final damage state |
-| `Gregoire_3PB/results/simulation_video.mp4` | Simulation animation |
+| `Gregoire_3PB/results/matlab_oliver_bandwidth_history.csv` | Oliver bandwidth history |
+| `../../softwarex/figures/load_cmod_verified.png` | Verified response figure, generated from preserved result states |
 
 ## Notes
 
 - The solver uses the modified von Mises equivalent strain, exponential softening, and direction-dependent Oliver crack-band regularization.
 - The default material and solver parameters are defined near the top of `solver_main_3pb.m`.
 - Keep the working folder at `3pb/matlab` because paths are relative.
+- Set `FRACMATH_SELFTEST=1` for the material-point energy check, `FRACMATH_HEADLESS=1` for no live figure/video, and `FRACMATH_STEPS=1000` or `10000` for step count.
+- A new run overwrites `Gregoire_3PB/results`. Preserved 1,000- and 10,000-step histories are in `softwarex/reproducibility/`.
+- The solver equilibrates the old damage state and updates damage once per load step. Its reported post-update free-DOF residual is nonzero, so the 1,000- and 10,000-step curves differ.

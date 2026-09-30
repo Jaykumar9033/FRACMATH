@@ -33,15 +33,15 @@ documentation locations for the FRACMATH repository.
 | `3pb/matlab/make_3pb_inp.py` | source | Helper for Abaqus input/export workflows |
 | `3pb/matlab/export.m` | source | MATLAB export helper |
 | `3pb/matlab/Gregoire_3PB/*.txt` | input | Mesh, node sets, CMOD nodes, and boundary-condition data |
-| `3pb/matlab/Gregoire_3PB/results/` | output | MATLAB curves, timing log, figures, and video |
+| `3pb/matlab/Gregoire_3PB/results/` | output | Corrected 10,000-step MATLAB CSV curves and timing log |
 | `3pb/abaqus/run_3pb_abaqus_OLIVER_T3_FAST.py` | source | Abaqus build-run-extract-plot workflow |
 | `3pb/abaqus/cdm_umat_2d_OLIVER_T3_FAST.for` | source | Abaqus UMAT implementation |
 | `3pb/abaqus/extract_damage.py` | source | Abaqus ODB damage extraction helper |
 | `3pb/abaqus/extract_peak_omega.py` | source | Peak-damage extraction helper |
-| `3pb/abaqus/Gregoire_3PB/` | input/output | Abaqus model files, ODB, logs, extracted results |
-| `3pb/comparison/plot_comparison.py` | source | Load-CMOD and runtime comparison plotting |
-| `3pb/comparison/plot_image_comparison.py` | source | Image-panel comparison plotting |
-| `3pb/comparison/comparison_summary.md` | output | MATLAB-vs-Abaqus summary table |
+| `3pb/abaqus/Gregoire_3PB/` | input/output | Corrected Oliver gradient table and extracted Abaqus CSV results |
+| `softwarex/plot_verified_figures.py` | source | Verified 2D response, timing, and damage figures |
+| `softwarex/reproducibility/` | data | Preserved 1,000/10,000-step MATLAB and one-CPU Abaqus checks |
+| `softwarex/manuscript.tex`, `softwarex/manuscript.pdf` | draft | SoftwareX manuscript and figures |
 
 ## 3D Nooru-Mohamed benchmark
 
@@ -52,7 +52,7 @@ documentation locations for the FRACMATH repository.
 | `Noor mohammad/Mesh/damage_static.m` | source | Main 3D vectorized MATLAB damage solver |
 | `Noor mohammad/Mesh/visulizaiton.m` | source | Mesh and boundary-condition visualization |
 | `Noor mohammad/Mesh/Job-1_*.txt` | input | Mesh and node-set files |
-| `Noor mohammad/Mesh/out_NR_vectorized_LIVE_damage_mesh/` | output | Main solver output folder |
+| `Noor mohammad/Mesh/out_NR_vectorized_LIVE_damage_mesh/` | archived output | 3D case was not rerun for the SoftwareX revision |
 
 ## 3D torsion benchmark
 
@@ -63,7 +63,7 @@ documentation locations for the FRACMATH repository.
 | `Torsion/working/run_torsion.m` | source | Main 3D torsion MATLAB solver |
 | `Torsion/working/visulize.m` | source | Visualization helper |
 | `Torsion/working/Job-1_*.txt` | input | Mesh and node-set files |
-| `Torsion/working/out_torsion_LIVE_ONLY_OLIVER/` | output | Main torsion output folder |
+| `Torsion/working/out_torsion_LIVE_ONLY_OLIVER/` | archived output | 3D case was not rerun for the SoftwareX revision |
 | `Torsion/visulize mesh/` | source/input | Mesh visualization cases and Abaqus model files |
 
 ## Documentation
@@ -72,4 +72,4 @@ documentation locations for the FRACMATH repository.
 | --- | --- | --- |
 | `doc/README.md` | documentation | Theory manual instructions |
 | `doc/theory_manual.tex` | source | LaTeX source for the theory manual |
-| `doc/theory_manual.pdf` | output | Compiled theory manual |
+| `doc/theory_manual.pdf` | planned output | Rebuild from revised TeX with a complete LaTeX installation; earlier PDF was removed because it described the superseded algorithm |

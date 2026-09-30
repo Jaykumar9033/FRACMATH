@@ -1,0 +1,7 @@
+Highlights
+
+• Inspectable MATLAB implementation of local continuum damage in 2D and 3D
+• Oliver projected crack-band width in the vectorized material update
+• Material-point checks verify strain mapping, irreversibility, and energy
+• Increment study and separated sparse factorization timing for 3PB
+• Mixed-mode and torsion examples illustrate 3D damage workflows
