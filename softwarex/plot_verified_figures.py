@@ -15,13 +15,11 @@ from scipy.io import loadmat
 HERE = Path(__file__).resolve().parent
 OUT = HERE / "figures"
 if (HERE / "reproducibility").exists():
-    MAT1000 = HERE / "reproducibility/results_1000/verified_state.mat"
     MAT10000 = HERE / "reproducibility/results_10000/verified_state.mat"
     ABQ = HERE / "reproducibility/abaqus/Gregoire_3PB/results/abaqus_load_cmod.csv"
     TIMING = HERE / "reproducibility/results_10000/matlab_timing.txt"
 else:
     ROOT = HERE.parent
-    MAT1000 = ROOT / "simulations/3pb_corrected/results_1000/verified_state.mat"
     MAT10000 = ROOT / "simulations/3pb_corrected/results_10000/verified_state.mat"
     ABQ = ROOT / "simulations/abaqus_corrected/Gregoire_3PB/results/abaqus_load_cmod.csv"
     TIMING = ROOT / "simulations/3pb_corrected/results_10000/matlab_timing.txt"
@@ -66,15 +64,13 @@ def mesh_figure(d):
     save(fig, "fig_mesh_corrected.png")
 
 
-def load_curve(d1, d10):
+def load_curve(d10):
     fig, ax = plt.subplots(figsize=(6.9, 4.4))
-    for d, lab, c, ls in [(d1, "MATLAB, 1,000 steps", ORANGE, "--"),
-                          (d10, "MATLAB, 10,000 steps", BLUE, "-")]:
-        x = d["CMOD"].ravel()
-        y = d["F"].ravel() / 1000
-        ax.plot(x, y, color=c, ls=ls, lw=1.8, label=lab)
-        i = np.argmax(y)
-        ax.plot(x[i], y[i], "o", color=c, ms=4)
+    x = d10["CMOD"].ravel()
+    y = d10["F"].ravel() / 1000
+    ax.plot(x, y, color=BLUE, lw=1.8, label="MATLAB, 10,000 fixed steps")
+    i = np.argmax(y)
+    ax.plot(x[i], y[i], "o", color=BLUE, ms=4)
     if ABQ.exists():
         rows = []
         with ABQ.open(newline="") as f:
@@ -86,7 +82,9 @@ def load_curve(d1, d10):
         if rows:
             a = np.asarray(rows)
             ax.plot(a[:, 0], a[:, 1]/1000, color="#537c49", lw=1.5,
-                    label="Abaqus UMAT, corrected law")
+                    label="Abaqus UMAT, adaptive increments")
+            j = np.argmax(a[:, 1])
+            ax.plot(a[j, 0], a[j, 1]/1000, "o", color="#537c49", ms=4)
     ax.set(xlabel="CMOD (mm)", ylabel="reaction load (kN)")
     ax.set_xlim(left=0)
     ax.set_ylim(bottom=0)
@@ -158,8 +156,8 @@ def timing_figure():
 
 if __name__ == "__main__":
     OUT.mkdir(exist_ok=True)
-    d1, d10 = state(MAT1000), state(MAT10000)
+    d10 = state(MAT10000)
     mesh_figure(d10)
-    load_curve(d1, d10)
+    load_curve(d10)
     damage_figure(d10)
     timing_figure()
