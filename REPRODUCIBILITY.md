@@ -42,6 +42,6 @@ The builder writes `oliver_t3_gradN.dat`; the UMAT reads it by element label. Ch
 
 ## Figures and limitations
 
-From `softwarex`, run `python plot_verified_figures.py` to rebuild the 2D load, timing, and damage figures from the preserved corrected data. Run `python rebuild_aes_figures.py` to recompose the archived 3D panels with their single shared color bars. The 3D numerical simulations were not rerun. The material-point test checks constitutive calibration, not structural mesh objectivity. The Abaqus timing record does not isolate UMAT and assembly time, so the repository does not claim MATLAB is faster than Abaqus.
+From `softwarex`, run `python plot_verified_figures.py` to rebuild the 2D load, timing, and damage figures from the preserved corrected data. Run `python rebuild_3d_figures.py` to recompose the archived 3D panels with their single shared color bars. The 3D numerical simulations were not rerun. The material-point test checks constitutive calibration, not structural mesh objectivity. The Abaqus timing record does not isolate UMAT and assembly time, so the repository does not claim MATLAB is faster than Abaqus.
 
 The archived [`v1.0.0`](https://github.com/Jaykumar9033/FRACMATH/tree/v1.0.0) and [Zenodo DOI](https://doi.org/10.5281/zenodo.21297071) are for the earlier implementation. Do not use that DOI as the identifier of the current SoftwareX revision.

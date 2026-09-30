@@ -1,6 +1,6 @@
 # Zenodo Release Notes
 
-The historical FRACMATH `v1.0.0` archive belongs to the earlier AES-era
+The historical FRACMATH `v1.0.0` archive belongs to the earlier pre-SoftwareX
 implementation. The current `.zenodo.json` prepares metadata for a future
 `v1.1.0` SoftwareX release; that release and its version DOI do not yet exist.
 

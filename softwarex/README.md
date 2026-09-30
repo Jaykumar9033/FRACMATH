@@ -17,13 +17,13 @@ identify this revision.
 | --- | --- |
 | `manuscript.tex`, `manuscript.pdf`, `figures/` | SoftwareX paper and figures |
 | `plot_verified_figures.py` | Regenerates corrected 2D figures from preserved `.mat` and CSV data |
-| `rebuild_aes_figures.py`, `figure_sources/` | Recomposes archived 3D image panels with larger labels and a shared color bar |
+| `rebuild_3d_figures.py`, `figure_sources/` | Recomposes archived 3D image panels with larger labels and a shared color bar |
 | `reproducibility/2d/` | Corrected MATLAB solver, mesh, and material-point energy check |
 | `reproducibility/results_1000/`, `results_10000/` | Preserved MATLAB step-size study |
 | `reproducibility/abaqus/` | Corrected UMAT, job builder, extracted fields, and diagnostics |
 | `REPRODUCE.md` | Exact run commands and limitations |
 
-The 3D panels are retained as qualitative examples from the earlier AES
+The 3D panels are retained as qualitative examples from the earlier submission
 submission. Their numerical cases were not rerun for this revision. The
 corrected 2D results are based on one mesh and do not prove structural mesh
 objectivity or a runtime advantage over Abaqus.

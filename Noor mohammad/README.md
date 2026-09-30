@@ -1,7 +1,7 @@
 # 3D Nooru-Mohamed benchmark
 
 This folder contains the 3D Nooru-Mohamed validation case used in the FRACMATH
-journal manuscript.
+SoftwareX manuscript.
 
 ## Folder map
 

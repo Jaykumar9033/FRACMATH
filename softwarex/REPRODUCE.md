@@ -5,7 +5,7 @@ This package is a revision candidate, not the public FRACMATH `v1.0.0` tag. The 
 ## Environment used
 
 - Windows 11, MATLAB R2024b, base MATLAB, one computational thread.
-- Python 3 with NumPy, SciPy, Matplotlib, and Pillow for the revised plots and AES figure layouts.
+- Python 3 with NumPy, SciPy, Matplotlib, and Pillow for the revised plots and 3D figure layouts.
 - Abaqus/Standard 2024 with Intel Fortran for the optional UMAT run. Use one Abaqus CPU until its table initialization is made thread-safe.
 
 ## MATLAB checks
@@ -27,7 +27,7 @@ matlab -batch "solver_main_3pb"
 
 The solver writes `Gregoire_3PB/results`. The two archived histories in `reproducibility/results_1000` and `reproducibility/results_10000` preserve both runs because running the script again overwrites `results`. The material-point self-test writes `material_energy.csv` with columns `bandwidth_mm, recovered_GF_N_per_mm, relative_error, final_damage`.
 
-To regenerate the revised 2D figures from the preserved 10,000-step MATLAB state and Abaqus CSV, run `python plot_verified_figures.py` from the package root after installing NumPy, SciPy, and Matplotlib. The 1,000-step MATLAB history is retained for the increment-sensitivity check in the text but is not plotted in the MATLAB--Abaqus comparison. Figures 4 and 5 use archived AES image panels, recomposed with one enlarged color bar per damage sequence and larger increment labels. Run `python rebuild_aes_figures.py` from the package root to rebuild those layouts from `figure_sources`. The underlying 3D numerical cases were not rerun in this revision.
+To regenerate the revised 2D figures from the preserved 10,000-step MATLAB state and Abaqus CSV, run `python plot_verified_figures.py` from the package root after installing NumPy, SciPy, and Matplotlib. The 1,000-step MATLAB history is retained for the increment-sensitivity check in the text but is not plotted in the MATLAB--Abaqus comparison. Figures 4 and 5 use archived earlier source image panels, recomposed with one enlarged color bar per damage sequence and larger increment labels. Run `python rebuild_3d_figures.py` from the package root to rebuild those layouts from `figure_sources`. The underlying 3D numerical cases were not rerun in this revision.
 
 ## Abaqus check
 

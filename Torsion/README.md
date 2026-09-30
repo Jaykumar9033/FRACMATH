@@ -1,7 +1,7 @@
 # 3D torsion benchmark
 
 This folder contains the 3D notched-beam torsion benchmark used in the
-FRACMATH journal manuscript.
+FRACMATH SoftwareX manuscript.
 
 ## Folder map
 
