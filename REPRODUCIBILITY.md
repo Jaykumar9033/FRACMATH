@@ -1,6 +1,6 @@
 # Reproducing the SoftwareX revision
 
-The manuscript, figures, source panels, scripts, and preserved results are in [`softwarex/`](softwarex/). The exact revision runs are documented in [`softwarex/REPRODUCE.md`](softwarex/REPRODUCE.md). Run commands below from the listed folders because the scripts use relative paths.
+The manuscript, figures, source panels, scripts, and preserved results are in [`softwarex/`](https://github.com/Jaykumar9033/FRACMATH/tree/main/softwarex). The exact revision runs are documented in [`softwarex/REPRODUCE.md`](softwarex/REPRODUCE.md). Run commands below from the listed folders because the scripts use relative paths.
 
 ## Environment
 

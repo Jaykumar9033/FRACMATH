@@ -7,10 +7,10 @@ FRACMATH is a vectorized MATLAB finite-element implementation of scalar continuu
 | Item | Location | Purpose |
 | --- | --- | --- |
 | Corrected 2D MATLAB solver | [`3pb/matlab/solver_main_3pb.m`](3pb/matlab/solver_main_3pb.m) | Notched three-point bending; `FRACMATH_STEPS`, `FRACMATH_HEADLESS`, and `FRACMATH_SELFTEST` controls |
-| Corrected Abaqus UMAT and job builder | [`3pb/abaqus/`](3pb/abaqus/) | Matched material update and Oliver T3 gradient table; use one CPU |
-| SoftwareX manuscript and figures | [`softwarex/`](softwarex/) | Draft PDF, TeX, figure sources, plotting scripts, and verified data |
+| Corrected Abaqus UMAT and job builder | [`3pb/abaqus/`](https://github.com/Jaykumar9033/FRACMATH/tree/main/3pb/abaqus) | Matched material update and Oliver T3 gradient table; use one CPU |
+| SoftwareX manuscript and figures | [`softwarex/`](https://github.com/Jaykumar9033/FRACMATH/tree/main/softwarex) | Draft PDF, TeX, figure sources, plotting scripts, and verified data |
 | Reproduction instructions | [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md) | Commands, environment, checks, and numerical limitations |
-| 3D examples | [`Noor mohammad/`](Noor%20mohammad/), [`Torsion/`](Torsion/) | Archived qualitative examples; not rerun for this revision |
+| 3D examples | [`Noor mohammad/`](https://github.com/Jaykumar9033/FRACMATH/tree/main/Noor%20mohammad), [`Torsion/`](https://github.com/Jaykumar9033/FRACMATH/tree/main/Torsion) | Archived qualitative examples; not rerun for this revision |
 | Theory manual | [`doc/theory_manual.tex`](doc/theory_manual.tex) | Equations and corrected solver explanation; PDF pending recompilation |
 
 The 2D invariant implementation was corrected to
