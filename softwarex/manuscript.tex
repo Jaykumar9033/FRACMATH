@@ -80,21 +80,18 @@ mechanics with crack band regularization}
 University of New Mexico, Albuquerque, NM, USA}
 
 \begin{abstract}
-\texttt{FRACMATH} is a MATLAB reference implementation of local isotropic
-continuum damage for quasibrittle solids. It combines a modified von Mises
-equivalent strain, exponential softening, and a direction-dependent Oliver
-crack-band width with vectorized triangular and tetrahedral finite elements.
-Its contribution is an inspectable software workflow and reproducible examples,
-rather than a new constitutive model. This revision exposes the sequence of
-assembly, factorization, equilibrium solve, damage update, and reaction
-calculation. A material-point test verifies the tensile/compressive strain
-mapping, damage irreversibility, and prescribed fracture energy over four
-bandwidths. A corrected two-dimensional bending run checks load-increment
-sensitivity and profiles the actual cost of sparse factorization separately
-from assembly. Three-dimensional mixed-mode and torsion examples illustrate
-damage localization. A corrected Abaqus UMAT run provides a code-to-code
-response check; job diagnostics are reported without a solver-speed claim.
-The revised source and scripts accompany this manuscript for inspection.
+\texttt{FRACMATH} is a vectorized MATLAB reference implementation of local
+isotropic damage with direction-dependent crack-band regularization.
+Its contribution is an inspectable workflow linking mesh import, projected
+width, constitutive history, sparse assembly, and solution.
+Material-point tests check strain mapping, irreversible damage, unloading,
+and fracture-energy calibration. A controlled three-mesh bending study
+compares regularized and fixed softening laws, measures partial structural
+dissipation, and checks load-increment sensitivity. Single-CPU Abaqus jobs
+provide response and diagnostic timing comparisons. Three-dimensional
+examples illustrate damage localization. Source code, response histories,
+energy diagnostics, and plotting scripts accompany the manuscript;
+algorithmic and validation limitations are stated.
 \end{abstract}
 
 \begin{keyword}
@@ -122,47 +119,22 @@ element method \sep MATLAB \sep Abaqus UMAT \sep quasibrittle fracture
 \toprule
 \textbf{Nr.} & \textbf{Code metadata description} & \textbf{Value} \\
 \midrule
-C1 & Current code version & SoftwareX development revision on GitHub main (untagged) \\
-C2 & Permanent link to code/repository used for this code version &
-Current corrected source: \href{https://github.com/Jaykumar9033/FRACMATH/tree/main}{GitHub main}. A permanent versioned release link and DOI must be inserted before submission. Earlier \href{https://github.com/Jaykumar9033/FRACMATH/tree/v1.0.0}{v1.0.0} is historical. \\
-C3 & Permanent link to Reproducible Capsule & Not available \\
-C4 & Legal code license & MIT License \\
-C5 & Code versioning system used & git \\
-C6 & Software code languages, tools, and services used & MATLAB; Fortran UMAT; Abaqus/Standard; Python plotting scripts \\
-C7 & Compilation requirements, operating environments, and dependencies &
-MATLAB R2024b used for the corrected runs; Abaqus/Standard 2024 used for the attempted UMAT rerun; Python 3 with NumPy, SciPy, and Matplotlib for revised figures \\
-C8 & If available, link to developer documentation/manual & Repository README, reproducibility guide, and theory manual in the GitHub repository \\
-C9 & Support email for questions & \href{mailto:mpathirage@unm.edu}{mpathirage@unm.edu} \\
+C1 & Current code version & SoftwareX study, commit 98ad87d \\
+C2 & Permanent GitHub link to code/repository used for this code version &
+Source and study data: \href{https://github.com/Jaykumar9033/FRACMATH/tree/98ad87db1ddb444fa73c0c0ab818202328b09198}{immutable GitHub commit}. \\
+C3 & Legal Code License & MIT License \\
+C4 & Code versioning system used & git \\
+C5 & Software code languages, tools, and services used & MATLAB; Fortran UMAT; Abaqus/Standard; Python analysis scripts \\
+C6 & Compilation requirements, operating environments \& dependencies &
+MATLAB R2024b; Abaqus/Standard 2024 with Intel Fortran; Python 3 with NumPy, SciPy, Matplotlib, Pillow, and psutil. Verified on Windows 11. \\
+C7 & If available Link to developer documentation/manual & Repository README, implementation walkthrough, and reproduction guides \\
+C8 & Support email for questions & \href{mailto:mpathirage@unm.edu}{mpathirage@unm.edu} \\
 \bottomrule
 \end{tabularx}
 \caption{Code metadata.}
 \label{tab:code-metadata}
 \end{table}
 
-\section*{Current executable software version}
-\label{sec:current-executable-version}
-
-\begin{table}[H]
-\centering
-\small
-\setlength{\tabcolsep}{5pt}
-\renewcommand{\arraystretch}{1.14}
-\begin{tabularx}{\linewidth}{@{}lP{0.43\linewidth}Y@{}}
-\toprule
-\textbf{Nr.} & \textbf{Executable software metadata description} & \textbf{Value} \\
-\midrule
-S1 & Current executable software version & SoftwareX development revision on GitHub main (untagged) \\
-S2 & Permanent link to executable software of this version & No separate compiled executable; MATLAB source scripts are available in the GitHub repository. \\
-S3 & Legal software license & MIT License \\
-S4 & Computing platforms/operating systems & Linux, macOS, and Windows with MATLAB; Abaqus/Standard is needed only for the UMAT comparison. \\
-S5 & Installation requirements \& dependencies & MATLAB R2024b used in this revision; no MATLAB toolbox beyond base MATLAB used by the 2D run. \\
-\bottomrule
-\end{tabularx}
-\caption{Executable software metadata.}
-\label{tab:executable-metadata}
-\end{table}
-
-% =====================================================================
 \section*{Motivation and significance}
 
 \texttt{FRACMATH} is intended for researchers and students who need to
@@ -173,7 +145,9 @@ whether the implementation makes its assumptions, update sequence,
 regularization length, and numerical limitations visible enough to check and
 modify. The package therefore includes element-level routines, a 2D bending
 case, two 3D examples, plotting scripts, and an Abaqus UMAT for independent
-comparison when its execution is verified.
+comparison. The controlled study examines how element-size compensation
+affects structural response and dissipation, and how increment size and
+sparse linear algebra limit the numerical workflow.
 
 \subsection*{Related software and scope}
 
@@ -200,10 +174,7 @@ J_2=\frac{(e_1-e_2)^2+(e_2-e_3)^2+(e_3-e_1)^2}{6},
 \label{eq:equiv}
 \end{equation}
 where $k=f_c/f_t$. For the 2D plane-stress element,
-$e_3=-\nu(e_1+e_2)/(1-\nu)$. The previous 2D MATLAB and UMAT files used
-$1/2$ instead of $1/6$ in this invariant. Both revised files use
-Eq.~\eqref{eq:equiv}; the 2D results below were regenerated with this
-correction.
+$e_3=-\nu(e_1+e_2)/(1-\nu)$. Both the MATLAB and UMAT implementations use Eq.~\eqref{eq:equiv}.
 
 The damage law is
 \begin{equation}
@@ -233,7 +204,8 @@ block with \texttt{decomposition}, (3) solves equilibrium for the frozen
 damage state, (4) obtains element strains with \texttt{pagemtimes}, updates
 $h$, $\kappa$, and $\omega$ in \texttt{damage\_update}, and (5) reassembles
 the damaged stiffness for reaction forces and the next increment. The
-factorization is reused only within a displacement increment. There is no
+factorization helper first attempts Cholesky and falls back to LU if
+that attempt fails. It is reused only within a displacement increment. There is no
 outer equilibrium iteration after the damage update, so this is a
 sequential secant scheme rather than a fully converged Newton solve.
 The post-update free-DOF residual is exported for each increment.
@@ -242,8 +214,11 @@ The optional Abaqus path uses \texttt{run\_3pb\_abaqus\_OLIVER\_T3\_FAST.py}
 to write a table of T3 shape-function gradients. The Fortran
 \texttt{cdm\_umat\_2d\_OLIVER\_T3\_FAST.for} reads that table to compute
 Eq.~\eqref{eq:oliver-t3}; it does not use \texttt{CELENT} when the table
-is present. The current table initialization is restricted to one Abaqus
-analysis thread pending a thread-safe revision.
+is present. The UMAT supplies the degraded elastic secant matrix as
+\texttt{DDSDDE}, rather than a consistent derivative of the evolving
+damage law. Its approximate tangent requires reporting equilibrium
+iteration counts with timings. Table initialization currently requires
+one Abaqus analysis thread.
 
 \subsection*{Material-point verification}
 
@@ -252,19 +227,28 @@ tension and $\tilde\varepsilon=|\varepsilon|/k$ in compression, monotone
 damage under unload/reload, and $h\int\sigma\,d\varepsilon\approx G_F$
 for four prescribed projected widths. Numerical integration to a large
 terminal strain gives the following results for $G_F=0.090$~N/mm.
+A standalone driver linked to the unchanged Fortran UMAT repeats the
+strain-mapping, projected-width, energy, and unload/reload assertions;
+its energy results agree with the MATLAB values at the precision shown.
+Sixteen additional UMAT checks combine these four triangle widths with
+loading directions of $15^\circ$, $45^\circ$, $75^\circ$, and $90^\circ$.
+Projected widths agree with Eq.~\eqref{eq:oliver-t3}, and the largest
+absolute relative energy error is $1.78\times10^{-6}$. These are local
+implementation checks, not evidence of structural orientation independence.
 
 \begin{table}[!htbp]
-\centering
-\caption{Corrected material-point fracture energy check. The relative error
-is against $0.090$~N/mm; this is not a structural mesh-refinement test.}
-\begin{tabular}{rrr}
+\centering\small
+\caption{Material-point softening-energy checks. Oliver relative error is
+against $G_F=0.090$~N/mm. The fixed-law integral targets
+$G_F h/h_{\rm ref}$ with $h_{\rm ref}=1.25$~mm. These are local checks.}
+\begin{tabular}{rrrr}
 \toprule
-$h$ (mm) & $h\int\sigma\,d\varepsilon$ (N/mm) & Relative error \\
+$h$ (mm) & Oliver integral (N/mm) & Relative error & Fixed-law integral (N/mm) \\
 \midrule
-0.5 & 0.090000160 & $1.78\times10^{-6}$ \\
-1.0 & 0.090000160 & $1.77\times10^{-6}$ \\
-2.0 & 0.090000159 & $1.77\times10^{-6}$ \\
-4.0 & 0.090000159 & $1.76\times10^{-6}$ \\
+0.5 & 0.090000160 & $1.78\times10^{-6}$ & 0.036000064 \\
+1.0 & 0.090000160 & $1.77\times10^{-6}$ & 0.072000128 \\
+2.0 & 0.090000159 & $1.77\times10^{-6}$ & 0.144000255 \\
+4.0 & 0.090000159 & $1.76\times10^{-6}$ & 0.288000511 \\
 \bottomrule
 \end{tabular}
 \label{tab:energy}
@@ -283,25 +267,25 @@ $G_F=0.090$~N/mm. The 14{,}268 CPS3-element mesh has 7{,}319 nodes.
 The left support is pinned, the right is a roller, and a prescribed
 vertical displacement reaches $-0.2$~mm. CMOD is the mean horizontal
 displacement difference across the notch mouth. Figure~\ref{fig:b1}
-uses a corrected mesh drawing: the 250~mm dimension denotes support
+uses the mesh drawing: the 250~mm dimension denotes support
 span, while 350~mm is the overall length.
 
 \begin{figure}[!htbp]
 \centering
 \begin{subfigure}{0.98\linewidth}
-\includegraphics[width=\linewidth]{fig_mesh_corrected.png}
+\includegraphics[width=\linewidth]{fig_mesh.png}
 \caption{Geometry, mesh, supports, and imposed displacement.}
 \end{subfigure}
 \begin{subfigure}{0.72\linewidth}
 \includegraphics[width=\linewidth]{load_cmod_verified.png}
-\caption{Corrected MATLAB 10{,}000-step response and Abaqus adaptive-increment response.}
+\caption{MATLAB 10{,}000-step response and Abaqus adaptive-increment response.}
 \end{subfigure}
-\caption{Recomputed 2D three-point bending case.}
+\caption{2D three-point bending case.}
 \label{fig:b1}
 \end{figure}
 
-The comparison in Fig.~\ref{fig:b1} uses the corrected 10{,}000-step
-MATLAB response and the corrected Abaqus UMAT response. The separate
+The comparison in Fig.~\ref{fig:b1} uses the 10{,}000-step
+MATLAB response and the Abaqus UMAT response. The separate
 increment-sensitivity check found that the 1{,}000-step MATLAB run peaks at
 4.26~kN (CMOD 0.02835~mm, step 174), while the 10{,}000-step
 run peaks at 4.03~kN (CMOD 0.02579~mm, step 1612). This
@@ -310,7 +294,7 @@ size matters for the sequential scheme; these results are numerical
 examples, not an increment-converged validation against experiment.
 The normalized post-update free-DOF residual at the peak is
 0.016 for 1{,}000 steps and 0.002 for
-10{,}000 steps. A corrected single-thread Abaqus/Standard 2024 UMAT run produced a peak of 4.00~kN at CMOD 0.02540~mm. The 10{,}000-step MATLAB peak differs by 0.68\% in load and 1.51\% in peak CMOD. The close response is a code-to-code check, not experimental validation.
+10{,}000 steps. A single-thread Abaqus/Standard 2024 UMAT run produced a peak of 4.00~kN at CMOD 0.02540~mm. The 10{,}000-step MATLAB peak differs by 0.68\% in load and 1.51\% in peak CMOD. The close response is a code-to-code check, not experimental validation.
 
 The completed Abaqus \texttt{.msg} reports 1{,}136
 accepted increments, 4{,}817 equilibrium iterations/solver passes, 4{,}799
@@ -335,12 +319,12 @@ response data are retained without alteration.
 Figure~\ref{fig:b1-damage} compares damage fields at peak and at
 the first saved post-peak state above CMOD 0.30~mm. The Abaqus field
 output is taken from the nearest stored frame, while the MATLAB panels
-use the corrected state arrays.
+use the state arrays.
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.96\linewidth]{damage_verified.png}
-\caption{Corrected damage field $\omega$ in the notch region on the
+\caption{Damage field $\omega$ in the notch region on the
 undeformed CPS3 mesh. Left: MATLAB; right: Abaqus/UMAT. Top: near peak
 load; bottom: post-peak state. Abaqus fields are the closest stored
 frames to the indicated response points.}
@@ -361,7 +345,7 @@ solver settings, and timing boundaries.
 
 \begin{table}[!htbp]
 \centering
-\caption{Measured MATLAB 2D timing for the corrected 10{,}000-step
+\caption{Measured MATLAB 2D timing for the 10{,}000-step
 headless run. Other is total wall time minus the instrumented scopes.}
 \label{tab:timing}
 \begin{tabular}{lrr}
@@ -381,7 +365,7 @@ Total & 785.70 & 100\% \\
 
 \begin{table}[!htbp]
 \centering
-\caption{Abaqus/Standard elapsed time extracted from the corrected job's
+\caption{Abaqus/Standard elapsed time extracted from the job's
 \texttt{.msg}. The remaining time cannot be partitioned into UMAT,
 assembly, convergence, output, or overhead using this record.}
 \label{tab:abaqus-timing}
@@ -423,8 +407,8 @@ displacement control over 900 increments to a top displacement of
 $f_t = 3.0$~MPa, $G_F = 0.110$~N/mm, and $k = f_c/f_t = 10$ (so
 $f_c = 30$~MPa).
 
-The following 3D panels are retained from the earlier submission as a
-qualitative illustration; this case was not rerun in the present revision.
+The 3D panels illustrate the damage workflow qualitatively; quantitative
+validation of this case is outside the scope of this study.
 
 \begin{figure}[p]
   \centering
@@ -469,16 +453,15 @@ qualitative illustration; this case was not rerun in the present revision.
 \centering
 \begin{subfigure}{0.50\linewidth}
 \includegraphics[width=\linewidth]{torsion.png}
-\caption{Specimen geometry from the earlier submission.}
+\caption{Specimen geometry.}
 \label{fig:b3-setup}
 \end{subfigure}
 \begin{subfigure}{0.98\linewidth}
 \makebox[\linewidth][c]{\includegraphics[width=1.12\linewidth]{torsion_damage_evolution_shared_bar.png}}
-\caption{Archived torsion damage sequence.}
+\caption{Torsion damage sequence.}
 \end{subfigure}
-\caption{Brokenshire torsion example. The 3D panels are retained as
-qualitative figures from the earlier submission; this revision did not rerun
-the 3D case or verify a measured torque curve.}
+\caption{Brokenshire torsion example. The 3D panels illustrate the workflow qualitatively; quantitative
+validation against a measured torque curve is outside this study.}
 \label{fig:b3-overview}
 \end{figure}
 
@@ -524,12 +507,139 @@ of the framework.
 
 
 % =====================================================================
+\subsection*{Controlled mesh sensitivity and computational scaling}
+
+A controlled 2D mesh family contains 14{,}313, 25{,}042, and
+56{,}216 CPS3 elements, corresponding to 14{,}686, 25{,}534, and
+56{,}954 DOFs. The notched-beam geometry and material properties are
+unchanged. Additional partitions place the supports exactly at
+$x=50$ and $300$~mm and define a fixed 6.25~mm loading strip at the
+top centre; all nodes on that strip receive the same displacement.
+The 50~mm-wide central zone containing the notch is refined across
+the beam height. Its nominal seeds are 1.25, 0.9375, and 0.625~mm;
+the outer seeds are five times larger. This concentrates elements near
+the expected damage path while retaining a coarser outer region.
+In all three main Oliver runs, elements with $\omega\geq0.95$ at
+peak load have centroids inside this refined region, at heights
+20.2--37.6~mm above the beam bottom. This checks the chosen refinement
+location, without asserting convergence of the damage-band geometry.
+These boundary sets and each complete Abaqus connectivity are exported
+directly to MATLAB; mesh-file hashes are checked after Abaqus rebuilds. This family is distinct from the single-mesh increment study. Both programs use one computational thread/CPU.
+
+The main MATLAB runs impose $-0.1$~mm in 2{,}000 increments
+($|\Delta u|=5\times10^{-5}$~mm). The regularized runs update the
+Oliver projected width; the control runs hold the softening calibration
+width at $h_{\rm ref}=1.25$~mm on every mesh. This control uses one
+fixed stress--strain law and disables element-size compensation.
+A second complete MATLAB family halves $|\Delta u|$ on all three
+meshes for both calibrations, using 4{,}000 increments.
+The Abaqus jobs use the same maximum displacement and increment cap,
+with automatic cutbacks available; their accepted counts are reported.
+
+For each MATLAB increment, the undamaged energy density is
+$Y_e=\tfrac12\boldsymbol\varepsilon_e^{\mathsf T}
+\mathbf D\boldsymbol\varepsilon_e$. Accumulated damage dissipation is
+evaluated by the positive end-of-step quadrature
+\begin{equation}
+\mathcal D_N=\sum_{n=1}^{N}\sum_e
+ Y_e^n\bigl(\omega_e^n-\omega_e^{n-1}\bigr)V_e.
+\label{eq:study-dissipation}
+\end{equation}
+External work uses trapezoidal integration of reaction versus prescribed
+displacement; stored energy is $\sum_e(1-\omega_e)Y_eV_e$.
+The discrepancy between external work and stored energy plus
+$\mathcal D_N$ is retained as a numerical diagnostic.
+Energy comparisons use a common CMOD of 0.10~mm and represent partial
+structural dissipation, not a measurement of complete fracture energy.
+
+% MESH_STUDY_RESULTS_BEGIN
+Figure~\ref{fig:mesh-study} compares the two softening calibrations.
+Across the three main runs, peak-load spread, defined as
+$(\max-\min)/\mathrm{mean}$, is 6.19\% with Oliver regularization
+and 6.78\% with the fixed law. The corresponding dissipation spreads
+are 6.86\% and 18.21\% (Table~\ref{tab:mesh-study}).
+The comparison tests element-size compensation for this mesh family;
+remaining sensitivity does not support complete mesh independence.
+
+\begin{table}[!htbp]
+\centering\small
+\caption{Controlled mesh study, 2{,}000 MATLAB increments. Partial damage
+dissipation $\mathcal D$ is evaluated at CMOD 0.10~mm.
+Subscripts O, F, and A denote Oliver MATLAB, fixed-law MATLAB, and
+regularized Abaqus runs.}
+\label{tab:mesh-study}
+\begin{tabular}{rrrrrrr}
+\toprule
+Elements & DOFs & $P_{\rm O}$ (kN) & $P_{\rm F}$ (kN) & $P_{\rm A}$ (kN) & $\mathcal D_{\rm O}$ (N mm) & $\mathcal D_{\rm F}$ (N mm) \\
+\midrule
+14,313 & 14,686 & 4.194 & 4.025 & 4.117 & 140.08 & 132.13 \\
+25,042 & 25,534 & 4.205 & 3.808 & 4.087 & 140.93 & 117.25 \\
+56,216 & 56,954 & 4.459 & 3.763 & 4.339 & 149.94 & 110.30 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+At 4{,}000 increments on every mesh, peak-load spreads are 5.98\% (Oliver) and 8.05\% (fixed law); dissipation spreads are 6.44\% and 20.76\%, respectively.
+The reduction in dissipation sensitivity therefore persists at the smaller increment.
+Halving the displacement increment gives coarse fixed (-0.96\% peak, -1.27\% dissipation), coarse oliver (-0.89\% peak, -0.99\% dissipation), medium fixed (-1.85\% peak, -2.55\% dissipation), medium oliver (-1.37\% peak, -1.53\% dissipation), fine fixed (-2.20\% peak, -3.74\% dissipation), fine oliver (-1.31\% peak, -1.42\% dissipation).
+These finite-increment checks quantify sensitivity; they do not establish
+asymptotic convergence. At CMOD 0.10~mm, the absolute energy-balance discrepancy
+is 0.42--1.00\% of external work in the main runs
+and 0.21--0.48\% in the refined runs.
+The fine Oliver peak post-damage relative residual decreases from
+0.0052 to 0.0029.
+The residual and energy discrepancy remain explicit limits of the
+sequential update.
+
+\begin{table}[!htbp]
+\centering\small
+\caption{Single-CPU study timings in seconds. MATLAB has 2{,}000 fixed
+increments. Abaqus counts are accepted increments and solver passes.
+Factorization and sparse-solver timers have different scopes; these are
+single-run measurements, not an accuracy-matched speed ranking.}
+\label{tab:mesh-timing}
+\begin{tabular}{rrrrrrrr}
+\toprule
+DOFs & MATLAB & Assembly & Factor. & Abaqus & Sparse & Incr. & Passes \\
+\midrule
+14,686 & 150.9 & 30.8 & 102.8 & 890.0 & 95.8 & 2,008 & 5,223 \\
+25,534 & 233.5 & 45.2 & 157.5 & 1794.0 & 208.4 & 2,000 & 6,225 \\
+56,954 & 621.0 & 104.1 & 432.1 & 4585.0 & 605.3 & 2,000 & 7,566 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+MATLAB peak loads differ from the corresponding Abaqus peaks by +1.87\%, +2.88\%, +2.78\%, respectively, relative to Abaqus.
+The completed Abaqus jobs report coarse: 2 cutbacks and 5,152 decompositions, medium: 0 cutbacks and 6,153 decompositions, fine: 0 cutbacks and 7,502 decompositions.
+Alternate force-tolerance acceptances are 4, 3, 5, respectively.
+Their wall time outside the sparse-solver timer is 794.2~s, 1585.6~s, 3979.7~s, respectively.
+It includes unseparated element/UMAT, assembly, convergence, output,
+and overhead; no material-time attribution is inferred.
+The fine-mesh response overlay is a code-to-code check with different
+equilibrium algorithms. Machine-readable histories, exact meshes, input
+decks, diagnostics, and analysis scripts accompany the study.
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\linewidth]{mesh_study_overview.pdf}
+\caption{Controlled 2D study. (a,b) Oliver and fixed-law responses;
+(c,d) peak load and partial damage dissipation versus DOFs;
+(e) measured wall and linear-algebra costs; (f) fine-mesh MATLAB/Abaqus
+responses. Main MATLAB curves use 2{,}000 increments to $-0.1$~mm;
+Abaqus uses the same maximum increment with adaptive cutbacks.
+Cost scopes and equilibrium algorithms differ.}
+\label{fig:mesh-study}
+\end{figure}
+
+% MESH_STUDY_RESULTS_END
+
+% =====================================================================
 \section*{Impact}
 
 The main value of \texttt{FRACMATH} is that users can trace a complete
 damage calculation through mesh import, element matrices, projected
 bandwidth, constitutive history, sparse solve, and plotted response.
-The material-point test and the revised timing scopes are small,
+The material-point test and the timing scopes are small,
 inspectable checks that expose two issues in the prior version: an
 incorrect 2D invariant coefficient and mislabelled factorization time.
 The 2D and 3D examples provide starting cases for method development
@@ -537,41 +647,39 @@ and classroom use. The supplied scripts permit the figures to be
 regenerated from the associated data.
 
 % =====================================================================
-\section*{Limitations}
+\subsection*{Limitations}
 
 The model is local, isotropic, quasistatic, and intended for monotonic
 loading. A single damage scalar does not represent crack closure or
-anisotropic degradation. The material-point energy result verifies the
-implemented softening calibration, but structural mesh-objectivity and
-3D quantitative validation have not been demonstrated here. The 2D
+anisotropic degradation. The material-point tests verify softening calibration. The controlled
+2D family tests mesh sensitivity for one geometry and mesh construction;
+it does not establish general mesh or orientation independence.
+The 3D examples remain qualitatively assessed. The 2D
 sequential update leaves a nonzero post-damage equilibrium residual;
-the 1,000/10,000-step difference shows the need for a stronger
-outer equilibrium iteration or an increment-convergence study before
-using response values as validation targets. The current Abaqus UMAT
+the archived increment study and new refinement checks quantify its
+effect. A fully coupled outer equilibrium iteration is future work. The current Abaqus UMAT
 gradient-table initialization is not safe for multithreaded analysis.
-Performance conclusions require larger problem sizes, matched solver
-settings, and Abaqus diagnostic timing from completed jobs.
+The larger study reports completed-job diagnostics, but the algorithms and
+timing scopes differ. An accuracy-matched speed ranking and multithreaded
+scaling remain unverified; no GPU performance claim is made.
 
 % =====================================================================
 \section*{Conclusions}
 
 \texttt{FRACMATH} is an inspectable MATLAB example of local damage
-with an Oliver projected crack-band width. The corrected revision
-adds constitutive checks, a 2D increment study, and timing scopes that
-separate sparse factorization from assembly. The revised manuscript
-reports the solver's present limitations and retains the 3D examples
+with an Oliver projected crack-band width. The study presents constitutive checks, controlled 2D mesh and increment studies,
+structural energy diagnostics, and timing scopes that separate sparse
+factorization from assembly. The manuscript reports the solver's present limitations and retains the 3D examples
 as qualitative demonstrations.
 
 % =====================================================================
 \section*{Data availability}
 
-The corrected 2D MATLAB source, UMAT source, mesh, material-point test,
+The 2D MATLAB source, UMAT source, mesh, material-point test,
 machine-readable response histories, and figure-generation script are
 available in the \href{https://github.com/Jaykumar9033/FRACMATH/tree/main}{FRACMATH GitHub repository}.
-The public v1.0.0 tag is an earlier version and should not be used to
-reproduce the corrected 2D figures.
-A permanent tagged release and archive DOI must be added before SoftwareX
-submission.
+The code and study data are identified by the immutable Git commit
+listed in Table~\ref{tab:code-metadata}.
 
 % =====================================================================
 \section*{CRediT authorship contribution statement}
@@ -604,7 +712,7 @@ code, numerical results, figures, and references are the responsibility
 of the authors.
 
 
-\begin{thebibliography}{12}
+\begin{thebibliography}{10}
 \small\setlength{\itemsep}{1pt}
 
 \bibitem{deVree}
@@ -616,17 +724,11 @@ J. Oliver, A consistent characteristic length for smeared cracking models, \emph
 \bibitem{bazant_oh}
 Z.~P. Ba\v{z}ant, B.~H. Oh, Crack band theory for fracture of concrete, \emph{Mat\'eriaux et Construction} 16~(3) (1983) 155--177. doi:10.1007/BF02486267.
 
-\bibitem{bazant_planas}
-Z.~P. Ba\v{z}ant, J. Planas, \emph{Fracture and Size Effect in Concrete and Other Quasibrittle Materials}, CRC Press, Boca Raton, FL, 1998.
-
 \bibitem{abaqus}
 Dassault Syst\`emes Simulia Corp., \emph{Abaqus/Standard User's Manual}, Version 2024, Providence, RI, USA, 2024.
 
 \bibitem{oofem}
 B. Patz\'ak, Z. Bittnar, Design of object-oriented finite element code, \emph{Advances in Engineering Software} 32~(10--11) (2001) 759--767. doi:10.1016/S0965-9978(01)00027-8.
-
-\bibitem{umfpack}
-T.~A. Davis, Algorithm 832: UMFPACK v4.3---an unsymmetric-pattern multifrontal method, \emph{ACM Transactions on Mathematical Software} 30~(2) (2004) 196--199. doi:10.1145/992200.992206.
 
 \bibitem{calfem}
 P.-E. Austrell, O. Dahlblom, J. Lindemann, A. Olsson, K.-G. Olsson, K. Persson, H. Petersson, M. Ristinmaa, G. Sandberg, P.-A. Wernberg, \emph{CALFEM---A Finite Element Toolbox}, Version 3.4, Lund University, Lund, Sweden, 2004.
