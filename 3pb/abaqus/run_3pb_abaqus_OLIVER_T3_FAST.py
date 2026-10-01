@@ -50,6 +50,7 @@ import os
 import sys
 import re
 import time
+import json
 
 PLOT_MODE = ('--plot' in sys.argv)
 
@@ -85,7 +86,10 @@ XL_NOTCH = XC - WN / 2.0
 XR_NOTCH = XC + WN / 2.0
 
 # Mesh (matched to MATLAB solver)
-ELEM_SIZE_GLOBAL = D / 16.0
+MESH_SCALE = float(os.environ.get('ABQ_MESH_SCALE', '1'))
+if MESH_SCALE <= 0:
+    raise ValueError('ABQ_MESH_SCALE must be positive')
+ELEM_SIZE_GLOBAL = (D / 16.0) * MESH_SCALE
 ELEM_SIZE_REFINE = ELEM_SIZE_GLOBAL / 5.0
 REFINE_W         = 0.5 * D
 REFINE_H         = D
@@ -94,7 +98,8 @@ REFINE_H         = D
 E_C, NU_C, FT, GF, FCFT = 37000.0, 0.20, 3.5, 0.090, 10.0
 
 # Loading
-U_FINAL = -0.2
+U_FINAL = float(os.environ.get('ABQ_U_FINAL', '-0.2'))
+STUDY_BC = os.environ.get('ABQ_STUDY_BC', '0') == '1'
 N_INC   = int(os.environ.get('ABQ_N_INC', '1000'))
 CPUS    = int(os.environ.get('ABQ_CPUS', '1'))
 
@@ -354,6 +359,11 @@ def build_model(case_dir, umat_file):
     sk_r = m.ConstrainedSketch(name='RefineZone', sheetSize=L, transform=tform)
     sk_r.rectangle(point1=(XC - REFINE_W / 2.0, 0.0),
                    point2=(XC + REFINE_W / 2.0, REFINE_H))
+    if STUDY_BC:
+        # Exact support coordinates and a fixed 6.25 mm loading strip.
+        # These partitions keep physical boundary conditions fixed as h changes.
+        for x in (OVERHANG, L - OVERHANG, XC - D/32.0, XC + D/32.0):
+            sk_r.Line(point1=(x, 0.0), point2=(x, D))
     part.PartitionFaceBySketch(sketch=sk_r, faces=part.faces)
     del sk_r
 
@@ -380,7 +390,13 @@ def build_model(case_dir, umat_file):
     node_tol = 0.5 * ELEM_SIZE_REFINE
     part.Set(nodes=pick_single_nearest(part, OVERHANG, 0.0),     name='Support_Left')
     part.Set(nodes=pick_single_nearest(part, L - OVERHANG, 0.0), name='Support_Right')
-    part.Set(nodes=pick_n_nearest_top(part, XC, D, 3),           name='Load_Nodes')
+    if STUDY_BC:
+        load_nodes = part.nodes.getByBoundingBox(
+            xMin=XC-D/32.0-1.e-6, xMax=XC+D/32.0+1.e-6,
+            yMin=D-1.e-6, yMax=D+1.e-6)
+        part.Set(nodes=load_nodes, name='Load_Nodes')
+    else:
+        part.Set(nodes=pick_n_nearest_top(part, XC, D, 3), name='Load_Nodes')
 
     cmod_L = part.nodes.getByBoundingBox(xMin=XL_NOTCH - node_tol, xMax=XL_NOTCH + node_tol,
                                          yMin=-node_tol, yMax=node_tol)
@@ -421,6 +437,42 @@ def build_model(case_dir, umat_file):
     return part
 
 
+def export_matlab_mesh(part, case_dir):
+    """Export exactly the Abaqus connectivity and boundary sets to MATLAB."""
+    target = os.path.join(case_dir, 'matlab_mesh')
+    ensure_dir(target)
+    mode = _detect_connectivity_mode(part)
+    with open(os.path.join(target, 'nodes.txt'), 'w') as stream:
+        for node in part.nodes:
+            stream.write('%d %.16e %.16e\n' %
+                         (node.label, node.coordinates[0], node.coordinates[1]))
+    with open(os.path.join(target, 'elements.txt'), 'w') as stream:
+        for element in part.elements:
+            labels = [_node_label_and_xy(part, token, mode)[0]
+                      for token in element.connectivity]
+            stream.write('%d %d %d %d\n' % tuple([element.label] + labels))
+    for filename, name in [('left_nodes.txt', 'Support_Left'),
+                           ('right_nodes.txt', 'Support_Right'),
+                           ('top_nodes.txt', 'Load_Nodes'),
+                           ('cmod1.txt', 'CMOD1'), ('cmod2.txt', 'CMOD2')]:
+        with open(os.path.join(target, filename), 'w') as stream:
+            for node in part.sets[name].nodes:
+                stream.write('%d\n' % node.label)
+    metadata = dict(mesh_scale=MESH_SCALE, elements=len(part.elements),
+                    nodes=len(part.nodes), dofs=2*len(part.nodes),
+                    global_seed_mm=ELEM_SIZE_GLOBAL,
+                    notch_seed_mm=ELEM_SIZE_REFINE,
+                    max_displacement_mm=U_FINAL, max_increment=1.0/N_INC,
+                    study_boundary_conditions=STUDY_BC)
+    metadata['boundary_nodes'] = {
+        name: [[int(n.label), float(n.coordinates[0]), float(n.coordinates[1])]
+               for n in part.sets[name].nodes]
+        for name in ('Support_Left', 'Support_Right', 'Load_Nodes', 'CMOD1', 'CMOD2')}
+    with open(os.path.join(target, 'mesh_metadata.json'), 'w') as stream:
+        json.dump(metadata, stream, indent=2)
+    print('Exported matching MATLAB mesh: %s' % target)
+
+
 # =====================================================================
 # JOB
 # =====================================================================
@@ -441,7 +493,14 @@ def run_job(case_dir, umat_file):
         job.waitForCompletion()
         solve_wall = time.time() - t0
         print('Job done in %.2f s.' % solve_wall)
-        if str(job.status).upper() != 'COMPLETED':
+        # Some CAE installations return None for job.status after completion.
+        # Require a fresh successful status file, not the wrapper return code.
+        status_path = os.path.join(case_dir, MODEL + '.sta')
+        confirmed = False
+        if os.path.exists(status_path) and os.path.getmtime(status_path) >= t0 - 1.0:
+            with open(status_path, 'r') as status_file:
+                confirmed = 'THE ANALYSIS HAS COMPLETED SUCCESSFULLY' in status_file.read()
+        if not confirmed:
             for ext in ('.dat', '.msg', '.sta', '.log'):
                 print_last_lines(os.path.join(case_dir, MODEL + ext))
             die('Abaqus analysis did not complete: %s' % str(job.status))
@@ -1114,6 +1173,9 @@ def main():
     base = script_base_dir()
     case_dir = os.path.join(base, MODEL)
     ensure_dir(case_dir)
+    if os.environ.get('ABQ_EXTRACT_ONLY', '0') == '1':
+        extract_and_plot(os.path.join(case_dir, MODEL + '.odb'))
+        return
     print('=' * 60)
     print('ABAQUS 3PB  Oliver-T3 FAST build + run')
     print('Base: %s' % base)
@@ -1124,8 +1186,12 @@ def main():
     part = build_model(case_dir, os.path.abspath(umat))
     grad_path = os.path.join(case_dir, 'oliver_t3_gradN.dat')
     write_oliver_t3_gradN_from_part(part, grad_path)
+    export_matlab_mesh(part, case_dir)
     print('Using UMAT: %s' % os.path.abspath(umat))
     print('Oliver table must be in the job folder: %s' % grad_path)
+    if os.environ.get('ABQ_BUILD_ONLY', '0') == '1':
+        print('Build-only mode: no simulation submitted.')
+        return
     odb_path, solve_wall = run_job(case_dir, os.path.abspath(umat))
     extract_and_plot(odb_path, solve_wall)
     print('\nDONE. Results: %s' % os.path.join(case_dir, 'results'))

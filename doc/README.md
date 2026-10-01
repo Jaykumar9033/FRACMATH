@@ -1,14 +1,14 @@
 # Theory manual
 
 This folder contains the theory manual for the FRACMATH formulation and solver
-implementation used by the SoftwareX manuscript revision.
+implementation used by the SoftwareX manuscript.
 
 ## Files
 
 | File | Purpose |
 | --- | --- |
 | `theory_manual.tex` | LaTeX source |
-| `theory_manual.pdf` | Generated locally when compiling the revised source; not committed until the PDF is verified |
+| `theory_manual.pdf` | Generated locally when compiling the source; not committed until the PDF is verified |
 
 ## What the manual covers
 
@@ -29,5 +29,4 @@ pdflatex theory_manual.tex
 pdflatex theory_manual.tex
 ```
 
-A complete LaTeX distribution is required to rebuild the PDF. The earlier PDF
-was removed from current `main` because it described the superseded solver.
+A complete LaTeX distribution is required to rebuild the PDF.

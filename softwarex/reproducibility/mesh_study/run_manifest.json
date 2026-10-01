@@ -1,0 +1,70 @@
+{
+  "mesh_scales": {
+    "coarse": 1.0,
+    "medium": 0.75,
+    "fine": 0.5
+  },
+  "steps": 2000,
+  "max_disp_mm": -0.1,
+  "boundary_conditions": "Exact x=50 and 300 mm supports; top loading strip x=171.875 to 178.125 mm",
+  "fixed_softening_reference_width_mm": 1.25,
+  "increment_checks": true,
+  "fixed_fine_check": true,
+  "timing_execution": "sequential processes, one computational thread/CPU",
+  "platform": "Windows-11-10.0.22631-SP0",
+  "processor": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+  "source_sha256": {
+    "solver_main_3pb.m": "790e80edef81b66994f8f98c37003d0dd0ab006bc0e390a598caaf3f1fb6b1bd",
+    "run_3pb_abaqus_OLIVER_T3_FAST.py": "b7e2f80f59a3b9540313a7ba2ad1897eaf43e5d05967cce076abc507d84bbacf",
+    "cdm_umat_2d_OLIVER_T3_FAST.for": "e320b938e8fe89f1a9ec93085c50a70e04aefd53e1d5c9ad23438818cfd754f3"
+  },
+  "source_text_sha256": {
+    "solver_main_3pb.m": "c45a7b3f8127b06690cc5598ebdb7de7e50709ae983127477b4bc420c63f0780",
+    "run_3pb_abaqus_OLIVER_T3_FAST.py": "082a87360e920228f1736f4a4f397e6d048c391b736ad9919d096b79c477b651",
+    "cdm_umat_2d_OLIVER_T3_FAST.for": "e320b938e8fe89f1a9ec93085c50a70e04aefd53e1d5c9ad23438818cfd754f3"
+  },
+  "invocations": [
+    {
+      "utc": "2026-10-01T03:21:29.319184+00:00",
+      "stage": "abaqus",
+      "meshes": [
+        "coarse",
+        "medium",
+        "fine"
+      ],
+      "steps": 2000,
+      "regularizations": [
+        "oliver",
+        "fixed"
+      ],
+      "source_sha256": {
+        "solver_main_3pb.m": "790e80edef81b66994f8f98c37003d0dd0ab006bc0e390a598caaf3f1fb6b1bd",
+        "run_3pb_abaqus_OLIVER_T3_FAST.py": "db5de45519fecfe5352f5e8bea17d567b0176e99f7c99c21f1c224d437a8b081",
+        "cdm_umat_2d_OLIVER_T3_FAST.for": "e320b938e8fe89f1a9ec93085c50a70e04aefd53e1d5c9ad23438818cfd754f3"
+      }
+    },
+    {
+      "utc": "2026-10-01T13:30:02.067378+00:00",
+      "stage": "matlab",
+      "meshes": [
+        "coarse",
+        "medium"
+      ],
+      "steps": 4000,
+      "regularizations": [
+        "oliver",
+        "fixed"
+      ],
+      "source_sha256": {
+        "solver_main_3pb.m": "790e80edef81b66994f8f98c37003d0dd0ab006bc0e390a598caaf3f1fb6b1bd",
+        "run_3pb_abaqus_OLIVER_T3_FAST.py": "b7e2f80f59a3b9540313a7ba2ad1897eaf43e5d05967cce076abc507d84bbacf",
+        "cdm_umat_2d_OLIVER_T3_FAST.for": "e320b938e8fe89f1a9ec93085c50a70e04aefd53e1d5c9ad23438818cfd754f3"
+      },
+      "source_text_sha256": {
+        "solver_main_3pb.m": "c45a7b3f8127b06690cc5598ebdb7de7e50709ae983127477b4bc420c63f0780",
+        "run_3pb_abaqus_OLIVER_T3_FAST.py": "082a87360e920228f1736f4a4f397e6d048c391b736ad9919d096b79c477b651",
+        "cdm_umat_2d_OLIVER_T3_FAST.for": "e320b938e8fe89f1a9ec93085c50a70e04aefd53e1d5c9ad23438818cfd754f3"
+      }
+    }
+  ]
+}

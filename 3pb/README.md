@@ -1,13 +1,13 @@
 # 2D three-point bending benchmark
 
 This folder contains the main 2D notched three-point bending validation case
-for the SoftwareX manuscript revision.
+for the SoftwareX manuscript.
 
 The benchmark compares:
 
 1. A vectorized MATLAB continuum damage mechanics solver.
 2. An Abaqus/Standard model using an Oliver-matched UMAT.
-3. Preserved corrected MATLAB and Abaqus results and verified plotting scripts in `../softwarex/`.
+3. Preserved MATLAB and Abaqus results and verified plotting scripts in `../softwarex/`.
 
 ## Folder map
 
@@ -15,7 +15,7 @@ The benchmark compares:
 | --- | --- |
 | `matlab/` | MATLAB 2D solver, mesh input files, and MATLAB results |
 | `abaqus/` | Abaqus model generation, UMAT, ODB extraction, and Abaqus results |
-| `../softwarex/` | Corrected comparisons, figures, source panels, and reproduction data |
+| `../softwarex/` | comparisons, figures, source panels, and reproduction data |
 
 ## Recommended run order
 
@@ -33,7 +33,7 @@ Detailed instructions are in each subfolder README and in the root `REPRODUCIBIL
 | Abaqus load-CMOD curve | `abaqus/Gregoire_3PB/results/abaqus_load_cmod.csv` |
 | MATLAB timing log | `matlab/Gregoire_3PB/results/matlab_timing.txt` |
 | Abaqus timing log | `abaqus/Gregoire_3PB/results/abaqus_timing.txt` |
-| Corrected MATLAB/Abaqus comparison | `../softwarex/figures/load_cmod_verified.png` |
+| MATLAB/Abaqus comparison | `../softwarex/figures/load_cmod_verified.png` |
 | Timing breakdown | `../softwarex/figures/timing_verified.png` |
 
 The earlier Abaqus ODB and comparison plots were removed from current `main`

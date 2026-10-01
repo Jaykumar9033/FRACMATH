@@ -1,0 +1,7 @@
+==== MATLAB CDM 3PB solver: vectorized sequential secant update ====
+h_mm G_N_per_mm relative_error final_damage
+    0.5000    0.0360    0.0000    1.0000
+    1.0000    0.0720    0.0000    1.0000
+    2.0000    0.1440    0.0000    1.0000
+    4.0000    0.2880    0.0000    1.0000
+

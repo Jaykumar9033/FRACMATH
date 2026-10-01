@@ -1,0 +1,7 @@
+{
+  "umat_matlab_max_absolute_energy_difference_N_per_mm": 3.400058012914542e-15,
+  "umat_matlab_max_absolute_stress_difference_MPa": 5.699885008425554e-13,
+  "rotated_cases": 16,
+  "rotated_max_absolute_relative_energy_error": 1.776541828616e-06,
+  "fixed_max_absolute_relative_energy_error": 1.7739467639816944e-06
+}

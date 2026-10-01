@@ -29,6 +29,15 @@ displacement increment reduces it in the preserved 1,000 vs 10,000 step
 example, but a fully coupled equilibrium solve is future work. Do not use
 these curves as mesh-objectivity evidence.
 
+## Abaqus tangent and iteration scope
+
+The current UMAT returns the degraded elastic secant matrix in `DDSDDE`.
+This is an approximate tangent for evolving damage, not the consistent
+derivative of the damage law. Its effect on Abaqus iterations must be kept
+in mind; solver-pass and cutback counts accompany timing. The remaining
+wall time alone cannot establish whether the UMAT contains an error.
+Gradient-table initialization currently requires one CPU.
+
 ## Measured timing
 
 Run headless for comparable MATLAB timing:
@@ -54,11 +63,21 @@ wall time is **not** a measurement of UMAT time: it also includes assembly,
 convergence, output, and overhead. The different increment histories prevent
 a direct speed ranking.
 
-## What remains for a larger benchmark
+## Controlled mesh study
 
-Generate at least two additional mesh sizes with the same geometry and
-boundary conditions, verify their element/DOF counts, and run matched
-single-CPU, headless MATLAB and Abaqus jobs. Record all new `.msg`, `.sta`,
-step diagnostics, hardware, versions, and peak-memory measurements. Re-run
-the constitutive and structural checks on each mesh. No larger-mesh result or
-GPU speedup is claimed by the current repository.
+[`softwarex/MESH_STUDY.md`](../softwarex/MESH_STUDY.md) documents three exact
+Abaqus/MATLAB meshes with fixed supports and loading width, separate Oliver
+and fixed-law MATLAB runs, smaller-increment checks, and single-CPU Abaqus
+jobs. `run_mesh_study.py` runs licensed analyses sequentially;
+`analyze_mesh_study.py` checks histories and regenerates the study figure.
+
+`FRACMATH_REGULARIZATION=fixed` holds the calibration width at
+`FRACMATH_FIXED_WIDTH` (default 1.25 mm). This gives one stress–strain law on
+all elements, serving as a control for element-size compensation.
+The regularized default remains `oliver`.
+
+The energy history records trapezoidal external work, stored elastic energy,
+positive end-of-step damage dissipation, and their balance discrepancy.
+Comparison at CMOD 0.10 mm measures partial structural dissipation. It is not
+complete fracture energy. Refinement checks and post-damage residuals must be
+considered when interpreting the mesh comparison. No GPU speedup is claimed.

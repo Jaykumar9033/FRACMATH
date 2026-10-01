@@ -81,4 +81,4 @@ def torsion():
 if __name__ == "__main__":
     nooru()
     torsion()
-    print("Saved revised Nooru-Mohamed and torsion damage montages")
+    print("Saved Nooru-Mohamed and torsion damage montages")

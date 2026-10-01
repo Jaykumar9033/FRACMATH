@@ -37,3 +37,12 @@ abaqus.rpy*
 # Keep scientific outputs in git unless intentionally removed.
 # Large Abaqus *.odb files are tracked through Git LFS via .gitattributes.
 *.spl
+
+# Preserve completed study logs as reproducibility evidence.
+!softwarex/reproducibility/mesh_study/**/run.log
+!softwarex/reproducibility/mesh_study/**/abaqus.log
+!softwarex/reproducibility/mesh_study/**/build.log
+!softwarex/reproducibility/mesh_study/material_tests/*_test.log
+!softwarex/reproducibility/mesh_study/**/Gregoire_3PB.log
+
+!softwarex/reproducibility/mesh_study/**/extract.log

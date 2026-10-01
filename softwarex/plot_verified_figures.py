@@ -1,4 +1,4 @@
-"""Regenerate revised SoftwareX 2D figures from the corrected local runs."""
+"""Regenerate SoftwareX 2D figures from the local runs."""
 
 from pathlib import Path
 import csv
@@ -15,15 +15,9 @@ from scipy.io import loadmat
 
 HERE = Path(__file__).resolve().parent
 OUT = HERE / "figures"
-if (HERE / "reproducibility").exists():
-    MAT10000 = HERE / "reproducibility/results_10000/verified_state.mat"
-    ABQ = HERE / "reproducibility/abaqus/Gregoire_3PB/results/abaqus_load_cmod.csv"
-    TIMING = HERE / "reproducibility/results_10000/matlab_timing.txt"
-else:
-    ROOT = HERE.parent
-    MAT10000 = ROOT / "simulations/3pb_corrected/results_10000/verified_state.mat"
-    ABQ = ROOT / "simulations/abaqus_corrected/Gregoire_3PB/results/abaqus_load_cmod.csv"
-    TIMING = ROOT / "simulations/3pb_corrected/results_10000/matlab_timing.txt"
+MAT10000 = HERE / "reproducibility/results_10000/verified_state.mat"
+ABQ = HERE / "reproducibility/abaqus/Gregoire_3PB/results/abaqus_load_cmod.csv"
+TIMING = HERE / "reproducibility/results_10000/matlab_timing.txt"
 
 plt.rcParams.update({
     "font.family": "DejaVu Sans", "font.size": 10,
@@ -62,7 +56,7 @@ def mesh_figure(d):
             color=BLUE, fontsize=9, bbox=dict(facecolor="white", edgecolor="none", pad=1.0))
     ax.annotate("notch", (175, 9), (202, 26), ha="left",
                 arrowprops=dict(arrowstyle="->", lw=1.0))
-    save(fig, "fig_mesh_corrected.png")
+    save(fig, "fig_mesh.png")
 
 
 def load_curve(d10):

@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 type: software
-message: "If you use this development revision, cite this repository. The v1.0.0 Zenodo DOI describes an earlier implementation; cite a new version DOI when released."
+message: "If you use FRACMATH, cite the immutable code commit identified in the SoftwareX manuscript."
 title: "FRACMATH: A vectorized MATLAB framework for continuum damage mechanics with crack band regularization"
 authors:
   - family-names: Mavani

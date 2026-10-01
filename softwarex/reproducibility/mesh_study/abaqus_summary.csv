@@ -1,0 +1,4 @@
+wall_s,accepted_increments,alternate_force_tolerance_acceptances,cutbacks,solver_passes,factorizations,solver_time_entries,summed_solver_elapsed_s,remaining_wall_s,mesh,dofs,elements,gradient_rows_loaded,response_rows,peak_load_N,peak_cmod_mm,matlab_peak_load_difference_percent,sampled_standard_working_set_MB
+890.0,2008,4,2,5223,5152,5223,95.802,794.198,coarse,14686,14313,14313,2009,4116.699,0.02655081,1.8708921881342366,280.6015625
+1794.0,2000,3,0,6225,6153,6225,208.376,1585.624,medium,25534,25042,25042,2001,4087.386,0.02599142,2.878196480586871,310.140625
+4585.0,2000,5,0,7566,7502,7566,605.273,3979.727,fine,56954,56216,56216,2001,4338.503,0.02926192,2.7771330341364266,381.33203125

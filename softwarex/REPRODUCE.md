@@ -1,11 +1,11 @@
-# Reproducing the revised 2D SoftwareX figures
+# Reproducing the 2D SoftwareX figures
 
-This package is a revision candidate, not the public FRACMATH `v1.0.0` tag. The 2D MATLAB and Fortran UMAT equivalent-strain invariant has been corrected to `J2 = ((e1-e2)^2 + (e2-e3)^2 + (e3-e1)^2)/6`.
+The 2D MATLAB and Fortran UMAT equivalent-strain invariant has been to `J2 = ((e1-e2)^2 + (e2-e3)^2 + (e3-e1)^2)/6`.
 
 ## Environment used
 
 - Windows 11, MATLAB R2024b, base MATLAB, one computational thread.
-- Python 3 with NumPy, SciPy, Matplotlib, and Pillow for the revised plots and 3D figure layouts.
+- Python 3 with NumPy, SciPy, Matplotlib, and Pillow for the plots and 3D figure layouts.
 - Abaqus/Standard 2024 with Intel Fortran for the optional UMAT run. Use one Abaqus CPU until its table initialization is made thread-safe.
 
 ## MATLAB checks
@@ -29,7 +29,7 @@ The solver writes `Gregoire_3PB/results`. The two archived histories in `reprodu
 
 New runs also write `matlab_step_diagnostics.csv` with per-step component timings, iteration count, old-damage convergence, and post-damage residual. Set `FRACMATH_CASE_DIR` to a separate mesh folder to avoid overwriting the preserved histories. The preserved 10,000-step run predates this per-step export.
 
-To regenerate the revised 2D figures from the preserved 10,000-step MATLAB state and Abaqus CSV, run `python plot_verified_figures.py` from the package root after installing NumPy, SciPy, and Matplotlib. The 1,000-step MATLAB history is retained for the increment-sensitivity check in the text but is not plotted in the MATLAB--Abaqus comparison. Figures 4 and 5 use archived earlier source image panels, recomposed with one enlarged color bar per damage sequence and larger increment labels. Run `python rebuild_3d_figures.py` from the package root to rebuild those layouts from `figure_sources`. The underlying 3D numerical cases were not rerun in this revision.
+To regenerate the 2D figures from the preserved 10,000-step MATLAB state and Abaqus CSV, run `python plot_verified_figures.py` from the package root after installing NumPy, SciPy, and Matplotlib. The 1,000-step MATLAB history is retained for the increment-sensitivity check in the text but is not plotted in the MATLAB--Abaqus comparison. Figures 4 and 5 use 3D source image panels, recomposed with one enlarged color bar per damage sequence and larger increment labels. Run `python rebuild_3d_figures.py` from the package root to rebuild those layouts from `figure_sources`. The 3D panels are qualitative workflow illustrations.
 
 Run `python compare_solver_diagnostics.py` from this package folder to rebuild `reproducibility/solver_diagnostics.json`. Abaqus `.msg` records solver passes and their elapsed times, but it cannot separate UMAT from assembly and other remaining costs. The different increment histories do not justify a speed ranking.
 
@@ -48,4 +48,8 @@ The Abaqus script rebuilds the geometry/mesh and writes the shape-function gradi
 
 ## Verification scope
 
-The material-point test verifies equivalent-strain mapping, irreversibility, and the exponential law's fracture energy calibration. The structural 3PB results remain load-increment sensitive, and a structural mesh-refinement study has not been performed. The 3D figures illustrate workflows but have not been rerun as part of this revision.
+The material-point test verifies equivalent-strain mapping, irreversibility, and the exponential law's fracture energy calibration. The structural 3PB results remain load-increment sensitive, and the controlled three-mesh study quantifies sensitivity for one mesh family. The 3D figures illustrate workflows qualitatively.
+
+## Controlled mesh and regularization study
+
+See [`MESH_STUDY.md`](MESH_STUDY.md) for the exact protocol, licensed-run commands, timing scopes, and limitations. The archived study can be analyzed without MATLAB or Abaqus by running `python softwarex/analyze_mesh_study.py` from the repository root.

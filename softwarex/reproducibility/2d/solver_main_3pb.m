@@ -32,7 +32,8 @@ if ~exist(case_dir, 'dir')
           case_dir);
 end
 
-res_dir = fullfile(case_dir, 'results');
+res_dir = getenv('FRACMATH_RESULTS_DIR');
+if isempty(res_dir); res_dir = fullfile(case_dir, 'results'); end
 if ~exist(res_dir, 'dir'); mkdir(res_dir); end
 
 % --- material + solver parameters --------------------------------------
@@ -46,6 +47,15 @@ p.OMEGA_MAX = 1 - 1e-12;
 p.eps0      = p.ft / p.E;
 
 p.max_disp  = -0.2;        % mm  total midspan deflection
+disp_env = str2double(getenv('FRACMATH_MAX_DISP'));
+if isfinite(disp_env) && disp_env < 0; p.max_disp = disp_env; end
+p.regularization = getenv('FRACMATH_REGULARIZATION');
+if isempty(p.regularization); p.regularization = 'oliver'; end
+assert(ismember(p.regularization, {'oliver', 'fixed'}), ...
+    'FRACMATH_REGULARIZATION must be oliver or fixed');
+p.fixed_width = 1.25; % mm: reference calibration for the local-law control
+width_env = str2double(getenv('FRACMATH_FIXED_WIDTH'));
+if isfinite(width_env) && width_env > 0; p.fixed_width = width_env; end
 p.num_steps = 10000;
 steps_env = str2double(getenv('FRACMATH_STEPS'));
 if isfinite(steps_env) && steps_env >= 1
@@ -120,6 +130,9 @@ StepAssembly = zeros(p.num_steps, 1);
 StepFactor = zeros(p.num_steps, 1);
 StepDamage = zeros(p.num_steps, 1);
 StepSolve = zeros(p.num_steps, 1);
+ExternalWork = zeros(p.num_steps, 1);
+ElasticEnergy = zeros(p.num_steps, 1);
+DamageDissipation = zeros(p.num_steps, 1);
 steps_done = 0;
 
 % Cache K after each damage update. This avoids assembling the same damaged
@@ -182,7 +195,8 @@ for step = 1:p.num_steps
 
     % --- damage update -------------------------------------------------
     tic;
-    [omega, kappa, h_oliver] = damage_update(u, B_all, gradN_all, dof_mat, kappa, omega, p);
+    omega_previous = omega;
+    [omega, kappa, h_oliver, strain_now] = damage_update(u, B_all, gradN_all, dof_mat, kappa, omega, p);
     t_dam = t_dam + toc;
 
     % Reassemble once after the damage update. This gives a reaction force
@@ -207,6 +221,19 @@ for step = 1:p.num_steps
     CMOD(step)   = C_now;
     F(step)      = F_now;
     Disp(step)   = -u_tgt;
+    % Damage dissipation = integral of Y d(omega), evaluated with the
+    % end-of-step strain. This positive quadrature is checked by step refinement.
+    Y = 0.5 * sum((strain_now * D_el) .* strain_now, 2) .* area_v * p.t;
+    ElasticEnergy(step) = sum((1-omega) .* Y);
+    dissipation_increment = sum((omega-omega_previous) .* Y);
+    if step == 1
+        ExternalWork(step) = 0.5 * F_now * Disp(step);
+        DamageDissipation(step) = dissipation_increment;
+    else
+        ExternalWork(step) = ExternalWork(step-1) + ...
+            0.5 * (F(step-1)+F_now) * (Disp(step)-Disp(step-1));
+        DamageDissipation(step) = DamageDissipation(step-1) + dissipation_increment;
+    end
     Hmean(step)  = mean(h_oliver);
     Hmin(step)   = min(h_oliver);
     Hmax(step)   = max(h_oliver);
@@ -265,6 +292,9 @@ StepAssembly = StepAssembly(1:steps_done).';
 StepFactor = StepFactor(1:steps_done).';
 StepDamage = StepDamage(1:steps_done).';
 StepSolve = StepSolve(1:steps_done).';
+ExternalWork = ExternalWork(1:steps_done).';
+ElasticEnergy = ElasticEnergy(1:steps_done).';
+DamageDissipation = DamageDissipation(1:steps_done).';
 
 % Close the video writer (NOT timed: happens after the clock is stopped)
 if do_visualization
@@ -272,10 +302,7 @@ if do_visualization
     fprintf('  Video saved successfully.\n');
 end
 ram_after  = ram_bytes();
-peak_ram_MB = max(0, (ram_after - ram_before)) / 2^20;
-if peak_ram_MB == 0
-    try, m = memory; peak_ram_MB = m.MemUsedMATLAB/2^20; catch; peak_ram_MB = NaN; end
-end
+allocation_delta_MB = (ram_after - ram_before) / 2^20;
 
 if isempty(snap_pp.u)
     snap_pp.u = u; snap_pp.omega = omega; snap_pp.load = F(end);
@@ -313,9 +340,19 @@ fprintf(fid, '%d,%d,%d,%.9e,%.9e,%.9e,%.9e,%.9e\n', ...
 fclose(fid);
 fprintf('  wrote %s\n', diag_path);
 
+energy_path = fullfile(res_dir, 'matlab_energy_history.csv');
+fid = fopen(energy_path, 'w');
+fprintf(fid, 'step,displacement_mm,cmod_mm,external_work_Nmm,elastic_energy_Nmm,damage_dissipation_Nmm,energy_balance_error_Nmm\n');
+fprintf(fid, '%d,%.9e,%.9e,%.9e,%.9e,%.9e,%.9e\n', ...
+    [(1:steps_done).', Disp(:), CMOD(:), ExternalWork(:), ElasticEnergy(:), ...
+     DamageDissipation(:), (ExternalWork(:)-ElasticEnergy(:)-DamageDissipation(:))].');
+fclose(fid);
+
 t_path = fullfile(res_dir, 'matlab_timing.txt');
 fid = fopen(t_path, 'w');
 fprintf(fid, 'MATLAB 3PB solver\n');
+fprintf(fid, 'MATLAB version: %s\n', version);
+fprintf(fid, 'Computational threads: 1\n');
 fprintf(fid, 'Peak load:    %.2f N\n',    pk_load);
 fprintf(fid, 'CMOD@peak:    %.6f mm\n',   pk_cmod);
 fprintf(fid, 'Solver wall-clock: %.2f s\n', t_solver);
@@ -325,7 +362,17 @@ fprintf(fid, '  assembly:   %.2f s  (%.1f%%)\n', t_asm,   100*t_asm/t_solver);
 fprintf(fid, '  factorization: %.2f s  (%.1f%%)\n', t_factor, 100*t_factor/t_solver);
 fprintf(fid, '  damage:     %.2f s  (%.1f%%)\n', t_dam,   100*t_dam/t_solver);
 fprintf(fid, '  solve:      %.2f s  (%.1f%%)\n', t_solve, 100*t_solve/t_solver);
-fprintf(fid, 'Peak RAM:     %.1f MB\n',   peak_ram_MB);
+fprintf(fid, 'MATLAB allocated memory delta: %.1f MB\n', allocation_delta_MB);
+if ispc
+    try
+        proc = System.Diagnostics.Process.GetCurrentProcess();
+        fprintf(fid, 'Peak process working set: %.1f MB\n', double(proc.PeakWorkingSet64)/2^20);
+    catch
+        fprintf(fid, 'Peak process working set: unavailable\n');
+    end
+end
+fprintf(fid, 'Regularization: %s (fixed reference width %.6g mm)\n', p.regularization, p.fixed_width);
+fprintf(fid, 'Final prescribed displacement: %.9e mm\n', p.max_disp);
 fprintf(fid, 'Mesh:         %d CPS3, %d DOFs\n', nE, 2*nN);
 fprintf(fid, 'Load steps:   %d\n',        numel(F));
 fprintf(fid, 'Old-damage steps converged: %d / %d\n', sum(StepConverged), steps_done);
@@ -343,7 +390,8 @@ fprintf('  wrote %s\n', t_path);
 % 6. Final static figures
 % =====================================================================
 save(fullfile(res_dir, 'verified_state.mat'), 'nodes', 'elems', 'u', 'omega', ...
-    'kappa', 'CMOD', 'F', 'RelRes', 'snap_peak', 'snap_pp', 'p');
+    'kappa', 'CMOD', 'F', 'RelRes', 'ExternalWork', 'ElasticEnergy', ...
+    'DamageDissipation', 'snap_peak', 'snap_pp', 'p');
 if do_visualization
     fig_load_cmod(CMOD, F, pk_load, pk_cmod, res_dir);
 end
@@ -367,7 +415,7 @@ fprintf('\n==== summary ====\n');
 fprintf('  peak load : %.2f N at CMOD = %.4f mm\n', pk_load, pk_cmod);
 fprintf('  wall-clock: %.1f s  (asm %.1f, dam %.1f, solve %.1f)\n', ...
         t_total, t_asm, t_dam, t_solve);
-fprintf('  peak RAM  : %.1f MB\n', peak_ram_MB);
+fprintf('  allocated memory delta: %.1f MB\n', allocation_delta_MB);
 fprintf('  output -> %s/\n', res_dir);
 
 end % solver_main_3pb
@@ -603,7 +651,7 @@ end
 % =====================================================================
 %                        DAMAGE UPDATE
 % =====================================================================
-function [omega_new, kappa_new, h_oliver] = damage_update(u, B_all, gradN_all, dof_mat, ...
+function [omega_new, kappa_new, h_oliver, strain] = damage_update(u, B_all, gradN_all, dof_mat, ...
                                                 kappa_old, omega_old, p)
     nE   = size(B_all,3);
     u_e  = reshape(u(dof_mat).', 6, 1, nE);
@@ -632,6 +680,11 @@ function [omega_new, kappa_new, h_oliver] = damage_update(u, B_all, gradN_all, d
     ny(iso) = 0.0;
 
     h_oliver = oliver_bandwidth_T3(gradN_all, nx, ny);
+    if strcmp(p.regularization, 'fixed')
+        % Ablation: keep one stress-strain softening law for all meshes.
+        % No element-dependent fracture-energy rescaling is applied.
+        h_oliver(:) = p.fixed_width;
+    end
 
     % Exponential stress-strain softening parameter with Oliver bandwidth.
     % eps_f = eps0/2 + GF/(h_oliver*ft)
@@ -1044,6 +1097,7 @@ end
 function material_selftest(p)
     widths = [0.5; 1; 2; 4];
     out = zeros(numel(widths), 4);
+    curve_rows = [];
     for j = 1:numel(widths)
         h = widths(j);
         nodes = [0 0; h 0; 0 1];
@@ -1055,13 +1109,19 @@ function material_selftest(p)
         u(2:2:6) = -p.nu * e * nodes(:,2);
         [~, kt, bw] = damage_update(u, B, gradN, dofmat, 0, 0, p);
         assert(abs(kt/e - 1) < 1e-10, 'Uniaxial tension equivalence failed');
-        assert(abs(bw/h - 1) < 1e-10, 'Oliver width failed');
+        if strcmp(p.regularization, 'oliver')
+            assert(abs(bw/h - 1) < 1e-10, 'Oliver width failed');
+        else
+            assert(abs(bw/p.fixed_width - 1) < 1e-10, 'Fixed width failed');
+        end
         u(1:2:6) = -e * nodes(:,1);
         u(2:2:6) = p.nu * e * nodes(:,2);
         [~, kc] = damage_update(u, B, gradN, dofmat, 0, 0, p);
         assert(abs(kc/(e/(p.fc/p.ft)) - 1) < 1e-10, ...
             'Uniaxial compression equivalence failed');
-        ef = max(p.eps0/2 + p.GF/(h*p.ft), p.eps0 + 1e-12);
+        calibration_h = h;
+        if strcmp(p.regularization, 'fixed'); calibration_h = p.fixed_width; end
+        ef = max(p.eps0/2 + p.GF/(calibration_h*p.ft), p.eps0 + 1e-12);
         decay = ef - p.eps0;
         strain = [linspace(0,p.eps0,80), ...
             linspace(p.eps0 + decay/3000, p.eps0 + 15*decay,3000)];
@@ -1077,10 +1137,29 @@ function material_selftest(p)
             stress(i) = (1-omega) * p.E * strain(i);
         end
         G = h * trapz(strain, stress);
-        out(j,:) = [h, G, (G-p.GF)/p.GF, omega];
+        % Explicit unload/reload check at a partially damaged state.
+        e_peak = p.eps0 + decay;
+        u(1:2:6) = e_peak * nodes(:,1);
+        u(2:2:6) = -p.nu * e_peak * nodes(:,2);
+        [o_commit,k_commit] = damage_update(u,B,gradN,dofmat,0,0,p);
+        for ratio = [0.25, 0.8, 1.0]
+            u(1:2:6) = ratio*e_peak * nodes(:,1);
+            u(2:2:6) = -p.nu*ratio*e_peak * nodes(:,2);
+            [o_check,k_check] = damage_update(u,B,gradN,dofmat,k_commit,o_commit,p);
+            assert(abs(o_check-o_commit) < 1.e-12 && ...
+                   abs(k_check-k_commit) < 1.e-12, 'Unload/reload history failed');
+        end
+        expected_G = p.GF * h/calibration_h;
+        out(j,:) = [h, G, (G-expected_G)/expected_G, omega];
         assert(abs(out(j,3)) < 0.01, 'Fracture energy check failed');
+        curve_rows = [curve_rows; repmat(h,numel(strain),1), strain(:), stress(:)]; %#ok<AGROW>
     end
-    writematrix(out, 'material_energy.csv');
+    if strcmp(p.regularization, 'oliver')
+        writematrix(out, 'material_energy.csv');
+    else
+        writematrix(out, 'material_energy_fixed.csv');
+    end
+    writematrix(curve_rows, ['material_softening_' p.regularization '.csv']);
     fprintf('h_mm G_N_per_mm relative_error final_damage\n');
     disp(out);
 end

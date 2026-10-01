@@ -2,14 +2,14 @@
 
 All notable repository changes for FRACMATH are recorded here.
 
-## Unreleased
+## SoftwareX study
 
-- Reframed repository documentation for the SoftwareX manuscript.
-- Corrected the 2D MATLAB and UMAT pairwise-deviatoric invariant coefficient from `1/2` to `1/6`.
-- Added preserved MATLAB material-point and 1,000/10,000-step checks and a corrected one-CPU Abaqus run.
-- Replaced unsupported timing and comparison figures with verified SoftwareX figures; old generated outputs remain in Git history and `v1.0.0`.
-- Added the SoftwareX manuscript draft, figure sources, and shared-color-bar 3D layouts.
-- Documented the lagged-damage solver residual and limits of the single-mesh comparison.
+- Controlled three-mesh comparison with Oliver regularization and fixed-law controls.
+- Structural work, stored energy, damage dissipation, and energy balance histories.
+- Load-increment checks and material-point verification in MATLAB and Fortran.
+- Exact exported meshes, source hashes, response histories, and Abaqus job diagnostics.
+- Operating-system memory measurements and explicitly scoped timing records.
+- SoftwareX manuscript, reproducibility scripts, and shared-color-bar 3D workflow illustrations.
 
 ## 1.0.0 - 2026-05-31
 

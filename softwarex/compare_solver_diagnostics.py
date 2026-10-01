@@ -34,11 +34,17 @@ def summarize(matlab_path, msg_path):
         "solve": r"solve:\s*([\d.]+)\s*s",
     }.items():
         costs[label] = required_float(pattern, matlab, "MATLAB " + label)
-    solver_ms = [float(x) for x in re.findall(r"SOLVER ELAPSED TIME:\s*([\d.]+)\s*ms", msg, re.I)]
-    if not solver_ms:
+    entries = re.findall(r"SOLVER ELAPSED TIME:\s*([\d.Ee+-]+)\s*(ms|s)\b", msg, re.I)
+    solver_seconds = [float(value) * (0.001 if unit.lower() == "ms" else 1)
+                      for value, unit in entries]
+    if not solver_seconds:
         raise ValueError("No Abaqus per-pass solver times found")
     def count(pattern, label):
         return int(required_float(pattern, msg, label))
+    passes = count(r"(\d+)\s+PASSES THROUGH THE EQUATION SOLVER", "Abaqus passes")
+    if len(solver_seconds) != passes:
+        raise ValueError("Solver timing entries (%d) differ from reported passes (%d)" %
+                         (len(solver_seconds), passes))
     return {
         "matlab": {
             "wall_s": mt,
@@ -49,12 +55,13 @@ def summarize(matlab_path, msg_path):
         "abaqus": {
             "wall_s": at,
             "accepted_increments": count(r"TOTAL OF\s+(\d+)\s+INCREMENTS", "Abaqus increments"),
+            "alternate_force_tolerance_acceptances": len(re.findall(r"FORCE EQUILIBRIUM ACCEPTED USING THE ALTERNATE TOLERANCE", msg, re.I)),
             "cutbacks": count(r"(\d+)\s+CUTBACKS IN AUTOMATIC INCREMENTATION", "Abaqus cutbacks"),
-            "solver_passes": count(r"(\d+)\s+PASSES THROUGH THE EQUATION SOLVER", "Abaqus passes"),
+            "solver_passes": passes,
             "factorizations": count(r"(\d+)\s+INVOLVE MATRIX DECOMPOSITION", "Abaqus factorizations"),
-            "solver_time_entries": len(solver_ms),
-            "summed_solver_elapsed_s": round(sum(solver_ms) / 1000.0, 4),
-            "remaining_wall_s": round(at - sum(solver_ms) / 1000.0, 4),
+            "solver_time_entries": len(solver_seconds),
+            "summed_solver_elapsed_s": round(sum(solver_seconds), 4),
+            "remaining_wall_s": round(at - sum(solver_seconds), 4),
         },
         "interpretation": "Remaining Abaqus wall time combines UMAT, assembly, convergence, output, and overhead; the .msg file does not isolate these components. MATLAB and Abaqus use different increment histories, so wall times are not a speed ranking.",
     }

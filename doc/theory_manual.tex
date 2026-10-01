@@ -93,8 +93,7 @@ where $\bm e$ is the deviatoric strain. Equivalently, in terms of the three
 principal strains, $J_2=[(\varepsilon_1-\varepsilon_2)^2+
 (\varepsilon_2-\varepsilon_3)^2+(\varepsilon_3-\varepsilon_1)^2]/6$.
 The factor $1/2$ applies to $\bm e:\bm e$; the equivalent pairwise-difference
-coefficient is $1/6$. The previous 2D implementation mistakenly used $1/2$
-with the pairwise differences and was corrected for this revision. The
+coefficient is $1/6$. The
 uniaxial check is given in Section~\ref{sec:eqstrain}.
 
 % =====================================================================
@@ -501,9 +500,9 @@ As $S\to 0$ near a stress-free state this expression is singular, which is harml
 damage is inactive there and the dyad term is never assembled; the code guards the divide
 with the loading check anyway.
 
-\subsection{What the revised 2D code actually solves}
+\subsection{What the 2D code actually solves}
 
-The consistent tangent above is included for reference. The revised 2D code
+The consistent tangent above is included for reference. The 2D code
 uses the symmetric secant stiffness
 %
 \begin{equation}
