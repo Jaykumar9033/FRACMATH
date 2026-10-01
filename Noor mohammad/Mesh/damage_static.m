@@ -131,6 +131,10 @@ else
     base_fix = unique([fixY_bottom; fixX_pin; fixZ_pin]);
 end
 
+if strcmpi(load_path,'tension')
+    [~,farZ] = max(p(:,1));
+    base_fix = unique([base_fix; dof(farZ,3)]);
+end
 dir_nodes = [presc_top_uy; base_fix];
 if is4c
     dir_nodes = [dir_nodes; Lx; Rx];
@@ -149,6 +153,14 @@ if strcmpi(load_path,'shear_force')
     if ~isempty(Nright), Fext_base(Rx) = -Fx_tot / max(numel(Nright),1); end
 end
 
+gauge_matrix = get_opt('gauge_matrix', sparse(0,ndof));
+gauge_res = zeros(nIncr,size(gauge_matrix,1));
+strict_equilibrium = get_opt('strict_equilibrium', false);
+gauge_control = get_opt('gauge_control', false);
+Gcontrol = mean(gauge_matrix,1);
+if gauge_control && (~strict_equilibrium || size(gauge_matrix,1)==0 || size(gauge_matrix,2)~=ndof)
+    error('Gauge control requires strict equilibrium and a gauge_matrix with ndof columns.');
+end
 delta_s_res = zeros(nIncr,1);
 delta_res   = zeros(nIncr,1);
 Ps_res      = zeros(nIncr,1);
@@ -267,7 +279,8 @@ for s = 1:nIncr
     end
 
     Utrial = U;
-    Utrial(presc_top_uy) = Uy_t;
+    if gauge_control, Utrial(presc_top_uy)=U(presc_top_uy);
+    else, Utrial(presc_top_uy) = Uy_t; end
     Utrial(base_fix) = 0.0;
     if is4c
         if ~isempty(Lx), Utrial(Lx) = uxL_t; end
@@ -275,6 +288,7 @@ for s = 1:nIncr
     end
 
     x = Utrial(free);
+    if gauge_control, x=[x;Utrial(presc_top_uy(1))]; end
     relres = Inf;
     converged = false;
 
@@ -282,9 +296,13 @@ for s = 1:nIncr
         [R, Jff, Fint_it] = residual_and_jac_NR( ...
             x, Utrial, free, B3, EDOF, Ke_unit3, idx_glob, ...
             E, nu, k_tc, j0, GF, gradN3, bandwidth_method, kappa, Fext, ...
-            I_trip, J_trip, eid_rep, Val_unit, ndof);
+            I_trip, J_trip, eid_rep, Val_unit, ndof, strict_equilibrium, V3, gauge_control,Gcontrol,presc_top_uy,Uy_t);
 
-        scaleR = max([1.0, double(full(norm(Fext(free),inf))), double(full(norm(Fint_it(free),inf)))]);
+        if strict_equilibrium
+            scaleR = max(1.0,double(full(norm(Fint_it,inf))));
+        else
+            scaleR = max([1.0, double(full(norm(Fext(free),inf))), double(full(norm(Fint_it(free),inf)))]);
+        end
         relres = double(full(norm(R,inf))) / scaleR;
 
         if relres <= tol
@@ -310,7 +328,7 @@ for s = 1:nIncr
                 x_try = x + alpha*dx;
                 Rtry = residual_only_NR( ...
                     x_try, Utrial, free, B3, EDOF, Ke_unit3, idx_glob, ...
-                    E, nu, k_tc, j0, GF, gradN3, bandwidth_method, kappa, Fext, ndof);
+                    E, nu, k_tc, j0, GF, gradN3, bandwidth_method, kappa, Fext, ndof,gauge_control,Gcontrol,presc_top_uy,Uy_t);
 
                 ntry = double(full(norm(Rtry,inf)));
                 if ntry < best_norm
@@ -332,18 +350,20 @@ for s = 1:nIncr
             x = x + dx;
         end
 
-        if double(full(norm(dx,inf))) <= step_tol * max(1.0, double(full(norm(x,inf))))
-            converged = true;
+        if ~strict_equilibrium && double(full(norm(dx,inf))) <= step_tol * max(1.0, double(full(norm(x,inf))))
+            converged = ~strict_equilibrium;
             break;
         end
     end
 
     if ~converged
+        if strict_equilibrium, error('Equilibrium did not converge at increment %d: residual %.3e',s,relres); end
         warning('Newton did not fully converge at increment %d. it=%d, relres=%.3e', s, it, relres);
     end
 
-    U(free) = x;
-    U(presc_top_uy) = Uy_t;
+    U(free) = x(1:numel(free));
+    if gauge_control, U(presc_top_uy)=x(end);
+    else, U(presc_top_uy) = Uy_t; end
     U(base_fix) = 0.0;
     if is4c
         if ~isempty(Lx), U(Lx) = uxL_t; end
@@ -358,6 +378,7 @@ for s = 1:nIncr
     [De_bc, ~, Fint_bc, ~, h_band_bc] = damage_state_and_internal_force( ...
         U, B3, EDOF, Ke_unit3, idx_glob, E, nu, k_tc, j0, GF, gradN3, bandwidth_method, kappa, ndof);
 
+    gauge_res(s,:) = (gauge_matrix*U).';
     Freac = Fint_bc - Fext;
     P_normal = double(full(sum(Freac(presc_top_uy))));
 
@@ -453,6 +474,9 @@ results = table(delta_s_res, delta_res, Ps_res, P_res, maxD_res, meanD_res, ...
                       'saved_png'});
 
 writetable(results, out_csv);
+if ~isempty(gauge_res)
+    writematrix([delta_res P_res gauge_res relres_res iter_res],fullfile(out_dir,[prefix '_gauge_results.csv']));
+end
 
 out_mat = fullfile(out_dir, [prefix '_fast_NR_final_state.mat']);
 save(out_mat, 'U','kappa','De_bc','delta_s_res','delta_res','Ps_res','P_res', ...
@@ -479,22 +503,45 @@ end
 function [R,Jff,Fint] = residual_and_jac_NR( ...
     x, Utrial, free, B3, EDOF, Ke_unit3, idx_glob, ...
     E, nu, k_tc, j0, GF, gradN3, bandwidth_method, kappa, Fext, ...
-    I_trip, J_trip, eid_rep, Val_unit, ndof)
+    I_trip, J_trip, eid_rep, Val_unit, ndof, strict_equilibrium, V3, gauge_control,Gcontrol,presc_top_uy,Uy_t)
 
 Uloc = Utrial;
-Uloc(free) = x;
+Uloc(free) = x(1:numel(free));
+if gauge_control, Uloc(presc_top_uy)=x(end); end
 
 [~, s_e, Fint, ~] = damage_state_and_internal_force( ...
     Uloc, B3, EDOF, Ke_unit3, idx_glob, E, nu, k_tc, j0, GF, gradN3, bandwidth_method, kappa, ndof);
 
 Rfull = Fint - Fext;
 R = Rfull(free);
+if gauge_control, R=[R;1e6*(Gcontrol*Uloc-Uy_t)]; end
 
 vals = Val_unit .* s_e(eid_rep);
 K = sparse(I_trip, J_trip, vals, ndof, ndof);
-K = 0.5*(K + K.');
+if strict_equilibrium
+    % Differentiate the same constitutive update; no fitted material terms.
+    ne=size(EDOF,2);epsv=pagemtimes(B3,reshape(Uloc(EDOF),12,1,ne));
+    ds=zeros(1,6,ne);
+    for c=1:6
+        step=1e-7*max(j0,abs(epsv(c,1,:)));
+        ep=epsv;em=epsv;ep(c,1,:)=ep(c,1,:)+step;em(c,1,:)=em(c,1,:)-step;
+        sp=material_scale(ep,E,nu,k_tc,j0,GF,gradN3,bandwidth_method,kappa);
+        sm=material_scale(em,E,nu,k_tc,j0,GF,gradN3,bandwidth_method,kappa);
+        ds(1,c,:)=reshape((sp-sm)./reshape(2*step,[],1),1,1,ne);
+    end
+    [Dunit,~,~]=iso3D_D(1,nu);
+    v=pagemtimes(permute(B3,[2,1,3]),pagemtimes(Dunit,epsv));
+    q=pagemtimes(ds,B3);
+    correction=bsxfun(@times,pagemtimes(v,q),reshape(V3,1,1,ne));
+    K=K+sparse(I_trip,J_trip,correction(:),ndof,ndof);
+else
+    K = 0.5*(K + K.');
+end
 
 Jff = K(free,free);
+if gauge_control
+    Jff=[Jff,sum(K(free,presc_top_uy),2);1e6*Gcontrol(free),1e6*sum(Gcontrol(presc_top_uy))];
+end
 
 if ~isempty(Jff)
     dmax = double(full(max(abs(diag(Jff)))));
@@ -508,16 +555,18 @@ end
 
 function R = residual_only_NR( ...
     x, Utrial, free, B3, EDOF, Ke_unit3, idx_glob, ...
-    E, nu, k_tc, j0, GF, gradN3, bandwidth_method, kappa, Fext, ndof)
+    E, nu, k_tc, j0, GF, gradN3, bandwidth_method, kappa, Fext, ndof,gauge_control,Gcontrol,presc_top_uy,Uy_t)
 
 Uloc = Utrial;
-Uloc(free) = x;
+Uloc(free) = x(1:numel(free));
+if gauge_control, Uloc(presc_top_uy)=x(end); end
 
 [~, ~, Fint, ~] = damage_state_and_internal_force( ...
     Uloc, B3, EDOF, Ke_unit3, idx_glob, E, nu, k_tc, j0, GF, gradN3, bandwidth_method, kappa, ndof);
 
 Rfull = Fint - Fext;
 R = Rfull(free);
+if gauge_control, R=[R;1e6*(Gcontrol*Uloc-Uy_t)]; end
 
 end
 
@@ -549,6 +598,14 @@ fe12 = bsxfun(@times, fe12, reshape(s_e,1,1,ne));
 
 Fint = assemble_accum(idx_glob, fe12, ndof);
 
+end
+
+function s = material_scale(epsv,E,nu,k,j0,GF,gradN,method,kappa_old)
+[eeq,n]=eqv_strain_modified_vm_vec(epsv,nu,k);
+h=oliver_bandwidth_TET4(gradN,n,method);
+kappa=max(kappa_old,reshape(eeq,[],1));d=zeros(size(kappa));active=kappa>=j0;
+b=E*j0/GF*h(:);d(active)=1-j0./kappa(active).*exp(-b(active).*(kappa(active)-j0));
+s=E*max(1-min(max(d,0),.999999),1e-8);
 end
 
 function [B_all,V_el,gradN_all,valid] = precompute_TET4_vectorized(p,T)

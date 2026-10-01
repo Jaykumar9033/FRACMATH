@@ -2,3 +2,5 @@
 
 # Preserve tested scientific data bytes and published SHA256 checks across OSes.
 softwarex/reproducibility/mesh_study/** -text
+
+softwarex/reproducibility/experimental_3d/** -text

@@ -23,4 +23,6 @@ The manuscript metadata identifies the source and study data by an immutable Git
 | `reproducibility/mesh_study/` | Exact meshes, completed-job diagnostics, response/energy histories, summaries, and source hashes |
 | `REPRODUCE.md` | Exact run commands and limitations |
 
-The 3D panels illustrate damage workflows qualitatively. Quantitative 3D validation is outside the study scope. The 2D study compares three controlled meshes. This evidence is limited to one geometry and mesh family; it does not establish general mesh independence or a runtime advantage over Abaqus.
+The 3D panels illustrate damage workflows qualitatively. A separate nominal-mesh pure-tension test compares the numerical response with digitized experimental data; general 3D mesh independence is unverified. The 2D study compares three controlled meshes. This evidence is limited to one geometry and mesh family; it does not establish general mesh independence or a runtime advantage over Abaqus.
+
+The 3D pure-tension experimental comparison is documented in [experimental_3d/README.md](reproducibility/experimental_3d/README.md); the runner uses local gauge control and strict equilibrium.

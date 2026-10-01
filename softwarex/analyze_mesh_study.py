@@ -145,6 +145,13 @@ def collect(workspace, target, steps, require_abaqus):
         if msg_path.exists():
             paired = summarize(case / ("matlab_oliver_%d/matlab_timing.txt" % steps), msg_path)["abaqus"]
             paired.update(mesh=name, dofs=metadata["dofs"], elements=metadata["elements"])
+            dat = msg_path.with_suffix('.dat').read_text(errors='replace')
+            for label, key in [('USER TIME', 'analysis_user_cpu_s'), ('SYSTEM TIME', 'analysis_system_cpu_s'), ('TOTAL CPU TIME', 'analysis_total_cpu_s')]:
+                matches = re.findall(re.escape(label)+r'\s*\(SEC\)\s*=\s*([0-9.E+\-]+)',dat)
+                if not matches: raise ValueError('Missing Abaqus CPU timer: '+label)
+                paired[key] = float(matches[-1])
+            paired['cpu_timer_scope'] = 'Rounded Abaqus analysis-stage CPU totals from final .dat JOB TIME SUMMARY; not material or assembly timers.'
+
             curve = np.loadtxt(abq / "results/abaqus_load_cmod.csv", delimiter=",", comments="#")
             if curve.ndim != 2 or curve.shape[1] != 2 or not np.all(np.isfinite(curve)) or np.max(curve[:, 1]) <= 0:
                 raise ValueError("Invalid Abaqus response: " + name)

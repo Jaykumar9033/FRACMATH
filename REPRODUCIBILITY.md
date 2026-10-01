@@ -46,10 +46,14 @@ Run `python softwarex/compare_solver_diagnostics.py` from the repository root to
 
 ## Figures and limitations
 
-From `softwarex`, run `python plot_verified_figures.py` to rebuild the 2D load, timing, and damage figures from the preserved data. Run `python rebuild_3d_figures.py` to recompose the archived 3D panels with their single shared color bars. Quantitative 3D validation is outside the study scope. The material-point test checks constitutive calibration, not structural mesh objectivity. The Abaqus timing record does not isolate UMAT and assembly time, so the repository does not claim MATLAB is faster than Abaqus.
+From `softwarex`, run `python plot_verified_figures.py` to rebuild the 2D load, timing, and damage figures from the preserved data. Run `python rebuild_3d_figures.py` to recompose the archived 3D panels with their single shared color bars. A separate nominal-mesh pure-tension test compares the numerical response with digitized experimental data; general 3D mesh independence is unverified. The material-point test checks constitutive calibration, not structural mesh objectivity. The Abaqus timing record does not isolate UMAT and assembly time, so the repository does not claim MATLAB is faster than Abaqus.
 
 Cite the immutable source and data commit specified in the manuscript.
 
 ## Controlled mesh and regularization study
 
 See [`softwarex/MESH_STUDY.md`](softwarex/MESH_STUDY.md) for the exact protocol, licensed-run commands, timing scopes, and limitations. The archived study can be analyzed without MATLAB or Abaqus by running `python softwarex/analyze_mesh_study.py` from the repository root.
+
+## 3D pure-tension experimental comparison
+
+Run `python softwarex/run_nooru_tension.py --workspace C:/runs/nooru_tension` and `python softwarex/analyze_nooru_tension.py --workspace C:/runs/nooru_tension` from the repository root. See `softwarex/reproducibility/experimental_3d/README.md` for the experimental source, digitization uncertainty, local gauge control, material parameters, numerical checks, and validation scope. This is a separate test from the proportional mixed-mode damage images. The existing end-twist example does not supply a valid experimental CMOD measurement.

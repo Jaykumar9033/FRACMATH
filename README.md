@@ -22,7 +22,7 @@ The manuscript identifies the source and study data with an immutable Git commit
 
 The preserved fixed-step MATLAB runs used 1,000 and 10,000 displacement steps. Their peak loads are 4.26464 and 4.02633 kN, respectively. The one-CPU Abaqus run reached 3.99914 kN with 1,136 accepted adaptive increments and 4,817 solver passes. Its 832 s wall time includes more than the 100.2 s summed sparse-solver timer. The distinct step histories and unknown time spent in UMAT, assembly, convergence, and output do not support a speed-ranking claim. These results use one mesh. The controlled study below assesses mesh sensitivity separately.
 
-The material-point test checks tensile/compressive equivalent strain, damage irreversibility, Oliver width, and fracture-energy calibration for widths of 0.5, 1, 2, and 4 mm. The 3D panels illustrate damage workflows with a shared color bar and increment labels; quantitative 3D validation is outside the study scope.
+The material-point test checks tensile/compressive equivalent strain, damage irreversibility, Oliver width, and fracture-energy calibration for widths of 0.5, 1, 2, and 4 mm. The 3D pure-tension case compares a nominal-mesh simulation with digitized Nooru-Mohamed specimen 47-05 data. The mixed-mode and torsion panels illustrate damage workflows with shared color bars; their loading controls differ from the experiments. See [experimental comparison](softwarex/reproducibility/experimental_3d/README.md).
 
 ## Run
 

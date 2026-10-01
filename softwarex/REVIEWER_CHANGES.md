@@ -15,3 +15,13 @@ example use separate protocols. Figure 1 retains only the 10,000-step MATLAB cur
 and Abaqus response. Figures 4 and 5 retain their large shared color bars.
 Figure 6 presents the controlled study. Numerical conclusions are taken from
 `reproducibility/mesh_study/summary.json`, not estimated timings.
+
+## Experimental 3D comparison and Abaqus profiling scope
+
+A nominal-mesh pure-tension test uses published specimen 47-05 data digitized from Nooru-Mohamed's thesis. Four 65 mm local gauges control the simulation; The 600-increment simulation completes. Attempts at 300 and 1,200 increments fail near peak localization; increment convergence is not established. Parameters are retained without fitting. Peak and curve errors, data-reading uncertainty, and boundary idealizations are reported. Mixed-mode and end-twist pictures remain qualitative.
+
+The final Abaqus `.dat` CPU totals accompany the existing elapsed and solver timers. Separate material/assembly timing could not be established: per-call UMAT timers dominate short calls, and Windows denied CPU profiling privileges. The elapsed remainder is not assigned to either phase.
+
+An attempted 1,200-increment run failed equilibrium at increment 55 (relative residual 0.004185). Its incomplete history is excluded. This failure limits claims of load-increment convergence near peak localization.
+
+The 300-increment attempt fails at increment 14 (relative residual 0.01430). Both failed runs are preserved in console logs and excluded from the comparison figure. The default runner reproduces the completed 600-increment case; `--steps 300 1200` reproduces the documented challenges.

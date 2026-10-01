@@ -53,3 +53,7 @@ The material-point test verifies equivalent-strain mapping, irreversibility, and
 ## Controlled mesh and regularization study
 
 See [`MESH_STUDY.md`](MESH_STUDY.md) for the exact protocol, licensed-run commands, timing scopes, and limitations. The archived study can be analyzed without MATLAB or Abaqus by running `python softwarex/analyze_mesh_study.py` from the repository root.
+
+## 3D pure-tension experimental comparison
+
+Run `python softwarex/run_nooru_tension.py --workspace C:/runs/nooru_tension` and `python softwarex/analyze_nooru_tension.py --workspace C:/runs/nooru_tension` from the repository root. See `softwarex/reproducibility/experimental_3d/README.md` for the experimental source, digitization uncertainty, local gauge control, material parameters, numerical checks, and validation scope. This is a separate test from the proportional mixed-mode damage images. The existing end-twist example does not supply a valid experimental CMOD measurement.

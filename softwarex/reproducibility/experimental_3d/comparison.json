@@ -1,0 +1,30 @@
+{
+  "experimental_peak_N": 19852.9412,
+  "runs": [
+    {
+      "steps": 600,
+      "peak_N": 18175.5223892807,
+      "peak_gauge_mm": 0.009,
+      "peak_error_percent": -8.449220666201839,
+      "curve_NRMSE_percent_of_experimental_peak": 8.107013888673364,
+      "max_equilibrium_residual": 9.92742155479534e-07,
+      "max_gauge_constraint_error_mm": 1.2984405217686401e-15
+    }
+  ],
+  "peak_increment_sensitivity_percent": null,
+  "rejected_runs": [
+    {
+      "steps": 300,
+      "failed_increment": 14,
+      "relative_residual": 0.0143,
+      "excluded": true
+    },
+    {
+      "steps": 1200,
+      "failed_increment": 55,
+      "relative_residual": 0.004185,
+      "excluded": true
+    }
+  ],
+  "scope": "One nominal mesh; existing material parameters without fitting; idealized two-platen pure tension. Not a torsion or mixed-mode validation."
+}
