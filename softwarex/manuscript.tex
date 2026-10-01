@@ -353,7 +353,9 @@ i9-13900 CPU and 64~GB RAM. Timing scopes
 around stiffness assembly, free-block factorization, damage update,
 and triangular solves are recorded separately in
 Table~\ref{tab:timing} and Figure~\ref{fig:timing}. Factorization
-is the largest measured component at this problem size. A cross-solver
+is the largest measured MATLAB component at this problem size. The
+Abaqus sparse-solver time and the unallocated remainder are reported
+separately in Table~\ref{tab:abaqus-timing}. A cross-solver
 speed comparison requires matched increments, convergence quality,
 solver settings, and timing boundaries.
 
@@ -377,10 +379,30 @@ Total & 785.70 & 100\% \\
 \end{tabular}
 \end{table}
 
+\begin{table}[!htbp]
+\centering
+\caption{Abaqus/Standard elapsed time extracted from the corrected job's
+\texttt{.msg}. The remaining time cannot be partitioned into UMAT,
+assembly, convergence, output, or overhead using this record.}
+\label{tab:abaqus-timing}
+\begin{tabular}{lrr}
+\toprule
+Component & Time (s) & Share \\
+\midrule
+Summed sparse-solver passes (4{,}817) & 100.15 & 12.0\% \\
+Remaining wall time (unallocated) & 731.85 & 88.0\% \\
+\midrule
+Total Abaqus wall clock & 832.00 & 100\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.75\linewidth]{timing_verified.png}
-\caption{Measured MATLAB time by instrumented component.}
+\includegraphics[width=0.98\linewidth]{timing_verified.png}
+\caption{Measured timing components from the archived MATLAB run and
+Abaqus \texttt{.msg}. The remainder of the Abaqus wall time is unallocated;
+the plots do not establish a cross-code speed ranking.}
 \label{fig:timing}
 \end{figure}
 

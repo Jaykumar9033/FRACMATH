@@ -2,6 +2,7 @@
 
 from pathlib import Path
 import csv
+import json
 
 import matplotlib
 matplotlib.use("Agg")
@@ -136,21 +137,31 @@ def damage_figure(d):
 
 
 def timing_figure():
-    import re
-    s = TIMING.read_text()
-    labels = ["assembly", "factorization", "damage", "solve"]
-    vals = [float(re.search(r"^  " + x + r":\s+([0-9.]+) s", s, re.M).group(1)) for x in labels]
-    total = float(re.search(r"Solver wall-clock:\s+([0-9.]+)", s).group(1))
-    labels.append("other")
-    vals.append(max(0, total - sum(vals)))
-    fig, ax = plt.subplots(figsize=(6.8, 3.4))
-    bars = ax.barh(labels[::-1], vals[::-1], color=["#aeb9c3", "#6387a4", "#d79b70", ORANGE, BLUE][::-1])
-    for bar, v in zip(bars, vals[::-1]):
-        ax.text(v + total*.012, bar.get_y()+bar.get_height()/2,
-                f"{v:.1f} s ({100*v/total:.1f}%)", va="center", fontsize=9)
-    ax.set_xlim(0, max(vals)*1.28)
-    ax.set_xlabel("wall clock (s)")
-    ax.set_title("MATLAB 3PB, 10,000 steps, corrected code", loc="left")
+    diagnostics = json.loads((HERE / "reproducibility/solver_diagnostics.json").read_text())
+    matlab = diagnostics["matlab"]
+    abaqus = diagnostics["abaqus"]
+    fig, axes = plt.subplots(1, 2, figsize=(10.4, 3.5), layout="constrained")
+    def panel(ax, names, values, colors, total, title):
+        bars = ax.barh(names[::-1], values[::-1], color=colors[::-1])
+        for bar, value in zip(bars, values[::-1]):
+            ax.text(value + total*.015, bar.get_y() + bar.get_height()/2,
+                    f"{value:.1f} s ({100*value/total:.1f}%)", va="center", fontsize=8)
+        ax.set_xlim(0, total*.96)
+        ax.set_xlabel("elapsed seconds")
+        ax.set_title(title, loc="left", fontsize=10)
+    m = matlab["component_s"]
+    panel(axes[0], ["assembly", "factorization", "damage", "solve", "other"],
+          [m[k] for k in ("assembly", "factorization", "damage", "solve")] +
+          [matlab["unattributed_s"]],
+          [BLUE, ORANGE, "#d79b70", "#6387a4", "#aeb9c3"],
+          matlab["wall_s"], "MATLAB: 10,000 fixed steps")
+    panel(axes[1], ["sparse solver", "remaining wall time*"],
+          [abaqus["summed_solver_elapsed_s"], abaqus["remaining_wall_s"]],
+          [BLUE, "#aeb9c3"], abaqus["wall_s"],
+          "Abaqus: 1,136 accepted increments")
+    fig.text(.5, -.035,
+             "*Abaqus remaining time combines UMAT, assembly, convergence, output, and overhead; it is not a UMAT measurement.",
+             ha="center", fontsize=8)
     save(fig, "timing_verified.png")
 
 
