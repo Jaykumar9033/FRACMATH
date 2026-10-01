@@ -27,7 +27,11 @@ matlab -batch "solver_main_3pb"
 
 The solver writes `Gregoire_3PB/results`. The two archived histories in `reproducibility/results_1000` and `reproducibility/results_10000` preserve both runs because running the script again overwrites `results`. The material-point self-test writes `material_energy.csv` with columns `bandwidth_mm, recovered_GF_N_per_mm, relative_error, final_damage`.
 
+New runs also write `matlab_step_diagnostics.csv` with per-step component timings, iteration count, old-damage convergence, and post-damage residual. Set `FRACMATH_CASE_DIR` to a separate mesh folder to avoid overwriting the preserved histories. The preserved 10,000-step run predates this per-step export.
+
 To regenerate the revised 2D figures from the preserved 10,000-step MATLAB state and Abaqus CSV, run `python plot_verified_figures.py` from the package root after installing NumPy, SciPy, and Matplotlib. The 1,000-step MATLAB history is retained for the increment-sensitivity check in the text but is not plotted in the MATLAB--Abaqus comparison. Figures 4 and 5 use archived earlier source image panels, recomposed with one enlarged color bar per damage sequence and larger increment labels. Run `python rebuild_3d_figures.py` from the package root to rebuild those layouts from `figure_sources`. The underlying 3D numerical cases were not rerun in this revision.
+
+Run `python compare_solver_diagnostics.py` from this package folder to rebuild `reproducibility/solver_diagnostics.json`. Abaqus `.msg` records solver passes and their elapsed times, but it cannot separate UMAT from assembly and other remaining costs. The different increment histories do not justify a speed ranking.
 
 ## Abaqus check
 

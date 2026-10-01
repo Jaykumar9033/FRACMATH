@@ -25,7 +25,8 @@ fprintf('==== MATLAB CDM 3PB solver: vectorized sequential secant update ====\n'
 maxNumCompThreads(1);   % match Abaqus cpus=1 (remove for multicore compare)
 
 % --- where the .txt files are ------------------------------------------
-case_dir = 'Gregoire_3PB';
+case_dir = getenv('FRACMATH_CASE_DIR');
+if isempty(case_dir); case_dir = 'Gregoire_3PB'; end
 if ~exist(case_dir, 'dir')
     error('Folder %s not found. Run export_3pb first to generate mesh files.', ...
           case_dir);
@@ -113,6 +114,12 @@ Hmean = zeros(p.num_steps, 1);
 Hmin  = zeros(p.num_steps, 1);
 Hmax  = zeros(p.num_steps, 1);
 RelRes = zeros(p.num_steps, 1);
+StepIterations = zeros(p.num_steps, 1);
+StepConverged = false(p.num_steps, 1);
+StepAssembly = zeros(p.num_steps, 1);
+StepFactor = zeros(p.num_steps, 1);
+StepDamage = zeros(p.num_steps, 1);
+StepSolve = zeros(p.num_steps, 1);
 steps_done = 0;
 
 % Cache K after each damage update. This avoids assembling the same damaged
@@ -131,6 +138,8 @@ wall0 = tic;
 fprintf('  step    u(mm)   load(kN)    CMOD(mm)   dmax    iter\n');
 
 for step = 1:p.num_steps
+    asm_before = t_asm; factor_before = t_factor;
+    damage_before = t_dam; solve_before = t_solve;
     u_tgt = step * (p.max_disp / p.num_steps);
     u(dof.prescribed) = u_tgt;
 
@@ -152,6 +161,7 @@ for step = 1:p.num_steps
     t_factor = t_factor + toc(t0);
 
     r = zeros(2*nN, 1);
+    converged = false;
     for it = 1:p.max_iter
         tic;
         r = K * u;
@@ -161,6 +171,7 @@ for step = 1:p.num_steps
         end
         if norm(r_free) / nrm0 < p.tol
             t_solve = t_solve + toc;
+            converged = true;
             break;
         end
         du = -(Kfac \ r_free);
@@ -181,6 +192,12 @@ for step = 1:p.num_steps
     r_react = K_next * u;
     t_asm = t_asm + toc;
     RelRes(step) = norm(r_react(dof.free)) / max(norm(r_react(dof.prescribed)), 1);
+    StepIterations(step) = it;
+    StepConverged(step) = converged;
+    StepAssembly(step) = t_asm - asm_before;
+    StepFactor(step) = t_factor - factor_before;
+    StepDamage(step) = t_dam - damage_before;
+    StepSolve(step) = t_solve - solve_before;
 
     F_now = -sum(r_react(dof.prescribed));
     C_now = max(0, mean(u(2*dof.cmod2-1)) - mean(u(2*dof.cmod1-1)));
@@ -242,6 +259,12 @@ Hmean = Hmean(1:steps_done).';
 Hmin  = Hmin(1:steps_done).';
 Hmax  = Hmax(1:steps_done).';
 RelRes = RelRes(1:steps_done).';
+StepIterations = StepIterations(1:steps_done).';
+StepConverged = StepConverged(1:steps_done).';
+StepAssembly = StepAssembly(1:steps_done).';
+StepFactor = StepFactor(1:steps_done).';
+StepDamage = StepDamage(1:steps_done).';
+StepSolve = StepSolve(1:steps_done).';
 
 % Close the video writer (NOT timed: happens after the clock is stopped)
 if do_visualization
@@ -280,6 +303,16 @@ fprintf(fid, '%d, %.6e, %.6e, %.6e\n', [(1:numel(Hmean)).', Hmean(:), Hmin(:), H
 fclose(fid);
 fprintf('  wrote %s\n', hcsv_path);
 
+% Inspectable per-step evidence for solver cost and post-damage imbalance.
+diag_path = fullfile(res_dir, 'matlab_step_diagnostics.csv');
+fid = fopen(diag_path, 'w');
+fprintf(fid, 'step,iterations,old_damage_converged,post_damage_relative_residual,assembly_s,factorization_s,damage_s,solve_s\n');
+fprintf(fid, '%d,%d,%d,%.9e,%.9e,%.9e,%.9e,%.9e\n', ...
+    [(1:steps_done).', StepIterations(:), double(StepConverged(:)), ...
+     RelRes(:), StepAssembly(:), StepFactor(:), StepDamage(:), StepSolve(:)].');
+fclose(fid);
+fprintf('  wrote %s\n', diag_path);
+
 t_path = fullfile(res_dir, 'matlab_timing.txt');
 fid = fopen(t_path, 'w');
 fprintf(fid, 'MATLAB 3PB solver\n');
@@ -295,6 +328,7 @@ fprintf(fid, '  solve:      %.2f s  (%.1f%%)\n', t_solve, 100*t_solve/t_solver);
 fprintf(fid, 'Peak RAM:     %.1f MB\n',   peak_ram_MB);
 fprintf(fid, 'Mesh:         %d CPS3, %d DOFs\n', nE, 2*nN);
 fprintf(fid, 'Load steps:   %d\n',        numel(F));
+fprintf(fid, 'Old-damage steps converged: %d / %d\n', sum(StepConverged), steps_done);
 fprintf(fid, 'Peak free-DOF residual / reaction: %.6e\n', RelRes(ip));
 fprintf(fid, 'Maximum free-DOF residual / reaction: %.6e\n', max(RelRes));
 if ~isempty(Hmean)

@@ -27,6 +27,8 @@ matlab -batch "solver_main_3pb"
 
 Each structural run writes `3pb/matlab/Gregoire_3PB/results` and overwrites the previous history. Preserved 1,000- and 10,000-step outputs are in `softwarex/reproducibility/results_1000` and `softwarex/reproducibility/results_10000`. The current `3pb/matlab/Gregoire_3PB/results` CSVs are the corrected 10,000-step run. `FRACMATH_SELFTEST=1` writes `material_energy.csv` in the working folder.
 
+Set `FRACMATH_CASE_DIR` to an absolute path containing the same mesh input files to write a new run outside the preserved case. New runs produce `matlab_step_diagnostics.csv` with iteration counts, old-damage convergence flags, post-damage relative residuals, and the four timed solver components. See [`doc/implementation_walkthrough.md`](doc/implementation_walkthrough.md) for the load-step algorithm and its limitations.
+
 ## Abaqus check
 
 From `3pb/abaqus`:
@@ -39,6 +41,8 @@ abaqus cae noGUI=run_3pb_abaqus_OLIVER_T3_FAST.py
 ```
 
 The builder writes `oliver_t3_gradN.dat`; the UMAT reads it by element label. Check the new `.sta`, `.msg`, and extracted CSV before comparing runs. Abaqus may cut back increments, so `ABQ_N_INC=1000` does not enforce a fixed 1,000-increment history. The preserved corrected Abaqus CSV, damage fields, and diagnostics are in `softwarex/reproducibility/abaqus/Gregoire_3PB`.
+
+Run `python softwarex/compare_solver_diagnostics.py` from the repository root to produce `softwarex/reproducibility/solver_diagnostics.json` from the preserved MATLAB timer and Abaqus `.msg`. The remaining Abaqus wall time cannot be assigned solely to UMAT or stiffness assembly.
 
 ## Figures and limitations
 

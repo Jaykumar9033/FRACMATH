@@ -12,6 +12,7 @@ FRACMATH is a vectorized MATLAB finite-element implementation of scalar continuu
 | Reproduction instructions | [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md) | Commands, environment, checks, and numerical limitations |
 | 3D examples | [`Noor mohammad/`](https://github.com/Jaykumar9033/FRACMATH/tree/main/Noor%20mohammad), [`Torsion/`](https://github.com/Jaykumar9033/FRACMATH/tree/main/Torsion) | Archived qualitative examples; not rerun for this revision |
 | Theory manual | [`doc/theory_manual.tex`](doc/theory_manual.tex) | Equations and corrected solver explanation; PDF pending recompilation |
+| Implementation walkthrough | [`doc/implementation_walkthrough.md`](doc/implementation_walkthrough.md) | Load-step pseudocode, profiling fields, convergence limit, and larger-mesh protocol |
 
 The 2D invariant implementation was corrected to
 `J2 = ((e1-e2)^2 + (e2-e3)^2 + (e3-e1)^2)/6` in both MATLAB and the Abaqus UMAT. The previous public [`v1.0.0`](https://github.com/Jaykumar9033/FRACMATH/tree/v1.0.0) tag and [Zenodo record](https://doi.org/10.5281/zenodo.21297071) document the earlier pre-SoftwareX version and **do not reproduce the current SoftwareX 2D figures**. A new versioned SoftwareX release and DOI have not yet been published.
@@ -29,6 +30,8 @@ Use MATLAB R2024b or a compatible release for the 2D script. From `3pb/matlab`, 
 From `3pb/abaqus`, run `abaqus cae noGUI=run_3pb_abaqus_OLIVER_T3_FAST.py` with Abaqus/Standard 2024 and a configured Intel Fortran compiler. Set `ABQ_CPUS=1`: the current UMAT table reader has not been made thread-safe for multiple Abaqus workers.
 
 From `softwarex`, run `python plot_verified_figures.py` to regenerate the 2D manuscript figures from the preserved result files. Run `python rebuild_3d_figures.py` to recompose the archived 3D panels with shared color bars. Install Python dependencies with `python -m pip install -r requirements.txt` from the repository root. See the [full guide](REPRODUCIBILITY.md) for commands and expected outputs.
+
+From the repository root, run `python softwarex/compare_solver_diagnostics.py` for an inspectable MATLAB/Abaqus timing breakdown. New MATLAB runs also write `matlab_step_diagnostics.csv`, including per-step costs and the post-damage residual. The preserved 10,000-step run predates this per-step export; its aggregate timer is retained unchanged.
 
 ## Citation and license
 
