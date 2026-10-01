@@ -88,8 +88,9 @@ Material-point tests check strain mapping, irreversible damage, unloading,
 and fracture-energy calibration. A controlled three-mesh bending study
 compares regularized and fixed softening laws, measures partial structural
 dissipation, and checks load-increment sensitivity. Single-CPU Abaqus jobs
-provide response and diagnostic timing comparisons. Three-dimensional
-examples illustrate damage localization. Source code, response histories,
+provide response and diagnostic timing comparisons. A three-dimensional
+pure-tension case is compared with a digitized experimental curve;
+mixed-mode and torsion examples illustrate damage localization. Source code, response histories,
 energy diagnostics, and plotting scripts accompany the manuscript;
 algorithmic and validation limitations are stated.
 \end{abstract}
@@ -119,9 +120,9 @@ element method \sep MATLAB \sep Abaqus UMAT \sep quasibrittle fracture
 \toprule
 \textbf{Nr.} & \textbf{Code metadata description} & \textbf{Value} \\
 \midrule
-C1 & Current code version & SoftwareX study, commit 98ad87d \\
+C1 & Current code version & SoftwareX study, commit 8506d3a \\
 C2 & Permanent GitHub link to code/repository used for this code version &
-Source and study data: \href{https://github.com/Jaykumar9033/FRACMATH/tree/98ad87db1ddb444fa73c0c0ab818202328b09198}{immutable GitHub commit}. \\
+Source and study data: \href{https://github.com/Jaykumar9033/FRACMATH/tree/8506d3a84811e526d8cbf1d212ab88532da2aa33}{immutable GitHub commit}. \\
 C3 & Legal Code License & MIT License \\
 C4 & Code versioning system used & git \\
 C5 & Software code languages, tools, and services used & MATLAB; Fortran UMAT; Abaqus/Standard; Python analysis scripts \\
@@ -391,15 +392,15 @@ the plots do not establish a cross-code speed ranking.}
 \end{figure}
 
 % =====================================================================
-\subsection*{Benchmark 2: 3D Nooru-Mohamed Mixed Mode Test}
+\subsection*{Benchmark 2: 3D Nooru-Mohamed Tests}
 % =====================================================================
 
 The Nooru-Mohamed specimen is a square double edge notched concrete
 panel, $200 \times 200 \times 50$~mm, with two horizontal notches 25~mm
 long cut from opposite edges at mid height \citep{nooru1992}; the
 central ligament between the notch tips experiences a mixed
-mode stress state. We follow load path 4c: a vertical (mode I)
-displacement is prescribed on the top edge and a proportional horizontal
+mode stress state. The illustrative proportional-displacement case prescribes a vertical (mode I)
+displacement on the top edge and a proportional horizontal
 (shear) displacement on the side edges, with a shear to tension ratio
 $\gamma = 0.6$ and the bottom edge held fixed, ramped together under
 displacement control over 900 increments to a top displacement of
@@ -407,24 +408,51 @@ displacement control over 900 increments to a top displacement of
 $f_t = 3.0$~MPa, $G_F = 0.110$~N/mm, and $k = f_c/f_t = 10$ (so
 $f_c = 30$~MPa).
 
-The 3D panels illustrate the damage workflow qualitatively; quantitative
-validation of this case is outside the scope of this study.
+The proportional-loading damage panels illustrate the workflow. A separate
+pure-tension comparison uses specimen 47-05 with two glued platens
+(Figure 3.16, printed page 45 of \citep{nooru1992}). Its load--displacement
+curve is manually digitized; estimated reading uncertainty is
+$\pm 0.00102$~mm and $\pm 164$~N. The nominal mesh has 3,933 nodes and
+18,927 TET4 elements. Existing material parameters above are retained
+without fitting. Bottom vertical displacements are fixed, the top platen
+has a common unknown vertical displacement, and minimal lateral pins
+remove rigid modes. The mean displacement of four interpolated 65~mm
+vertical gauges at $x=30/170$~mm on both faces controls the load history.
+An augmented Newton system solves this constraint with nodal equilibrium;
+a numerical constitutive tangent differentiates the same damage and
+projected-width update. The relative equilibrium tolerance is $10^{-6}$;
+unconverged increments are rejected.
+% EXPERIMENTAL_METRICS_BEGIN
+With 600 increments to a mean gauge displacement of 0.2~mm, the peak
+is 18.18~kN at 0.0090~mm, versus digitized estimates of 19.85~kN at
+0.00659~mm: the peak-load error is $-8.45\%$. The RMS curve error on
+1,001 uniformly spaced points over 0--0.2~mm is 8.11\% of experimental
+peak load. The late softening tail is underpredicted. All accepted
+increments meet the equilibrium tolerance, with a maximum relative
+residual of $9.93\times10^{-7}$. A 1,200-increment attempt fails equilibrium
+at increment 55 (residual $4.19\times10^{-3}$); a 300-increment attempt
+also fails at increment 14 (residual $1.43\times10^{-2}$). Both are excluded. Thus this
+single nominal-mesh comparison provides quantitative experimental
+error measures, but does not establish increment convergence or general
+3D validation. Experimental notch scatter, idealized platens, and
+curve-digitization uncertainty also limit the comparison.
+% EXPERIMENTAL_METRICS_END
 
 \begin{figure}[p]
   \centering
 
   \makebox[\linewidth][c]{%
-  \begin{subfigure}{0.44\linewidth}
+  \begin{subfigure}{0.35\linewidth}
     \centering
     \includegraphics[width=\linewidth]{nooru_BC_2D.png}
     \caption{2D boundary conditions.}
     \label{fig:b2-nooru-bc-2d}
   \end{subfigure}
   \hspace{0.02\linewidth}
-  \begin{subfigure}{0.44\linewidth}
+  \begin{subfigure}{0.62\linewidth}
     \centering
-    \includegraphics[width=\linewidth]{nooru_mesh_3D.png}
-    \caption{3D mesh.}
+    \includegraphics[width=\linewidth]{nooru_tension_comparison.pdf}
+    \caption{Separate pure-tension comparison.}
     \label{fig:b2-nooru-mesh-3d}
   \end{subfigure}}
 
@@ -439,8 +467,9 @@ validation of this case is outside the scope of this study.
     \label{fig:b2-nooru-damage}
   \end{subfigure}
 
-  \caption{Nooru-Mohamed benchmark: boundary conditions, 3D mesh, and
-    damage evolution $\omega$ over the imposed loading history.}
+  \caption{Nooru-Mohamed cases: proportional-loading boundary conditions
+    and damage panels; the load curve compares a separate pure-tension
+    simulation with digitized specimen 47-05 data. The controls differ.}
   \label{fig:b2-overview}
 \end{figure}
 
@@ -453,7 +482,7 @@ validation of this case is outside the scope of this study.
 \centering
 \begin{subfigure}{0.50\linewidth}
 \includegraphics[width=\linewidth]{torsion.png}
-\caption{Specimen geometry.}
+\caption{Published collar loading arrangement; the illustrative model imposes an end-face twist.}
 \label{fig:b3-setup}
 \end{subfigure}
 \begin{subfigure}{0.98\linewidth}
@@ -465,16 +494,14 @@ validation against a measured torque curve is outside this study.}
 \label{fig:b3-overview}
 \end{figure}
 
-Brokenshire's torsion test \citep{brokenshire1996,jefferson_torsion}
-uses a $400 \times 250 \times 100$~mm plain concrete beam with a
-diagonal notch cut through the thickness (depth 25~mm, width 5~mm)
-across the bottom face at midspan. Three supports sit at the bottom
-corners and one end of the top edge, and a single point load acts on the
-remaining top corner (Figure~\ref{fig:b3-setup}), so the beam is
-twisted and the plane of maximum principal tension turns in space around
-the notch front, lining up with no face of the mesh. The projected length is recomputed from the local principal direction
-at each integration point. This example illustrates a nonplanar damage
-path; its orientation and energy convergence require a mesh study.
+The torsion illustration uses a $400\times100\times100$~mm beam.
+The published Brokenshire test uses steel collars with three supported
+arms and one loaded arm \citep{brokenshire1996,jefferson_torsion,jefferson2005}.
+Its measured response is applied load versus clip-gauge CMOD.
+The rotation-controlled model illustrated here uses different end constraints;
+a load--CMOD validation therefore requires a model of the collar and gauge
+configuration. The projected width follows the local principal direction,
+producing a nonplanar damage path whose mesh convergence is unverified.
 
 In the model one end face is fully fixed while the opposite end face is
 given a prescribed rigid-body twist $\theta$ about the beam axis under
@@ -483,7 +510,7 @@ $\theta_{\mathrm{end}} = 3.0\times10^{-3}$~rad over 140 increments; the
 reaction torque is recovered from the twisted end.
 
 The material is plain concrete with $E = 35{,}000$~MPa, $\nu = 0.20$,
-$f_t = 3.0$~MPa, $G_F = 0.080$~N/mm, $\kappa_0 = 6.0\times10^{-5}$, and
+$f_t = 3.0$~MPa, $G_F = 0.080$~N/mm, $\kappa_0=f_t/E=8.57\times10^{-5}$, and
 $k = f_c/f_t = 10$ (so $f_c = 30$~MPa), with the same exponential
 softening scaled element by element through the crack band length.
 
@@ -498,9 +525,8 @@ crack-band regularization under nonplanar, torsion-driven crack growth:
 the predicted damage band nucleates at the notch front and spirals
 toward the loaded corner (Figure~\ref{fig:b3-overview}),
 qualitatively similar to the published fracture description
-\citep{brokenshire1996}. A quantitative comparison against the measured
-load--crack-opening response is left for the planned nonlocal extension
-of the framework.
+\citep{brokenshire1996}. The available torsion history does not provide a valid experimental
+CMOD channel; it supports the qualitative damage illustration only.
 
 
 
@@ -612,6 +638,7 @@ DOFs & MATLAB & Assembly & Factor. & Abaqus & Sparse & Incr. & Passes \\
 MATLAB peak loads differ from the corresponding Abaqus peaks by +1.87\%, +2.88\%, +2.78\%, respectively, relative to Abaqus.
 The completed Abaqus jobs report coarse: 2 cutbacks and 5,152 decompositions, medium: 0 cutbacks and 6,153 decompositions, fine: 0 cutbacks and 7,502 decompositions.
 Alternate force-tolerance acceptances are 4, 3, 5, respectively.
+The rounded analysis CPU totals from the final \texttt{.dat} summaries are 531~s, 1100~s, 2550~s, respectively. CPU and elapsed timers have different scopes; these totals do not isolate material or assembly work.
 Their wall time outside the sparse-solver timer is 794.2~s, 1585.6~s, 3979.7~s, respectively.
 It includes unseparated element/UMAT, assembly, convergence, output,
 and overhead; no material-time attribution is inferred.
@@ -654,7 +681,9 @@ loading. A single damage scalar does not represent crack closure or
 anisotropic degradation. The material-point tests verify softening calibration. The controlled
 2D family tests mesh sensitivity for one geometry and mesh construction;
 it does not establish general mesh or orientation independence.
-The 3D examples remain qualitatively assessed. The 2D
+The 3D pure-tension comparison uses one nominal mesh and idealized platens;
+3D mesh independence remains untested. Mixed-mode and torsion images
+remain qualitative. The 2D
 sequential update leaves a nonzero post-damage equilibrium residual;
 the archived increment study and new refinement checks quantify its
 effect. A fully coupled outer equilibrium iteration is future work. The current Abaqus UMAT
@@ -669,8 +698,10 @@ scaling remain unverified; no GPU performance claim is made.
 \texttt{FRACMATH} is an inspectable MATLAB example of local damage
 with an Oliver projected crack-band width. The study presents constitutive checks, controlled 2D mesh and increment studies,
 structural energy diagnostics, and timing scopes that separate sparse
-factorization from assembly. The manuscript reports the solver's present limitations and retains the 3D examples
-as qualitative demonstrations.
+factorization from assembly in MATLAB. A nominal-mesh 3D pure-tension
+comparison provides experimental error measures without fitting material
+parameters. The mixed-mode and torsion cases remain qualitative, and
+separate Abaqus material/assembly costs remain unmeasured.
 
 % =====================================================================
 \section*{Data availability}
@@ -744,6 +775,11 @@ D.~R. Brokenshire, A study of torsion fracture tests, Ph.D. thesis, Cardiff Univ
 
 \bibitem{jefferson_torsion}
 A.~D. Jefferson, B.~I.~G. Barr, T. Bennett, S.~C. Hee, Three dimensional finite element simulations of fracture tests using the Craft concrete model, \emph{Computers and Concrete} 1~(3) (2004) 261--284. doi:10.12989/cac.2004.1.3.261.
+
+\bibitem{jefferson2005}
+A.~D. Jefferson, T. Bennett, Benchmark problems for assessing a combined
+micro-mechanical continuum based model for concrete, COMPLAS VIII,
+Barcelona, 2005. URL: \url{https://congress.cimne.com/complas05/admin/Files/FilePaper/p334.pdf}.
 
 \end{thebibliography}
 
