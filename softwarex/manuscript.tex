@@ -80,24 +80,21 @@ mechanics with crack band regularization}
 University of New Mexico, Albuquerque, NM, USA}
 
 \begin{abstract}
-\texttt{FRACMATH} is a vectorized MATLAB reference implementation of local
-isotropic damage with direction-dependent crack-band regularization.
-Its contribution is an inspectable workflow linking mesh import, projected
-width, constitutive history, sparse assembly, and solution.
-Material-point tests check strain mapping, irreversible damage, unloading,
-and fracture-energy calibration. A controlled three-mesh bending study
-compares regularized and fixed softening laws, measures partial structural
-dissipation, and checks load-increment sensitivity. Single-CPU Abaqus jobs
-provide response and diagnostic timing comparisons. A three-dimensional
-pure-tension case is compared with a digitized experimental curve;
-mixed-mode and torsion examples illustrate damage localization. Source code, response histories,
-energy diagnostics, and plotting scripts accompany the manuscript;
-algorithmic and validation limitations are stated.
+FRACMATH is an inspectable, vectorized MATLAB implementation of isotropic
+damage with direction-dependent crack-band regularization. Its code links
+projected width, constitutive history, sparse assembly and solution.
+Material-point tests verify strain mapping, irreversible damage and
+fracture-energy calibration. Mesh/increment studies compare regularized
+and fixed softening laws. Thirty matched size/mesh/computing runs assess
+MATLAB CPU, hybrid GPU and Abaqus SMP configurations. The hybrid GPU shows
+no speed advantage on the tested workstation. A nominal-mesh
+three-dimensional pure-tension comparison supplies experimental error
+measures; mixed-mode and torsion images illustrate workflows. Source,
+histories, diagnostics and reproduction scripts accompany the paper.
 \end{abstract}
 
 \begin{keyword}
-continuum damage mechanics \sep crack-band regularization \sep finite
-element method \sep MATLAB \sep Abaqus UMAT \sep quasibrittle fracture
+continuum damage mechanics \sep crack-band regularization \sep MATLAB \sep hybrid GPU \sep Abaqus UMAT \sep quasibrittle fracture
 \end{keyword}
 
 \end{frontmatter}
@@ -120,14 +117,14 @@ element method \sep MATLAB \sep Abaqus UMAT \sep quasibrittle fracture
 \toprule
 \textbf{Nr.} & \textbf{Code metadata description} & \textbf{Value} \\
 \midrule
-C1 & Current code version & SoftwareX study, commit 8506d3a \\
+C1 & Current code version & SoftwareX study, commit abf6f49 \\
 C2 & Permanent GitHub link to code/repository used for this code version &
-Source and study data: \href{https://github.com/Jaykumar9033/FRACMATH/tree/8506d3a84811e526d8cbf1d212ab88532da2aa33}{immutable GitHub commit}. \\
+Source and study data: \href{https://github.com/Jaykumar9033/FRACMATH/tree/abf6f49610ef046dd8493739a333716f63b79d05}{immutable GitHub commit}. \\
 C3 & Legal Code License & MIT License \\
 C4 & Code versioning system used & git \\
 C5 & Software code languages, tools, and services used & MATLAB; Fortran UMAT; Abaqus/Standard; Python analysis scripts \\
 C6 & Compilation requirements, operating environments \& dependencies &
-MATLAB R2024b; Abaqus/Standard 2024 with Intel Fortran; Python 3 with NumPy, SciPy, Matplotlib, Pillow, and psutil. Verified on Windows 11. \\
+MATLAB R2024b; Abaqus/Standard 2024 with Intel Fortran; Python 3 with NumPy, SciPy, Matplotlib, Pillow, and psutil; Parallel Computing Toolbox and a compatible CUDA GPU for the optional hybrid backend. Verified on Windows 11. \\
 C7 & If available Link to developer documentation/manual & Repository README, implementation walkthrough, and reproduction guides \\
 C8 & Support email for questions & \href{mailto:mpathirage@unm.edu}{mpathirage@unm.edu} \\
 \bottomrule
@@ -157,8 +154,7 @@ OOFEM \citep{oofem} provide broader element and analysis capabilities.
 CALFEM \citep{calfem} provides an accessible MATLAB finite element teaching
 environment. \texttt{FRACMATH} offers a narrower, code-readable example of
 direction-dependent local crack-band damage in 2D and 3D. It is designed
-for teaching, replication, and testing method changes, not as a claim of
-faster or more accurate performance than those systems.
+for teaching, replication, and testing method changes.
 
 % =====================================================================
 \section*{Software description}
@@ -218,8 +214,15 @@ Eq.~\eqref{eq:oliver-t3}; it does not use \texttt{CELENT} when the table
 is present. The UMAT supplies the degraded elastic secant matrix as
 \texttt{DDSDDE}, rather than a consistent derivative of the evolving
 damage law. Its approximate tangent requires reporting equilibrium
-iteration counts with timings. Table initialization currently requires
-one Abaqus analysis thread.
+iteration counts with timings. \texttt{UEXTERNALDB} initializes the
+gradient table before SMP workers start; material calls read its saved
+arrays, and missing gradients terminate the job.
+
+The optional 2D hybrid GPU backend keeps strain operators and reference
+element matrices on the device. A fused \texttt{gpuArray.arrayfun} kernel
+evaluates projected width, equivalent strain, and irreversible history.
+Results and stiffness values return to CPU sparse assembly and factorization.
+Timed operations include transfers and synchronization.
 
 \subsection*{Material-point verification}
 
@@ -308,8 +311,8 @@ Thus no attribution of the remainder to the UMAT or speed ranking
 between codes is supported. The MATLAB run used 10{,}000 fixed
 increments, while Abaqus used automatic increments, so the two
 wall-clock totals are not a controlled benchmark.
-The repository now includes a parser that reproduces these counts and
-timings from the archived \texttt{.msg} and MATLAB timing file. New MATLAB
+The repository includes a parser that reproduces these counts and
+timings from the archived \texttt{.msg} and MATLAB timing file. MATLAB
 runs export per-step component timings, iteration counts, and the
 post-damage equilibrium residual. The implementation walkthrough maps
 these measurements to the corresponding solver functions. The preserved
@@ -332,17 +335,12 @@ frames to the indicated response points.}
 \label{fig:b1-damage}
 \end{figure}
 
-The 10{,}000-step run used MATLAB R2024b, one computational thread,
-and headless output on a Windows 11 workstation with an Intel Core
-i9-13900 CPU and 64~GB RAM. Timing scopes
-around stiffness assembly, free-block factorization, damage update,
-and triangular solves are recorded separately in
-Table~\ref{tab:timing} and Figure~\ref{fig:timing}. Factorization
-is the largest measured MATLAB component at this problem size. The
-Abaqus sparse-solver time and the unallocated remainder are reported
-separately in Table~\ref{tab:abaqus-timing}. A cross-solver
-speed comparison requires matched increments, convergence quality,
-solver settings, and timing boundaries.
+The 10{,}000-step headless run used MATLAB R2024b, one computational
+thread, Windows 11, an Intel Core i9-13900 and 64~GB RAM.
+Tables~\ref{tab:timing}--\ref{tab:abaqus-timing} distinguish MATLAB
+assembly, factorization, damage and solves from Abaqus sparse-solver
+passes and unallocated elapsed time. Different algorithms, convergence
+quality and timing scopes qualify cross-program comparisons.
 
 \begin{table}[!htbp]
 \centering
@@ -382,12 +380,42 @@ Total Abaqus wall clock & 832.00 & 100\% \\
 \end{tabular}
 \end{table}
 
+\subsubsection*{Size, mesh and computing configurations}
+
+Thirty runs combine depths of 100/200~mm, three meshes, and MATLAB
+CPU1/CPU8/hybrid GPU or Abaqus CPU1/CPU8. All dimensions scale by two;
+final displacement is $-0.1/-0.2$~mm. Absolute global/notch seeds are
+12.5/2.5, 6.25/1.25 and 4.6875/0.9375~mm; each computing comparison
+uses identical mesh files. The largest mesh has 100{,}104 elements and
+101{,}088 DOFs. MATLAB uses 2{,}000 fixed increments; Abaqus uses maximum
+increments of $1/2{,}000$, with SDV every 100 accepted increments.
+The two finest large-specimen Abaqus meshes use limits of 80 equilibrium
+iterations and 12 attempts, retaining default convergence tolerances;
+a failed default-control attempt is archived. Fresh processes run
+sequentially, once per setting. MATLAB CPU8 limits numerical-library
+threads; the hybrid backend uses an NVIDIA RTX A2000 12GB in double precision.
+
+All hardware-response checks pass: MATLAB load-history differences are
+below $1.76\times10^{-11}$ of peak load and final-damage differences below
+$1.34\times10^{-9}$; Abaqus pairs have identical curves at CSV precision
+and identical iteration counts. MATLAB CPU8 and hybrid GPU are slower
+than CPU1 in all six cases. CPU1 factorization occupies 67--74\% of loop time.
+Abaqus SMP speed ratios range from 0.68 to 2.90; the largest mesh reaches
+2.90. Abaqus CPU1 sparse-solver passes occupy 9.8--14.4\% of analysis wall
+time; the remainder is unallocated. MATLAB/Abaqus peak differences are
+1.87--4.24\%. Table~\ref{tab:scaling} and Figure~\ref{fig:timing} report
+costs; complete phase, memory and residual records accompany the code.
+
+\input{tables/scaling_table.tex}
+
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.98\linewidth]{timing_verified.png}
-\caption{Measured timing components from the archived MATLAB run and
-Abaqus \texttt{.msg}. The remainder of the Abaqus wall time is unallocated;
-the plots do not establish a cross-code speed ranking.}
+\includegraphics[width=0.98\linewidth]{scaling_timings.pdf}
+\caption{Thirty size/mesh/computing runs. MATLAB bars cover the load loop;
+Abaqus bars cover analysis and output. CPU8 denotes a MATLAB library-thread
+limit or Abaqus SMP; GPU denotes element/damage work with CPU sparse
+factorization. These workstation observations establish no cross-program
+speed ranking or GPU speed advantage.}
 \label{fig:timing}
 \end{figure}
 
@@ -666,9 +694,8 @@ Cost scopes and equilibrium algorithms differ.}
 The main value of \texttt{FRACMATH} is that users can trace a complete
 damage calculation through mesh import, element matrices, projected
 bandwidth, constitutive history, sparse solve, and plotted response.
-The material-point test and the timing scopes are small,
-inspectable checks that expose two issues in the prior version: an
-incorrect 2D invariant coefficient and mislabelled factorization time.
+Material-point tests verify strain mapping and softening calibration;
+the recorded timing scopes distinguish assembly from sparse factorization.
 The 2D and 3D examples provide starting cases for method development
 and classroom use. The supplied scripts permit the figures to be
 regenerated from the associated data.
@@ -685,12 +712,12 @@ The 3D pure-tension comparison uses one nominal mesh and idealized platens;
 3D mesh independence remains untested. Mixed-mode and torsion images
 remain qualitative. The 2D
 sequential update leaves a nonzero post-damage equilibrium residual;
-the archived increment study and new refinement checks quantify its
-effect. A fully coupled outer equilibrium iteration is future work. The current Abaqus UMAT
-gradient-table initialization is not safe for multithreaded analysis.
-The larger study reports completed-job diagnostics, but the algorithms and
-timing scopes differ. An accuracy-matched speed ranking and multithreaded
-scaling remain unverified; no GPU performance claim is made.
+the increment and refinement studies quantify its effect. A fully coupled
+outer equilibrium iteration is future work. The hybrid GPU backend applies
+to 2D T3 elements and retains CPU sparse factorization. One observation per
+configuration on one workstation provides no statistical timing confidence.
+Different equilibrium algorithms and timing scopes prevent an
+accuracy-matched cross-program speed ranking.
 
 % =====================================================================
 \section*{Conclusions}
@@ -700,7 +727,8 @@ with an Oliver projected crack-band width. The study presents constitutive check
 structural energy diagnostics, and timing scopes that separate sparse
 factorization from assembly in MATLAB. A nominal-mesh 3D pure-tension
 comparison provides experimental error measures without fitting material
-parameters. The mixed-mode and torsion cases remain qualitative, and
+parameters. The hybrid GPU and SMP study measures hardware-dependent
+costs on matched meshes. The mixed-mode and torsion cases remain qualitative, and
 separate Abaqus material/assembly costs remain unmeasured.
 
 % =====================================================================
