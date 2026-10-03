@@ -7,7 +7,7 @@ FRACMATH is a vectorized MATLAB finite-element implementation of scalar continuu
 | Item | Location | Purpose |
 | --- | --- | --- |
 | 2D MATLAB solver | [`3pb/matlab/solver_main_3pb.m`](3pb/matlab/solver_main_3pb.m) | Notched three-point bending; `FRACMATH_STEPS`, `FRACMATH_HEADLESS`, and `FRACMATH_SELFTEST` controls |
-| Abaqus UMAT and job builder | [`3pb/abaqus/`](https://github.com/Jaykumar9033/FRACMATH/tree/main/3pb/abaqus) | Matched material update and Oliver T3 gradient table; use one CPU |
+| Abaqus UMAT and job builder | [`3pb/abaqus/`](https://github.com/Jaykumar9033/FRACMATH/tree/main/3pb/abaqus) | Matched material update and Oliver T3 gradient table with eager SMP initialization |
 | SoftwareX manuscript and figures | [`softwarex/`](https://github.com/Jaykumar9033/FRACMATH/tree/main/softwarex) | Draft PDF, TeX, figure sources, plotting scripts, and verified data |
 | Reproduction instructions | [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md) | Commands, environment, checks, and numerical limitations |
 | 3D examples | [`Noor mohammad/`](https://github.com/Jaykumar9033/FRACMATH/tree/main/Noor%20mohammad), [`Torsion/`](https://github.com/Jaykumar9033/FRACMATH/tree/main/Torsion) | Qualitative damage-workflow examples |
@@ -46,7 +46,7 @@ outer element seeds are five times larger. Support coordinates and loading
 strip remain fixed, and exact Abaqus mesh files are exported to MATLAB.
 
 At CMOD 0.10 mm, the three-mesh spread in partial damage dissipation is
-6.86% with Oliver regularization versus 18.21% with a fixed stress–strain
+6.86% with Oliver regularization versus 18.21% with a fixed stressâ€“strain
 law. Peak-load spreads are 6.19% and 6.78%, respectively. These measures
 use `(maximum - minimum) / mean`. Regularization improves the dissipation
 comparison for this family but does not establish complete mesh independence.
@@ -63,3 +63,11 @@ To regenerate the study summary and Figure 6 without licensed solvers:
 ```powershell
 python softwarex/analyze_mesh_study.py
 ```
+
+## CPU and hybrid GPU size/mesh study
+
+The solver supports `FRACMATH_THREADS` (default 1), `FRACMATH_SIZE_SCALE` (default 1), and `FRACMATH_BACKEND=cpu` or `gpu_hybrid` (default cpu). The hybrid backend runs element stiffness values and damage operations on a double-precision GPU and retains CPU sparse assembly/factorization. It requires Parallel Computing Toolbox and a compatible GPU. Abaqus supports SMP after eager gradient-table loading at analysis start.
+
+See [SCALING_STUDY.md](softwarex/SCALING_STUDY.md) for the 30-case protocol, exact size/mesh choices, pilot checks, licensed-run commands, and timing scopes. Hardware acceleration is evaluated from measured, response-checked runs.
+
+All 30 configurations complete and pass the hardware-response checks. The largest mesh has 100,104 elements and 101,088 DOFs. MATLAB CPU8 and hybrid GPU are slower than CPU1 on this workstation; Abaqus CPU8 reaches a 2.90 speed ratio on the largest mesh. Full measured times and interpretation are in the study guide.

@@ -6,7 +6,7 @@ The 2D MATLAB and Fortran UMAT equivalent-strain invariant has been to `J2 = ((e
 
 - Windows 11, MATLAB R2024b, base MATLAB, one computational thread.
 - Python 3 with NumPy, SciPy, Matplotlib, and Pillow for the plots and 3D figure layouts.
-- Abaqus/Standard 2024 with Intel Fortran for the optional UMAT run. Use one Abaqus CPU until its table initialization is made thread-safe.
+- Abaqus/Standard 2024 with Intel Fortran for the optional UMAT run. The default uses one Abaqus CPU; ABQ_CPUS=8 selects SMP with eager gradient-table initialization.
 
 ## MATLAB checks
 
@@ -57,3 +57,7 @@ See [`MESH_STUDY.md`](MESH_STUDY.md) for the exact protocol, licensed-run comman
 ## 3D pure-tension experimental comparison
 
 Run `python softwarex/run_nooru_tension.py --workspace C:/runs/nooru_tension` and `python softwarex/analyze_nooru_tension.py --workspace C:/runs/nooru_tension` from the repository root. See `softwarex/reproducibility/experimental_3d/README.md` for the experimental source, digitization uncertainty, local gauge control, material parameters, numerical checks, and validation scope. This is a separate test from the proportional mixed-mode damage images. The existing end-twist example does not supply a valid experimental CMOD measurement.
+
+## Size, mesh, CPU and hybrid GPU evidence
+
+See [SCALING_STUDY.md](SCALING_STUDY.md) for all 30 completed configurations, response checks, measured times, exact meshes and licensed-run/archive-replay commands. The hybrid GPU is functional and retains CPU sparse factorization; no GPU speedup is observed on this workstation. Abaqus SMP reaches a 2.90 speed ratio on the largest mesh.

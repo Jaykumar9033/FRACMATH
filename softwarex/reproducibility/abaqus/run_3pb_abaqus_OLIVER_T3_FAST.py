@@ -32,7 +32,7 @@ Outputs (Gregoire_3PB/results/):
     oliver_t3_gradN.dat  (T3 gradients used by the UMAT for Oliver h(n))
 
 Environment options:
-    set ABQ_CPUS=1          keep one thread until UMAT table loading is thread-safe
+    set ABQ_CPUS=1          one thread; ABQ_CPUS=8 selects eight threads with eager UMAT loading
     set ABQ_FIELD_FREQ=100  write SDV field every 100 increments
     set ABQ_AUTO_PLOT=1     make figures immediately after run; default 0
 """
@@ -74,11 +74,14 @@ if not PLOT_MODE:
 MODEL = 'Gregoire_3PB'
 
 # Geometry [mm]
-D        = 100.0
+SIZE_SCALE = float(os.environ.get('ABQ_SIZE_SCALE', '1'))
+if SIZE_SCALE <= 0:
+    raise ValueError('ABQ_SIZE_SCALE must be positive')
+D        = 100.0 * SIZE_SCALE
 S        = 2.5 * D
 OVERHANG = 0.5 * D
 L        = S + 2.0 * OVERHANG
-B_THICK  = 50.0
+B_THICK  = 50.0 * SIZE_SCALE
 A0       = 0.2 * D
 WN       = D / 40.0
 XC       = L / 2.0
@@ -89,7 +92,7 @@ XR_NOTCH = XC + WN / 2.0
 MESH_SCALE = float(os.environ.get('ABQ_MESH_SCALE', '1'))
 if MESH_SCALE <= 0:
     raise ValueError('ABQ_MESH_SCALE must be positive')
-ELEM_SIZE_GLOBAL = (D / 16.0) * MESH_SCALE
+ELEM_SIZE_GLOBAL = (100.0 / 16.0) * MESH_SCALE
 ELEM_SIZE_REFINE = ELEM_SIZE_GLOBAL / 5.0
 REFINE_W         = 0.5 * D
 REFINE_H         = D
@@ -416,6 +419,14 @@ def build_model(case_dir, umat_file):
     m.StaticStep(name='Loading', previous='Initial', maxNumInc=20000,
                  initialInc=1.0 / float(N_INC), minInc=1.0e-10,
                  maxInc=1.0 / float(N_INC), nlgeom=OFF)
+    # The secant UMAT can converge slowly during localized damage. Increase
+    # iteration/attempt limits when requested, without changing field tolerances.
+    eq_limit = int(os.environ.get('ABQ_EQ_LIMIT', '0'))
+    if eq_limit:
+        m.steps['Loading'].control.setValues(
+            allowPropagation=OFF, resetDefaultValues=OFF,
+            timeIncrementation=(4.0, 8.0, 9.0, float(eq_limit), 10.0, 4.0,
+                               12.0, 12.0, 6.0, 3.0, float(eq_limit)))
 
     m.DisplacementBC(name='BC_SupL', createStepName='Loading',
                      region=asm.sets['Support_Left'], u1=SET, u2=SET)
@@ -424,6 +435,11 @@ def build_model(case_dir, umat_file):
     m.DisplacementBC(name='BC_Load', createStepName='Loading',
                      region=asm.sets['Load_Nodes'], u2=U_FINAL)
 
+    # Keep only the explicit benchmark output scopes.
+    for name in tuple(m.fieldOutputRequests.keys()):
+        del m.fieldOutputRequests[name]
+    for name in tuple(m.historyOutputRequests.keys()):
+        del m.historyOutputRequests[name]
     # Field: SDV only (damage snapshots). History: load + CMOD (per increment).
     m.FieldOutputRequest(name='F-SDV', createStepName='Loading',
                          variables=FIELD_VARS, frequency=FIELD_FREQ)
@@ -463,7 +479,8 @@ def export_matlab_mesh(part, case_dir):
                     global_seed_mm=ELEM_SIZE_GLOBAL,
                     notch_seed_mm=ELEM_SIZE_REFINE,
                     max_displacement_mm=U_FINAL, max_increment=1.0/N_INC,
-                    study_boundary_conditions=STUDY_BC)
+                    study_boundary_conditions=STUDY_BC, size_scale=SIZE_SCALE,
+                    depth_mm=D, length_mm=L, thickness_mm=B_THICK)
     metadata['boundary_nodes'] = {
         name: [[int(n.label), float(n.coordinates[0]), float(n.coordinates[1])]
                for n in part.sets[name].nodes]
@@ -482,7 +499,8 @@ def run_job(case_dir, umat_file):
     if MODEL in mdb.jobs.keys():
         del mdb.jobs[MODEL]
     job = mdb.Job(name=MODEL, model=MODEL, description='Gregoire 3PB CDM UMAT',
-                  userSubroutine=umat_file, numCpus=CPUS, numDomains=CPUS)
+                  userSubroutine=umat_file, numCpus=CPUS, numDomains=CPUS,
+                  multiprocessingMode=THREADS)
     cwd0 = os.getcwd()
     ensure_dir(case_dir)
     os.chdir(case_dir)

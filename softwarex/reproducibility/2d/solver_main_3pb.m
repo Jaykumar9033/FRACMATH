@@ -22,7 +22,9 @@ function solver_main_3pb()
 clc;
 fprintf('==== MATLAB CDM 3PB solver: vectorized sequential secant update ====\n');
 
-maxNumCompThreads(1);   % match Abaqus cpus=1 (remove for multicore compare)
+threads = str2double(getenv('FRACMATH_THREADS'));
+if ~isfinite(threads) || threads<1; threads=1; end
+threads=round(threads); maxNumCompThreads(threads);
 
 % --- where the .txt files are ------------------------------------------
 case_dir = getenv('FRACMATH_CASE_DIR');
@@ -40,6 +42,14 @@ if ~exist(res_dir, 'dir'); mkdir(res_dir); end
 p.E         = 37000;       % MPa
 p.nu        = 0.20;
 p.t         = 50;          % mm  (thickness)
+size_scale = str2double(getenv('FRACMATH_SIZE_SCALE'));
+if ~isfinite(size_scale) || size_scale<=0; size_scale=1; end
+p.t = p.t * size_scale;
+p.backend=getenv('FRACMATH_BACKEND');
+if isempty(p.backend); p.backend='cpu'; end
+assert(ismember(p.backend,{'cpu','gpu_hybrid'}));
+use_gpu=strcmp(p.backend,'gpu_hybrid');
+if use_gpu; gpu_dev=gpuDevice; end
 p.ft        = 3.50;        % MPa
 p.fc        = 35.0;        % MPa
 p.GF        = 0.090;       % N/mm
@@ -94,6 +104,12 @@ DB   = pagemtimes(D_el, B_all);
 Ke0  = pagemtimes(permute(B_all,[2 1 3]), DB) .* ...
        reshape(area_v * p.t, 1, 1, []);
 [II, JJ] = sparse_indices(dof_mat);
+B_damage=B_all; grad_damage=gradN_all;
+if use_gpu
+    B_damage=gpuArray(B_all); grad_damage=cell(1,6);
+    for c=1:6; grad_damage{c}=gpuArray(gradN_all(:,c)); end
+    Ke0=gpuArray(Ke0); wait(gpu_dev);
+end
 % Full Oliver bandwidth is direction-dependent, so it is computed inside
 % damage_update from the current principal strain direction of each element.
 
@@ -196,7 +212,7 @@ for step = 1:p.num_steps
     % --- damage update -------------------------------------------------
     tic;
     omega_previous = omega;
-    [omega, kappa, h_oliver, strain_now] = damage_update(u, B_all, gradN_all, dof_mat, kappa, omega, p);
+    [omega, kappa, h_oliver, strain_now] = damage_update(u, B_damage, grad_damage, dof_mat, kappa, omega, p);
     t_dam = t_dam + toc;
 
     % Reassemble once after the damage update. This gives a reaction force
@@ -352,7 +368,9 @@ t_path = fullfile(res_dir, 'matlab_timing.txt');
 fid = fopen(t_path, 'w');
 fprintf(fid, 'MATLAB 3PB solver\n');
 fprintf(fid, 'MATLAB version: %s\n', version);
-fprintf(fid, 'Computational threads: 1\n');
+fprintf(fid, 'Computational threads: %d\n',threads);
+fprintf(fid, 'Backend: %s\n',p.backend);
+if use_gpu; fprintf(fid,'GPU: %s; double precision; CPU sparse assembly/factorization\n',gpu_dev.Name); end
 fprintf(fid, 'Peak load:    %.2f N\n',    pk_load);
 fprintf(fid, 'CMOD@peak:    %.6f mm\n',   pk_cmod);
 fprintf(fid, 'Solver wall-clock: %.2f s\n', t_solver);
@@ -633,6 +651,7 @@ function K = assemble_K(Ke0, omega, II, JJ, nN)
     nE = size(Ke0,3);
     Ke = Ke0 .* reshape(1 - omega, 1, 1, nE);
     V  = reshape(Ke, 36, nE).';
+    if isa(V,'gpuArray'); V=gather(V); end
     K  = sparse(II(:), JJ(:), V(:), 2*nN, 2*nN);
 end
 
@@ -654,8 +673,23 @@ end
 function [omega_new, kappa_new, h_oliver, strain] = damage_update(u, B_all, gradN_all, dof_mat, ...
                                                 kappa_old, omega_old, p)
     nE   = size(B_all,3);
+    gpu_mode=isa(B_all,'gpuArray');
+    if gpu_mode
+        u=gpuArray(u);
+    end
     u_e  = reshape(u(dof_mat).', 6, 1, nE);
     strain = squeeze(pagemtimes(B_all, u_e)).';
+    if gpu_mode
+        % One fused element kernel avoids dozens of small GPU launches.
+        [og,kg,hg]=arrayfun(@gpu_damage_point,strain(:,1),strain(:,2),strain(:,3), ...
+            gradN_all{1},gradN_all{2},gradN_all{3},gradN_all{4},gradN_all{5},gradN_all{6}, ...
+            gpuArray(kappa_old),gpuArray(omega_old),p.nu,p.fc/p.ft,p.eps0, ...
+            p.GF,p.ft,p.OMEGA_MAX,strcmp(p.regularization,'fixed'),p.fixed_width);
+        values=gather([og,kg,hg,strain]);
+        omega_new=values(:,1); kappa_new=values(:,2); h_oliver=values(:,3);
+        strain=values(:,4:6);
+        return;
+    end
 
     ex = strain(:,1); ey = strain(:,2); gxy = strain(:,3);
     me  = (ex+ey)/2;
@@ -705,7 +739,7 @@ function [omega_new, kappa_new, h_oliver, strain] = damage_update(u, B_all, grad
     eq_s = max(eq_s, 0);
 
     kappa_new = max(kappa_old, eq_s);
-    omega_new = zeros(nE,1);
+    omega_new = zeros(nE,1,'like',kappa_new);
     m = kappa_new > p.eps0;
     if any(m)
         km  = kappa_new(m);
@@ -716,6 +750,30 @@ function [omega_new, kappa_new, h_oliver, strain] = damage_update(u, B_all, grad
     omega_new = min(max(omega_new,0), p.OMEGA_MAX);
     bad = ~isfinite(omega_new);
     omega_new(bad) = omega_old(bad);
+end
+
+function [omega,kappa,h] = gpu_damage_point(ex,ey,gxy,g1x,g1y,g2x,g2y,g3x,g3y, ...
+    kappa_old,omega_old,nu,k,eps0,GF,ft,omega_max,fixed,width)
+    % Scalar form of the CPU damage update, compiled by gpuArray.arrayfun.
+    me=(ex+ey)/2; rad=sqrt(((ex-ey)/2)^2+(gxy/2)^2);
+    e1=me+rad; e2=me-rad;
+    theta=0.5*atan2(gxy,ex-ey); nx=cos(theta); ny=sin(theta);
+    if abs(ex-ey)+abs(gxy)<1e-18; nx=1; ny=0; end
+    den=abs(g1x*nx+g1y*ny)+abs(g2x*nx+g2y*ny)+abs(g3x*nx+g3y*ny);
+    h=max(2/max(den,1e-14),1e-12);
+    if fixed; h=width; end
+    ef=max(eps0/2+GF/(h*ft),eps0+1e-12);
+    e3=-nu/(1-nu)*(e1+e2); I1=e1+e2+e3;
+    J2=((e1-e2)^2+(e2-e3)^2+(e3-e1)^2)/6;
+    a1=(k-1)/(2*k*(1-2*nu)); a2=1/(2*k);
+    a3=((k-1)/(1-2*nu))^2; a4=12*k/(1+nu)^2;
+    eq=max(a1*I1+a2*sqrt(max(a3*I1^2+a4*J2,0)),0);
+    kappa=max(kappa_old,eq); omega=0;
+    if kappa>eps0
+        omega=1-(eps0/kappa)*exp(-(kappa-eps0)/max(ef-eps0,1e-15));
+    end
+    omega=min(max(max(omega,omega_old),0),omega_max);
+    if ~isfinite(omega); omega=omega_old; end
 end
 
 function h = oliver_bandwidth_T3(gradN_all, nx, ny)

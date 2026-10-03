@@ -4,3 +4,5 @@
 softwarex/reproducibility/mesh_study/** -text
 
 softwarex/reproducibility/experimental_3d/** -text
+
+softwarex/reproducibility/scaling_study/** -text

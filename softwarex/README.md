@@ -26,3 +26,8 @@ The manuscript metadata identifies the source and study data by an immutable Git
 The 3D panels illustrate damage workflows qualitatively. A separate nominal-mesh pure-tension test compares the numerical response with digitized experimental data; general 3D mesh independence is unverified. The 2D study compares three controlled meshes. This evidence is limited to one geometry and mesh family; it does not establish general mesh independence or a runtime advantage over Abaqus.
 
 The 3D pure-tension experimental comparison is documented in [experimental_3d/README.md](reproducibility/experimental_3d/README.md); the runner uses local gauge control and strict equilibrium.
+
+
+## Size, mesh, CPU and hybrid GPU evidence
+
+See [SCALING_STUDY.md](SCALING_STUDY.md) for all 30 completed configurations, response checks, measured times, exact meshes and licensed-run/archive-replay commands. The hybrid GPU is functional and retains CPU sparse factorization; no GPU speedup is observed on this workstation. Abaqus SMP reaches a 2.90 speed ratio on the largest mesh.

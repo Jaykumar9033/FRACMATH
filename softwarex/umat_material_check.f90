@@ -1,5 +1,5 @@
 ! Standalone material-point verification linked to the unmodified repository UMAT.
-! GETOUTDIR is a test-only stub; actual Abaqus supplies that utility.
+! GETOUTDIR and XIT are test-only stubs; actual Abaqus supplies these utilities.
 program material_check
   implicit none
   integer :: i,j,k,jstep(4),el
@@ -107,4 +107,9 @@ subroutine getoutdir(outdir,length)
   character(*)::outdir
   integer::length
   outdir='.';length=1
+end subroutine
+
+subroutine xit
+  implicit none
+  error stop "UMAT requested termination during standalone verification"
 end subroutine

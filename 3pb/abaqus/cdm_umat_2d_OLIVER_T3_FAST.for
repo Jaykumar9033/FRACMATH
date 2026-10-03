@@ -302,11 +302,26 @@ C=======================================================================
       G3X = 0.0D0
       G3Y = 0.0D0
 
-      IF ((.NOT. HAVE) .AND. READY .AND. (.NOT. WARNED)) THEN
-         WRITE(6,*) 'UMAT WARNING: missing element in Oliver table; ',
-     &              'CELENT fallback used for missing labels.'
-         WARNED = .TRUE.
+C     Table is read before worker threads start; missing entries are fatal.
+      IF (NOEL .GT. 0 .AND. .NOT. HAVE) THEN
+         WRITE(6,*) 'UMAT ERROR: missing Oliver gradients, NOEL=',NOEL
+         CALL XIT
       END IF
 
+      RETURN
+      END
+
+C=======================================================================
+C  Eager initialization at analysis start, before parallel UMAT calls.
+C  Abaqus invokes UEXTERNALDB at synchronized analysis boundaries.
+C=======================================================================
+      SUBROUTINE UEXTERNALDB(LOP,LRESTART,TIME,DTIME,KSTEP,KINC)
+      INCLUDE 'ABA_PARAM.INC'
+      INTEGER LOP,LRESTART,KSTEP,KINC
+      REAL*8 TIME(2),DTIME,G1X,G1Y,G2X,G2Y,G3X,G3Y
+      LOGICAL HAVE
+      IF (LOP .EQ. 0 .OR. LOP .EQ. 4) THEN
+         CALL OLIVER_GET_GRAD_FAST(0,G1X,G1Y,G2X,G2Y,G3X,G3Y,HAVE)
+      END IF
       RETURN
       END

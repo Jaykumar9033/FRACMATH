@@ -36,7 +36,7 @@ This is an approximate tangent for evolving damage, not the consistent
 derivative of the damage law. Its effect on Abaqus iterations must be kept
 in mind; solver-pass and cutback counts accompany timing. The remaining
 wall time alone cannot establish whether the UMAT contains an error.
-Gradient-table initialization currently requires one CPU.
+UEXTERNALDB initializes the gradient table before UMAT worker threads start. Saved gradients are read-only during the analysis, supporting Abaqus SMP. Missing gradient entries terminate the job.
 
 ## Measured timing
 
@@ -72,7 +72,7 @@ jobs. `run_mesh_study.py` runs licensed analyses sequentially;
 `analyze_mesh_study.py` checks histories and regenerates the study figure.
 
 `FRACMATH_REGULARIZATION=fixed` holds the calibration width at
-`FRACMATH_FIXED_WIDTH` (default 1.25 mm). This gives one stress–strain law on
+`FRACMATH_FIXED_WIDTH` (default 1.25 mm). This gives one stressâ€“strain law on
 all elements, serving as a control for element-size compensation.
 The regularized default remains `oliver`.
 
@@ -80,4 +80,12 @@ The energy history records trapezoidal external work, stored elastic energy,
 positive end-of-step damage dissipation, and their balance discrepancy.
 Comparison at CMOD 0.10 mm measures partial structural dissipation. It is not
 complete fracture energy. Refinement checks and post-damage residuals must be
-considered when interpreting the mesh comparison. No GPU speedup is claimed.
+considered when interpreting the mesh comparison. Hardware timings are evaluated separately in the size/mesh study.
+
+## Hybrid GPU and CPU threading
+
+`FRACMATH_BACKEND=gpu_hybrid` keeps element strain operators, reference stiffness values, and shape-function gradients on the GPU. A fused `gpuArray.arrayfun` kernel computes equivalent strain, principal direction, Oliver width, and irreversible damage/history per element in double precision. One combined gather returns damage, history, width, and strain arrays. Stiffness values are gathered before CPU sparse construction; sparse factorization and equilibrium solves remain on the CPU. Timed operations include transfers and GPU synchronization; initial device setup and precomputation are excluded from the loop timer.
+
+`FRACMATH_THREADS=8` limits supported MATLAB numerical libraries to eight computational threads; it does not create independent `parfor` simulations. Abaqus uses `ABQ_CPUS=8` in SMP mode, with UEXTERNALDB loading the shared gradient table before material calls. The secant tangent may need many iterations during localization. The two finest large-specimen meshes use the same extended iteration limits for both thread settings, retaining default convergence tolerances.
+
+[SCALING_STUDY.md](../softwarex/SCALING_STUDY.md) specifies matched meshes, source hashes, hardware-response checks, cost scopes, and the complete size/mesh protocol.

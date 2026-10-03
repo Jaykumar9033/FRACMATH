@@ -4,4 +4,4 @@ Highlights
 - Direction-dependent Oliver width integrated with constitutive history
 - Material-point energy calibration and unload/reload verification
 - Controlled mesh study compares regularized and fixed softening laws
-- Abaqus diagnostics and increment checks qualify performance comparisons
+- CPU, hybrid GPU and Abaqus SMP costs measured on matched size/mesh cases

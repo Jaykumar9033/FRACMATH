@@ -1,7 +1,7 @@
 {
   "title": "FRACMATH: A vectorized MATLAB framework for continuum damage mechanics with crack band regularization",
   "upload_type": "software",
-  "description": "FRACMATH is an inspectable MATLAB framework for quasibrittle fracture with scalar continuum damage and direction-dependent Oliver crack-band regularization. The SoftwareX study provides material-point verification, a controlled three-mesh regularization comparison, structural energy diagnostics, increment checks, and single-CPU Abaqus job records. The 3D examples illustrate damage workflows qualitatively. The evidence does not establish a solver-speed ranking or GPU performance.",
+  "description": "FRACMATH is an inspectable MATLAB framework for quasibrittle fracture with scalar continuum damage and direction-dependent Oliver crack-band regularization. The SoftwareX study provides material-point verification, controlled mesh/regularization and increment comparisons, structural energy diagnostics, and a 30-configuration size/mesh study of MATLAB CPU1/CPU8/hybrid GPU and Abaqus CPU1/CPU8. A nominal-mesh 3D pure-tension test is compared with digitized experimental data; mixed-mode and torsion images are qualitative. Hardware response checks accompany measured costs. On the tested workstation the hybrid GPU backend has no speed advantage, while larger Abaqus cases benefit from SMP. Equilibrium algorithms and timing scopes differ; no cross-program speed ranking is established.",
   "creators": [
     {
       "name": "Mavani, Jaykumar",
@@ -24,7 +24,9 @@
     "finite element method",
     "MATLAB",
     "Abaqus",
-    "UMAT"
+    "UMAT",
+    "hybrid GPU",
+    "SMP"
   ],
   "related_identifiers": [
     {
