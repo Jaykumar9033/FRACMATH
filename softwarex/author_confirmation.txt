@@ -1,0 +1,11 @@
+Author confirmation before submission
+
+Please confirm the author order, affiliations, corresponding-author email, and CRediT contributions in manuscript.tex.
+
+The manuscript acknowledges NASA and the New Mexico Space Grant Consortium, grant 80NSSC22M0044. Please confirm the funding information and whether the funder had a role in the study, manuscript preparation, or submission decision.
+
+The manuscript states that the authors declare no conflict of interest. Please confirm this statement and complete any journal declaration form consistently with the funding disclosure.
+
+Please confirm that all authors approve the manuscript and submission, and that the manuscript is not under consideration elsewhere. These attestations must be made by the authors; the prepared cover letter does not assert them on their behalf.
+
+Please review the AI-use declaration and confirm that the authors have checked and take responsibility for the code, scientific claims, results, figures, and references.

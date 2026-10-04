@@ -1,0 +1,14 @@
+Dear Editors of SoftwareX,
+
+Please consider our manuscript, "FRACMATH: A vectorized MATLAB framework for continuum damage mechanics with crack band regularization," by Jaykumar Mavani and Madura Pathirage, as an original software article.
+
+FRACMATH provides an inspectable MATLAB workflow for continuum damage simulation of quasibrittle materials. Its contribution is the implementation and accompanying reproducible evidence: direction-dependent crack-band width, irreversible constitutive history, vectorized element operations, sparse assembly, and documented numerical solution steps. The article presents established constitutive ideas through accessible software rather than claiming a new damage model.
+
+The public repository includes a beginner entry script, example meshes, an Abaqus UMAT, reproduction scripts, and numerical histories. Material-point checks address fracture-energy calibration and damage irreversibility. Controlled mesh and increment studies assess the effects of regularization. Ninety timing observations cover matched size, mesh, and computing configurations, including MATLAB CPU, hybrid GPU, and Abaqus SMP. The article reports the measured performance limits, including the absence of a GPU speed advantage on the tested workstation, and distinguishes sampling estimates from complete phase wall times.
+
+The software, documentation, and examples support examination and reuse of numerical implementation choices in research and teaching. The manuscript follows the SoftwareX structure and supplies software metadata, six figures, and separate highlights.
+
+Correspondence may be addressed to Madura Pathirage, mpathirage@unm.edu, Gerald May Department of Civil, Construction, and Environmental Engineering, University of New Mexico, Albuquerque, NM, USA.
+
+Sincerely,
+Jaykumar Mavani and Madura Pathirage

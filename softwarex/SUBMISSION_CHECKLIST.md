@@ -23,7 +23,7 @@ requirements still need a final check.
 | Maximum six figures | Six; the 3D comparison occupies an existing figure | Retain at most six |
 | Metadata C1–C8, with template labels retained | Rows present | Pin C1/C2 to the final tested version and verify all links |
 | Public GitHub repository with documented README.md and Licence.txt | Files present locally | Publish and verify the final source/data/docs on GitHub |
-| Software citation when a DOI/PID is supplied | Final software reference absent | Cite the tested release and its verified version-specific archive DOI |
+| Software citation when a DOI/PID is supplied | Immutable source/data commit cited | Cite the tested release and its verified version-specific archive DOI |
 | Clear software architecture, functions, dependencies, examples and impact | Descriptions, examples and beginner guide present | Confirm the documented beginner workflow runs and supports the impact claims |
 
 The reviewer form evaluates empirical evidence, readability, reproducibility,
@@ -79,8 +79,9 @@ archives contain tested sources, paired-data checks and measurement scopes.
    metadata currently says `1.1.0-dev`; verify that the final manuscript's
    immutable source/data link contains every file supporting its results.
 4. Have the authors confirm the contributions, affiliations/contact address, funding statement
-   and competing-interest declaration. Prepare the cover letter and check the
-   separate highlights and any portal-required declaration files.
+   and competing-interest declaration. Review the prepared `cover_letter.txt` and check the
+   separate highlights and any portal-required declaration files. `author_confirmation.txt`
+   lists the statements requiring author confirmation.
    The original cover letter cites v1.0.0 and a 3.6-fold MATLAB speed claim;
    it does not describe the present comparison. The original declaration
    discloses NASA/Space Grant financial support, while the paper declares no
