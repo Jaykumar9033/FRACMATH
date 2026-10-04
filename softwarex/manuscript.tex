@@ -302,7 +302,7 @@ One-element tests check equivalent strain, unloading and reloading. A separate t
 \begin{equation}
 G_{\rm calc}=h\int_0^\infty\sigma\,\mathrm d\varepsilon.
 \end{equation}
-Here $h$ is the element's projected crack-band width. The target is $G_F=0.090$~N/mm. The Oliver model adjusts the softening curve using $h$, so the calculated energy stays close to this target at every tested width (Table~\ref{tab:energy}). The constant-width control instead uses $h_{\rm ref}=1.25$~mm to set the same stress--strain curve for all elements. Its calculated energy therefore changes with the actual width $h$; this is the expected control response.
+Here $h$ is the element's projected crack-band width. The target is $G_F=0.090$~N/mm. The Oliver model adjusts the softening curve using $h$, so the calculated energy stays close to this target at every tested width. For widths of 0.5, 1, 2 and 4~mm, its calculated energy is 0.090~N/mm to three decimal places. The constant-width control instead uses $h_{\rm ref}=1.25$~mm to set the same stress--strain curve for all elements. Its calculated energy therefore changes with the actual width $h$; this is the expected control response. Over the same widths, its energy increases from 0.036 to 0.288~N/mm. The full material-point values are provided in the code archive.
 A driver linked to the unchanged UMAT reproduces the MATLAB energy values. Sixteen additional width/direction combinations pass, with maximum relative energy error below 0.00018\%. These local checks do not establish structural orientation independence.
 An 824-case audit compares the actual UMAT with an independent
 tensor-eigensolve calculation and the MATLAB damage functions. The cases include 112 added unloading, reloading and rotating-strain states. Strain splits,
@@ -310,21 +310,7 @@ multiaxial states, irreversible history, projected width, stress and the
 documented secant matrix pass declared absolute/relative tolerances of
 $2\times10^{-10}$. This does not establish a consistent damage tangent.
 
-\begin{table}[!htbp]
-\centering\small
-\caption{Energy per crack area from the one-element tension test. The target is 0.090~N/mm. The Oliver model preserves this value across the tested widths; the constant-width control shows the effect of using one unchanged softening curve. Values are rounded; the full results are supplied with the code.}
-\begin{tabular}{rrr}
-\toprule
-\shortstack{Crack-band width\\$h$ (mm)} & \shortstack{Oliver model\\$G_{\rm calc}$ (N/mm)} & \shortstack{Constant-width control\\$G_{\rm calc}$ (N/mm)} \\
-\midrule
-0.5 & 0.090 & 0.036 \\
-1.0 & 0.090 & 0.072 \\
-2.0 & 0.090 & 0.144 \\
-4.0 & 0.090 & 0.288 \\
-\bottomrule
-\end{tabular}
-\label{tab:energy}
-\end{table}
+
 
 % =====================================================================
 \section{Illustrative examples}
