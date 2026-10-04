@@ -140,6 +140,8 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--workspace',type=Path,required=True)
     parser.add_argument('--steps',type=int,default=600)
+    parser.add_argument('--meshes',nargs='+',choices=['coarse','medium','fine'],
+                        default=['coarse','medium','fine'])
     args=parser.parse_args()
     package=Path(__file__).resolve().parent
     data=package/'reproducibility/experimental_3d'
@@ -147,10 +149,17 @@ def main():
     source=data/'source/damage_static.m'
     results=[]
     for name,seed in [('coarse',12),('medium',9),('fine',6)]:
+        if name not in args.meshes:
+            continue
         folder=args.workspace/name
         folder.mkdir(parents=True,exist_ok=True)
         if (folder/'completion.json').exists():
-            results.append(json.loads((folder/'completion.json').read_text()))
+            previous=json.loads((folder/'completion.json').read_text())
+            if not previous.get('completed'):
+                raise ValueError('This mesh has an active or failed run; preserve it and use a separate workspace: '+str(folder))
+            if previous['initial_intervals']!=args.steps:
+                raise ValueError('Existing mesh uses a different target-interval count')
+            results.append(previous)
             continue
         shutil.copy2(package/'build_nooru_mesh.py',folder/'build_nooru_mesh.py')
         if not (folder/'mesh_metadata.json').exists():
@@ -180,15 +189,21 @@ damage_static('Job-1',opts);
                     history='nondecreasing equivalent strain and damage; commit only converged trials',
                     notch_depth_mm=25,notch_width_mm=5,geometry='200 x 200 x 50 mm panel',
                     material=dict(E_MPa=29000,nu=0.2,ft_MPa=3,GF_N_per_mm=0.11,k=10))
+        record.update(completed=False,in_progress=True,driver_pid=os.getpid())
+        (folder/'completion.json').write_text(json.dumps(record,indent=2),encoding='utf-8')
         print('Starting 3D',name,'nodes',node_count,flush=True)
         with (folder/'console.log').open('w',encoding='utf-8') as stream:
             process=subprocess.run(['matlab','-batch','run_case'],cwd=folder,stdout=stream,stderr=subprocess.STDOUT)
         record['return_code']=process.returncode
+        record['in_progress']=False
         record['completed']=process.returncode==0 and (folder/'Job-1_gauge_results.csv').exists()
         (folder/'completion.json').write_text(json.dumps(record,indent=2),encoding='utf-8')
         results.append(record)
         print('3D',name,'completed:',record['completed'],flush=True)
-    (args.workspace/'study_manifest.json').write_text(json.dumps(dict(runs=results,
+    records=[json.loads((args.workspace/name/'completion.json').read_text())
+             for name in ['coarse','medium','fine']
+             if (args.workspace/name/'completion.json').exists()]
+    (args.workspace/'study_manifest.json').write_text(json.dumps(dict(runs=records,
         scope='Published 25 mm notch geometry; strict local-gauge control; target-bisection trials reject uncommitted damage. Failed jobs are excluded.'),indent=2),encoding='utf-8')
 
 

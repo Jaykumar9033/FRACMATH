@@ -54,6 +54,17 @@ The material-point test verifies equivalent-strain mapping, irreversibility, and
 
 ## Controlled mesh and regularization study
 
+The actual 10,000-step beginner execution is preserved in
+`reproducibility/beginner_entry_check/`. Run
+`python softwarex/analyze_beginner_entry.py --workspace softwarex/reproducibility/beginner_entry_check`
+from the repository root to verify exact equality of every state/response and
+peak/post-peak snapshot array with the preserved benchmark.
+
+The separate software-sampling profile is in `reproducibility/abaqus_profile/`.
+Its README gives archive-replay and fresh-collection commands. Named assembly
+and user-library self estimates exclude callees and cannot allocate the
+benchmark's unmeasured material/assembly wall-time remainder.
+
 See [`MESH_STUDY.md`](MESH_STUDY.md) for the exact protocol, licensed-run commands, timing scopes, and limitations. The archived study can be analyzed without MATLAB or Abaqus by running `python softwarex/analyze_mesh_study.py` from the repository root.
 
 ## 3D pure-tension experimental comparison

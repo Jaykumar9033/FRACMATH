@@ -12,6 +12,8 @@ import matplotlib.pyplot as plt
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--workspace',required=True,type=Path)
+    parser.add_argument('--require-all',action='store_true',
+                        help='Fail the final verification gate unless all three meshes finish')
     args=parser.parse_args()
     package=Path(__file__).resolve().parent
     experiment=np.loadtxt(package/'reproducibility/experimental_3d/nooru_47_05_digitized.csv',delimiter=',',skiprows=1)
@@ -76,6 +78,8 @@ def main():
         for suffix in ['png','pdf']:
             fig.savefig(output/('nooru_tension_mesh_comparison.'+suffix),dpi=300)
     print(json.dumps(summary,indent=2))
+    if args.require_all and len(accepted)!=3:
+        raise SystemExit('The complete three-mesh verification gate is not satisfied')
 
 
 if __name__=='__main__':

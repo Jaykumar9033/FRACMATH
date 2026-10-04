@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+import time
 
 from run_scaling_study import setup, env_abq
 from run_mesh_study import command_abaqus
@@ -26,9 +27,21 @@ def main():
     folder.mkdir(parents=True, exist_ok=True)
     result = folder / 'vtune_result'
     if result.exists():
+        manifest = folder / 'profile_manifest.json'
+        if manifest.exists():
+            previous = json.loads(manifest.read_text(encoding='utf-8'))
+            if all(previous.get(key) == 0 for key in ['collection_return_code',
+                    'summary_export_return_code', 'hotspots_export_return_code']):
+                print(json.dumps(previous, indent=2))
+                return
         raise ValueError('Use a new workspace for each profile')
     setup(folder, args.source_snapshot.resolve())
     environment = env_abq('small', 'coarse', 2000, -0.1, cpus=1)
+    if os.name == 'nt':
+        # VTune queries Windows PowerShell 5.1. An inherited PowerShell 7
+        # module path can make its Security module fail to load.
+        environment['PSModulePath'] = str(Path(os.environ['SystemRoot']) /
+            'System32/WindowsPowerShell/v1.0/Modules')
     command = [str(args.vtune), '-collect', 'hotspots', '-knob', 'sampling-mode=sw',
                '-knob', 'enable-stack-collection=true', '-result-dir', str(result),
                '-follow-child', '-app-working-dir', str(folder), '--'] + command_abaqus(folder)
@@ -36,7 +49,21 @@ def main():
                   scope='Separate small/coarse CPU1 2,000-increment analysis; user-mode CPU sampling. Not wall-time attribution and not a benchmark observation.',
                   interpretation='UMAT-inclusive stacks may estimate material CPU work. Assembly is reported only if named symbols identify it; unknown solver symbols remain unallocated.')
     with (folder / 'collection.log').open('w', encoding='utf-8') as stream:
-        process = subprocess.run(command, cwd=folder, env=environment, stdout=stream, stderr=subprocess.STDOUT)
+        process = subprocess.Popen(command, cwd=folder, env=environment,
+                                   stdout=stream, stderr=subprocess.STDOUT)
+        stopped = False
+        started = time.monotonic()
+        while process.poll() is None:
+            status = folder/'Gregoire_3PB/Gregoire_3PB.sta'
+            finished = (status.exists() and 'THE ANALYSIS HAS COMPLETED SUCCESSFULLY'
+                        in status.read_text(errors='replace'))
+            if not stopped and (finished or time.monotonic()-started > 900):
+                # Compiler telemetry may outlive the completed job. Stop the
+                # collector gracefully rather than waiting for such children.
+                subprocess.run([str(args.vtune), '-r', str(result), '-command', 'stop'],
+                               stdout=stream, stderr=subprocess.STDOUT, env=environment)
+                stopped = True
+            time.sleep(2)
     record['collection_return_code'] = process.returncode
     if process.returncode == 0:
         for report in ['summary', 'hotspots']:
@@ -46,7 +73,8 @@ def main():
             if report == 'hotspots':
                 options += ['-group-by', 'process,function,module']
             with (folder / (report + '_export.log')).open('w', encoding='utf-8') as stream:
-                exported = subprocess.run(options, stdout=stream, stderr=subprocess.STDOUT)
+                exported = subprocess.run(options, stdout=stream, stderr=subprocess.STDOUT,
+                                          env=environment)
             record[report + '_export_return_code'] = exported.returncode
     (folder / 'profile_manifest.json').write_text(json.dumps(record, indent=2), encoding='utf-8')
     print(json.dumps(record, indent=2))

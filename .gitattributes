@@ -9,3 +9,5 @@ softwarex/reproducibility/scaling_study/** -text
 softwarex/reproducibility/timing_repeats/** -text
 softwarex/reproducibility/nooru_25mm_coarse/** -text whitespace=cr-at-eol
 softwarex/reproducibility/nooru_proportional/response_history.csv -text
+softwarex/reproducibility/abaqus_profile/** -text
+softwarex/reproducibility/beginner_entry_check/** -text
