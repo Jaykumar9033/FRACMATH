@@ -39,7 +39,7 @@ Licensed MATLAB with Parallel Computing Toolbox, a CUDA-compatible GPU, and lice
 
 MATLAB uses 2,000 fixed increments; Abaqus uses maximum increments of 1/2,000 with adaptive cutbacks. All MATLAB old-damage solves must converge, and complete finite histories are required. Within MATLAB, the maximum load-history difference from CPU1 must be <=0.1% of CPU1 peak, and maximum absolute final-damage difference must be <=1e-4. Within Abaqus, the peak difference and maximum curve difference on a common monotone CMOD grid must be <=0.1% of CPU1 peak; accepted-increment counts and adaptive paths are also reported. These checks assess hardware consistency; MATLAB's sequential post-damage residual is preserved and reported, not confused with fully coupled equilibrium.
 
-Solver wall time, component scopes, process-launch time, response peaks, nominal bending stress $3.75P/(bD)$, residuals and memory records accompany the results. MATLAB loop time excludes precomputation and output writing; Abaqus analysis wall time includes its analysis/output work. Launch-to-exit costs additionally include initialization and (for Abaqus) model construction. Within-program speed ratios are conditional on the response checks. Cross-program timings are descriptive because the equilibrium algorithms differ. One run per case does not establish statistical timing confidence. Abaqus material and stiffness-assembly timers are not inferred from its unallocated remainder.
+Solver wall time, component scopes, process-launch time, response peaks, nominal bending stress $3.75P/(bD)$, residuals and memory records accompany the results. MATLAB loop time excludes precomputation and output writing; Abaqus analysis wall time includes its analysis/output work. Launch-to-exit costs additionally include initialization and (for Abaqus) model construction. Within-program speed ratios are conditional on the response checks. Cross-program timings are descriptive because the equilibrium algorithms differ. Three sequential observations per case describe the observed timing range, without establishing population confidence intervals. Abaqus material and stiffness-assembly timers are not inferred from its unallocated remainder.
 
 The completed experimental comparison and original 10,000-step Figure 1 are separate studies. This hardware comparison does not change their histories or step counts.
 
@@ -69,21 +69,30 @@ The large specimen's medium and fine meshes use an equilibrium-iteration limit o
 
 All 30 histories complete and pass the declared hardware-response checks. Maximum MATLAB load-history difference from CPU1 is 1.76e-11 of peak load; maximum absolute final-damage difference is 1.34e-9. Abaqus CPU1/CPU8 curves agree at exported CSV precision, with identical increments, cutbacks and solver-pass counts within every pair.
 
-Times below are one workstation observation per configuration. MATLAB covers its load loop; Abaqus covers analysis and output. They do not establish a cross-program speed ranking.
+Times below are medians of three sequential workstation observations per configuration (90 runs). The third observation reverses the computing-configuration order. Minimum and maximum observed times are retained in the timing CSV and figure; they are not confidence intervals. MATLAB covers its load loop; Abaqus covers analysis and output. They do not establish a cross-program speed ranking.
 
 | Size | Mesh | DOFs | MATLAB CPU1 (s) | MATLAB CPU8 (s) | MATLAB hybrid GPU (s) | Abaqus CPU1 (s) | Abaqus CPU8 (s) |
 |---|---|---:|---:|---:|---:|---:|---:|
-| small | coarse | 3,772 | 39.9 | 42.3 | 61.5 | 158 | 234 |
-| small | medium | 14,686 | 133.9 | 145.3 | 139.1 | 830 | 403 |
-| small | fine | 25,534 | 235.7 | 261.1 | 256.7 | 1667 | 691 |
-| large | coarse | 14,686 | 132.1 | 140.0 | 145.2 | 819 | 390 |
-| large | medium | 56,954 | 598.0 | 639.6 | 624.5 | 4350 | 1583 |
-| large | fine | 101,088 | 1156.6 | 1221.3 | 1193.9 | 8548 | 2947 |
+| small | coarse | 3,772 | 31.3 | 33.8 | 38.5 | 158 | 234 |
+| small | medium | 14,686 | 131.2 | 144.0 | 146.1 | 832 | 403 |
+| small | fine | 25,534 | 232.3 | 251.8 | 255.0 | 1667 | 691 |
+| large | coarse | 14,686 | 127.6 | 140.0 | 147.0 | 819 | 398 |
+| large | medium | 56,954 | 598.9 | 639.6 | 626.4 | 4380 | 1586 |
+| large | fine | 101,088 | 1155.5 | 1206.0 | 1193.9 | 8548 | 2947 |
 
-MATLAB CPU8 and the hybrid GPU backend are slower than CPU1 in all six observations. CPU1 sparse factorization accounts for 67-74% of the load loop. The hybrid GPU retains that CPU factorization and includes data transfers in its element/damage scopes. These data support a functional GPU backend, with no GPU speedup on this workstation. Abaqus CPU8 is slower on the smallest case and gives within-program speed ratios of 2.06-2.90 on the remaining cases. On the largest mesh, Abaqus takes 8,548/2,947 s (CPU1/CPU8), with 2,003 accepted increments and 8,297 solver passes in both configurations.
+MATLAB CPU8 and the hybrid GPU backend are slower than CPU1 for all six median comparisons. CPU1 sparse factorization accounts for 67-76% of the load loop. The hybrid GPU retains that CPU factorization and includes data transfers in its element/damage scopes. These data support a functional GPU backend, with no GPU speedup on this workstation. Abaqus CPU8 is slower on the smallest case and gives within-program speed ratios of 2.06-2.90 on the remaining cases. On the largest mesh, Abaqus takes 8,548/2,947 s (CPU1/CPU8), with 2,003 accepted increments and 8,297 solver passes in both configurations.
 
-MATLAB CPU1 peaks are 1.87-4.24% above Abaqus CPU1 peaks across these six cases. Different equilibrium algorithms and residuals qualify this comparison. Abaqus CPU1 summed sparse-solver elapsed times account for 9.8-14.4% of analysis wall time. The remaining time is unallocated; it is not labeled material or assembly time. Original measured ODB sizes accompany the live-run summary; an archive replay without ODBs reports that size as unavailable while retaining all other diagnostics.
+MATLAB CPU1 peaks are 1.87-4.24% above Abaqus CPU1 peaks across these six cases. Different equilibrium algorithms and residuals qualify this comparison. Abaqus CPU1 summed sparse-solver elapsed times account for 9.5-14.4% of analysis wall time. The remaining time is unallocated; it is not labeled material or assembly time. Original measured ODB sizes accompany the live-run summary; an archive replay without ODBs reports that size as unavailable while retaining all other diagnostics.
 
-![Measured times](reproducibility/scaling_study/analysis/scaling_timings.png)
+![Median times and observed ranges](reproducibility/timing_repeats/analysis/scaling_timings.png)
 
 ![Normalized size/mesh responses](reproducibility/scaling_study/analysis/scaling_responses.png)
+
+## Repeated observations
+
+All saved MATLAB numerical arrays and Abaqus response CSVs are identical across the three observations within each setting. Abaqus accepted-increment and solver-pass counts are also identical. Timings vary and are not numerical outputs to reproduce exactly.
+
+```powershell
+python softwarex/run_timing_repeats.py --baseline C:/runs/scaling_study --workspace C:/runs/timing_repeats
+python softwarex/plot_timing_repeats.py --summary C:/runs/timing_repeats/analysis/summary.json --baseline C:/runs/scaling_study/analysis/summary.json --output C:/runs/timing_repeats/analysis
+```

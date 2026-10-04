@@ -1,0 +1,13 @@
+{
+  "source": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\nooru_25mm_mesh_study\\coarse\\damage_static.m",
+  "source_sha256": "23ab8d9d0ec38d364e1124e5a679f497950d34afa18e5b7c57fccaf74fcc299d",
+  "functions": [
+    "material_scale",
+    "precompute_TET4_vectorized",
+    "oliver_bandwidth_TET4",
+    "eqv_strain_modified_vm_vec",
+    "max_principal_strain_direction_vec"
+  ],
+  "retains_damage_history": true,
+  "scope": "Local TET4 mapping, direction, projected width, finite-interval softening integral and unloading checks; rotating-direction irreversibility additionally checked for state-history source. Not structural mesh convergence."
+}

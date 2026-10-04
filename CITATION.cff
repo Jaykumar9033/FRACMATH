@@ -26,5 +26,6 @@ abstract: >-
   modified von Mises equivalent strain, exponential softening, and
   direction-dependent Oliver crack-band regularization.
   The SoftwareX study includes a hybrid 2D GPU backend with CPU sparse
-  factorization, CPU/SMP size and mesh comparisons, and a nominal-mesh 3D
-  pure-tension comparison with digitized experimental data.
+  factorization, CPU/SMP size and mesh comparisons, and three timing observations for each computing configuration, and a
+  single-mesh 3D pure-tension comparison with published notch geometry and
+  digitized experimental data.

@@ -18,38 +18,61 @@ function solver_main_3pb()
 %       matlab_load_cmod_fig.png/pdf      Load vs CMOD curve
 %       fig_damage_postpeak.png/pdf       post-peak crack figure, Abaqus style
 %       simulation_video.mp4              Video of the simulation process
+%
+%   Student reading order:
+%       1. Read parameters and mesh.
+%       2. Compute the elastic matrices once.
+%       3. Solve at the previous damage, then calculate new damage.
+%       4. Save load, crack opening, damage, and residual histories.
+%   The CPU path is the default. GPU statements are optional and use the
+%   same constitutive law. See softwarex/BEGINNER_GUIDE.md for array sizes.
 
 clc;
 fprintf('==== MATLAB CDM 3PB solver: vectorized sequential secant update ====\n');
 
 threads = str2double(getenv('FRACMATH_THREADS'));
-if ~isfinite(threads) || threads<1; threads=1; end
-threads=round(threads); maxNumCompThreads(threads);
+if ~isfinite(threads) || threads<1;
+    threads=1;
+end
+threads=round(threads);
+maxNumCompThreads(threads);
 
 % --- where the .txt files are ------------------------------------------
 case_dir = getenv('FRACMATH_CASE_DIR');
-if isempty(case_dir); case_dir = 'Gregoire_3PB'; end
+if isempty(case_dir);
+    case_dir = 'Gregoire_3PB';
+end
 if ~exist(case_dir, 'dir')
     error('Folder %s not found. Run export_3pb first to generate mesh files.', ...
           case_dir);
 end
 
 res_dir = getenv('FRACMATH_RESULTS_DIR');
-if isempty(res_dir); res_dir = fullfile(case_dir, 'results'); end
-if ~exist(res_dir, 'dir'); mkdir(res_dir); end
+if isempty(res_dir);
+    res_dir = fullfile(case_dir, 'results');
+end
+if ~exist(res_dir, 'dir');
+    mkdir(res_dir);
+end
 
 % --- material + solver parameters --------------------------------------
 p.E         = 37000;       % MPa
 p.nu        = 0.20;
 p.t         = 50;          % mm  (thickness)
 size_scale = str2double(getenv('FRACMATH_SIZE_SCALE'));
-if ~isfinite(size_scale) || size_scale<=0; size_scale=1; end
+if ~isfinite(size_scale) || size_scale<=0;
+    size_scale=1;
+end
 p.t = p.t * size_scale;
 p.backend=getenv('FRACMATH_BACKEND');
-if isempty(p.backend); p.backend='cpu'; end
+if isempty(p.backend);
+    p.backend='cpu';
+end
 assert(ismember(p.backend,{'cpu','gpu_hybrid'}));
 use_gpu=strcmp(p.backend,'gpu_hybrid');
-if use_gpu; gpu_dev=gpuDevice; end
+if use_gpu;
+    gpu_dev=gpuDevice;
+end
 p.ft        = 3.50;        % MPa
 p.fc        = 35.0;        % MPa
 p.GF        = 0.090;       % N/mm
@@ -58,14 +81,20 @@ p.eps0      = p.ft / p.E;
 
 p.max_disp  = -0.2;        % mm  total midspan deflection
 disp_env = str2double(getenv('FRACMATH_MAX_DISP'));
-if isfinite(disp_env) && disp_env < 0; p.max_disp = disp_env; end
+if isfinite(disp_env) && disp_env < 0;
+    p.max_disp = disp_env;
+end
 p.regularization = getenv('FRACMATH_REGULARIZATION');
-if isempty(p.regularization); p.regularization = 'oliver'; end
+if isempty(p.regularization);
+    p.regularization = 'oliver';
+end
 assert(ismember(p.regularization, {'oliver', 'fixed'}), ...
     'FRACMATH_REGULARIZATION must be oliver or fixed');
 p.fixed_width = 1.25; % mm: reference calibration for the local-law control
 width_env = str2double(getenv('FRACMATH_FIXED_WIDTH'));
-if isfinite(width_env) && width_env > 0; p.fixed_width = width_env; end
+if isfinite(width_env) && width_env > 0;
+    p.fixed_width = width_env;
+end
 p.num_steps = 10000;
 steps_env = str2double(getenv('FRACMATH_STEPS'));
 if isfinite(steps_env) && steps_env >= 1
@@ -444,9 +473,8 @@ end % solver_main_3pb
 % =====================================================================
 function live = open_live_fig(nodes, elems)
 % LIVE view: show ONLY fully damaged elements.
-% The old version interpolated element damage to nodes, which makes the
-% crack look smeared. This version plots the full beam in grey and overlays
-% only elements with omega >= FULL_DAMAGE_THRESH.
+% Plot the full beam in grey and overlay elements satisfying
+% omega >= FULL_DAMAGE_THRESH, without nodal averaging.
 
     FULL_DAMAGE_THRESH = 0.99;   % "full damage" threshold. Use 0.99 if stricter is needed.
 
@@ -755,25 +783,43 @@ end
 function [omega,kappa,h] = gpu_damage_point(ex,ey,gxy,g1x,g1y,g2x,g2y,g3x,g3y, ...
     kappa_old,omega_old,nu,k,eps0,GF,ft,omega_max,fixed,width)
     % Scalar form of the CPU damage update, compiled by gpuArray.arrayfun.
-    me=(ex+ey)/2; rad=sqrt(((ex-ey)/2)^2+(gxy/2)^2);
-    e1=me+rad; e2=me-rad;
-    theta=0.5*atan2(gxy,ex-ey); nx=cos(theta); ny=sin(theta);
-    if abs(ex-ey)+abs(gxy)<1e-18; nx=1; ny=0; end
+    % Principal strains and crack-normal direction.
+    me=(ex+ey)/2;
+    rad=sqrt(((ex-ey)/2)^2+(gxy/2)^2);
+    e1=me+rad;
+    e2=me-rad;
+    theta=0.5*atan2(gxy,ex-ey);
+    nx=cos(theta);
+    ny=sin(theta);
+    if abs(ex-ey)+abs(gxy)<1e-18;
+        nx=1;
+        ny=0;
+    end
+    % Project each shape-function gradient onto the crack normal.
     den=abs(g1x*nx+g1y*ny)+abs(g2x*nx+g2y*ny)+abs(g3x*nx+g3y*ny);
     h=max(2/max(den,1e-14),1e-12);
-    if fixed; h=width; end
+    if fixed;
+        h=width;
+    end
     ef=max(eps0/2+GF/(h*ft),eps0+1e-12);
-    e3=-nu/(1-nu)*(e1+e2); I1=e1+e2+e3;
+    e3=-nu/(1-nu)*(e1+e2);
+    I1=e1+e2+e3;
     J2=((e1-e2)^2+(e2-e3)^2+(e3-e1)^2)/6;
-    a1=(k-1)/(2*k*(1-2*nu)); a2=1/(2*k);
-    a3=((k-1)/(1-2*nu))^2; a4=12*k/(1+nu)^2;
+    a1=(k-1)/(2*k*(1-2*nu));
+    a2=1/(2*k);
+    a3=((k-1)/(1-2*nu))^2;
+    a4=12*k/(1+nu)^2;
     eq=max(a1*I1+a2*sqrt(max(a3*I1^2+a4*J2,0)),0);
-    kappa=max(kappa_old,eq); omega=0;
+    % History and damage cannot decrease on unloading.
+    kappa=max(kappa_old,eq);
+    omega=0;
     if kappa>eps0
         omega=1-(eps0/kappa)*exp(-(kappa-eps0)/max(ef-eps0,1e-15));
     end
     omega=min(max(max(omega,omega_old),0),omega_max);
-    if ~isfinite(omega); omega=omega_old; end
+    if ~isfinite(omega);
+        omega=omega_old;
+    end
 end
 
 function h = oliver_bandwidth_T3(gradN_all, nx, ny)

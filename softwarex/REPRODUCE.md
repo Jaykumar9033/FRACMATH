@@ -1,6 +1,8 @@
 # Reproducing the 2D SoftwareX figures
 
-The 2D MATLAB and Fortran UMAT equivalent-strain invariant has been to `J2 = ((e1-e2)^2 + (e2-e3)^2 + (e3-e1)^2)/6`.
+The 2D MATLAB and Fortran UMAT equivalent-strain invariant is `J2 = ((e1-e2)^2 + (e2-e3)^2 + (e3-e1)^2)/6`.
+
+For a first MATLAB run, open `start_here.m` and press Run. Settings are at the top, and results are written to `student_results`. See [BEGINNER_GUIDE.md](BEGINNER_GUIDE.md) for the numerical sequence and array sizes.
 
 ## Environment used
 
@@ -27,7 +29,7 @@ matlab -batch "solver_main_3pb"
 
 The solver writes `Gregoire_3PB/results`. The two archived histories in `reproducibility/results_1000` and `reproducibility/results_10000` preserve both runs because running the script again overwrites `results`. The material-point self-test writes `material_energy.csv` with columns `bandwidth_mm, recovered_GF_N_per_mm, relative_error, final_damage`.
 
-New runs also write `matlab_step_diagnostics.csv` with per-step component timings, iteration count, old-damage convergence, and post-damage residual. Set `FRACMATH_CASE_DIR` to a separate mesh folder to avoid overwriting the preserved histories. The preserved 10,000-step run predates this per-step export.
+The solver writes `matlab_step_diagnostics.csv` with per-step component timings, iteration count, old-damage convergence, and post-damage residual. Set `FRACMATH_RESULTS_DIR` to a separate results folder. The 10,000-step archive supplies aggregate timing and numerical states; the mesh and hardware studies also supply per-step diagnostics.
 
 To regenerate the 2D figures from the preserved 10,000-step MATLAB state and Abaqus CSV, run `python plot_verified_figures.py` from the package root after installing NumPy, SciPy, and Matplotlib. The 1,000-step MATLAB history is retained for the increment-sensitivity check in the text but is not plotted in the MATLAB--Abaqus comparison. Figures 4 and 5 use 3D source image panels, recomposed with one enlarged color bar per damage sequence and larger increment labels. Run `python rebuild_3d_figures.py` from the package root to rebuild those layouts from `figure_sources`. The 3D panels are qualitative workflow illustrations.
 
@@ -56,7 +58,7 @@ See [`MESH_STUDY.md`](MESH_STUDY.md) for the exact protocol, licensed-run comman
 
 ## 3D pure-tension experimental comparison
 
-Run `python softwarex/run_nooru_tension.py --workspace C:/runs/nooru_tension` and `python softwarex/analyze_nooru_tension.py --workspace C:/runs/nooru_tension` from the repository root. See `softwarex/reproducibility/experimental_3d/README.md` for the experimental source, digitization uncertainty, local gauge control, material parameters, numerical checks, and validation scope. This is a separate test from the proportional mixed-mode damage images. The existing end-twist example does not supply a valid experimental CMOD measurement.
+Run `python softwarex/plot_nooru_coarse.py` from the repository root to check the completed 25 mm-notch history and regenerate Figure 4b. Copy `softwarex/reproducibility/nooru_25mm_coarse` to a separate workspace and run `matlab -batch run_case` there for a structural rerun. See that folder's README for the mesh, gauge control, source-linked material checks, parameters and validation scope. The experimental source and digitization uncertainty are in `softwarex/reproducibility/experimental_3d/experimental_source.json`. The 20 mm-notch source and histories in that separate folder are idealized-geometry evidence. The proportional mixed-mode damage images and end-twist example remain qualitative.
 
 ## Size, mesh, CPU and hybrid GPU evidence
 

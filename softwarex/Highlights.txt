@@ -2,6 +2,6 @@ Highlights
 
 - Inspectable vectorized MATLAB workflow for local continuum damage
 - Direction-dependent Oliver width integrated with constitutive history
-- Material-point energy calibration and unload/reload verification
+- TET4 energy and damage-history checks accompany a 3D experimental comparison
 - Controlled mesh study compares regularized and fixed softening laws
-- CPU, hybrid GPU and Abaqus SMP costs measured on matched size/mesh cases
+- CPU, hybrid GPU and Abaqus SMP costs measured in 90 matched size/mesh runs

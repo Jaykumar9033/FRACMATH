@@ -4,6 +4,8 @@ FRACMATH is a vectorized MATLAB finite-element implementation of scalar continuu
 
 ## Start here
 
+Students can open [`softwarex/start_here.m`](softwarex/start_here.m) in MATLAB and press Run. The settings are at the top; the supplied mesh and the paper's solver are used directly. Read the [beginner guide](softwarex/BEGINNER_GUIDE.md) for units, array sizes, functions, and output checks.
+
 | Item | Location | Purpose |
 | --- | --- | --- |
 | 2D MATLAB solver | [`3pb/matlab/solver_main_3pb.m`](3pb/matlab/solver_main_3pb.m) | Notched three-point bending; `FRACMATH_STEPS`, `FRACMATH_HEADLESS`, and `FRACMATH_SELFTEST` controls |
@@ -22,13 +24,13 @@ The manuscript identifies the source and study data with an immutable Git commit
 
 The preserved fixed-step MATLAB runs used 1,000 and 10,000 displacement steps. Their peak loads are 4.26464 and 4.02633 kN, respectively. The one-CPU Abaqus run reached 3.99914 kN with 1,136 accepted adaptive increments and 4,817 solver passes. Its 832 s wall time includes more than the 100.2 s summed sparse-solver timer. The distinct step histories and unknown time spent in UMAT, assembly, convergence, and output do not support a speed-ranking claim. These results use one mesh. The controlled study below assesses mesh sensitivity separately.
 
-The material-point test checks tensile/compressive equivalent strain, damage irreversibility, Oliver width, and fracture-energy calibration for widths of 0.5, 1, 2, and 4 mm. The 3D pure-tension case compares a nominal-mesh simulation with digitized Nooru-Mohamed specimen 47-05 data. The mixed-mode and torsion panels illustrate damage workflows with shared color bars; their loading controls differ from the experiments. See [experimental comparison](softwarex/reproducibility/experimental_3d/README.md).
+The material-point test checks tensile/compressive equivalent strain, damage irreversibility, Oliver width, and fracture-energy calibration for widths of 0.5, 1, 2, and 4 mm. The mixed-mode and torsion panels illustrate damage workflows with shared color bars; their loading controls differ from the experiments. The [illustrative 3D comparison](softwarex/reproducibility/experimental_3d/README.md) uses 20 mm notches and is distinct from the published 25 mm specimen geometry described below.
 
 ## Run
 
 Use MATLAB R2024b or a compatible release for the 2D script. From `3pb/matlab`, run `solver_main_3pb`. Set `FRACMATH_HEADLESS=1` to omit live figures and video; set `FRACMATH_STEPS=1000` or `10000` to select the run length. Set `FRACMATH_SELFTEST=1` to run the material-point check.
 
-From `3pb/abaqus`, run `abaqus cae noGUI=run_3pb_abaqus_OLIVER_T3_FAST.py` with Abaqus/Standard 2024 and a configured Intel Fortran compiler. Set `ABQ_CPUS=1`: the current UMAT table reader has not been made thread-safe for multiple Abaqus workers.
+From `3pb/abaqus`, run `abaqus cae noGUI=run_3pb_abaqus_OLIVER_T3_FAST.py` with Abaqus/Standard 2024 and a configured Intel Fortran compiler. Set `ABQ_CPUS=1` for one CPU or `ABQ_CPUS=8` for SMP; the gradient table is initialized before parallel material calls.
 
 From `softwarex`, run `python plot_verified_figures.py` to regenerate the 2D manuscript figures from the preserved result files. Run `python rebuild_3d_figures.py` to recompose the archived 3D panels with shared color bars. Install Python dependencies with `python -m pip install -r requirements.txt` from the repository root. See the [full guide](REPRODUCIBILITY.md) for commands and expected outputs.
 
@@ -68,6 +70,14 @@ python softwarex/analyze_mesh_study.py
 
 The solver supports `FRACMATH_THREADS` (default 1), `FRACMATH_SIZE_SCALE` (default 1), and `FRACMATH_BACKEND=cpu` or `gpu_hybrid` (default cpu). The hybrid backend runs element stiffness values and damage operations on a double-precision GPU and retains CPU sparse assembly/factorization. It requires Parallel Computing Toolbox and a compatible GPU. Abaqus supports SMP after eager gradient-table loading at analysis start.
 
-See [SCALING_STUDY.md](softwarex/SCALING_STUDY.md) for the 30-case protocol, exact size/mesh choices, pilot checks, licensed-run commands, and timing scopes. Hardware acceleration is evaluated from measured, response-checked runs.
+See [SCALING_STUDY.md](softwarex/SCALING_STUDY.md) for the 30-configuration protocol, exact size/mesh choices, pilot checks, licensed-run commands, and timing scopes. Each configuration has three sequential workstation observations, giving 90 completed runs. Hardware acceleration is evaluated from measured, response-checked runs.
 
-All 30 configurations complete and pass the hardware-response checks. The largest mesh has 100,104 elements and 101,088 DOFs. MATLAB CPU8 and hybrid GPU are slower than CPU1 on this workstation; Abaqus CPU8 reaches a 2.90 speed ratio on the largest mesh. Full measured times and interpretation are in the study guide.
+All 30 configurations complete and pass the hardware-response checks. Saved MATLAB numerical arrays and Abaqus response CSVs match exactly across the three observations within each configuration. Median times and observed minimum/maximum ranges are preserved in [timing_repeats](softwarex/reproducibility/timing_repeats/README.md). The largest mesh has 100,104 elements and 101,088 DOFs. MATLAB CPU8 and hybrid GPU are slower than CPU1 for all six median size/mesh comparisons on this workstation; Abaqus CPU8 reaches a 2.90 speed ratio on the largest mesh. MATLAB load-loop time and Abaqus analysis/output time have different scopes, so these totals do not establish a cross-program speed ranking.
+
+## 3D material checks and experimental comparison
+
+The published-geometry pure-tension case uses a 200 × 200 × 50 mm specimen with two 25 mm-deep, 5 mm-wide notches and four local displacement gauges. Its completed coarse mesh contains 35,917 TET4 elements and 21,828 DOFs. The run reaches the final 0.20 mm mean gauge displacement in 608 accepted increments, with eight rejected trials; the maximum accepted relative equilibrium residual is 8.917e-7.
+
+The computed peak is 16.6415 kN versus 19.8529 kN in the digitized Nooru-Mohamed specimen 47-05 record: a 16.18% underprediction. The normalized curve RMS error is 9.27%. These errors are reported explicitly; this single completed mesh does not establish 3D mesh convergence. The [coarse-case archive](softwarex/reproducibility/nooru_25mm_coarse/README.md) supplies the mesh, source, inputs, histories and numerical checks.
+
+Local tests pass for 32 tetrahedron-size/direction cases, the compressive equivalent-strain mapping, and eight rotating-direction damage-history cases. They check projected width, tensile response, post-peak fracture-energy calibration and damage irreversibility. These constitutive checks do not replace the structural experimental comparison. Medium/fine 3D cases, separate Abaqus profiling and the beginner-entry 10,000-step reproduction check remain pending.

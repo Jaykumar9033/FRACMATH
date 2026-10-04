@@ -46,3 +46,5 @@ abaqus.rpy*
 !softwarex/reproducibility/mesh_study/**/Gregoire_3PB.log
 
 !softwarex/reproducibility/mesh_study/**/extract.log
+!softwarex/reproducibility/nooru_25mm_coarse/**/*.log
+!softwarex/reproducibility/nooru_25mm_coarse/*.log
