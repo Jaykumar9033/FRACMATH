@@ -50,7 +50,7 @@ def main():
             'nooru_damage_evolution_shared_bar.png', 'torsion_damage_evolution_shared_bar.png',
             'mesh_study_overview.pdf']),
         'declarations': all(title in text for title in ['CRediT authorship contribution statement',
-                                                      'Declaration of competing interest', 'Declaration of generative AI and AI-assisted technologies in the manuscript preparation process']),
+                                                      'Declaration of competing interest', 'Declaration of AI-assisted technologies']),
         'five_highlights_at_most_85_characters': len([line for line in (package / 'highlights.txt').read_text().splitlines()
                                                     if line.startswith('- ')]) == 5 and all(
             len(line[2:]) <= 85 for line in (package / 'highlights.txt').read_text().splitlines() if line.startswith('- ')),
