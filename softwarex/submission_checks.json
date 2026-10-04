@@ -2,11 +2,11 @@
   "template": "SoftwareX original software article, Version 6 (March 2026)",
   "template_url": "https://legacyfileshare.elsevier.com/promis_misc/softwarex-osp-template.docx",
   "abstract_words": 95,
-  "main_text_words_estimate": 3646,
+  "main_text_words_estimate": 3733,
   "word_count_scope": "Includes equations and code; excludes metadata, tables, figures and references.",
   "figures": 6,
   "keywords": 6,
-  "manuscript_sha256": "a4bc7cbc181b0d34d7bada0926df011b8db6ab0ad442538fe8e153e3dfe94b71",
+  "manuscript_sha256": "6bc8be2760e2aa3ba1ed9e63a53b720e45e00d01667f3cf50fd7675b96dd3e08",
   "checks": {
     "five_required_sections": true,
     "figure_count_at_most_six": true,

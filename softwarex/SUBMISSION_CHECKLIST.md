@@ -86,7 +86,7 @@ from the quantitative published 25 mm-notch geometry.
 6. Repeat the PDF, file and delivery checks if further simulation results are
    incorporated. The manuscript names OpenAI Codex in its AI-use declaration
    and identifies the completed numerical evidence by immutable commit
-   `3dd910742bef9af58132d8a6818f87ddf189fd48`.
+   `fb725be6c2026582a22ad9bc2d8c86b579930a03`.
 
 The three-mesh 3D study, GPU/SMP benchmarking and detailed Abaqus profiling
 are evidence goals of this manuscript, not universal mandatory SoftwareX

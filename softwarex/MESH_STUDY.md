@@ -155,9 +155,7 @@ and `fine/mesh` folders directly through `FRACMATH_CASE_DIR`, with
 `FRACMATH_MAX_DISP=-0.1`, and a new `FRACMATH_RESULTS_DIR`. These MATLAB-only
 reruns do not require Abaqus; creating new meshes or Abaqus comparisons does.
 
-## Matched smaller-increment family
-
-### Response comparison figures
+## Response comparison figures
 
 `figures/mesh_study_overview.pdf` compares coarse, medium and fine
 load--CMOD curves for Oliver MATLAB, fixed-law MATLAB and regularized Abaqus,
@@ -167,6 +165,8 @@ shows each MATLAB/Abaqus pair on all three meshes. These response curves,
 not elapsed time, assess mesh sensitivity. Computational cost appears
 separately in the hardware-study figure; the raw mesh-study timing records
 remain in the archive.
+
+## Matched smaller-increment family
 
 The fixed-law fine-mesh check showed greater increment sensitivity. The study
 therefore includes 4,000-step runs for both calibrations on all three meshes,
