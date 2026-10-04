@@ -96,3 +96,7 @@ All saved MATLAB numerical arrays and Abaqus response CSVs are identical across 
 python softwarex/run_timing_repeats.py --baseline C:/runs/scaling_study --workspace C:/runs/timing_repeats
 python softwarex/plot_timing_repeats.py --summary C:/runs/timing_repeats/analysis/summary.json --baseline C:/runs/scaling_study/analysis/summary.json --output C:/runs/timing_repeats/analysis
 ```
+
+## Separate UMAT and native assembly diagnostics
+
+The companion [phase measurement archive](reproducibility/abaqus_phase_timing/README.md) contains a direct serial UMAT call timer and a native-only VTune profile. Both use the matched small/coarse mesh and finish the same response path. Their results appear separately in Figure 3 and Table 5 and do not enter the 90 timing observations. Clock overhead and sampling scopes prevent a complete material/assembly wall-time partition.

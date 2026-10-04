@@ -19,6 +19,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--workspace', type=Path, required=True)
     parser.add_argument('--source-snapshot', type=Path, required=True)
+    parser.add_argument('--debug-symbols', action='store_true',
+                        help='Generate and preserve user-library symbols without disabling optimization')
     parser.add_argument('--vtune', type=Path, default=Path(r'C:\Program Files (x86)\Intel\oneAPI\vtune\2025.0\bin64\vtune.exe'))
     args = parser.parse_args()
     if not args.vtune.exists():
@@ -36,6 +38,15 @@ def main():
                 return
         raise ValueError('Use a new workspace for each profile')
     setup(folder, args.source_snapshot.resolve())
+    if args.debug_symbols:
+        pdb = str(folder/'standardU.pdb')
+        extra = '/DEBUG /PDB:"'+pdb+'"'
+        (folder/'abaqus_v6.env').write_text(
+            'compile_fortran += ["/names:lowercase", "/Zi"]\n'
+            'link_sl += '+repr(' '+extra)+'\n')
+        job = folder/'Gregoire_3PB'
+        job.mkdir(exist_ok=True)
+        shutil.copy2(folder/'abaqus_v6.env',job/'abaqus_v6.env')
     environment = env_abq('small', 'coarse', 2000, -0.1, cpus=1)
     if os.name == 'nt':
         # VTune queries Windows PowerShell 5.1. An inherited PowerShell 7
@@ -46,6 +57,7 @@ def main():
                '-knob', 'enable-stack-collection=true', '-result-dir', str(result),
                '-follow-child', '-app-working-dir', str(folder), '--'] + command_abaqus(folder)
     record = dict(command=command,
+                  debug_symbols=args.debug_symbols,
                   scope='Separate small/coarse CPU1 2,000-increment analysis; user-mode CPU sampling. Not wall-time attribution and not a benchmark observation.',
                   interpretation='UMAT-inclusive stacks may estimate material CPU work. Assembly is reported only if named symbols identify it; unknown solver symbols remain unallocated.')
     with (folder / 'collection.log').open('w', encoding='utf-8') as stream:
@@ -76,6 +88,7 @@ def main():
                 exported = subprocess.run(options, stdout=stream, stderr=subprocess.STDOUT,
                                           env=environment)
             record[report + '_export_return_code'] = exported.returncode
+    record['user_pdb_preserved'] = (folder/'standardU.pdb').exists()
     (folder / 'profile_manifest.json').write_text(json.dumps(record, indent=2), encoding='utf-8')
     print(json.dumps(record, indent=2))
 

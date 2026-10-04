@@ -22,3 +22,5 @@ Use VALIDATION_SCOPE.md and the numerical-study guides for measurement definitio
 Review author details, CRediT roles, scientific claims and the AI-use declaration. Check upload fields and declaration forms in the submission portal. The live author-guide page was inaccessible, so portal requirements have not been fully verified. Formatting checks do not predict acceptance.
 
 The existing version-specific archive remains cited for the code and study data. No new Zenodo release is part of this manuscript edit. The current figure-display script is supplied in the repository and submission package.
+
+Separate Abaqus phase evidence is supplied in `reproducibility/abaqus_phase_timing/`: direct actual-UMAT timers, clock diagnostics, native-only assembly samples, exact response checks, raw logs and source snapshots. Figure 3 and Table 5 state the different timer scopes. Full assembly wall time remains unallocated.

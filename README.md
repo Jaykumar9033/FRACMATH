@@ -95,3 +95,7 @@ Run `python softwarex/verify_paper_figures.py --workspace C:/runs/figure_replay`
 ## Software release
 
 [FRACMATH v1.1.1](https://github.com/Jaykumar9033/FRACMATH/releases/tag/v1.1.1) is archived at [Zenodo, DOI 10.5281/zenodo.23138595](https://doi.org/10.5281/zenodo.23138595). All 366 archived-file hashes match the tagged Git source. The manuscript identifies this source version and its numerical-validation limits.
+
+## Abaqus UMAT and assembly measurements
+
+A separate serial instrumented run records 18,579,456 actual UMAT calls and a raw elapsed sum of 2.996 s. Its clock-pair projection is 1.672 s and remains a diagnostic, without subtraction. A separate native-only profile reports 1.917 s of user-library self estimates and 2.873 s in four identified assembly routines. Both runs reproduce all 2,001 baseline response rows and seven mesh/boundary hashes exactly. Full assembly wall time remains unallocated; the measures have different scopes and are outside the 90 benchmark observations. See [measurement methods and reproduction](softwarex/reproducibility/abaqus_phase_timing/README.md).

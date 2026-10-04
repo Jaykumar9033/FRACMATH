@@ -449,28 +449,41 @@ median costs and observed ranges from 90 runs; complete phase, memory and
 residual records accompany the code. All saved MATLAB numerical arrays
 and Abaqus response CSVs are identical across repeats within each setting.
 
-A separate small/coarse CPU1 VTune software-sampling run reproduces the
-same mesh, boundary sets and 2,001 response rows exactly. It identifies
-2.03~s of self-time estimates in the user-subroutine library and 3.81~s
-in four named assembly routines. These exclude callees and unresolved
-symbols; profiling effects and timer scopes prevent interpreting them
-as complete material/assembly wall times. Function and call-stack exports
-accompany the code. Table~\ref{tab:abaqus-material-assembly} summarizes
-these estimates separately from the performance results.
+Two separate small/coarse, single-CPU runs measure UMAT calls and profile
+native assembly work. Both complete 2{,}000 increments and reproduce all
+2{,}001 baseline response rows and seven mesh/boundary hashes exactly.
+An instrumented UMAT records 18{,}579{,}456 calls with a raw elapsed sum
+of 2.996~s. Integer-8 \texttt{SYSTEM\_CLOCK} reads surround the unchanged
+constitutive calculations. Empty clock pairs average 0.09~$\mu$s;
+their call-count projection is 1.672~s. This diagnostic is not subtracted:
+clock overhead, timer resolution and scheduling qualify the raw sum.
+The instrumented job reports 3{,}184 solver passes, 3{,}105 decompositions,
+no cutbacks, 15.33~s of sparse-solver elapsed time and 162~s analysis wall time.
+
+A separate VTune collection attaches only to \texttt{standard.exe} after
+startup. It estimates 1.917~s of user-library self work and 2.873~s in four
+named assembly routines. All report exports succeed. Temporary-library
+removal, missing symbols and PulseEvent warnings limit attribution.
+The profile totals 139.31~s of sampled CPU estimates, while Abaqus reports
+24~s CPU and 161~s wall time; these scopes are not rescaled or added.
+Self samples exclude callees and unidentified work, so full assembly wall
+time remains unmeasured. Table~\ref{tab:abaqus-material-assembly} and
+Figure~\ref{fig:timing} keep these measures separate from the 90 benchmark
+observations. Raw sources, logs, calibration and verification scripts are supplied.
 
 \begin{table}[!htbp]
 \centering\small
-\caption{Abaqus material-related and assembly profiling estimates from a
-separate small/coarse, single-CPU, 2{,}000-increment run. These are sampled
-CPU self times, not complete phase wall times, and are excluded from the
-90 timing observations.}
+\caption{Separate Abaqus UMAT and assembly measurements. Timer kinds differ;
+the rows are not additive and do not provide a complete phase allocation.}
 \label{tab:abaqus-material-assembly}
 \begin{tabularx}{\linewidth}{@{}YrY@{}}
 \toprule
-Measured scope & Estimate (s) & Interpretation \\
+Measured scope & Time (s) & Timer and scope \\
 \midrule
-User-subroutine library & 2.03 & UMAT, helpers and external-database initialization; not an isolated material timer. \\
-Four identified assembly routines & 3.81 & Self samples in named kernels; excludes callees and unidentified assembly work. \\
+Actual UMAT calls & 2.996 & Raw instrumented elapsed-call sum, including clock effects. \\
+Empty clock-pair projection & 1.672 & Diagnostic projected across calls; not an overhead subtraction. \\
+User-subroutine library & 1.917 & Sampled CPU self time in the separate native-only profile. \\
+Four identified assembly routines & 2.873 & Sampled CPU self time; excludes callees and unidentified work. \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -479,7 +492,7 @@ Four identified assembly routines & 3.81 & Self samples in named kernels; exclud
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.90\linewidth]{scaling_timings.pdf}
+\includegraphics[width=0.84\linewidth]{scaling_timings.pdf}
 \caption{Thirty size/mesh/computing configurations with three observations
 each. Bars show medians; whiskers show the observed minimum and maximum.
 MATLAB bars cover the load loop;
@@ -487,8 +500,9 @@ Abaqus bars cover analysis and output. CPU8 denotes a MATLAB library-thread
 limit or Abaqus SMP; GPU denotes element/damage work with CPU sparse
 factorization. These workstation observations establish no cross-program
 speed ranking or GPU speed advantage. The lower panel reports the separate
-Abaqus profile: user-library and named-assembly CPU self-time estimates,
-not complete material/assembly wall times.}
+Abaqus native-only profile (left) and direct UMAT timer (right).
+The clock-pair projection is a diagnostic, not a subtraction. These CPU self
+samples and elapsed-call sums do not form complete phase wall times.}
 \label{fig:timing}
 \end{figure}
 
@@ -780,8 +794,9 @@ factorization from assembly in MATLAB. A geometry-matched 3D pure-tension
 comparison quantifies peak and curve errors without fitting material
 parameters.
 The hybrid GPU and SMP study reports 90 timing observations on matched meshes. The mixed-mode and torsion cases remain qualitative, and
-complete Abaqus material/assembly wall costs remain unmeasured;
-separate sampling identifies user-library and assembly self work.
+direct timers record UMAT call duration with explicit clock diagnostics.
+Native profiling identifies assembly self work; complete assembly wall
+cost remains unallocated.
 
 % =====================================================================
 \section*{Data availability}

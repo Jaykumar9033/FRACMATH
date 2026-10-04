@@ -75,3 +75,6 @@ documentation locations for the FRACMATH repository.
 | `doc/README.md` | documentation | Theory manual instructions |
 | `doc/theory_manual.tex` | source | LaTeX source for the theory manual |
 | `doc/theory_manual.pdf` | planned output | Build from TeX with a complete LaTeX installation |
+
+| `softwarex/reproducibility/abaqus_phase_timing/` | archived evidence | Direct UMAT timers, clock diagnostics, native assembly samples, exact response checks and raw logs |
+| `softwarex/time_abaqus_umat.py`, `softwarex/profile_native_abaqus.py` | measurement tools | Separate serial timer and native-only profiler launchers |

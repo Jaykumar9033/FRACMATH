@@ -44,7 +44,7 @@ def main():
             values = [('%.1f' if r['config'].startswith('matlab') else '%.0f') % r['median_s'] for r in selected]
             table.append(' & '.join([size.capitalize(), mesh, format(dofs, ','), *values])+r' \\')
     package = Path(__file__).resolve().parent
-    profile = json.loads((package/'reproducibility/abaqus_profile/analysis_summary.json').read_text())
+    profile = json.loads((package/'reproducibility/abaqus_phase_timing/native_profile/analysis_summary.json').read_text())
     names = ['User library', 'Named assembly']
     values = [profile['user_library_self_sampled_CPU_time_s'],
               profile['explicitly_named_assembly_self_sampled_CPU_time_s']]
@@ -55,9 +55,17 @@ def main():
     ax.tick_params(axis='x', labelrotation=15)
     ax.grid(axis='y', alpha=.2)
     axes[2, 1].axis('off')
-    axes[2, 1].text(0, .95, 'User library: UMAT, helpers\nand initialization.\n\nAssembly: four named routines.\nCallees and unknown work excluded.\n\nNot complete phase wall timers.\nNot part of the 90 benchmark runs.',
+    axes[2, 1].text(0, .95, 'User library includes UMAT\nand helpers; startup is excluded.\n\nAssembly: four named routines.\nCallees and unknown work excluded.\n\nRight: raw UMAT call timer.\nClock projection is a diagnostic.\nNo subtraction or summation.\n\nNot complete phase wall timers.\nOutside the 90 benchmark runs.',
                     va='top', fontsize=11, transform=axes[2, 1].transAxes)
-    axes[2, 2].axis('off')
+    direct = json.loads((package/'reproducibility/abaqus_phase_timing/direct/direct_timing_summary.json').read_text())
+    ax = axes[2, 2]
+    bars = ax.bar(['UMAT call\nsum (raw)', 'Empty-pair\nprojection'],
+                  [direct['measurements']['umat_elapsed_s'], direct['empty_clock_pair_projection_s']],
+                  color=['#228833', '#bbbbbb'])
+    bars[1].set_hatch('//')
+    ax.bar_label(bars, fmt='%.2f s', padding=3)
+    ax.set(title='Separate instrumented CPU1 run', ylabel='Elapsed-time measure (s)', ylim=(0, 4))
+    ax.grid(axis='y', alpha=.2)
     table.extend([r'\hline', r'\end{tabular}', r'\end{table}'])
     args.output.mkdir(parents=True, exist_ok=True)
     (args.output/'scaling_table.tex').write_text('\n'.join(table)+'\n', encoding='utf-8')

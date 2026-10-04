@@ -15,3 +15,5 @@ softwarex/reproducibility/nooru_25mm_mesh_study/** -text
 softwarex/reproducibility/nooru_proportional_strict/** -text
 softwarex/reproducibility/umat_audit/** -text
 softwarex/reproducibility/figure_replay/** -text
+
+softwarex/reproducibility/abaqus_phase_timing/** -text

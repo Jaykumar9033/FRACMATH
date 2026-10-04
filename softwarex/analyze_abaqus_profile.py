@@ -54,7 +54,7 @@ def main():
     msg = (job/"Gregoire_3PB.msg").read_text(errors="replace")
     solver = re.findall(r"SOLVER ELAPSED TIME:\s*([\d.Ee+-]+)\s*(ms|s)\b", msg)
     summary = dict(
-        scope="One separate small/coarse CPU1 2,000-increment profile; sampling estimates, not benchmark timings.",
+        scope=manifest.get('scope',"One separate small/coarse CPU1 2,000-increment profile; sampling estimates, not benchmark timings."),
         response_arrays_exactly_equal=True, response_rows=len(a), mesh_sha256=hashes,
         user_library_self_sampled_CPU_time_s=user,
         explicitly_named_assembly_self_sampled_CPU_time_s=assembly,
@@ -68,6 +68,15 @@ def main():
                      "Sampled CPU-time estimates and Abaqus CPU/elapsed timers have different scopes and are not summed or rescaled.",
                      "The profiler reports missing symbols and a PulseEvent collection warning.",
                      "Other numerical validation jobs were active; this is not an isolated performance observation."])
+    if manifest.get('debug_symbols'):
+        summary['debug_symbols_requested'] = True
+        summary['user_pdb_preserved'] = manifest.get('user_pdb_preserved',False)
+        summary['resolved_user_functions'] = sorted(set(row['function'] for row in selected
+                                                        if row['module']=='standardU.dll'))
+        summary['limitations'] = summary['limitations'][:4]
+        summary['limitations'].append('Separate fresh profile; requested symbols are reported only if recovered. Not an unprofiled benchmark observation.')
+        collection = (folder/'collection.log').read_text(errors='replace')
+        summary['collection_warning_lines'] = [line for line in collection.splitlines() if 'Warning:' in line]
     (folder/"analysis_summary.json").write_text(json.dumps(summary, indent=2)+"\n", encoding="utf-8")
     print(json.dumps(summary, indent=2))
 
