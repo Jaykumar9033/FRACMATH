@@ -356,8 +356,8 @@ The archived logs and timing parser reproduce these measurements.
 The controlled studies additionally retain per-step costs, residuals and
 iteration counts linked to the implementation walkthrough.
 
-Figure~\ref{fig:b1-damage} compares damage fields at peak and at
-the first saved post-peak state above CMOD 0.30~mm. The Abaqus field
+Figure~\ref{fig:b1-damage} compares the severely damaged element bands
+at peak load and at the final saved state. The Abaqus field
 output is taken from the nearest stored frame, while the MATLAB panels
 use the state arrays.
 
@@ -365,13 +365,13 @@ use the state arrays.
 \centering
 \includegraphics[width=0.96\linewidth]{damage_verified.png}
 \caption{Damaged element bands on the full undeformed beam. The light grey
-background shows the CPS3 mesh; dark elements meet the displayed cutoff. Left: MATLAB; right: Abaqus/UMAT. Top: severe damage at peak
-load ($\omega\geq0.99$). Bottom: fully damaged elements
-($\omega\geq0.999999$) after peak, at the saved state above CMOD 0.30~mm.
-The cutoffs differ between rows and are printed in each panel with the
-selected element count. These bands show damage localization, not a
-measured open-crack length. No smoothing is used. Abaqus uses the nearest
-stored response frame.}
+background shows the CPS3 mesh. Dark elements have $\omega\geq0.99$ in
+all panels. Left: MATLAB; right: Abaqus/UMAT. Top: peak load. Bottom:
+final saved state. The final selected band extends from the notch tip at
+$y=20$~mm to about $y=94.8$~mm in both programs. This is a severe-damage
+band, not complete separation: the stricter $\omega\geq0.999999$ criterion
+reaches only $y=55.4$~mm. Counts are printed in each panel. No smoothing
+or artificial crack extension is used. Abaqus uses stored field frames.}
 \label{fig:b1-damage}
 \end{figure}
 

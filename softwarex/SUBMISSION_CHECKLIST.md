@@ -15,7 +15,7 @@ https://legacyfileshare.elsevier.com/promis_misc/softwarex-osp-template.docx
 
 ## Evidence and scope
 
-Use VALIDATION_SCOPE.md and the numerical-study guides for measurement definitions. The UMAT audit and archive-backed figure reconstruction pass. Figure 2 shows severe damage at peak and full damage after peak with explicit cutoffs; Figures 4 and 5 retain the shared colorbars. Scientific claims remain limited to the results shown in the paper.
+Use VALIDATION_SCOPE.md and the numerical-study guides for measurement definitions. The UMAT audit and archive-backed figure reconstruction pass. Figure 2 shows severe damage at peak and final state with the same explicit 0.99 cutoff; Figures 4 and 5 retain the shared colorbars. Scientific claims remain limited to the results shown in the paper.
 
 ## Final author checks
 

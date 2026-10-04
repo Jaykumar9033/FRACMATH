@@ -93,8 +93,8 @@ def damage_figure(d):
     nodes = d["nodes"]
     elems = d["elems"].astype(int) - 1
     panels = [(d["snap_peak"][0, 0], "At peak load"),
-              (d["snap_pp"][0, 0], "Post peak, CMOD > 0.30 mm")]
-    cutoffs = (0.99, 0.999999)  # Severe damage at peak; full damage after peak.
+              ({"omega": d["omega"]}, "Final saved state")]
+    cutoffs = (0.99, 0.99)  # Same explicit severe-damage criterion in both rows.
     pd = ABQ.parent / "plotdata"
     has_abq = (pd / "omega_peak.csv").exists() and (pd / "omega_postpeak.csv").exists()
     fig, axes = plt.subplots(2, 2 if has_abq else 1,
@@ -115,10 +115,10 @@ def damage_figure(d):
         ax.add_collection(coll)
         ax.text(.03, .97, f"ω ≥ {cutoff:g}\n{selected.sum()} elements",
                 transform=ax.transAxes, va="top", fontsize=9)
-        ax.set_title("MATLAB: peak" if row == 0 else "MATLAB: postpeak",
+        ax.set_title("MATLAB: peak" if row == 0 else "MATLAB: final",
                      loc="left", fontsize=10)
         if has_abq:
-            fn = "omega_peak.csv" if row == 0 else "omega_postpeak.csv"
+            fn = "omega_peak.csv" if row == 0 else "omega_last.csv"
             values = np.loadtxt(pd / fn, delimiter=",", comments="#")
             abq_w = np.zeros(len(abq_elems))
             abq_w[values[:, 0].astype(int)-1] = values[:, 2]
@@ -131,7 +131,7 @@ def damage_figure(d):
             ax.add_collection(coll)
             ax.text(.03, .97, f"ω ≥ {cutoff:g}\n{selected.sum()} elements",
                     transform=ax.transAxes, va="top", fontsize=9)
-            ax.set_title("Abaqus: peak" if row == 0 else "Abaqus: postpeak",
+            ax.set_title("Abaqus: peak" if row == 0 else "Abaqus: final",
                          loc="left", fontsize=10)
     for ax in axes.ravel():
         ax.set(xlim=(-5, 355), ylim=(-3, 103), xlabel="x (mm)", ylabel="y (mm)")
@@ -139,7 +139,7 @@ def damage_figure(d):
     for label, ax in zip("abcd", axes.ravel()):
         ax.text(-.02, 1.09, f"({label})", transform=ax.transAxes, fontsize=11,
                 fontweight="bold", ha="right")
-    fig.suptitle("Peak: severely damaged band; postpeak: fully damaged band", fontsize=11)
+    fig.suptitle("Peak and final saved state: elements with at least 99% damage", fontsize=11)
     save(fig, "damage_verified.png")
 
 
