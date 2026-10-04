@@ -40,7 +40,7 @@ python softwarex/plot_nooru_coarse.py
 ```
 
 This writes `analysis/summary.json` and the comparison plot. The regenerated
-PDF is used as Figure 4b; the mixed-mode and torsion damage panels remain
+PDF is used as Figure 3b; the mixed-mode and torsion damage panels remain
 qualitative, with their shared color bars.
 
 ## Local verification

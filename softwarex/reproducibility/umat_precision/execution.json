@@ -1,0 +1,10 @@
+{
+  "compiler": "Intel ifx 2025.0.4",
+  "flags": "/O2 /extend-source /names:lowercase",
+  "matlab": "R2024b",
+  "batch_return_code": 0,
+  "history_fortran_return_code": 0,
+  "matlab_history_return_code": 0,
+  "method": "Executed native batch driver and independently checked UMAT/MATLAB material points; no additional structural Abaqus solve.",
+  "platform": "Windows 11, Intel Core i9-13900, 64 GB RAM"
+}

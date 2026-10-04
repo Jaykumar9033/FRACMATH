@@ -72,3 +72,7 @@ factorization require concepts beyond introductory MATLAB. The beginner
 guide explains their array dimensions; rewriting them as a different solver
 would require new numerical verification. The AI-use declaration remains
 accurate: readable code is not evidence of human-only authorship.
+
+## Batch timing and history checks
+
+The [material-point timing archive](reproducibility/umat_precision/README.md) contains five high-resolution batches without per-call clocks and 824 independent UMAT/MATLAB cases, including 112 unloading/reloading and rotating-strain states. Batch elapsed time includes driver work; it is not an Abaqus job-phase measurement.

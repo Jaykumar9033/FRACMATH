@@ -34,7 +34,7 @@ The solver option name `load_path='4c'` selects this proportional displacement
 path; it does not reproduce the sequential force/displacement control of the
 published experimental case 4c. No experimental 4a/4c points are overlaid.
 The separate published-geometry pure-tension specimen 47-05 comparison is in
-[`../nooru_25mm_coarse/`](../nooru_25mm_coarse/README.md) and manuscript Figure 4.
+[`../nooru_25mm_coarse/`](../nooru_25mm_coarse/README.md) and manuscript Figure 3.
 
 The saved MAT file does not record a complete invocation options structure.
 This archive therefore preserves the recorded history for inspection rather

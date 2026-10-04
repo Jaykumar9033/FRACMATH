@@ -21,3 +21,7 @@ Completed diagnostic commands, source snapshots, response comparisons and logs a
 A complete phase allocation would require a vendor-supported detailed performance report or sufficiently complete instrumentation of the internal routines. A more detailed sampling profile can improve attribution, but it remains an estimate rather than the directly measured MATLAB elapsed breakdown. Replacing built-in elements with a user element would change the implementation being benchmarked and would not measure the current built-in assembly path.
 
 Official documentation consulted: [Abaqus Output Guide](https://docs.software.vt.edu/abaqusv2025/English/SIMACAEOUTRefMap/simaout-c-ov.htm), [Generating diagnostic information](https://docs.software.vt.edu/abaqusv2025/English/SIMACAECAERefMap/simacae-c-outgenerate.htm), and [User subroutines and utilities](https://docs.software.vt.edu/abaqusv2025/English/SIMACAESUBRefMap/simasub-c-subroutineover.htm). These describe output and user-subroutine interfaces; they do not establish that the unavailable full timing partition has been measured.
+
+## External batch timing
+
+The [standalone batch benchmark](reproducibility/umat_precision/README.md) places high-resolution timers outside 14.24-million-call batches of the unchanged UMAT. This avoids per-call clock intrusion but includes driver work and cached synthetic inputs. It is distinct from in-job Abaqus timings and does not isolate assembly or exact block percentages.

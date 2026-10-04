@@ -39,7 +39,6 @@ def main():
         'fig_mesh.png': 'fig_mesh.png',
         'load_cmod_verified.png': 'load_cmod_verified.png',
         'damage_verified.png': 'damage_verified.png',
-        'scaling_timings.pdf': 'scaling_timings.pdf',
         'nooru_tension_comparison.pdf': 'nooru_report/nooru_tension_mesh_comparison.pdf',
         'nooru_damage_evolution_shared_bar.png': 'nooru_damage_evolution_shared_bar.png',
         'torsion_damage_evolution_shared_bar.png': 'torsion_damage_evolution_shared_bar.png',

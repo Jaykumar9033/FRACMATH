@@ -6,7 +6,7 @@ FRACMATH provides an inspectable MATLAB workflow for continuum damage simulation
 
 The public repository includes a beginner entry script, example meshes, an Abaqus UMAT, reproduction scripts, and numerical histories. Material-point checks address fracture-energy calibration and damage irreversibility. Controlled mesh and increment studies assess the effects of regularization. Ninety timing observations cover matched size, mesh, and computing configurations, including MATLAB CPU, hybrid GPU, and Abaqus SMP. The article reports the measured performance limits, including the absence of a GPU speed advantage on the tested workstation, and distinguishes sampling estimates from complete phase wall times.
 
-The software, documentation, and examples support examination and reuse of numerical implementation choices in research and teaching. The manuscript follows the SoftwareX structure and supplies software metadata, six figures, and separate highlights.
+The software, documentation, and examples support examination and reuse of numerical implementation choices in research and teaching. The manuscript follows the SoftwareX structure and supplies software metadata, five figures, and separate highlights.
 
 Both authors approve submission to SoftwareX. The manuscript is not under consideration elsewhere. The authors acknowledge NASA and the New Mexico Space Grant Consortium, grant 80NSSC22M0044, and declare no competing interests. The funders had no role in study design, data analysis, manuscript writing or the decision to submit.
 

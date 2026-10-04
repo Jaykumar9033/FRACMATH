@@ -17,3 +17,5 @@ softwarex/reproducibility/umat_audit/** -text
 softwarex/reproducibility/figure_replay/** -text
 
 softwarex/reproducibility/abaqus_phase_timing/** -text
+
+softwarex/reproducibility/umat_precision/** -text

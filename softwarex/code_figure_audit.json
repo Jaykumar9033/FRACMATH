@@ -1,16 +1,20 @@
 {
   "executed_date": "2026-10-04",
-  "umat_cases": 712,
+  "umat_cases": 824,
   "umat_comparison_passed": true,
   "energy_test_passed": true,
   "missing_gradient_failure_expected": true,
   "matlab_smoke_passed": true,
-  "generated_figure_assets_pixel_identical": 8,
+  "generated_figure_assets_pixel_identical": 7,
   "static_illustrations_source_identical": 2,
   "archived_file_hashes_verified": 366,
   "beginner_full_arrays_exact": true,
   "three_mesh_3d_full_equilibrium_gate_passed": true,
   "strict_proportional_mixed_mode_completed": false,
   "numerical_umat_changed": false,
-  "scope": "Tests of supported material inputs and paper workflows; not a universal bug-free guarantee or quantitative mixed-mode validation."
+  "scope": "Checks of supported material inputs, current figure reconstruction and named completed workflows; standalone batch times include driver work. Not a universal bug-free guarantee or quantitative mixed-mode validation.",
+  "standalone_umat_batches": 10,
+  "standalone_batch_source_bytes_identical": true,
+  "material_history_states": 112,
+  "manuscript_figures": 5
 }

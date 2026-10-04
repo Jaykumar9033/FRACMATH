@@ -1,0 +1,7 @@
+{
+  "history_paths": 16,
+  "history_states": 112,
+  "nondecreasing_history_and_damage": true,
+  "secant_symmetric_positive_semidefinite": true,
+  "points": 824
+}

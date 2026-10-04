@@ -45,7 +45,7 @@ def main():
         'package_license': (package / 'Licence.txt').exists(),
         'beginner_entry_and_guide': all((package / name).exists() for name in ['start_here.m', 'BEGINNER_GUIDE.md']),
         'all_manuscript_figure_assets': all((package / 'figures' / name).exists() for name in [
-            'fig_mesh.png', 'load_cmod_verified.png', 'damage_verified.png', 'scaling_timings.pdf',
+            'fig_mesh.png', 'load_cmod_verified.png', 'damage_verified.png',
             'nooru_BC_2D.png', 'nooru_tension_comparison.pdf', 'torsion.png',
             'nooru_damage_evolution_shared_bar.png', 'torsion_damage_evolution_shared_bar.png',
             'mesh_study_overview.pdf']),

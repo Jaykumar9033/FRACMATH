@@ -291,7 +291,7 @@ OpenAI Codex assisted with implementation, audit and plotting scripts as
 well as manuscript preparation. Verification uses executed MATLAB/Fortran
 routines, archived solver outputs and explicitly identified experimental
 digitization. Figures are deterministic plots of these data. The beginner
-entry reproduces benchmark numerical arrays exactly; rebuilding the eight
+entry reproduces benchmark numerical arrays exactly; rebuilding the seven
 generated figure assets gives identical pixels, and the two supplied geometry
 illustrations retain their source bytes. These checks establish reproduction
 of the archived outputs; illustrative 3D fields retain the validation limits
@@ -305,8 +305,8 @@ unchanged UMAT reproduces the MATLAB energy values. Sixteen additional
 width/direction combinations pass, with maximum relative energy error
 $1.78\times10^{-6}$. These local checks do not establish structural
 orientation independence.
-An additional 712-case audit compares the actual UMAT with an independent
-tensor-eigensolve calculation and the MATLAB damage functions. Strain splits,
+An 824-case audit compares the actual UMAT with an independent
+tensor-eigensolve calculation and the MATLAB damage functions. The cases include 112 added unloading, reloading and rotating-strain states. Strain splits,
 multiaxial states, irreversible history, projected width, stress and the
 documented secant matrix pass declared absolute/relative tolerances of
 $2\times10^{-10}$. This does not establish a consistent damage tangent.
@@ -478,6 +478,8 @@ and Abaqus response CSVs are identical across repeats within each setting.
 Separate small/coarse, single-CPU diagnostic runs reproduce all 2{,}001 baseline response rows and seven mesh/boundary hashes exactly. Instrumentation around the unchanged UMAT calculations records 18{,}579{,}456 calls and a raw elapsed sum of 2.996~s. The empty-clock-pair projection is 1.672~s; it is not subtracted because it does not measure the full instrumentation overhead. A separate native-only VTune profile estimates 2.873~s of CPU self time in four named assembly routines. This excludes callees and unidentified work, so it does not measure full assembly wall time. These diagnostics use a different problem and timer scope from Table~\ref{tab:abaqus-timing}; they are separate from the 90 benchmark observations. The full reports, calibration, source files and response checks are available in the code archive.
 
 A further serial rerun separates seven UMAT blocks and reproduces the same baseline exactly. Their raw elapsed sums total 11.899~s, while the projection of seven empty clock pairs is 10.404~s. Clock overhead and resolution therefore prevent reliable uninstrumented block percentages. The detailed block measurements are supplied as diagnostics in the archive rather than as a complete material-time breakdown.
+
+A standalone benchmark links the unchanged UMAT and places high-resolution clocks outside batches of 14.24 million calls. Ten batches in two fresh processes give a median elapsed time of 1.148~s (range 1.129--1.241~s), including driver work. Empty-driver batches have a median of 0.128~s and are reported separately without subtraction. These cached material-point measurements reduce per-call clock intrusion; they are not structural Abaqus phase times and do not resolve individual-block costs.
 
 \input{tables/scaling_table.tex}
 

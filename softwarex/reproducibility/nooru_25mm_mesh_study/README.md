@@ -17,7 +17,7 @@ of fine peak. The remaining experimental discrepancy is much larger than
 this mesh spread. These results concern one mesh family and do not prove
 general mesh independence or increment convergence.
 
-From the repository root, replay the full-history gate and regenerate Figure 4b:
+From the repository root, replay the full-history gate and regenerate Figure 3b:
 
 ```powershell
 python softwarex/analyze_nooru_mesh_study.py --workspace softwarex/reproducibility/nooru_25mm_mesh_study --require-all
@@ -35,4 +35,4 @@ Experimental digitization and uncertainty are documented in
 proportional damage images are qualitative and use different controls.
 
 The original coarse-only package remains a record of that individual case.
-Figure 4b in this manuscript uses all three curves from this study.
+Figure 3b in this manuscript uses all three curves from this study.
