@@ -23,7 +23,7 @@ requirements still need a final check.
 | Maximum six figures | Six; the 3D comparison occupies an existing figure | Retain at most six |
 | Metadata C1–C8, with template labels retained | Rows present | Pin C1/C2 to the final tested version and verify all links |
 | Public GitHub repository with documented README.md and Licence.txt | Files present locally | Publish and verify the final source/data/docs on GitHub |
-| Software citation when a DOI/PID is supplied | Immutable source/data commit cited | Cite the tested release and its verified version-specific archive DOI |
+| Software citation when a DOI/PID is supplied | Release, immutable source and version DOI cited | Verified DOI 10.5281/zenodo.23138595 |
 | Clear software architecture, functions, dependencies, examples and impact | Descriptions, examples and beginner guide present | Confirm the documented beginner workflow runs and supports the impact claims |
 
 The reviewer form evaluates empirical evidence, readability, reproducibility,
@@ -58,7 +58,7 @@ retains the preserved 10,000-step MATLAB response; Figures 4 and 5 retain the
 large shared color bars. The illustrative 20 mm-notch geometry is distinct
 from the quantitative published 25 mm-notch geometry.
 
-## Remaining work for this submission
+## Final submission checks
 
 The separate Abaqus sampling collection and full beginner-entry execution are
 complete. The profile identifies named assembly and user-library self estimates;
@@ -73,10 +73,10 @@ archives contain tested sources, paired-data checks and measurement scopes.
 2. The strict proportional mixed-mode attempt stops at bisection exhaustion.
    Its failure record is preserved and explicitly delimited in the paper;
    it does not supply quantitative mixed-mode validation.
-3. Publish the final tested GitHub version, verify its automatic Zenodo archive,
-   and add the correct software reference and metadata. The local citation
-   metadata currently says `1.1.0-dev`; verify that the final manuscript's
-   immutable source/data link contains every file supporting its results.
+3. FRACMATH v1.1.1 is published at GitHub and automatically archived by
+   Zenodo, DOI 10.5281/zenodo.23138595. The tag points to the source commit
+   named in manuscript metadata and the software reference. All 366 archived
+   file hashes match that tagged Git source, including raw run logs.
 4. Review the contributions and affiliations/contact address. Jaykumar Mavani confirmed
    both-author submission approval, exclusive submission, the funding acknowledgement
    and no competing interests on 3 October 2026. Review the prepared `cover_letter.txt` and check the
@@ -90,7 +90,7 @@ archives contain tested sources, paired-data checks and measurement scopes.
 5. Repeat the PDF, file and delivery checks if further simulation results are
    incorporated. The manuscript names OpenAI Codex in its AI-use declaration
    and identifies the completed numerical evidence by immutable commit
-   `243be5fb66f7754eaac0e9d338f6a531b5331975`.
+   `f4d208ecf45b6a4e4d4530e5f71fbf8bcb9f0fe0`.
 
 The three-mesh 3D study, GPU/SMP benchmarking and detailed Abaqus profiling
 are evidence goals of this manuscript, not universal mandatory SoftwareX

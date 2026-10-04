@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 type: software
-message: "If you use FRACMATH, cite the immutable code commit identified in the SoftwareX manuscript."
+message: "If you use FRACMATH, cite FRACMATH v1.1.1 and its version-specific Zenodo DOI."
 title: "FRACMATH: A vectorized MATLAB framework for continuum damage mechanics with crack band regularization"
 authors:
   - family-names: Mavani
@@ -12,6 +12,7 @@ authors:
 repository-code: "https://github.com/Jaykumar9033/FRACMATH"
 version: "1.1.1"
 date-released: "2026-10-04"
+doi: "10.5281/zenodo.23138595"
 license: MIT
 keywords:
   - fracture mechanics

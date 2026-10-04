@@ -90,3 +90,8 @@ See [UMAT_GUIDE.md](softwarex/UMAT_GUIDE.md) for the constitutive sequence and s
 The complete three-mesh 25 mm-notch study is archived in `softwarex/reproducibility/nooru_25mm_mesh_study/`. All histories reach 0.2 mm gauge displacement within the equilibrium tolerance. Peak underprediction remains 16.18–17.39%; the mesh spread does not explain the experimental discrepancy. The strict mixed-mode failure is preserved in `softwarex/reproducibility/nooru_proportional_strict/`.
 
 Run `python softwarex/verify_paper_figures.py --workspace C:/runs/figure_replay` from the repository root to rebuild the manuscript figures in a separate folder. All eight generated assets pass pixel comparison; two supplied geometry illustrations match their archived sources. Runtime and PDF metadata are not numerical reproduction targets.
+
+
+## Software release
+
+[FRACMATH v1.1.1](https://github.com/Jaykumar9033/FRACMATH/releases/tag/v1.1.1) is archived at [Zenodo, DOI 10.5281/zenodo.23138595](https://doi.org/10.5281/zenodo.23138595). All 366 archived-file hashes match the tagged Git source. The manuscript identifies this source version and its numerical-validation limits.
