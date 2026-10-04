@@ -1,11 +1,13 @@
 Author confirmation before submission
 
+Confirmed by Jaykumar Mavani on 3 October 2026: both authors approve submission to SoftwareX; the manuscript is not under consideration elsewhere; the NASA/Space Grant funding acknowledgement and no-competing-interests statement are accurate. These confirmed statements appear in cover_letter.txt.
+
 Please confirm the author order, affiliations, corresponding-author email, and CRediT contributions in manuscript.tex.
 
 The manuscript acknowledges NASA and the New Mexico Space Grant Consortium, grant 80NSSC22M0044. Please confirm the funding information and whether the funder had a role in the study, manuscript preparation, or submission decision.
 
 The manuscript states that the authors declare no conflict of interest. Please confirm this statement and complete any journal declaration form consistently with the funding disclosure.
 
-Please confirm that all authors approve the manuscript and submission, and that the manuscript is not under consideration elsewhere. These attestations must be made by the authors; the prepared cover letter does not assert them on their behalf.
+Author approval, exclusive submission, the funding acknowledgement and no competing interests have been confirmed as recorded above.
 
 Please review the AI-use declaration and confirm that the authors have checked and take responsibility for the code, scientific claims, results, figures, and references.

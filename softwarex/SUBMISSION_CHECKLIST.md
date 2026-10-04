@@ -78,8 +78,9 @@ archives contain tested sources, paired-data checks and measurement scopes.
    and add the correct software reference and metadata. The local citation
    metadata currently says `1.1.0-dev`; verify that the final manuscript's
    immutable source/data link contains every file supporting its results.
-4. Have the authors confirm the contributions, affiliations/contact address, funding statement
-   and competing-interest declaration. Review the prepared `cover_letter.txt` and check the
+4. Review the contributions and affiliations/contact address. Jaykumar Mavani confirmed
+   both-author submission approval, exclusive submission, the funding acknowledgement
+   and no competing interests on 3 October 2026. Review the prepared `cover_letter.txt` and check the
    separate highlights and any portal-required declaration files. `author_confirmation.txt`
    lists the statements requiring author confirmation.
    The original cover letter cites v1.0.0 and a 3.6-fold MATLAB speed claim;

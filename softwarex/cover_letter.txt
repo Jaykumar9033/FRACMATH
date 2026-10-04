@@ -8,6 +8,8 @@ The public repository includes a beginner entry script, example meshes, an Abaqu
 
 The software, documentation, and examples support examination and reuse of numerical implementation choices in research and teaching. The manuscript follows the SoftwareX structure and supplies software metadata, six figures, and separate highlights.
 
+Both authors approve submission to SoftwareX. The manuscript is not under consideration elsewhere. The authors acknowledge NASA and the New Mexico Space Grant Consortium, grant 80NSSC22M0044, and declare no competing interests.
+
 Correspondence may be addressed to Madura Pathirage, mpathirage@unm.edu, Gerald May Department of Civil, Construction, and Environmental Engineering, University of New Mexico, Albuquerque, NM, USA.
 
 Sincerely,
