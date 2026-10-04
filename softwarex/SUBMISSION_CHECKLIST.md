@@ -23,4 +23,4 @@ Review author details, CRediT roles, scientific claims and the AI-use declaratio
 
 The existing version-specific archive remains cited for the code and study data. No new Zenodo release is part of this manuscript edit. The current figure-display script is supplied in the repository and submission package.
 
-Separate Abaqus phase evidence is supplied in `reproducibility/abaqus_phase_timing/`: direct actual-UMAT timers, clock diagnostics, native-only assembly samples, exact response checks, raw logs and source snapshots. Table 5 states the different timer scopes. Full assembly wall time remains unallocated.
+Separate Abaqus phase evidence is supplied in `reproducibility/abaqus_phase_timing/`: direct actual-UMAT timers, clock diagnostics, native-only assembly samples, exact response checks, raw logs and source snapshots. The diagnostic paragraph states the different timer scopes. Full assembly wall time remains unallocated.

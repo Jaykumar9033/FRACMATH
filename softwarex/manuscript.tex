@@ -471,48 +471,11 @@ Abaqus SMP speed ratios range from 0.68 to 2.90; the largest mesh reaches
 2.90. Abaqus CPU1 sparse-solver passes occupy 9.5--14.4\% of analysis wall
 time; the remainder is unallocated. MATLAB/Abaqus peak differences are
 1.87--4.24\%. Table~\ref{tab:scaling} reports
-median costs and observed ranges from 90 runs; complete phase, memory and
+median costs from 90 runs; complete phase, memory and
 residual records accompany the code. All saved MATLAB numerical arrays
 and Abaqus response CSVs are identical across repeats within each setting.
 
-Two separate small/coarse, single-CPU runs measure UMAT calls and profile
-native assembly work. Both complete 2{,}000 increments and reproduce all
-2{,}001 baseline response rows and seven mesh/boundary hashes exactly.
-An instrumented UMAT records 18{,}579{,}456 calls with a raw elapsed sum
-of 2.996~s. Integer-8 \texttt{SYSTEM\_CLOCK} reads surround the unchanged
-constitutive calculations. Empty clock pairs average 0.09~$\mu$s;
-their call-count projection is 1.672~s. This diagnostic is not subtracted:
-clock overhead, timer resolution and scheduling qualify the raw sum.
-The instrumented job reports 3{,}184 solver passes, 3{,}105 decompositions,
-no cutbacks, 15.33~s of sparse-solver elapsed time and 162~s analysis wall time.
-
-A separate VTune collection attaches only to \texttt{standard.exe} after
-startup. It estimates 1.917~s of user-library self work and 2.873~s in four
-named assembly routines. All report exports succeed. Temporary-library
-removal, missing symbols and PulseEvent warnings limit attribution.
-The profile totals 139.31~s of sampled CPU estimates, while Abaqus reports
-24~s CPU and 161~s wall time; these scopes are not rescaled or added.
-Self samples exclude callees and unidentified work, so full assembly wall
-time remains unmeasured. Table~\ref{tab:abaqus-material-assembly} and
-Table~\ref{tab:abaqus-material-assembly} keeps these measures separate from the 90 benchmark
-observations. Raw sources, logs, calibration and verification scripts are supplied.
-
-\begin{table}[!htbp]
-\centering\small
-\caption{Separate Abaqus UMAT and assembly measurements. Timer kinds differ;
-the rows are not additive and do not provide a complete phase allocation.}
-\label{tab:abaqus-material-assembly}
-\begin{tabularx}{\linewidth}{@{}YrY@{}}
-\toprule
-Measured scope & Time (s) & Timer and scope \\
-\midrule
-Actual UMAT calls & 2.996 & Raw instrumented elapsed-call sum, including clock effects. \\
-Empty clock-pair projection & 1.672 & Diagnostic projected across calls; not an overhead subtraction. \\
-User-subroutine library & 1.917 & Sampled CPU self time in the separate native-only profile. \\
-Four identified assembly routines & 2.873 & Sampled CPU self time; excludes callees and unidentified work. \\
-\bottomrule
-\end{tabularx}
-\end{table}
+Separate small/coarse, single-CPU diagnostic runs reproduce all 2{,}001 baseline response rows and seven mesh/boundary hashes exactly. Instrumentation around the unchanged UMAT calculations records 18{,}579{,}456 calls and a raw elapsed sum of 2.996~s. The empty-clock-pair projection is 1.672~s; it is not subtracted because it does not measure the full instrumentation overhead. A separate native-only VTune profile estimates 2.873~s of CPU self time in four named assembly routines. This excludes callees and unidentified work, so it does not measure full assembly wall time. These diagnostics use a different problem and timer scope from Table~\ref{tab:abaqus-timing}; they are separate from the 90 benchmark observations. The full reports, calibration, source files and response checks are available in the code archive.
 
 \input{tables/scaling_table.tex}
 
@@ -695,7 +658,7 @@ The comparison measures the effect of element-size compensation for this mesh fa
 \caption{Controlled mesh study, 2{,}000 MATLAB increments. Partial damage
 dissipation $\mathcal D$ is evaluated at CMOD 0.10~mm.
 Subscripts O, F, and A denote Oliver MATLAB, constant-width MATLAB, and
-regularized Abaqus runs.}
+regularized Abaqus runs. The dissipation columns quantify the effect of element-size compensation beyond the load--CMOD curves.}
 \label{tab:mesh-study}
 \begin{tabular}{rrrrrrr}
 \toprule
