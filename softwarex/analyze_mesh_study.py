@@ -202,9 +202,9 @@ def figures(workspace, result, out):
     out.mkdir(parents=True, exist_ok=True)
     plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 12,
                          "axes.spines.top": False, "axes.spines.right": False})
-    fig, grid = plt.subplots(4, 2, figsize=(8.3, 13.6), layout="constrained")
+    fig, grid = plt.subplots(2, 2, figsize=(8.3, 7.2), layout="constrained")
     axes = grid[0]
-    for ax, mode, title in zip(axes, ("oliver", "fixed"), ("Oliver regularization", "Fixed stress-strain softening")):
+    for ax, mode, title in zip(axes, ("oliver", "fixed"), ("Oliver regularization", "Constant width: h = 1.25 mm")):
         for name, color, style in zip(MESHES, COLORS, STYLES):
             folder = workspace / name / ("matlab_%s_%d" % (mode, result["main_steps"]))
             curve = np.loadtxt(folder / "matlab_load_cmod.csv", delimiter=",", comments="#")
@@ -214,22 +214,8 @@ def figures(workspace, result, out):
         ax.set(xlabel="CMOD (mm)", ylabel="load (kN)", title=title, xlim=(0, .15), ylim=(0, None))
         ax.grid(alpha=.18)
         ax.legend(frameon=False, fontsize=10)
-    axes = grid[1]
-    for mode, color, marker in (("oliver", COLORS[0], "o"), ("fixed", COLORS[1], "s")):
-        rows = [r for r in result["matlab"] if r["regularization"] == mode]
-        x = [r["dofs"] for r in rows]
-        label = "Oliver" if mode == "oliver" else "Fixed law"
-        axes[0].plot(x, [r["peak_load_N"]/1000 for r in rows], marker=marker, color=color, label=label)
-        axes[1].plot(x, [r["dissipation_at_common_cmod_Nmm"] for r in rows], marker=marker, color=color, label=label)
-    axes[0].set(ylabel="peak load (kN)")
-    axes[1].set(ylabel="damage dissipation (N mm)", title="At CMOD = %.2f mm" % result["common_cmod_mm"])
-    for ax in axes:
-        ax.set_xlabel("degrees of freedom")
-        ax.ticklabel_format(axis="x", style="sci", scilimits=(0, 0))
-        ax.grid(alpha=.18)
-        ax.legend(frameon=False)
     if result["abaqus"]:
-        axes = grid[2]
+        axes = grid[1]
         for name, color, style in zip(MESHES, COLORS, STYLES):
             folder = workspace / name / "Gregoire_3PB/results"
             if not folder.exists():
@@ -255,22 +241,8 @@ def figures(workspace, result, out):
         for ax in axes:
             ax.grid(alpha=.18)
     else:
-        for ax in grid[2]:
+        for ax in grid[1]:
             ax.set_visible(False)
-    for mode, color, marker in (("oliver", COLORS[0], "o"), ("fixed", COLORS[1], "s")):
-        for steps, style in ((result["main_steps"], "-"), (2*result["main_steps"], "--")):
-            source = result["matlab"] if steps == result["main_steps"] else result["increment_checks"]
-            rows = sorted([r for r in source if r["regularization"] == mode and r["steps"] == steps], key=lambda r:r["dofs"])
-            label = ("Oliver" if mode == "oliver" else "Fixed") + f", {steps:,} steps"
-            grid[3, 0].plot([r["dofs"] for r in rows], [r["peak_load_N"]/1000 for r in rows], color=color, marker=marker, ls=style, label=label)
-            grid[3, 1].plot([r["dofs"] for r in rows], [r["dissipation_at_common_cmod_Nmm"] for r in rows], color=color, marker=marker, ls=style, label=label)
-    grid[3, 0].set(title="Mesh and increment sensitivity", ylabel="peak load (kN)")
-    grid[3, 1].set(title="Partial dissipation at CMOD 0.10 mm", ylabel="damage dissipation (N mm)")
-    for ax in grid[3]:
-        ax.set_xlabel("degrees of freedom")
-        ax.ticklabel_format(axis="x", style="sci", scilimits=(0, 0))
-        ax.grid(alpha=.18)
-        ax.legend(frameon=False, fontsize=9)
     for label, ax in zip("abcdefgh", grid.flat):
         if ax.get_visible():
             ax.text(-.17, 1.06, "("+label+")", transform=ax.transAxes, fontweight="bold")

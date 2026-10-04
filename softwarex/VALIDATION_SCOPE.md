@@ -8,4 +8,4 @@ FRACMATH uses established damage and crack-band models. Its software contributio
 - Figure 2 displays peak and final saved states with the same damage cutoff of 0.99. The final band reaches y=94.8 mm; the stricter 0.999999 cutoff reaches y=55.4 mm. Each panel states its cutoff and element count. These are computed damage bands, not measured open-crack lengths. No smoothing is used.
 - The three-mesh 3D pure-tension plot compares the published specimen geometry with digitized measurements. The mixed-mode and torsion images are qualitative examples.
 
-Figure 1 contains the 10,000-step MATLAB curve. Figures 4 and 5 use large shared colorbars. Figure 6 compares response curves; timing is shown separately in Figure 3.
+Figure 1 contains the 10,000-step MATLAB curve. Figures 3 and 4 use large shared colorbars. Figure 5 compares completed response curves. Timing is reported in tables.

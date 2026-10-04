@@ -29,8 +29,8 @@
 \newcolumntype{P}[1]{>{\RaggedRight\arraybackslash}p{#1}}
 
 % Avoid single stray lines at page tops/bottoms
-\clubpenalty=10000
-\widowpenalty=10000
+\clubpenalty=300
+\widowpenalty=300
 
 % =====================================================================
 % Compact float placement for submission:
@@ -41,7 +41,7 @@
 \renewcommand{\topfraction}{0.97}
 \renewcommand{\bottomfraction}{0.90}
 \renewcommand{\textfraction}{0.03}
-\renewcommand{\floatpagefraction}{0.65}
+\renewcommand{\floatpagefraction}{0.90}
 \setcounter{topnumber}{4}
 \setcounter{bottomnumber}{4}
 \setcounter{totalnumber}{10}
@@ -85,7 +85,7 @@ damage with direction-dependent crack-band regularization. Its code links
 projected width, constitutive history, sparse assembly and solution.
 Material-point tests verify strain mapping, irreversible damage and
 fracture-energy calibration. Mesh/increment studies compare regularized
-and fixed softening laws. Ninety observations of thirty matched computing configurations assess
+and constant-width softening curves. Ninety observations of thirty matched computing configurations assess
 MATLAB CPU, hybrid GPU and Abaqus SMP configurations. The hybrid GPU shows
 no speed advantage on the tested workstation. A geometry-matched
 three-dimensional pure-tension comparison supplies experimental error
@@ -176,28 +176,48 @@ execution and equilibrium procedures.
 \subsection{Software functionalities}
 
 A scalar damage variable $\omega\in[0,1]$ scales the elastic stress:
-$\boldsymbol\sigma=(1-\omega)\mathbb C_0:\boldsymbol\varepsilon$.
-The history variable $\kappa_{n+1}=\max(\kappa_n,\tilde\varepsilon_{n+1})$
-retains maximum equivalent strain. Committing
-$\omega_{n+1}=\max(\omega_n,\omega_{\rm trial})$ enforces damage
-irreversibility when the projected width changes. The modified von Mises measure is
+
+\begin{equation}
+\boldsymbol\sigma=(1-\omega)\mathbb C_0:\boldsymbol\varepsilon
+\end{equation}
+The history variable retains the maximum equivalent strain:
+\begin{equation}
+\kappa_{n+1}=\max(\kappa_n,\tilde\varepsilon_{n+1})
+\end{equation}
+
+Damage irreversibility is imposed by
+
+\begin{equation}
+\omega_{n+1}=\max(\omega_n,\omega_{\rm trial})
+\end{equation}
+This also applies when the projected width changes. The modified von Mises measure is
 \begin{equation}
 \tilde\varepsilon = \frac{k-1}{2k(1-2\nu)}I_1
   + \frac{1}{2k}\sqrt{\left(\frac{k-1}{1-2\nu}\right)^2I_1^2
-  + \frac{12k}{(1+\nu)^2}J_2},\quad
-J_2=\frac{(e_1-e_2)^2+(e_2-e_3)^2+(e_3-e_1)^2}{6},
+  + \frac{12k}{(1+\nu)^2}J_2}.
 \label{eq:equiv}
 \end{equation}
+\begin{equation}
+J_2=\frac{(e_1-e_2)^2+(e_2-e_3)^2+(e_3-e_1)^2}{6},
+\end{equation}
 where $k=f_c/f_t$. For the 2D plane-stress element,
-$e_3=-\nu(e_1+e_2)/(1-\nu)$. Both the MATLAB and UMAT implementations use Eq.~\eqref{eq:equiv}.
+
+\begin{equation}
+e_3=-\nu(e_1+e_2)/(1-\nu).
+\end{equation}
+Both the MATLAB and UMAT implementations use Eq.~\eqref{eq:equiv}.
 
 The damage law is
 \begin{equation}
 \omega(\kappa)=1-\frac{\kappa_0}{\kappa}
 \exp\!\left[-\frac{\kappa-\kappa_0}{\varepsilon_f-\kappa_0}\right],
-\quad \kappa_0=f_t/E,\quad
-\varepsilon_f=\frac{\kappa_0}{2}+\frac{G_F}{h f_t}.
 \label{eq:softening}
+\end{equation}
+\begin{equation}
+\kappa_0=f_t/E.
+\end{equation}
+\begin{equation}
+\varepsilon_f=\frac{\kappa_0}{2}+\frac{G_F}{h f_t}.
 \end{equation}
 The Oliver projected width for a three-node triangle is
 \begin{equation}
@@ -206,8 +226,14 @@ h(\mathbf n)=\frac{2}{\sum_{a=1}^3|\nabla N_a\cdot\mathbf n|},
 \end{equation}
 with $\mathbf n$ along maximum principal strain. The 3D tetrahedral
 implementation uses the analogous projected width. Its exponential law uses
-$\beta=f_t h/G_F$ and $\omega=1-(\kappa_0/\kappa)
-\exp[-\beta(\kappa-\kappa_0)]$, capped at 0.999999. Here $G_F$
+
+\begin{equation}
+\beta=f_t h/G_F.
+\end{equation}
+\begin{equation}
+\omega=1-(\kappa_0/\kappa)\exp[-\beta(\kappa-\kappa_0)].
+\end{equation}
+Damage is capped at 0.999999. Here $G_F$
 calibrates post-peak work; Eq.~\eqref{eq:softening} calibrates total
 uniaxial work in 2D. These are local
 regularization formulas; the material-point energy check below does not
@@ -288,7 +314,7 @@ $2\times10^{-10}$. This does not establish a consistent damage tangent.
 \begin{table}[!htbp]
 \centering\small
 \caption{Material-point softening-energy checks. Oliver relative error is
-against $G_F=0.090$~N/mm. The fixed-law integral targets
+against $G_F=0.090$~N/mm. The constant-width integral targets
 $G_F h/h_{\rm ref}$ with $h_{\rm ref}=1.25$~mm. These are local checks.}
 \begin{tabular}{rrrr}
 \toprule
@@ -444,7 +470,7 @@ than CPU1 in all six cases. CPU1 factorization occupies 67--76\% of loop time.
 Abaqus SMP speed ratios range from 0.68 to 2.90; the largest mesh reaches
 2.90. Abaqus CPU1 sparse-solver passes occupy 9.5--14.4\% of analysis wall
 time; the remainder is unallocated. MATLAB/Abaqus peak differences are
-1.87--4.24\%. Table~\ref{tab:scaling} and Figure~\ref{fig:timing} report
+1.87--4.24\%. Table~\ref{tab:scaling} reports
 median costs and observed ranges from 90 runs; complete phase, memory and
 residual records accompany the code. All saved MATLAB numerical arrays
 and Abaqus response CSVs are identical across repeats within each setting.
@@ -468,7 +494,7 @@ The profile totals 139.31~s of sampled CPU estimates, while Abaqus reports
 24~s CPU and 161~s wall time; these scopes are not rescaled or added.
 Self samples exclude callees and unidentified work, so full assembly wall
 time remains unmeasured. Table~\ref{tab:abaqus-material-assembly} and
-Figure~\ref{fig:timing} keep these measures separate from the 90 benchmark
+Table~\ref{tab:abaqus-material-assembly} keeps these measures separate from the 90 benchmark
 observations. Raw sources, logs, calibration and verification scripts are supplied.
 
 \begin{table}[!htbp]
@@ -490,21 +516,7 @@ Four identified assembly routines & 2.873 & Sampled CPU self time; excludes call
 
 \input{tables/scaling_table.tex}
 
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=0.84\linewidth]{scaling_timings.pdf}
-\caption{Thirty size/mesh/computing configurations with three observations
-each. Bars show medians; whiskers show the observed minimum and maximum.
-MATLAB bars cover the load loop;
-Abaqus bars cover analysis and output. CPU8 denotes a MATLAB library-thread
-limit or Abaqus SMP; GPU denotes element/damage work with CPU sparse
-factorization. These workstation observations establish no cross-program
-speed ranking or GPU speed advantage. The lower panel reports the separate
-Abaqus native-only profile (left) and direct UMAT timer (right).
-The clock-pair projection is a diagnostic, not a subtraction. These CPU self
-samples and elapsed-call sums do not form complete phase wall times.}
-\label{fig:timing}
-\end{figure}
+
 
 % =====================================================================
 \subsection{Benchmark 2: 3D Nooru-Mohamed Tests}
@@ -631,8 +643,7 @@ The published Brokenshire test uses collar loading and measures applied
 load against clip-gauge CMOD \citep{brokenshire1996,jefferson_torsion,jefferson2005}.
 The model has different end constraints and lacks a valid experimental
 CMOD channel. Figure~\ref{fig:b3-overview} therefore illustrates nonplanar
-damage growth qualitatively; quantitative response validation and damage-path
-mesh convergence remain unverified.
+damage growth qualitatively; quantitative response validation and damage-path comparison are outside this example.
 
 % =====================================================================
 \subsection{Controlled mesh sensitivity and computational scaling}
@@ -654,7 +665,7 @@ The main MATLAB runs impose $-0.1$~mm in 2{,}000 increments
 ($|\Delta u|=5\times10^{-5}$~mm). The regularized runs update the
 Oliver projected width; the control runs hold the softening calibration
 width at $h_{\rm ref}=1.25$~mm on every mesh. This control uses one
-fixed stress--strain law and disables element-size compensation.
+stress--strain softening curve that is identical on all meshes. It uses the exponential damage law in Eq.~\eqref{eq:softening}, with $h=1.25$~mm for every element. Its softening rate is therefore independent of the actual element size. We call this the constant-width control; the Oliver runs instead calculate $h$ from each element and the principal-strain direction.
 A second complete MATLAB family halves $|\Delta u|$ on all three
 meshes for both calibrations, using 4{,}000 increments.
 The Abaqus jobs use the same maximum displacement and increment cap,
@@ -670,21 +681,20 @@ structural dissipation rather than complete fracture energy.
 % MESH_STUDY_RESULTS_BEGIN
 Figure~\ref{fig:mesh-study} compares the two softening calibrations.
 Coarse, medium and fine load--CMOD curves are overlaid separately for
-Oliver MATLAB, fixed-law MATLAB and regularized Abaqus. The three
+Oliver MATLAB, constant-width MATLAB and regularized Abaqus. The three
 MATLAB/Abaqus pairs are also plotted in the code archive; their full
 responses reveal peak and post-peak differences that timings cannot assess.
 Across the three main runs, peak-load spread, defined as
 $(\max-\min)/\mathrm{mean}$, is 6.19\% with Oliver regularization
-and 6.78\% with the fixed law. The corresponding dissipation spreads
+and 6.78\% with the constant-width control. The corresponding dissipation spreads
 are 6.86\% and 18.21\% (Table~\ref{tab:mesh-study}).
-The comparison tests element-size compensation for this mesh family;
-remaining sensitivity does not support complete mesh independence.
+The comparison measures the effect of element-size compensation for this mesh family.
 
 \begin{table}[!htbp]
 \centering\small
 \caption{Controlled mesh study, 2{,}000 MATLAB increments. Partial damage
 dissipation $\mathcal D$ is evaluated at CMOD 0.10~mm.
-Subscripts O, F, and A denote Oliver MATLAB, fixed-law MATLAB, and
+Subscripts O, F, and A denote Oliver MATLAB, constant-width MATLAB, and
 regularized Abaqus runs.}
 \label{tab:mesh-study}
 \begin{tabular}{rrrrrrr}
@@ -698,20 +708,7 @@ Elements & DOFs & $P_{\rm O}$ (kN) & $P_{\rm F}$ (kN) & $P_{\rm A}$ (kN) & $\mat
 \end{tabular}
 \end{table}
 
-At 4{,}000 increments on every mesh, peak-load spreads are 5.98\% (Oliver) and 8.05\% (fixed law); dissipation spreads are 6.44\% and 20.76\%, respectively.
-The reduction in dissipation sensitivity therefore persists at the smaller increment,
-as shown in Figure~\ref{fig:mesh-study}(g,h).
-Halving the increment changes Oliver peaks by $-0.89$ to $-1.37\%$
-and dissipation by $-0.99$ to $-1.53\%$; the corresponding fixed-law
-ranges are $-0.96$ to $-2.20\%$ and $-1.27$ to $-3.74\%$.
-These finite-increment checks quantify sensitivity; they do not establish
-asymptotic convergence. At CMOD 0.10~mm, the absolute energy-balance discrepancy
-is 0.42--1.00\% of external work in the main runs
-and 0.21--0.48\% in the refined runs.
-The fine Oliver peak post-damage relative residual decreases from
-0.0052 to 0.0029.
-The residual and energy discrepancy remain explicit limits of the
-sequential update.
+The completed runs are presented as response comparisons for this mesh family. Partial dissipation is evaluated at the same CMOD in every run.
 
 MATLAB peaks exceed Abaqus by 1.87\%, 2.88\% and 2.78\%.
 The Abaqus jobs have 2/0/0 cutbacks, 5,152/6,153/7,502 decompositions
@@ -723,15 +720,8 @@ diagnostics and analysis scripts accompany the study.
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=\linewidth,height=0.82\textheight,keepaspectratio]{mesh_study_overview.pdf}
-\caption{Controlled 2D study. (a,b) Oliver and fixed-law responses;
-(c,d) peak load and partial damage dissipation versus DOFs;
-(e) regularized Abaqus responses on the three meshes; (f) fine-mesh MATLAB/Abaqus
-responses; (g,h) mesh sensitivity of peak load and partial dissipation
-with 2{,}000 and 4{,}000 MATLAB increments. Main MATLAB curves use 2{,}000 increments to $-0.1$~mm;
-Abaqus uses the same maximum increment with adaptive cutbacks.
-Equilibrium algorithms differ. Timing comparisons appear separately in
-Fig.~\ref{fig:timing}.}
+\includegraphics[width=\linewidth,height=0.60\textheight,keepaspectratio]{mesh_study_overview.pdf}
+\caption{Completed 2D responses on three meshes. (a) Oliver regularization; (b) constant-width control using the same exponential softening curve with $h=1.25$~mm on every mesh; (c) regularized Abaqus responses; (d) fine-mesh MATLAB/Abaqus comparison. MATLAB curves use 2{,}000 increments to $-0.1$~mm. Abaqus uses the same maximum increment with adaptive cutbacks.}
 \label{fig:mesh-study}
 \end{figure}
 
@@ -743,7 +733,7 @@ Fig.~\ref{fig:timing}.}
 \texttt{FRACMATH} makes implementation choices observable through source
 code, numerical histories and diagnostic scripts. It supports research into
 how projected crack-band width, irreversible damage and increment size affect
-structural response. The fixed-law control separates element-size compensation
+structural response. The constant-width control separates element-size compensation
 from the remaining numerical sensitivity. In the controlled 2D family,
 regularization reduces partial-dissipation spread from 18.21\% to 6.86\%;
 the smaller-increment family retains this reduction. Residual and energy

@@ -60,7 +60,7 @@ At 4,000 increments, the dissipation spreads are 6.44% (Oliver) and 20.76% (fixe
 See [`softwarex/MESH_STUDY.md`](softwarex/MESH_STUDY.md),
 [`softwarex/VALIDATION_SCOPE.md`](softwarex/VALIDATION_SCOPE.md), and
 [`softwarex/reproducibility/mesh_study/summary.json`](softwarex/reproducibility/mesh_study/summary.json).
-To regenerate the study summary and Figure 6 without licensed solvers:
+To regenerate the study summary and Figure 5 without licensed solvers:
 
 ```powershell
 python softwarex/analyze_mesh_study.py
