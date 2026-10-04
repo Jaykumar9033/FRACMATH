@@ -6,7 +6,7 @@
   "word_count_scope": "Includes equations and code; excludes metadata, tables, figures and references.",
   "figures": 6,
   "keywords": 6,
-  "manuscript_sha256": "67e65821bc13a236f1268036dfca8e71cd75912f34d34124b3c44d8e7e5777c0",
+  "manuscript_sha256": "faba6ce983ab2f0feb7867769d91d7179611b0a034871e4976291f5357c41094",
   "checks": {
     "five_required_sections": true,
     "figure_count_at_most_six": true,
@@ -15,14 +15,16 @@
     "main_text_below_4000_words": true,
     "metadata_C1_to_C8": true,
     "GitHub_code_link": true,
+    "metadata_commit_matches_source_link": true,
     "package_license": true,
     "beginner_entry_and_guide": true,
-    "six_figure_assets": true,
+    "all_manuscript_figure_assets": true,
     "declarations": true,
     "five_highlights_at_most_85_characters": true,
     "first_presentation_wording": true,
     "solver_copies_identical": true,
-    "repository_readme_and_license": true
+    "repository_readme_and_license": true,
+    "umat_copies_identical": true
   },
   "all_file_checks_pass": true,
   "manual_checks": [
