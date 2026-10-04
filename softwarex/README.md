@@ -27,6 +27,7 @@ dimensions, the load-step algorithm, and how to compare numerical outputs.
 | `reproducibility/mesh_study/` | Exact meshes, completed-job diagnostics, response/energy histories, summaries, and source hashes |
 | `reproducibility/timing_repeats/` | Three observations of each of 30 configurations: medians, ranges, raw records and exact response-repeat checks |
 | `reproducibility/nooru_25mm_coarse/` | Published 25 mm notch geometry, completed coarse TET4 run, digitized experimental comparison and local material/history checks |
+| `plot_nooru_proportional.py`, `reproducibility/nooru_proportional/` | Shear and normal response diagnostics with explicit equilibrium-failure markers |
 | `REPRODUCE.md` | Exact run commands and limitations |
 
 The 3D damage panels illustrate workflows qualitatively. The completed coarse pure-tension case with the published 25 mm notch geometry supplies a quantitative experimental comparison; one completed mesh does not establish 3D mesh convergence. The 2D study compares three controlled meshes. These studies do not establish general mesh independence or a runtime advantage over Abaqus.

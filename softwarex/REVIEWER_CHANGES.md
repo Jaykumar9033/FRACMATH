@@ -13,10 +13,20 @@
 The controlled mesh study and the single-mesh 1,000/10,000-step
 example use separate protocols. Figure 1 retains only the 10,000-step MATLAB curve
 and Abaqus response. Figures 4 and 5 retain their large shared color bars.
-Figure 6 presents the controlled study. Numerical conclusions are taken from
+Figure 6 presents coarse/medium/fine response overlays for both programs,
+with peak and dissipation comparisons. Timing appears separately in Figure 3.
+Numerical conclusions are taken from
 `reproducibility/mesh_study/summary.json`, not estimated timings.
 
 ## Experimental 3D comparison and Abaqus profiling scope
+
+The separate proportional mixed-mode response archive contains two panels:
+shear reaction magnitude versus side displacement and signed normal reaction
+versus top displacement. Its recorded residual exceeds 1e-6 at 894 of 900
+increments. The figure marks these points and remains a diagnostic outside
+the main paper; it does not supply mixed-mode experimental validation.
+The internal `4c` option uses simultaneous proportional displacement control,
+which differs from the published experimental loading sequence.
 
 The quantitative pure-tension case uses published specimen 47-05 dimensions with 25 mm notches, 35,917 TET4 elements and four interpolated 65 mm gauges. The 600 initial intervals produce 608 accepted increments with eight rejected/bisected trials. The peak is 16.64 kN versus the digitized experimental 19.85 kN (16.18% below); curve NRMSE is 9.27%. All accepted equilibrium residuals are below 1e-6. Source-linked local checks cover 32 size/direction cases, compression mapping and eight rotating-direction unloading/history cases. Parameters are retained without fitting. One completed mesh does not establish structural 3D mesh or increment convergence. The separate 20 mm-notch histories and mixed-mode/torsion pictures are idealized or qualitative evidence.
 

@@ -1,7 +1,10 @@
 # 3D Nooru-Mohamed benchmark
 
-This folder contains the 3D Nooru-Mohamed validation case used in the FRACMATH
-SoftwareX manuscript.
+This folder contains the illustrative proportional-loading Nooru-Mohamed
+case used in the FRACMATH SoftwareX manuscript. Its archived response is
+diagnostic: 894 of 900 increments exceed the equilibrium tolerance. The
+separate published-geometry pure-tension experimental comparison is in
+[`softwarex/reproducibility/nooru_25mm_coarse/`](../softwarex/reproducibility/nooru_25mm_coarse/README.md).
 
 ## Folder map
 

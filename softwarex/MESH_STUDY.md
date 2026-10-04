@@ -17,7 +17,7 @@ Both material calibrations on all three meshes also use 4,000 steps to quantify 
 
 The `oliver` runs recompute the projected element width and rescale the
 exponential softening law. The `fixed` runs use a reference calibration width
-of 1.25 mm for all elements on all meshes, so their local stress–strain law
+of 1.25 mm for all elements on all meshes, so their local stressâ€“strain law
 does not change with mesh size. All other material properties are identical.
 The fixed law is an ablation of element-size compensation, not a new model.
 
@@ -31,7 +31,7 @@ energy plus dissipation diagnoses increment and equilibrium errors.
 The analysis compares dissipation at a common CMOD of 0.10 mm. This is partial
 structural dissipation; it is not a direct estimate of complete fracture
 energy or a prescribed crack area. The one-element test separately checks
-the full stress–strain integral against the fracture-energy calibration.
+the full stressâ€“strain integral against the fracture-energy calibration.
 
 ## Run
 
@@ -108,7 +108,7 @@ and partial-damage unload/reload history. Sixteen further cases combine the
 four triangle base widths with principal tensile directions of 15, 45, 75,
 and 90 degrees, checking analytic projected widths and softening energy.
 This verifies local direction handling, not structural orientation independence.
-It writes energy and stress�strain
+It writes energy and stress–strain
 CSVs. Its `GETOUTDIR` stub is only for standalone testing and must not be
 linked into an Abaqus job. This tests local material calculations; it does
 not test the Abaqus global equilibrium procedure.
@@ -156,6 +156,17 @@ and `fine/mesh` folders directly through `FRACMATH_CASE_DIR`, with
 reruns do not require Abaqus; creating new meshes or Abaqus comparisons does.
 
 ## Matched smaller-increment family
+
+### Response comparison figures
+
+`figures/mesh_study_overview.pdf` compares coarse, medium and fine
+load--CMOD curves for Oliver MATLAB, fixed-law MATLAB and regularized Abaqus,
+alongside peak load and partial dissipation. Its final panel compares the
+two programs on the identical fine mesh. `mesh_study_code_comparison.pdf`
+shows each MATLAB/Abaqus pair on all three meshes. These response curves,
+not elapsed time, assess mesh sensitivity. Computational cost appears
+separately in the hardware-study figure; the raw mesh-study timing records
+remain in the archive.
 
 The fixed-law fine-mesh check showed greater increment sensitivity. The study
 therefore includes 4,000-step runs for both calibrations on all three meshes,

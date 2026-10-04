@@ -230,13 +230,15 @@ def figures(workspace, result, out):
         ax.legend(frameon=False)
     if result["abaqus"]:
         axes = grid[2]
-        rows = [r for r in result["matlab"] if r["regularization"] == "oliver"]
-        abq = result["abaqus"]
-        axes[0].plot([r["dofs"] for r in rows], [r["wall_s"] for r in rows], "o-", color=COLORS[0], label="MATLAB wall")
-        axes[0].plot([r["dofs"] for r in rows], [r["factorization_s"] for r in rows], "o--", color=COLORS[0], label="MATLAB factorization")
-        axes[0].plot([r["dofs"] for r in abq], [r["wall_s"] for r in abq], "s-", color=COLORS[1], label="Abaqus wall")
-        axes[0].plot([r["dofs"] for r in abq], [r["summed_solver_elapsed_s"] for r in abq], "s--", color=COLORS[1], label="Abaqus sparse solver")
-        axes[0].set(xlabel="degrees of freedom", ylabel="elapsed time (s)", title="Measured costs; algorithms differ")
+        for name, color, style in zip(MESHES, COLORS, STYLES):
+            folder = workspace / name / "Gregoire_3PB/results"
+            if not folder.exists():
+                folder = workspace / name / "abaqus/results"
+            curve = np.loadtxt(folder / "abaqus_load_cmod.csv", delimiter=",", comments="#")
+            axes[0].plot(curve[:, 0], curve[:, 1]/1000,
+                         color=color, ls=style, label=name.capitalize())
+        axes[0].set(xlabel="CMOD (mm)", ylabel="load (kN)",
+                    title="Abaqus: three mesh responses", xlim=(0, .15), ylim=(0, None))
         axes[0].legend(frameon=False, fontsize=10)
         fine_matlab = workspace / "fine" / ("matlab_oliver_%d/matlab_load_cmod.csv" % result["main_steps"])
         folder = workspace / "fine/Gregoire_3PB/results"

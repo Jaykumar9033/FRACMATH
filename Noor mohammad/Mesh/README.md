@@ -64,5 +64,13 @@ Representative outputs include:
 
 ## Notes
 
+- The option `load_path='4c'` denotes simultaneous proportional displacement
+  control with shear/tension displacement ratio 0.6; it is not the published
+  experimental case 4c loading sequence.
+- The saved 900-increment history has 894 increments above the 1e-6
+  equilibrium tolerance. Its reaction curves are diagnostics, and its damage
+  images illustrate the workflow qualitatively. See the
+  [two-channel response archive](../../softwarex/reproducibility/nooru_proportional/README.md).
+
 - The solver uses TET4 elements, modified von Mises equivalent strain, exponential softening, and an Oliver direction-dependent crack-band bandwidth.
 - The folder name contains a space, so use quotes if navigating from a terminal.

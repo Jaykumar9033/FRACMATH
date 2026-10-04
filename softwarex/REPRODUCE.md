@@ -58,6 +58,14 @@ See [`MESH_STUDY.md`](MESH_STUDY.md) for the exact protocol, licensed-run comman
 
 ## 3D pure-tension experimental comparison
 
+For the separate proportional mixed-mode history, run
+`python softwarex/plot_nooru_proportional.py` from the repository root.
+The two panels preserve shear and normal reaction signs and identify
+equilibrium failures. This history is diagnostic: 894 of 900 saved increments
+exceed the 1e-6 tolerance. The proportional `4c` option does not reproduce
+the published sequential experimental loading, so no 4a/4c experimental
+points are overlaid. See `reproducibility/nooru_proportional/README.md`.
+
 Run `python softwarex/plot_nooru_coarse.py` from the repository root to check the completed 25 mm-notch history and regenerate Figure 4b. Copy `softwarex/reproducibility/nooru_25mm_coarse` to a separate workspace and run `matlab -batch run_case` there for a structural rerun. See that folder's README for the mesh, gauge control, source-linked material checks, parameters and validation scope. The experimental source and digitization uncertainty are in `softwarex/reproducibility/experimental_3d/experimental_source.json`. The 20 mm-notch source and histories in that separate folder are idealized-geometry evidence. The proportional mixed-mode damage images and end-twist example remain qualitative.
 
 ## Size, mesh, CPU and hybrid GPU evidence

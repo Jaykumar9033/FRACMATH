@@ -8,3 +8,4 @@ softwarex/reproducibility/experimental_3d/** -text
 softwarex/reproducibility/scaling_study/** -text
 softwarex/reproducibility/timing_repeats/** -text
 softwarex/reproducibility/nooru_25mm_coarse/** -text whitespace=cr-at-eol
+softwarex/reproducibility/nooru_proportional/response_history.csv -text
