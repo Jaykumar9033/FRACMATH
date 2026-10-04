@@ -20,7 +20,6 @@ def main():
     package=Path(__file__).resolve().parent
     experiment=np.loadtxt(package/'reproducibility/experimental_3d/nooru_47_05_digitized.csv',delimiter=',',skiprows=1)
     fig,ax=plt.subplots(figsize=(6,3.5),layout='constrained')
-    ax.plot(experiment[:,0],experiment[:,1]/1000,'ko-',ms=3,lw=1,label='47-05 experiment (digitized)')
     accepted=[]
     excluded=[]
     curves={}
