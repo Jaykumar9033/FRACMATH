@@ -10,7 +10,8 @@ authors:
     given-names: Madura
     email: mpathirage@unm.edu
 repository-code: "https://github.com/Jaykumar9033/FRACMATH"
-version: "1.1.0-dev"
+version: "1.1.0"
+date-released: "2026-10-04"
 license: MIT
 keywords:
   - fracture mechanics
@@ -27,5 +28,5 @@ abstract: >-
   direction-dependent Oliver crack-band regularization.
   The SoftwareX study includes a hybrid 2D GPU backend with CPU sparse
   factorization, CPU/SMP size and mesh comparisons, and three timing observations for each computing configuration, and a
-  single-mesh 3D pure-tension comparison with published notch geometry and
+  three-mesh 3D pure-tension comparison with published notch geometry and
   digitized experimental data.

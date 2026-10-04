@@ -2,8 +2,11 @@
 
 All notable repository changes for FRACMATH are recorded here.
 
-## SoftwareX study
+## 1.1.0 - 2026-10-04
 
+- Actual UMAT material-point audit and pixel-verified manuscript figure reconstruction.
+- Three equilibrium-verified published-geometry 3D meshes and experimental error measures.
+- Hybrid GPU/CPU and Abaqus SMP comparisons with 90 timing observations.
 - Controlled three-mesh comparison with Oliver regularization and fixed-law controls.
 - Structural work, stored energy, damage dissipation, and energy balance histories.
 - Load-increment checks and material-point verification in MATLAB and Fortran.

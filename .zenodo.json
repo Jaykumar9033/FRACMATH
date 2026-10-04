@@ -1,7 +1,7 @@
 {
   "title": "FRACMATH: A vectorized MATLAB framework for continuum damage mechanics with crack band regularization",
   "upload_type": "software",
-  "description": "FRACMATH is an inspectable MATLAB framework for quasibrittle fracture with scalar continuum damage and direction-dependent Oliver crack-band regularization. The SoftwareX study provides material-point verification, controlled mesh/regularization and increment comparisons, structural energy diagnostics, and 90 timing observations across a 30-configuration size/mesh study of MATLAB CPU1/CPU8/hybrid GPU and Abaqus CPU1/CPU8. A completed 35,917-element 3D pure-tension test using the published 25 mm notch geometry is compared with digitized experimental data; mixed-mode and torsion images are qualitative. Hardware response checks accompany measured costs. On the tested workstation the hybrid GPU backend has no speed advantage, while larger Abaqus cases benefit from SMP. Equilibrium algorithms and timing scopes differ; no cross-program speed ranking is established.",
+  "description": "FRACMATH is an inspectable MATLAB framework for quasibrittle fracture with scalar continuum damage and direction-dependent Oliver crack-band regularization. The SoftwareX study provides material-point verification, controlled mesh/regularization and increment comparisons, structural energy diagnostics, and 90 timing observations across a 30-configuration size/mesh study of MATLAB CPU1/CPU8/hybrid GPU and Abaqus CPU1/CPU8. Three completed 3D pure-tension meshes (35,917, 94,525 and 144,791 TET4 elements) using the published 25 mm notch geometry is compared with digitized experimental data; mixed-mode and torsion images are qualitative. Hardware response checks accompany measured costs. On the tested workstation the hybrid GPU backend has no speed advantage, while larger Abaqus cases benefit from SMP. Equilibrium algorithms and timing scopes differ; no cross-program speed ranking is established. A 712-case audit compares the actual UMAT with independent calculations and MATLAB damage functions. All generated manuscript figures reproduce from preserved data. The strict proportional mixed-mode attempt is archived as a convergence failure, not quantitative validation.",
   "creators": [
     {
       "name": "Mavani, Jaykumar",
@@ -16,7 +16,7 @@
   ],
   "access_right": "open",
   "license": "mit",
-  "version": "1.1.0-dev",
+  "version": "1.1.0",
   "keywords": [
     "fracture mechanics",
     "continuum damage mechanics",
