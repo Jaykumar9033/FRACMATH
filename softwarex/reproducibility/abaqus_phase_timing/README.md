@@ -22,3 +22,7 @@ python softwarex/analyze_abaqus_profile.py --workspace softwarex/reproducibility
 ```
 
 For licensed fresh runs use time_abaqus_umat.py or profile_native_abaqus.py with a new --workspace and the same --source-snapshot. The direct-timer command also needs --baseline. Run them sequentially. VTune is required only for native profiling. SHA256.json files identify the archived raw sources and outputs. Local proprietary executables, raw VTune databases and PDB files are not part of the repository; the full CSV exports and warnings are provided.
+
+## UMAT block measurements
+
+The [seven-block diagnostic](blocks/README.md) records constants/state, strain/history, Oliver width, damage, stress, secant matrix and state storage. Response and mesh checks pass. Clock calibration is large relative to these short blocks, so the archive reports raw sums without claiming precise uninstrumented percentages.
