@@ -43,17 +43,17 @@ file checks does not predict editorial acceptance.
   Oliver regularization versus 18.21% with the fixed law; at 4,000 increments,
   the spreads are 6.44% versus 20.76%. These measures qualify this mesh family,
   rather than establishing general mesh independence.
-- **3D published geometry:** the coarse pure-tension case has 35,917 TET4 elements
-  and 21,828 DOFs. It completes 608 accepted increments with eight rejected trials,
-  reaching 0.20 mm mean gauge displacement. Maximum accepted relative equilibrium
-  residual is 8.917e-7. The simulated peak is 16.6415 kN versus digitized 19.8529 kN,
-  a 16.18% underprediction; normalized curve RMS error is 9.27%.
+- **3D published geometry:** 35,917, 94,525 and 144,791 TET4 meshes
+  complete their full 0.20 mm gauge paths within the 1e-6 equilibrium tolerance.
+  Peak spread is 1.46%; medium/fine curve RMS difference is 0.35% of fine peak.
+  Experimental peak underprediction remains 16.18–17.39%; curve NRMSE is
+  9.09–9.27%. These errors remain explicit rather than removed by mesh choice.
 - **Local 3D checks:** 32 tetrahedron size/direction cases, the compression mapping
   and eight rotating-direction damage-history cases pass. Projected width,
   tensile response, post-peak energy calibration and damage irreversibility are
   checked. These tests do not establish structural mesh convergence.
 
-The manuscript describes these completed results and their limits. Figure 1
+The 712-case UMAT audit, fresh energy tests and missing-gradient failure check pass. All eight generated manuscript assets reproduce with identical pixels; two supplied geometry illustrations match archived source bytes. The manuscript describes these completed results and their limits. Figure 1
 retains the preserved 10,000-step MATLAB response; Figures 4 and 5 retain the
 large shared color bars. The illustrative 20 mm-notch geometry is distinct
 from the quantitative published 25 mm-notch geometry.
@@ -66,14 +66,13 @@ complete phase wall-time attribution remains unavailable. The entry exactly
 reproduces every benchmark numerical state, response and snapshot array. Their
 archives contain tested sources, paired-data checks and measurement scopes.
 
-1. Finish and assess the medium/fine 3D pure-tension cases using the published
-   25 mm notch geometry. The completed coarse case predicts 16.64 kN versus
-   a digitized experimental peak of 19.85 kN (16.18% below). Explain this
-   discrepancy and report only complete, converged histories. One mesh is
-   insufficient for a 3D mesh-convergence claim.
-2. Finish or explicitly delimit the strict proportional mixed-mode run. Its
-   controls differ from the experimental 4a/4c sequence; do not add unmatched
-   experimental overlays or use rejected/unconverged histories as validation.
+1. The three published-geometry 3D pure-tension meshes are complete. Their
+   peaks are 16.64, 16.40 and 16.53 kN; peak spread is 1.46% and medium/fine
+   curve RMS difference is 0.35% of fine peak. All histories pass the full
+   equilibrium gate. Experimental underprediction remains 16.18–17.39%.
+2. The strict proportional mixed-mode attempt stops at bisection exhaustion.
+   Its failure record is preserved and explicitly delimited in the paper;
+   it does not supply quantitative mixed-mode validation.
 3. Publish the final tested GitHub version, verify its automatic Zenodo archive,
    and add the correct software reference and metadata. The local citation
    metadata currently says `1.1.0-dev`; verify that the final manuscript's
@@ -91,7 +90,7 @@ archives contain tested sources, paired-data checks and measurement scopes.
 5. Repeat the PDF, file and delivery checks if further simulation results are
    incorporated. The manuscript names OpenAI Codex in its AI-use declaration
    and identifies the completed numerical evidence by immutable commit
-   `c65a73254d6aa62e5ea35c6e6852b875cab37f36`.
+   `243be5fb66f7754eaac0e9d338f6a531b5331975`.
 
 The three-mesh 3D study, GPU/SMP benchmarking and detailed Abaqus profiling
 are evidence goals of this manuscript, not universal mandatory SoftwareX

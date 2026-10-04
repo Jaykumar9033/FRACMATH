@@ -119,7 +119,7 @@ continuum damage mechanics \sep crack-band regularization \sep MATLAB \sep hybri
 \midrule
 C1 & Current code version & SoftwareX study, commit 3dd9107 \\
 C2 & Permanent link to code/repository used for this code version &
-Source and study data: \href{https://github.com/Jaykumar9033/FRACMATH/tree/c65a73254d6aa62e5ea35c6e6852b875cab37f36}{immutable GitHub commit}. \\
+Source and study data: \href{https://github.com/Jaykumar9033/FRACMATH/tree/243be5fb66f7754eaac0e9d338f6a531b5331975}{immutable GitHub commit}. \\
 C3 & Legal code license & MIT License \\
 C4 & Code versioning system used & git \\
 C5 & Software code languages, tools and services used & MATLAB; Fortran UMAT; Abaqus/Standard; Python analysis scripts \\
@@ -264,6 +264,11 @@ loading directions of $15^\circ$, $45^\circ$, $75^\circ$, and $90^\circ$.
 Projected widths agree with Eq.~\eqref{eq:oliver-t3}, and the largest
 absolute relative energy error is $1.78\times10^{-6}$. These are local
 implementation checks, not evidence of structural orientation independence.
+An additional 712-case audit compares the actual UMAT with an independent
+tensor-eigensolve calculation and the MATLAB damage functions. Strain splits,
+multiaxial states, irreversible history, projected width, stress and the
+documented secant matrix pass declared absolute/relative tolerances of
+$2\times10^{-10}$. This does not establish a consistent damage tangent.
 
 \begin{table}[!htbp]
 \centering\small
@@ -478,15 +483,18 @@ $f_c = 30$~MPa).
 The proportional-loading damage panels illustrate the workflow. Its recorded
 shear and normal reaction curves are archived as diagnostics: 894 of 900
 increments exceed the $10^{-6}$ equilibrium tolerance, so these histories
-do not support a quantitative mixed-mode validation. The option name
+do not support a quantitative mixed-mode validation. A strict rerun rejects
+unconverged trials and stops at target-bisection exhaustion; its failure
+record is preserved. The option name
 \texttt{4c} selects proportional displacement control, not the published
 sequential experimental loading. A separate
 pure-tension comparison uses specimen 47-05 with two glued platens
 (Figure 3.16, printed page 45 of \citep{nooru1992}). Its load--displacement
 curve is manually digitized; estimated reading uncertainty is
 $\pm 0.00102$~mm and $\pm 164$~N. This quantitative case uses the published
-25~mm-deep, 5~mm-wide notches, 7,276 nodes and 35,917 TET4 elements
-(21,828 DOFs). Global/notch mesh seeds are 12/4~mm. Material parameters above are retained
+25~mm-deep, 5~mm-wide notches, with 35,917, 94,525 and 144,791 TET4 elements
+(21,828, 54,540 and 84,774 DOFs). Global/notch mesh seeds are 12/4, 9/3
+and 6/2~mm. Material parameters above are retained
 without fitting. Bottom vertical displacements are fixed, the top platen
 has a common unknown vertical displacement, and minimal lateral pins
 remove rigid modes. The mean displacement of four interpolated 65~mm
@@ -497,19 +505,19 @@ projected-width update. The relative equilibrium tolerance is $10^{-6}$;
 unconverged trials are rejected and their target intervals bisected without
 committing damage.
 % EXPERIMENTAL_METRICS_BEGIN
-The initial 600 target intervals to a mean gauge displacement of 0.2~mm
-produce 608 accepted increments after eight rejected/bisected trials.
-The peak is 16.64~kN at 0.00933~mm, versus digitized estimates of 19.85~kN
-at 0.00659~mm: the peak-load error is $-16.18\%$. The RMS curve error on
-1,001 uniformly spaced points over 0--0.2~mm is 9.27\% of experimental
-peak load. Both peak and late softening tail are underpredicted. All accepted
-increments meet the equilibrium tolerance; the maximum relative residual
-is $8.92\times10^{-7}$ and maximum gauge-constraint error is
-$1.24\times10^{-15}$~mm. This completed single-mesh comparison reports
-experimental error without establishing increment convergence or general
-3D mesh independence. Idealized platens, constitutive assumptions and
-curve-digitization uncertainty limit its interpretation. Further meshes
-are not included in the completed evidence reported here.
+The initial 600 target intervals to 0.2~mm produce 608, 606 and 601 accepted
+increments after eight, six and one rejected/bisected trials. Coarse,
+medium and fine peaks are 16.64, 16.40 and 16.53~kN, versus the digitized
+19.85~kN: errors are $-16.18\%$, $-17.39\%$ and $-16.76\%$.
+The peak spread is 1.46\% of their mean. On 1,001 uniform points over
+0--0.2~mm, experimental curve RMS errors are 9.27\%, 9.25\% and 9.09\%
+of experimental peak; medium--fine RMS difference is 0.35\% of fine peak.
+Both peak and late softening tail are underpredicted. All accepted residuals
+meet $10^{-6}$; the maximum is $9.84\times10^{-7}$ and maximum gauge error
+is $1.24\times10^{-15}$~mm. The small mesh spread does not remove the
+experimental discrepancy or establish general mesh independence.
+Idealized platens, constitutive assumptions, digitization and untested
+increment convergence limit interpretation.
 
 Local TET4 checks cover four edge lengths (0.5, 1, 2 and 4~mm) and eight
 tensile directions. All 32 cases pass equivalent-strain mapping,
@@ -550,9 +558,9 @@ mesh convergence; their source-linked data accompany the code.
   \end{subfigure}
 
   \caption{Nooru-Mohamed cases: proportional-loading boundary conditions
-    and damage panels; the load curve compares a separate pure-tension
-    simulation with digitized specimen 47-05 data. Proportional-loading
-    panels use 20~mm notches; the pure-tension curve uses 25~mm notches.
+    and damage panels; the load curves compare three separate pure-tension
+    meshes with digitized specimen 47-05 data. Proportional-loading
+    panels use 20~mm notches; the pure-tension curves use 25~mm notches.
     The controls differ. Mixed-mode damage panels are qualitative;
     their recorded reaction history contains equilibrium failures.}
   \label{fig:b2-overview}
@@ -759,9 +767,9 @@ loading. A single damage scalar does not represent crack closure or
 anisotropic degradation. The material-point tests verify softening calibration. The controlled
 2D family tests mesh sensitivity for one geometry and mesh construction;
 it does not establish general mesh or orientation independence.
-The 3D pure-tension comparison uses one mesh with published 25~mm notches
-and idealized platens; its peak load is 16.18\% below the digitized experiment.
-3D mesh independence remains untested. Mixed-mode and torsion images
+The three-mesh 3D pure-tension comparison uses published 25~mm notches
+and idealized platens; peaks remain 16.18--17.39\% below the digitized experiment.
+General 3D mesh independence is not established. Mixed-mode and torsion images
 remain qualitative. The 2D
 sequential update leaves a nonzero post-damage equilibrium residual;
 the increment and refinement studies quantify its effect. A fully coupled
@@ -866,8 +874,8 @@ Barcelona, 2005. URL: \url{https://congress.cimne.com/complas05/admin/Files/File
 
 \bibitem{fracmath}
 J. Mavani, M. Pathirage, FRACMATH: source and completed numerical evidence,
-GitHub, 2026, Git commit \texttt{c65a732}. URL:
-\url{https://github.com/Jaykumar9033/FRACMATH/tree/c65a73254d6aa62e5ea35c6e6852b875cab37f36}.
+GitHub, 2026, Git commit \texttt{243be5f}. URL:
+\url{https://github.com/Jaykumar9033/FRACMATH/tree/243be5fb66f7754eaac0e9d338f6a531b5331975}.
 
 \end{thebibliography}
 
