@@ -455,7 +455,25 @@ same mesh, boundary sets and 2,001 response rows exactly. It identifies
 in four named assembly routines. These exclude callees and unresolved
 symbols; profiling effects and timer scopes prevent interpreting them
 as complete material/assembly wall times. Function and call-stack exports
-accompany the code; these estimates do not enter the performance table.
+accompany the code. Table~\ref{tab:abaqus-material-assembly} summarizes
+these estimates separately from the performance results.
+
+\begin{table}[!htbp]
+\centering\small
+\caption{Abaqus material-related and assembly profiling estimates from a
+separate small/coarse, single-CPU, 2{,}000-increment run. These are sampled
+CPU self times, not complete phase wall times, and are excluded from the
+90 timing observations.}
+\label{tab:abaqus-material-assembly}
+\begin{tabularx}{\linewidth}{@{}YrY@{}}
+\toprule
+Measured scope & Estimate (s) & Interpretation \\
+\midrule
+User-subroutine library & 2.03 & UMAT, helpers and external-database initialization; not an isolated material timer. \\
+Four identified assembly routines & 3.81 & Self samples in named kernels; excludes callees and unidentified assembly work. \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
 \input{tables/scaling_table.tex}
 
