@@ -48,3 +48,13 @@ abaqus.rpy*
 !softwarex/reproducibility/mesh_study/**/extract.log
 !softwarex/reproducibility/nooru_25mm_coarse/**/*.log
 !softwarex/reproducibility/nooru_25mm_coarse/*.log
+
+# Submission paperwork is maintained outside the software repository.
+/softwarex/manuscript.tex
+/softwarex/manuscript.pdf
+/softwarex/Highlights.txt
+/softwarex/cover_letter.txt
+/softwarex/author_confirmation.txt
+/softwarex/SUBMISSION_CHECKLIST.md
+/softwarex/submission_checks.json
+/softwarex/code_figure_audit.json

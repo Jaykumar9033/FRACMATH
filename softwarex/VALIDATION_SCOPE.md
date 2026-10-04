@@ -10,4 +10,4 @@ FRACMATH uses established damage and crack-band models. Its software contributio
 
 Figure 1 contains the 10,000-step MATLAB curve. Figures 3 and 4 use large shared colorbars. Figure 5 compares completed response curves. Timing is reported in tables.
 
-The [evidence map](CLAIM_EVIDENCE.md) links manuscript claims to completed datasets. The [UMAT precision archive](reproducibility/umat_precision/README.md) supplies 824 local cases, ten external batches and an independently executed fresh-process replay. These measurements do not provide full Abaqus assembly wall time.
+The [UMAT precision archive](reproducibility/umat_precision/README.md) supplies 824 local cases, ten external batches and an independently executed fresh-process replay. These measurements do not provide full Abaqus assembly wall time.

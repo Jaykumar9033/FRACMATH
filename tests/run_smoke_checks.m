@@ -16,7 +16,6 @@ requiredFiles = {
     '3pb/matlab/Gregoire_3PB/results/matlab_load_cmod.csv'
     '3pb/abaqus/cdm_umat_2d_OLIVER_T3_FAST.for'
     'softwarex/plot_verified_figures.py'
-    'softwarex/manuscript.tex'
     'softwarex/reproducibility/results_1000/matlab_load_cmod.csv'
     'softwarex/reproducibility/results_10000/matlab_load_cmod.csv'
     '3pb/abaqus/Gregoire_3PB/results/abaqus_load_cmod.csv'

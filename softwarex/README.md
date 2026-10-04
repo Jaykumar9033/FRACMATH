@@ -1,7 +1,7 @@
 # SoftwareX package
 
-This folder contains the SoftwareX manuscript draft, figure sources, plotting
-scripts, and the preserved verification data for the 2D and 3D FRACMATH
+This folder contains figure sources, plotting scripts, and the preserved
+verification data for the 2D and 3D FRACMATH
 implementation. The 2D MATLAB and UMAT source files are also copied here
 under `reproducibility/` so the package can be run independently; the
 repository's primary code entry points are under `../3pb/`.
@@ -16,7 +16,7 @@ dimensions, the load-step algorithm, and how to compare numerical outputs.
 
 | Path | Contents |
 | --- | --- |
-| `manuscript.tex`, `manuscript.pdf`, `figures/` | SoftwareX paper and figures |
+| `figures/`, `tables/` | Reference figures and numerical tables reproduced by the scripts |
 | `plot_verified_figures.py` | Regenerates 2D figures from preserved `.mat` and CSV data |
 | `rebuild_3d_figures.py`, `figure_sources/` | Recomposes archived 3D image panels with larger labels and a shared color bar |
 | `compare_solver_diagnostics.py`, `reproducibility/solver_diagnostics.json` | Parses preserved MATLAB and Abaqus timing records without assigning unmeasured UMAT time |
