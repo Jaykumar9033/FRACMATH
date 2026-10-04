@@ -364,13 +364,14 @@ use the state arrays.
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.96\linewidth]{damage_verified.png}
-\caption{Fully damaged elements ($\omega\geq0.999999$) in the notch region
-on the undeformed CPS3 mesh. Partially damaged elements are omitted.
-Neither peak state contains elements at this cutoff, so the upper panels
-are empty. The lower panels show the computed element band, without smoothing
-or drawing an artificial crack line. Left: MATLAB; right: Abaqus/UMAT. Top: near peak
-load; bottom: post-peak state. Abaqus fields are the closest stored
-frames to the indicated response points.}
+\caption{Damaged element bands in the notch region on the undeformed
+CPS3 mesh. Left: MATLAB; right: Abaqus/UMAT. Top: severe damage at peak
+load ($\omega\geq0.99$). Bottom: fully damaged elements
+($\omega\geq0.999999$) after peak, at the saved state above CMOD 0.30~mm.
+The cutoffs differ between rows and are printed in each panel with the
+selected element count. These bands show damage localization, not a
+measured open-crack length. No smoothing is used. Abaqus uses the nearest
+stored response frame.}
 \label{fig:b1-damage}
 \end{figure}
 
