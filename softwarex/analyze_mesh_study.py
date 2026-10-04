@@ -202,7 +202,7 @@ def figures(workspace, result, out):
     out.mkdir(parents=True, exist_ok=True)
     plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 12,
                          "axes.spines.top": False, "axes.spines.right": False})
-    fig, grid = plt.subplots(3, 2, figsize=(8.3, 10.5), layout="constrained")
+    fig, grid = plt.subplots(4, 2, figsize=(8.3, 13.6), layout="constrained")
     axes = grid[0]
     for ax, mode, title in zip(axes, ("oliver", "fixed"), ("Oliver regularization", "Fixed stress-strain softening")):
         for name, color, style in zip(MESHES, COLORS, STYLES):
@@ -257,7 +257,21 @@ def figures(workspace, result, out):
     else:
         for ax in grid[2]:
             ax.set_visible(False)
-    for label, ax in zip("abcdef", grid.flat):
+    for mode, color, marker in (("oliver", COLORS[0], "o"), ("fixed", COLORS[1], "s")):
+        for steps, style in ((result["main_steps"], "-"), (2*result["main_steps"], "--")):
+            source = result["matlab"] if steps == result["main_steps"] else result["increment_checks"]
+            rows = sorted([r for r in source if r["regularization"] == mode and r["steps"] == steps], key=lambda r:r["dofs"])
+            label = ("Oliver" if mode == "oliver" else "Fixed") + f", {steps:,} steps"
+            grid[3, 0].plot([r["dofs"] for r in rows], [r["peak_load_N"]/1000 for r in rows], color=color, marker=marker, ls=style, label=label)
+            grid[3, 1].plot([r["dofs"] for r in rows], [r["dissipation_at_common_cmod_Nmm"] for r in rows], color=color, marker=marker, ls=style, label=label)
+    grid[3, 0].set(title="Mesh and increment sensitivity", ylabel="peak load (kN)")
+    grid[3, 1].set(title="Partial dissipation at CMOD 0.10 mm", ylabel="damage dissipation (N mm)")
+    for ax in grid[3]:
+        ax.set_xlabel("degrees of freedom")
+        ax.ticklabel_format(axis="x", style="sci", scilimits=(0, 0))
+        ax.grid(alpha=.18)
+        ax.legend(frameon=False, fontsize=9)
+    for label, ax in zip("abcdefgh", grid.flat):
         if ax.get_visible():
             ax.text(-.17, 1.06, "("+label+")", transform=ax.transAxes, fontweight="bold")
     fig.savefig(out / "mesh_study_overview.png", dpi=300, bbox_inches="tight")

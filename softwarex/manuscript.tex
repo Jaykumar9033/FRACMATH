@@ -486,7 +486,9 @@ MATLAB bars cover the load loop;
 Abaqus bars cover analysis and output. CPU8 denotes a MATLAB library-thread
 limit or Abaqus SMP; GPU denotes element/damage work with CPU sparse
 factorization. These workstation observations establish no cross-program
-speed ranking or GPU speed advantage.}
+speed ranking or GPU speed advantage. The lower panel reports the separate
+Abaqus profile: user-library and named-assembly CPU self-time estimates,
+not complete material/assembly wall times.}
 \label{fig:timing}
 \end{figure}
 
@@ -683,7 +685,8 @@ Elements & DOFs & $P_{\rm O}$ (kN) & $P_{\rm F}$ (kN) & $P_{\rm A}$ (kN) & $\mat
 \end{table}
 
 At 4{,}000 increments on every mesh, peak-load spreads are 5.98\% (Oliver) and 8.05\% (fixed law); dissipation spreads are 6.44\% and 20.76\%, respectively.
-The reduction in dissipation sensitivity therefore persists at the smaller increment.
+The reduction in dissipation sensitivity therefore persists at the smaller increment,
+as shown in Figure~\ref{fig:mesh-study}(g,h).
 Halving the increment changes Oliver peaks by $-0.89$ to $-1.37\%$
 and dissipation by $-0.99$ to $-1.53\%$; the corresponding fixed-law
 ranges are $-0.96$ to $-2.20\%$ and $-1.27$ to $-3.74\%$.
@@ -706,11 +709,12 @@ diagnostics and analysis scripts accompany the study.
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=\linewidth]{mesh_study_overview.pdf}
+\includegraphics[width=\linewidth,height=0.82\textheight,keepaspectratio]{mesh_study_overview.pdf}
 \caption{Controlled 2D study. (a,b) Oliver and fixed-law responses;
 (c,d) peak load and partial damage dissipation versus DOFs;
 (e) regularized Abaqus responses on the three meshes; (f) fine-mesh MATLAB/Abaqus
-responses. Main MATLAB curves use 2{,}000 increments to $-0.1$~mm;
+responses; (g,h) mesh sensitivity of peak load and partial dissipation
+with 2{,}000 and 4{,}000 MATLAB increments. Main MATLAB curves use 2{,}000 increments to $-0.1$~mm;
 Abaqus uses the same maximum increment with adaptive cutbacks.
 Equilibrium algorithms differ. Timing comparisons appear separately in
 Fig.~\ref{fig:timing}.}
