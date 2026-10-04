@@ -6,7 +6,7 @@
   "word_count_scope": "Includes equations and code; excludes metadata, tables, figures and references.",
   "figures": 5,
   "keywords": 6,
-  "manuscript_sha256": "85899f0f6ea8f7f071235c6a1f57166839231f13fe2b23feab18a9faa5e90c57",
+  "manuscript_sha256": "c8002d1c1f030107ba9a67dc1949514ebc84089a7abc398acdd0f5f2e90e777e",
   "checks": {
     "five_required_sections": true,
     "architecture_and_functionalities": true,

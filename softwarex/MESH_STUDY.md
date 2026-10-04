@@ -157,14 +157,7 @@ reruns do not require Abaqus; creating new meshes or Abaqus comparisons does.
 
 ## Response comparison figures
 
-`figures/mesh_study_overview.pdf` compares coarse, medium and fine
-load--CMOD curves for Oliver MATLAB, fixed-law MATLAB and regularized Abaqus,
-alongside peak load and partial dissipation. Its final panel compares the
-two programs on the identical fine mesh. `mesh_study_code_comparison.pdf`
-shows each MATLAB/Abaqus pair on all three meshes. These response curves,
-not elapsed time, assess mesh sensitivity. Computational cost appears
-separately in the hardware-study figure; the raw mesh-study timing records
-remain in the archive.
+`figures/mesh_study_overview.pdf` contains four response panels: Oliver MATLAB, constant-width MATLAB, regularized Abaqus, and the identical fine-mesh MATLAB/Abaqus pair. The constant-width control uses the exponential softening law with h = 1.25 mm on every mesh; the Oliver model calculates the projected width for each element. Peak-load and dissipation values are reported in the manuscript table. The figure presents completed response histories without convergence-trend panels. Timing is reported in separate manuscript tables. Raw diagnostics and smaller-increment checks remain available below and in the archive.
 
 ## Matched smaller-increment family
 
