@@ -98,7 +98,7 @@ def damage_figure(d):
     pd = ABQ.parent / "plotdata"
     has_abq = (pd / "omega_peak.csv").exists() and (pd / "omega_postpeak.csv").exists()
     fig, axes = plt.subplots(2, 2 if has_abq else 1,
-                            figsize=(8.5 if has_abq else 5.2, 7.4), layout="constrained",
+                            figsize=(13.5 if has_abq else 10.0, 5.2), layout="constrained",
                             squeeze=False)
     abq_nodes = abq_elems = None
     if has_abq:
@@ -108,9 +108,10 @@ def damage_figure(d):
         cutoff = cutoffs[row]
         omega = snap["omega"].ravel()
         selected = omega >= cutoff
-        coll = PolyCollection(nodes[elems[selected]], facecolors="#711f22",
+        coll = PolyCollection(nodes[elems[selected]], facecolors="#151515", zorder=3,
                               edgecolors="none")
         ax = axes[row, 0]
+        ax.triplot(nodes[:, 0], nodes[:, 1], elems, color="#dce0e5", lw=.12, zorder=1)
         ax.add_collection(coll)
         ax.text(.03, .97, f"ω ≥ {cutoff:g}\n{selected.sum()} elements",
                 transform=ax.transAxes, va="top", fontsize=9)
@@ -122,17 +123,22 @@ def damage_figure(d):
             abq_w = np.zeros(len(abq_elems))
             abq_w[values[:, 0].astype(int)-1] = values[:, 2]
             selected = abq_w >= cutoff
-            coll = PolyCollection(abq_nodes[abq_elems[selected]], facecolors="#711f22",
+            coll = PolyCollection(abq_nodes[abq_elems[selected]], facecolors="#151515", zorder=3,
                                   edgecolors="none")
             ax = axes[row, 1]
+            ax.triplot(abq_nodes[:, 0], abq_nodes[:, 1], abq_elems,
+                       color="#dce0e5", lw=.12, zorder=1)
             ax.add_collection(coll)
             ax.text(.03, .97, f"ω ≥ {cutoff:g}\n{selected.sum()} elements",
                     transform=ax.transAxes, va="top", fontsize=9)
             ax.set_title("Abaqus: peak" if row == 0 else "Abaqus: postpeak",
                          loc="left", fontsize=10)
     for ax in axes.ravel():
-        ax.set(xlim=(145, 205), ylim=(0, 100), xlabel="x (mm)", ylabel="y (mm)")
+        ax.set(xlim=(-5, 355), ylim=(-3, 103), xlabel="x (mm)", ylabel="y (mm)")
         ax.set_aspect("equal")
+    for label, ax in zip("abcd", axes.ravel()):
+        ax.text(-.02, 1.09, f"({label})", transform=ax.transAxes, fontsize=11,
+                fontweight="bold", ha="right")
     fig.suptitle("Peak: severely damaged band; postpeak: fully damaged band", fontsize=11)
     save(fig, "damage_verified.png")
 
