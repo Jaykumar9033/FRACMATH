@@ -97,3 +97,13 @@ are evidence goals of this manuscript, not universal mandatory SoftwareX
 tests. Claims must follow the completed evidence. The GPU implementation
 has no measured speed advantage on this workstation; the software contribution
 is inspectability, reproducible comparisons and regularization diagnostics.
+
+## Template and policy review — 4 October 2026
+
+The official Original Software Publication Word template retrieved today remains Version 6 (March 2026), SHA-256 `9fcf40ede96a2f188ee4ef77134e0596d01e1b65fd9db63f2874d29f2ecb916d`. The manuscript uses the five numbered main sections, explicit software architecture and functionalities, C1–C8 metadata, six figures, six keywords and a roughly 100-word abstract. The conservative main-text count includes equations and code and remains below 4,000 words. Figure assets and numerical sources are unchanged.
+
+Jaykumar Mavani confirmed on 4 October 2026 that the funders had no role in study design, data analysis, manuscript writing or the decision to submit. This statement appears in the manuscript and cover letter. The manuscript identifies AI assistance in the implementation description and under the journal-policy declaration heading. Author responsibility and final review remain necessary.
+
+The live ScienceDirect author-guide page returned HTTP 403; portal-specific upload fields and declaration forms must be checked at submission. The verified template and policy checks do not imply acceptance or verification of inaccessible portal requirements.
+
+Final formatting evidence: conservative main-text estimate 3,654 words; abstract 95 words; six figures and six keywords. A main-text-only compilation excluding metadata, figures, tables and references occupies six pages. The complete submission PDF occupies 15 pages. Two-pass local compilation has no undefined references or overfull-box warnings; figure and declaration layout was visually checked.

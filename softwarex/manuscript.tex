@@ -134,7 +134,7 @@ C8 & Support email for questions & \href{mailto:mpathirage@unm.edu}{mpathirage@u
 \label{tab:code-metadata}
 \end{table}
 
-\section*{Motivation and significance}
+\section{Motivation and significance}
 
 \texttt{FRACMATH} is intended for researchers and students who need to
 inspect the numerical path from a strain field to a damage field and a
@@ -148,7 +148,7 @@ comparison. The controlled study examines how element-size compensation
 affects structural response and dissipation, and how increment size and
 sparse linear algebra limit the numerical workflow.
 
-\subsection*{Related software and scope}
+\subsection{Related software and scope}
 
 General-purpose finite element systems such as Abaqus \citep{abaqus} and
 OOFEM \citep{oofem} provide broader element and analysis capabilities.
@@ -158,7 +158,24 @@ direction-dependent local crack-band damage in 2D and 3D. It is designed
 for teaching, replication, and testing method changes.
 
 % =====================================================================
-\section*{Software description}
+\section{Software description}
+
+\subsection{Software architecture}
+
+The package follows a visible sequence: input settings and mesh files;
+precomputed element operators; displacement increments and constitutive
+history; sparse equilibrium solution; saved numerical states; and figure
+reconstruction. The 2D entry \texttt{start\_here.m} exposes material,
+increment and backend settings and calls the benchmark solver. Mesh inputs
+contain coordinates, connectivity and support/loading sets. Outputs contain
+load--CMOD histories, damage snapshots, residuals and component timings.
+The beginner guide describes units and array dimensions; the implementation
+walkthrough maps each output to its producing function. Separate 3D drivers
+retain their documented equilibrium algorithms. The optional UMAT and hybrid
+GPU paths share the 2D constitutive definitions while using different
+execution and equilibrium procedures.
+
+\subsection{Software functionalities}
 
 A scalar damage variable $\omega\in[0,1]$ scales the elastic stress:
 $\boldsymbol\sigma=(1-\omega)\mathbb C_0:\boldsymbol\varepsilon$.
@@ -201,13 +218,7 @@ The pure-tension 3D implementation retains both $\kappa$ and $\omega$;
 accepted increments commit their nondecreasing histories, while rejected
 trials leave the committed state unchanged.
 
-\subsection*{Numerical workflow and code map}
-
-Students open \texttt{start\_here.m}, edit the visible settings and run the
-supplied mesh. The beginner guide explains units, array dimensions and
-the function sequence. The entry script calls the benchmark solver directly.
-A headless 10{,}000-step execution of the entry exactly
-reproduces all saved benchmark response, state and snapshot arrays.
+\subsection{Numerical implementation}
 
 The 2D driver \texttt{solver\_main\_3pb.m} reads the mesh and support/loading
 sets, precomputes elastic element matrices and shape-function gradients,
@@ -250,21 +261,26 @@ evaluates projected width, equivalent strain, and irreversible history.
 Results and stiffness values return to CPU sparse assembly and factorization.
 Timed operations include transfers and synchronization.
 
-\subsection*{Material-point verification}
+\subsection{Verification and reproducibility}
 
-A one-element uniaxial test checks $\tilde\varepsilon=\varepsilon$ in
-tension and $\tilde\varepsilon=|\varepsilon|/k$ in compression, monotone
-damage under unload/reload, and $h\int\sigma\,d\varepsilon\approx G_F$
-for four prescribed projected widths. Numerical integration to a large
-terminal strain gives the following results for $G_F=0.090$~N/mm.
-A standalone driver linked to the unchanged Fortran UMAT repeats the
-strain-mapping, projected-width, energy, and unload/reload assertions;
-its energy results agree with the MATLAB values at the precision shown.
-Sixteen additional UMAT checks combine these four triangle widths with
-loading directions of $15^\circ$, $45^\circ$, $75^\circ$, and $90^\circ$.
-Projected widths agree with Eq.~\eqref{eq:oliver-t3}, and the largest
-absolute relative energy error is $1.78\times10^{-6}$. These are local
-implementation checks, not evidence of structural orientation independence.
+OpenAI Codex assisted with implementation, audit and plotting scripts as
+well as manuscript preparation. Verification uses executed MATLAB/Fortran
+routines, archived solver outputs and explicitly identified experimental
+digitization. Figures are deterministic plots of these data. The beginner
+entry reproduces benchmark numerical arrays exactly; rebuilding the eight
+generated figure assets gives identical pixels, and the two supplied geometry
+illustrations retain their source bytes. These checks establish reproduction
+of the archived outputs; illustrative 3D fields retain the validation limits
+reported below.
+
+
+One-element tests verify tensile/compressive equivalent-strain mapping,
+irreversible unloading/reloading and $h\int\sigma\,d\varepsilon\approx G_F$
+for four projected widths (Table~\ref{tab:energy}). A driver linked to the
+unchanged UMAT reproduces the MATLAB energy values. Sixteen additional
+width/direction combinations pass, with maximum relative energy error
+$1.78\times10^{-6}$. These local checks do not establish structural
+orientation independence.
 An additional 712-case audit compares the actual UMAT with an independent
 tensor-eigensolve calculation and the MATLAB damage functions. Strain splits,
 multiaxial states, irreversible history, projected width, stress and the
@@ -290,9 +306,9 @@ $h$ (mm) & Oliver integral (N/mm) & Relative error & Fixed-law integral (N/mm) \
 \end{table}
 
 % =====================================================================
-\section*{Illustrative examples}
+\section{Illustrative examples}
 
-\subsection*{Benchmark 1: Notched 2D three-point bending}
+\subsection{Benchmark 1: Notched 2D three-point bending}
 
 The Gr\'egoire beam \citep{gregoire2013} has depth $D=100$~mm,
 support span $S=250$~mm, overall length 350~mm, thickness 50~mm, and
@@ -319,17 +335,13 @@ span, while 350~mm is the overall length.
 \label{fig:b1}
 \end{figure}
 
-The comparison in Fig.~\ref{fig:b1} uses the 10{,}000-step
-MATLAB response and the Abaqus UMAT response. The separate
-increment-sensitivity check found that the 1{,}000-step MATLAB run peaks at
-4.26~kN (CMOD 0.02835~mm, step 174), while the 10{,}000-step
-run peaks at 4.03~kN (CMOD 0.02579~mm, step 1612). This
-{5.9}\% change in peak load shows that increment
-size matters for the sequential scheme; these results are numerical
-examples, not an increment-converged validation against experiment.
-The normalized post-update free-DOF residual at the peak is
-0.016 for 1{,}000 steps and 0.002 for
-10{,}000 steps. A single-thread Abaqus/Standard 2024 UMAT run produced a peak of 4.00~kN at CMOD 0.02540~mm. The 10{,}000-step MATLAB peak differs by 0.68\% in load and 1.51\% in peak CMOD. The close response is a code-to-code check, not experimental validation.
+Figure~\ref{fig:b1} compares the 10{,}000-step MATLAB response with
+Abaqus. MATLAB peaks at 4.03~kN and CMOD 0.02579~mm; Abaqus peaks at
+4.00~kN and 0.02540~mm, differences of 0.68\% and 1.51\%.
+A separate 1{,}000-step check peaks at 4.26~kN, demonstrating increment
+sensitivity. Peak post-update residuals are 0.016 and 0.002 for
+1{,}000 and 10{,}000 steps. The overlay is a code-to-code check;
+increment-converged experimental validation is not established.
 
 The completed Abaqus \texttt{.msg} reports 1{,}136
 accepted increments, 4{,}817 equilibrium iterations/solver passes, 4{,}799
@@ -342,14 +354,9 @@ Thus no attribution of the remainder to the UMAT or speed ranking
 between codes is supported. The MATLAB run used 10{,}000 fixed
 increments, while Abaqus used automatic increments, so the two
 wall-clock totals are not a controlled benchmark.
-The repository includes a parser that reproduces these counts and
-timings from the archived \texttt{.msg} and MATLAB timing file. MATLAB
-runs export per-step component timings, iteration counts, and the
-post-damage equilibrium residual. The implementation walkthrough maps
-these measurements to the corresponding solver functions. The
-10{,}000-step archive supplies aggregate timing and response data;
-the controlled mesh and hardware archives also supply per-step diagnostics.
-
+The archived logs and timing parser reproduce these measurements.
+The controlled studies additionally retain per-step costs, residuals and
+iteration counts linked to the implementation walkthrough.
 
 Figure~\ref{fig:b1-damage} compares damage fields at peak and at
 the first saved post-peak state above CMOD 0.30~mm. The Abaqus field
@@ -464,7 +471,7 @@ speed ranking or GPU speed advantage.}
 \end{figure}
 
 % =====================================================================
-\subsection*{Benchmark 2: 3D Nooru-Mohamed Tests}
+\subsection{Benchmark 2: 3D Nooru-Mohamed Tests}
 % =====================================================================
 
 The Nooru-Mohamed specimen is a square double edge notched concrete
@@ -569,7 +576,7 @@ mesh convergence; their source-linked data accompany the code.
 
 
 % =====================================================================
-\subsection*{Benchmark 3: 3D Notched Beam Torsion}
+\subsection{Benchmark 3: 3D Notched Beam Torsion}
 % =====================================================================
 
 \begin{figure}[!htbp]
@@ -588,46 +595,22 @@ validation against a measured torque curve is outside this study.}
 \label{fig:b3-overview}
 \end{figure}
 
-The torsion illustration uses a $400\times100\times100$~mm beam.
-The published Brokenshire test uses steel collars with three supported
-arms and one loaded arm \citep{brokenshire1996,jefferson_torsion,jefferson2005}.
-Its measured response is applied load versus clip-gauge CMOD.
-The rotation-controlled model illustrated here uses different end constraints;
-a load--CMOD validation therefore requires a model of the collar and gauge
-configuration. The projected width follows the local principal direction,
-producing a nonplanar damage path whose mesh convergence is unverified.
+The torsion illustration uses a $400\times100\times100$~mm beam with
+one end fixed and the other prescribed a rigid twist to $0.003$~rad over
+140 increments. Material parameters are $E=35{,}000$~MPa, $\nu=0.20$,
+$f_t=3$~MPa, $G_F=0.080$~N/mm and $k=10$. The TET4 mesh is refined
+near the notch front; damage updates use under-relaxation 0.35, and
+Cholesky solves reuse an AMD ordering.
 
-In the model one end face is fully fixed while the opposite end face is
-given a prescribed rigid-body twist $\theta$ about the beam axis under
-rotation control, ramped to
-$\theta_{\mathrm{end}} = 3.0\times10^{-3}$~rad over 140 increments; the
-reaction torque is recovered from the twisted end.
-
-The material is plain concrete with $E = 35{,}000$~MPa, $\nu = 0.20$,
-$f_t = 3.0$~MPa, $G_F = 0.080$~N/mm, $\kappa_0=f_t/E=8.57\times10^{-5}$, and
-$k = f_c/f_t = 10$ (so $f_c = 30$~MPa), with the same exponential
-softening scaled element by element through the crack band length.
-
-The TET4 mesh carries a refined layer around the notch front. The damage
-update is under-relaxed with a factor of 0.35 to keep the staggered
-fixed point iteration stable through the steep post-peak branch, and
-each linear solve reuses a single AMD ordering with a Cholesky
-factorization.
-
-This case is a qualitative demonstration of direction-dependent
-crack-band regularization under nonplanar, torsion-driven crack growth:
-the predicted damage band nucleates at the notch front and spirals
-toward the loaded corner (Figure~\ref{fig:b3-overview}),
-qualitatively similar to the published fracture description
-\citep{brokenshire1996}. The available torsion history does not provide a valid experimental
-CMOD channel; it supports the qualitative damage illustration only.
-
-
-
-
+The published Brokenshire test uses collar loading and measures applied
+load against clip-gauge CMOD \citep{brokenshire1996,jefferson_torsion,jefferson2005}.
+The model has different end constraints and lacks a valid experimental
+CMOD channel. Figure~\ref{fig:b3-overview} therefore illustrates nonplanar
+damage growth qualitatively; quantitative response validation and damage-path
+mesh convergence remain unverified.
 
 % =====================================================================
-\subsection*{Controlled mesh sensitivity and computational scaling}
+\subsection{Controlled mesh sensitivity and computational scaling}
 
 A controlled 2D mesh family contains 14{,}313, 25{,}042, and
 56{,}216 CPS3 elements, corresponding to 14{,}686, 25{,}534, and
@@ -639,10 +622,6 @@ The 50~mm-wide central zone containing the notch is refined across
 the beam height. Its nominal seeds are 1.25, 0.9375, and 0.625~mm;
 the outer seeds are five times larger. This concentrates elements near
 the expected damage path while retaining a coarser outer region.
-In all three main Oliver runs, elements with $\omega\geq0.95$ at
-peak load have centroids inside this refined region, at heights
-20.2--37.6~mm above the beam bottom. This checks the chosen refinement
-location, without asserting convergence of the damage-band geometry.
 These boundary sets and each complete Abaqus connectivity are exported
 directly to MATLAB; mesh-file hashes are checked after Abaqus rebuilds. This family is distinct from the single-mesh increment study. Both programs use one computational thread/CPU.
 
@@ -705,7 +684,9 @@ Elements & DOFs & $P_{\rm O}$ (kN) & $P_{\rm F}$ (kN) & $P_{\rm A}$ (kN) & $\mat
 
 At 4{,}000 increments on every mesh, peak-load spreads are 5.98\% (Oliver) and 8.05\% (fixed law); dissipation spreads are 6.44\% and 20.76\%, respectively.
 The reduction in dissipation sensitivity therefore persists at the smaller increment.
-Halving the displacement increment gives coarse fixed (-0.96\% peak, -1.27\% dissipation), coarse oliver (-0.89\% peak, -0.99\% dissipation), medium fixed (-1.85\% peak, -2.55\% dissipation), medium oliver (-1.37\% peak, -1.53\% dissipation), fine fixed (-2.20\% peak, -3.74\% dissipation), fine oliver (-1.31\% peak, -1.42\% dissipation).
+Halving the increment changes Oliver peaks by $-0.89$ to $-1.37\%$
+and dissipation by $-0.99$ to $-1.53\%$; the corresponding fixed-law
+ranges are $-0.96$ to $-2.20\%$ and $-1.27$ to $-3.74\%$.
 These finite-increment checks quantify sensitivity; they do not establish
 asymptotic convergence. At CMOD 0.10~mm, the absolute energy-balance discrepancy
 is 0.42--1.00\% of external work in the main runs
@@ -715,16 +696,13 @@ The fine Oliver peak post-damage relative residual decreases from
 The residual and energy discrepancy remain explicit limits of the
 sequential update.
 
-MATLAB peak loads differ from the corresponding Abaqus peaks by +1.87\%, +2.88\%, +2.78\%, respectively, relative to Abaqus.
-The completed Abaqus jobs report coarse: 2 cutbacks and 5,152 decompositions, medium: 0 cutbacks and 6,153 decompositions, fine: 0 cutbacks and 7,502 decompositions.
-Alternate force-tolerance acceptances are 4, 3, 5, respectively.
-The rounded analysis CPU totals from the final \texttt{.dat} summaries are 531~s, 1100~s, 2550~s, respectively. CPU and elapsed timers have different scopes; these totals do not isolate material or assembly work.
-Their wall time outside the sparse-solver timer is 794.2~s, 1585.6~s, 3979.7~s, respectively.
-It includes unseparated element/UMAT, assembly, convergence, output,
-and overhead; no material-time attribution is inferred.
-The fine-mesh response overlay is a code-to-code check with different
-equilibrium algorithms. Machine-readable histories, exact meshes, input
-decks, diagnostics, and analysis scripts accompany the study.
+MATLAB peaks exceed Abaqus by 1.87\%, 2.88\% and 2.78\%.
+The Abaqus jobs have 2/0/0 cutbacks, 5,152/6,153/7,502 decompositions
+and 4/3/5 alternate force-tolerance acceptances. Their reported CPU totals
+are 531/1,100/2,550~s; wall time outside sparse-solver scopes is
+794.2/1,585.6/3,979.7~s. These different timer scopes do not isolate
+material or assembly work. Exact meshes, input decks, complete curves,
+diagnostics and analysis scripts accompany the study.
 
 \begin{figure}[p]
 \centering
@@ -738,51 +716,59 @@ Equilibrium algorithms differ. Timing comparisons appear separately in
 Fig.~\ref{fig:timing}.}
 \label{fig:mesh-study}
 \end{figure}
-\FloatBarrier
 
 % MESH_STUDY_RESULTS_END
 
 % =====================================================================
-\section*{Impact}
+\section{Impact}
 
-The main value of \texttt{FRACMATH} is that users can trace a complete
-damage calculation through mesh import, element matrices, projected
-bandwidth, constitutive history, sparse solve, and plotted response.
-Material-point tests verify strain mapping and softening calibration;
-the recorded timing scopes distinguish assembly from sparse factorization.
-The 2D and 3D examples provide starting cases for method development
-and classroom use. The supplied scripts permit the figures to be
-regenerated from the associated data. Users can investigate how mesh and
-increment size affect damage dissipation, and whether moving element work
-to a GPU helps when sparse factorization remains on the CPU. The fixed-law
-control, residual histories and measured component costs make these
-questions testable. The beginner entry script and array guide support
-classroom inspection. Independent adoption, download statistics and
-commercial use are not established by this study.
+\texttt{FRACMATH} makes implementation choices observable through source
+code, numerical histories and diagnostic scripts. It supports research into
+how projected crack-band width, irreversible damage and increment size affect
+structural response. The fixed-law control separates element-size compensation
+from the remaining numerical sensitivity. In the controlled 2D family,
+regularization reduces partial-dissipation spread from 18.21\% to 6.86\%;
+the smaller-increment family retains this reduction. Residual and energy
+records let users judge the associated equilibrium error before extending
+the method.
 
-% =====================================================================
-\subsection*{Limitations}
+The 3D tension example shows how to distinguish mesh sensitivity from
+experimental agreement: a 1.46\% peak spread coexists with 16--17\%
+experimental underprediction. Its interpolated gauge control, rejected-trial
+handling and digitized reference provide inspectable starting points for
+studying boundary conditions and constitutive assumptions. The mixed-mode
+failure record also exposes where the current workflow needs further work.
 
-The model is local, isotropic, quasistatic, and intended for monotonic
-loading. A single damage scalar does not represent crack closure or
-anisotropic degradation. The material-point tests verify softening calibration. The controlled
-2D family tests mesh sensitivity for one geometry and mesh construction;
-it does not establish general mesh or orientation independence.
-The three-mesh 3D pure-tension comparison uses published 25~mm notches
-and idealized platens; peaks remain 16.18--17.39\% below the digitized experiment.
-General 3D mesh independence is not established. Mixed-mode and torsion images
-remain qualitative. The 2D
-sequential update leaves a nonzero post-damage equilibrium residual;
-the increment and refinement studies quantify its effect. A fully coupled
-outer equilibrium iteration is future work. The hybrid GPU backend applies
-to 2D T3 elements and retains CPU sparse factorization. Three observations per
-configuration on one workstation describe observed timing variation,
-without establishing population confidence intervals.
-Different equilibrium algorithms and timing scopes prevent an
-accuracy-matched cross-program speed ranking.
+The timing evidence supports decisions about computational development.
+Ninety observations on matched meshes show that moving element operations
+to a GPU does not improve this implementation on the tested workstation,
+where CPU sparse factorization dominates. Component scopes and Abaqus
+iteration counts allow subsequent implementations to be compared with
+explicit accuracy and timing definitions.
+
+For teaching and reuse, the entry script and array guide connect each input
+to a computed state and plotted response. The verified UMAT provides a second
+implementation for examining strain conventions and regularization. Users
+can reproduce the figures, change a documented routine and inspect the
+resulting response, energy and residual histories. Independent adoption,
+download statistics and commercial use have not been established.
 
 % =====================================================================
-\section*{Conclusions}
+\subsection{Limitations}
+
+The model is local, isotropic and quasistatic, with one damage scalar;
+crack closure and anisotropic degradation are unrepresented. The reported
+mesh families do not establish general mesh or orientation independence.
+The 3D tension peaks remain 16.18--17.39\% below experiment; mixed-mode and
+torsion fields remain qualitative. The 2D sequential update leaves a
+post-damage equilibrium residual; coupled outer iteration is future work.
+The hybrid GPU supports 2D T3 elements with CPU sparse factorization.
+Three timing observations per configuration on one workstation provide
+observed ranges. Different equilibrium algorithms and timer scopes prevent
+an accuracy-matched cross-program speed ranking.
+
+% =====================================================================
+\section{Conclusions}
 
 \texttt{FRACMATH} is an inspectable MATLAB example of local damage
 with an Oliver projected crack-band width. The study presents constitutive checks, controlled 2D mesh and increment studies,
@@ -819,7 +805,8 @@ acquisition.
 
 The authors acknowledge support from the National Aeronautics and Space
 Administration (NASA), and the New Mexico Space Grant Consortium under
-grant 80NSSC22M0044.
+grant 80NSSC22M0044. The funders had no role in study design, data
+analysis, manuscript writing or the decision to submit for publication.
 
 % =====================================================================
 \section*{Declaration of competing interest}
@@ -827,10 +814,11 @@ grant 80NSSC22M0044.
 
 The authors declare no conflict of interest.
 
-\section*{Declaration of AI-assisted technologies}
+\section*{Declaration of generative AI and AI-assisted technologies in the manuscript preparation process}
 
 OpenAI Codex was used to assist with manuscript wording,
-formatting, and implementation support. The scientific claims, equations,
+formatting, code development, verification and figure-reproduction scripts.
+The authors are responsible for reviewing the assisted work. The scientific claims, equations,
 code, numerical results, figures, and references are the responsibility
 of the authors.
 

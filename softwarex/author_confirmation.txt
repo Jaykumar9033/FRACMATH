@@ -4,7 +4,7 @@ Confirmed by Jaykumar Mavani on 3 October 2026: both authors approve submission 
 
 Please confirm the author order, affiliations, corresponding-author email, and CRediT contributions in manuscript.tex.
 
-The manuscript acknowledges NASA and the New Mexico Space Grant Consortium, grant 80NSSC22M0044. Please confirm the funding information and whether the funder had a role in the study, manuscript preparation, or submission decision.
+The manuscript acknowledges NASA and the New Mexico Space Grant Consortium, grant 80NSSC22M0044. Confirmed by Jaykumar Mavani on 4 October 2026: the funders had no role in study design, data analysis, manuscript writing or the decision to submit.
 
 The manuscript states that the authors declare no conflict of interest. Please confirm this statement and complete any journal declaration form consistently with the funding disclosure.
 
