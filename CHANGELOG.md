@@ -2,6 +2,10 @@
 
 All notable repository changes for FRACMATH are recorded here.
 
+## 1.1.1 - 2026-10-04
+
+- Complete raw diagnostic records and byte-preserved verification manifests.
+
 ## 1.1.0 - 2026-10-04
 
 - Actual UMAT material-point audit and pixel-verified manuscript figure reconstruction.
