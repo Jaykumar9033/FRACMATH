@@ -1,8 +1,9 @@
 {
   "execution.json": "08ecddd2c260096cc1a6a1ee45c787c5c873a0993ca0c7f0d8023cf60c2814c1",
+  "figure_reproduction_checks.json": "2601438dfd3075f14b8c66456f276dda49bbc6dc9d39bd7682079df25806248b",
   "manuscript_claim_checks.json": "c5cb17d9e04e72aed6be92e2da8f2cf83bdef0e4b596df8f3fccc62811efa09b",
   "README.md": "69c6997f86cb8797b15a3f33ff9025ca562c189f9c068deb0f74764a1e9dc81f",
-  "reference_metadata.json": "1202cc117361af76317e5ed54aa4526eb72bfbb1da0528af1a4c4a171df365b9",
+  "reference_metadata.json": "2910c359810ce0dcd9ea9fd4d1088fb3f75a27c12e58d33b22b42cca101de288",
   "summary.json": "40d6dfe20bf3884b3ca5b94c597802e21bbb130fcaa266400482635ca4e57962",
   "batch/batch_timings.csv": "c4dd1af3501324d5c769961362f9489e5218b2848ced303e099c778c96b0cabb",
   "batch/benchmark_umat_batches.f90": "f5c73caeed12b155d4ed2bccecd4ebc9107f906181f70359bb5e2302313a964a",
