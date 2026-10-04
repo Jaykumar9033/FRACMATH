@@ -1,4 +1,8 @@
-﻿
+% Run the supplied 3D torsion example.
+% Set material values first, then loading points and solver options.
+% E and strengths use MPa; lengths use mm; GF uses N/mm.
+% These damage fields are qualitative examples.
+
 
 function run_torsion()
     clc; close all;

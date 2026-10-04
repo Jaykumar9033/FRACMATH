@@ -19,6 +19,8 @@ results_folder = fullfile(package_folder, 'student_results');
 addpath(solver_folder);
 
 % 3. Pass the settings to the solver.
+% setenv writes a named setting; getenv reads it inside the solver.
+% num2str converts a number to the text needed by setenv.
 setenv('FRACMATH_CASE_DIR', mesh_folder);
 setenv('FRACMATH_RESULTS_DIR', results_folder);
 setenv('FRACMATH_STEPS', num2str(number_of_steps));

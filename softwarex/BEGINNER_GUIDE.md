@@ -69,3 +69,60 @@ Run `verify_paper_figures.py --workspace C:/runs/figure_replay` with Python
 to check all manuscript figure assets in a separate folder. The three-mesh
 pure-tension comparison uses the completed published-geometry archive;
 mixed-mode damage images remain qualitative.
+
+## Words used in the code
+
+| Word | Simple meaning |
+| --- | --- |
+| Node | A point in the mesh with an unknown displacement |
+| Element | A triangle in 2D or a tetrahedron in 3D |
+| Degree of freedom (DOF) | One displacement component at one node |
+| Boundary condition | A displacement or force specified by the test |
+| Assembly | Adding all element stiffness contributions into one matrix |
+| Sparse matrix | A matrix that stores mainly its nonzero entries |
+| Factorization | Preparing a matrix so the displacement equations can be solved |
+| Residual | The force imbalance left after a trial solution |
+| Secant stiffness | Elastic stiffness reduced by the current damage |
+| Increment | One small change in the applied displacement or load |
+| History variable | A stored value from earlier loading; here the largest equivalent strain |
+| CMOD | The relative displacement of two nodes across the notch mouth |
+
+## Follow one triangle
+
+Start with the CPU branch in `damage_update`. The code takes the six displacement components of a triangle and multiplies them by its `B` matrix. This gives normal strains `ex`, `ey` and engineering shear strain `gxy`. The shear entry of the strain tensor is `gxy/2`.
+
+The principal strains describe extension and compression along special directions. The equivalent strain combines them into one scalar. `kappa` stores the largest equivalent strain reached, so unloading does not erase the loading history. The projected width sets the softening scale. `omega` then reduces the element stiffness through `1 - omega`.
+
+For a single element, the assembly idea is:
+
+```matlab
+% This explains the formula; it is not a second solver.
+element_stiffness = (1 - element_damage) * elastic_stiffness;
+```
+
+The production code evaluates many element matrices together. `sparse` adds contributions with the same row and column. Reading the single-element formula first helps explain the vectorized statements.
+
+## Which files should I read next?
+
+1. `start_here.m`: choose a run and find its output folder.
+2. `solver_main_3pb.m`: read the numbered sections, then `load_mesh`, `precompute_T3`, `assemble_K` and `damage_update`.
+3. `UMAT_GUIDE.md`: match the MATLAB material variables to the Fortran variables.
+4. `MESH_STUDY.md`: understand the mesh choices and constant-width control before running the study.
+5. `SCALING_STUDY.md`: understand the measured scopes before using threads or the hybrid GPU.
+6. `plot_verified_figures.py`: see how saved numerical arrays become plots. This script does not solve the model.
+
+The `run_*.py` scripts organise simulations. The `analyze_*.py` scripts read saved results. The `plot_*.py` scripts draw figures. The `audit_umat.py` and `verify_paper_figures.py` scripts check material responses and figure reproduction. Exact commands are in `REPRODUCE.md`.
+
+## Reading the 3D examples
+
+`Noor mohammad/Mesh/damage_static.m` reads a mesh prefix and an `opts` structure. A structure groups named settings such as `E`, `GF` and `nIncr`. The local helper uses a supplied setting when it exists and otherwise uses the default. Read material, loading and convergence settings before the element calculations.
+
+`Torsion/working/run_torsion.m` sets the material and loading geometry, then passes its `opts` structure to the 3D calculation. Three-dimensional strain and stiffness arrays are larger than in the triangle example. Read the 2D example first. The mixed-mode and torsion damage fields have the validation limits described in `VALIDATION_SCOPE.md`.
+
+## Common first-run problems
+
+- Missing mesh file: keep the downloaded folder structure intact.
+- GPU function is unavailable: leave `backend = 'cpu'`.
+- No live plot: check `show_figures`; numerical outputs can still be saved.
+- Different settings give a different curve: record the mesh, material, increments and backend before comparing outputs.
+- A slow run: first use CPU and headless output. Timing depends on hardware; it is not an exact reproduction target.

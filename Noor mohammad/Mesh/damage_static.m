@@ -1,4 +1,7 @@
-﻿function damage_static(prefix, opts)
+% Run the 3D tension or mixed-mode example with supplied mesh files.
+% prefix selects mesh names; opts contains optional settings.
+% E and strengths use MPa; lengths use mm; GF uses N/mm.
+function damage_static(prefix, opts)
 
 if nargin < 1 || isempty(prefix), prefix = 'Job-1'; end
 if nargin < 2 || isempty(opts),   opts   = struct();  end

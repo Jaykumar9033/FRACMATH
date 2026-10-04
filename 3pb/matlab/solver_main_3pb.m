@@ -582,6 +582,7 @@ end
 % =====================================================================
 %                    MESH LOADING
 % =====================================================================
+% Read coordinates and node numbers. Each node has x and y displacement.
 function [nodes, elems, dof] = load_mesh(d)
     raw_n = load(fullfile(d, 'nodes.txt'));
     raw_e = load(fullfile(d, 'elements.txt'));
@@ -629,6 +630,8 @@ end
 % =====================================================================
 %                    ELEMENT PRE-COMPUTATION
 % =====================================================================
+% Calculate quantities that depend only on the mesh, once before loading.
+% B maps six triangle displacements to three strain components.
 function [B_all, area_v, gradN_all, dof_mat] = precompute_T3(nodes, elems)
     x1 = nodes(elems(:,1),1);  y1 = nodes(elems(:,1),2);
     x2 = nodes(elems(:,2),1);  y2 = nodes(elems(:,2),2);
@@ -668,6 +671,7 @@ function [B_all, area_v, gradN_all, dof_mat] = precompute_T3(nodes, elems)
 end
 
 
+% Store where each element stiffness entry belongs in the global matrix.
 function [II, JJ] = sparse_indices(dof_mat)
     [lr, lc] = ndgrid(1:6, 1:6);
     II = dof_mat(:, lr(:));
@@ -675,6 +679,8 @@ function [II, JJ] = sparse_indices(dof_mat)
 end
 
 
+% Reduce each elastic element matrix by (1 - damage), then add entries.
+% sparse adds entries that share the same row and column automatically.
 function K = assemble_K(Ke0, omega, II, JJ, nN)
     nE = size(Ke0,3);
     Ke = Ke0 .* reshape(1 - omega, 1, 1, nE);
@@ -683,6 +689,8 @@ function K = assemble_K(Ke0, omega, II, JJ, nN)
     K  = sparse(II(:), JJ(:), V(:), 2*nN, 2*nN);
 end
 
+% Prepare the free-node stiffness for repeated solves at fixed damage.
+% Factorization does most of the work; solving then reuses that work.
 function Kfac = factor_free_stiffness(Kff)
     % Robust factorization helper for the free-DOF stiffness block.
     % Cholesky is fastest for a positive-definite secant stiffness; LU is
@@ -698,6 +706,9 @@ end
 % =====================================================================
 %                        DAMAGE UPDATE
 % =====================================================================
+% Read element strain from displacement and calculate the new damage.
+% kappa stores the largest equivalent strain reached so far.
+% Damage cannot fall when the specimen unloads.
 function [omega_new, kappa_new, h_oliver, strain] = damage_update(u, B_all, gradN_all, dof_mat, ...
                                                 kappa_old, omega_old, p)
     nE   = size(B_all,3);
@@ -822,6 +833,8 @@ function [omega,kappa,h] = gpu_damage_point(ex,ey,gxy,g1x,g1y,g2x,g2y,g3x,g3y, .
     end
 end
 
+% Project each shape-function gradient onto the strain direction.
+% The resulting width scales softening to the given fracture energy.
 function h = oliver_bandwidth_T3(gradN_all, nx, ny)
     % Direction-dependent Oliver bandwidth:
     % h(n) = 2 / sum_a |grad(N_a) dot n|, a = 1..3 for T3.
@@ -1198,6 +1211,7 @@ function r = ram_bytes()
     end
 end
 
+% Check the material law on simple strain paths without a full mesh solve.
 function material_selftest(p)
     widths = [0.5; 1; 2; 4];
     out = zeros(numel(widths), 4);
