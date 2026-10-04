@@ -1,0 +1,34 @@
+{
+  "template": "SoftwareX original software article, Version 6 (March 2026)",
+  "template_url": "https://legacyfileshare.elsevier.com/promis_misc/softwarex-osp-template.docx",
+  "abstract_words": 95,
+  "main_text_words_estimate": 3646,
+  "word_count_scope": "Includes equations and code; excludes metadata, tables, figures and references.",
+  "figures": 6,
+  "keywords": 6,
+  "manuscript_sha256": "a4bc7cbc181b0d34d7bada0926df011b8db6ab0ad442538fe8e153e3dfe94b71",
+  "checks": {
+    "five_required_sections": true,
+    "figure_count_at_most_six": true,
+    "keyword_count_at_most_six": true,
+    "abstract_approximately_100_words": true,
+    "main_text_below_4000_words": true,
+    "metadata_C1_to_C8": true,
+    "GitHub_code_link": true,
+    "package_license": true,
+    "beginner_entry_and_guide": true,
+    "six_figure_assets": true,
+    "declarations": true,
+    "five_highlights_at_most_85_characters": true,
+    "first_presentation_wording": true,
+    "solver_copies_identical": true,
+    "repository_readme_and_license": true
+  },
+  "all_file_checks_pass": true,
+  "manual_checks": [
+    "Inspect compiled PDF layout.",
+    "Verify version-specific release and DOI.",
+    "Authors confirm declarations and final submission details."
+  ],
+  "interpretation": "File and formatting checks are not a prediction of editorial acceptance."
+}

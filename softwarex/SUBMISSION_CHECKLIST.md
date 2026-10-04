@@ -75,8 +75,7 @@ from the quantitative published 25 mm-notch geometry.
    and add the correct software reference and metadata. The local citation
    metadata currently says `1.1.0-dev`; verify that the final manuscript's
    immutable source/data link contains every file supporting its results.
-5. Name the AI tool/service used in the writing declaration, and have the authors
-   confirm the contributions, affiliations/contact address, funding statement
+5. Have the authors confirm the contributions, affiliations/contact address, funding statement
    and competing-interest declaration. Prepare the cover letter and check the
    separate highlights and any portal-required declaration files.
    The original cover letter cites v1.0.0 and a 3.6-fold MATLAB speed claim;
@@ -84,9 +83,10 @@ from the quantitative published 25 mm-notch geometry.
    discloses NASA/Space Grant financial support, while the paper declares no
    competing interests. Funding does not automatically imply a conflict;
    authors must confirm consistent wording across the submission files.
-6. Inspect every final PDF page, figures, captions, tables, references
-   and hyperlinks; rerun `check_submission.py`; synchronize the delivery package
-   with the published source and evidence.
+6. Repeat the PDF, file and delivery checks if further simulation results are
+   incorporated. The manuscript names OpenAI Codex in its AI-use declaration
+   and identifies the completed numerical evidence by immutable commit
+   `3dd910742bef9af58132d8a6818f87ddf189fd48`.
 
 The three-mesh 3D study, GPU/SMP benchmarking and detailed Abaqus profiling
 are evidence goals of this manuscript, not universal mandatory SoftwareX

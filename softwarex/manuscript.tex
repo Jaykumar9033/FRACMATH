@@ -85,9 +85,9 @@ damage with direction-dependent crack-band regularization. Its code links
 projected width, constitutive history, sparse assembly and solution.
 Material-point tests verify strain mapping, irreversible damage and
 fracture-energy calibration. Mesh/increment studies compare regularized
-and fixed softening laws. Thirty matched size/mesh/computing runs assess
+and fixed softening laws. Ninety observations of thirty matched computing configurations assess
 MATLAB CPU, hybrid GPU and Abaqus SMP configurations. The hybrid GPU shows
-no speed advantage on the tested workstation. A nominal-mesh
+no speed advantage on the tested workstation. A geometry-matched
 three-dimensional pure-tension comparison supplies experimental error
 measures; mixed-mode and torsion images illustrate workflows. Source,
 histories, diagnostics and reproduction scripts accompany the paper.
@@ -117,15 +117,15 @@ continuum damage mechanics \sep crack-band regularization \sep MATLAB \sep hybri
 \toprule
 \textbf{Nr.} & \textbf{Code metadata description} & \textbf{Value} \\
 \midrule
-C1 & Current code version & SoftwareX study, commit abf6f49 \\
-C2 & Permanent GitHub link to code/repository used for this code version &
-Source and study data: \href{https://github.com/Jaykumar9033/FRACMATH/tree/abf6f49610ef046dd8493739a333716f63b79d05}{immutable GitHub commit}. \\
-C3 & Legal Code License & MIT License \\
+C1 & Current code version & SoftwareX study, commit 3dd9107 \\
+C2 & Permanent link to code/repository used for this code version &
+Source and study data: \href{https://github.com/Jaykumar9033/FRACMATH/tree/3dd910742bef9af58132d8a6818f87ddf189fd48}{immutable GitHub commit}. \\
+C3 & Legal code license & MIT License \\
 C4 & Code versioning system used & git \\
-C5 & Software code languages, tools, and services used & MATLAB; Fortran UMAT; Abaqus/Standard; Python analysis scripts \\
-C6 & Compilation requirements, operating environments \& dependencies &
+C5 & Software code languages, tools and services used & MATLAB; Fortran UMAT; Abaqus/Standard; Python analysis scripts \\
+C6 & Compilation requirements, operating environments and dependencies &
 MATLAB R2024b; Abaqus/Standard 2024 with Intel Fortran; Python 3 with NumPy, SciPy, Matplotlib, Pillow, and psutil; Parallel Computing Toolbox and a compatible CUDA GPU for the optional hybrid backend. Verified on Windows 11. \\
-C7 & If available Link to developer documentation/manual & Repository README, implementation walkthrough, and reproduction guides \\
+C7 & If available, link to developer documentation/manual & \href{https://github.com/Jaykumar9033/FRACMATH/blob/main/softwarex/BEGINNER_GUIDE.md}{Beginner guide}; implementation walkthrough and reproduction guides \\
 C8 & Support email for questions & \href{mailto:mpathirage@unm.edu}{mpathirage@unm.edu} \\
 \bottomrule
 \end{tabularx}
@@ -162,7 +162,9 @@ for teaching, replication, and testing method changes.
 A scalar damage variable $\omega\in[0,1]$ scales the elastic stress:
 $\boldsymbol\sigma=(1-\omega)\mathbb C_0:\boldsymbol\varepsilon$.
 The history variable $\kappa_{n+1}=\max(\kappa_n,\tilde\varepsilon_{n+1})$
-makes the update irreversible. The modified von Mises measure is
+retains maximum equivalent strain. Committing
+$\omega_{n+1}=\max(\omega_n,\omega_{\rm trial})$ enforces damage
+irreversibility when the projected width changes. The modified von Mises measure is
 \begin{equation}
 \tilde\varepsilon = \frac{k-1}{2k(1-2\nu)}I_1
   + \frac{1}{2k}\sqrt{\left(\frac{k-1}{1-2\nu}\right)^2I_1^2
@@ -187,11 +189,22 @@ h(\mathbf n)=\frac{2}{\sum_{a=1}^3|\nabla N_a\cdot\mathbf n|},
 \label{eq:oliver-t3}
 \end{equation}
 with $\mathbf n$ along maximum principal strain. The 3D tetrahedral
-implementation uses the analogous projected width. These are local
+implementation uses the analogous projected width. Its exponential law uses
+$\beta=f_t h/G_F$ and $\omega=1-(\kappa_0/\kappa)
+\exp[-\beta(\kappa-\kappa_0)]$, capped at 0.999999. Here $G_F$
+calibrates post-peak work; Eq.~\eqref{eq:softening} calibrates total
+uniaxial work in 2D. These are local
 regularization formulas; the material-point energy check below does not
 by itself prove structural mesh objectivity.
+The pure-tension 3D implementation retains both $\kappa$ and $\omega$;
+accepted increments commit their nondecreasing histories, while rejected
+trials leave the committed state unchanged.
 
 \subsection*{Numerical workflow and code map}
+
+Students open \texttt{start\_here.m}, edit the visible settings and run the
+supplied mesh. The beginner guide explains units, array dimensions and
+the function sequence. The entry script calls the benchmark solver directly.
 
 The 2D driver \texttt{solver\_main\_3pb.m} reads the mesh and support/loading
 sets, precomputes elastic element matrices and shape-function gradients,
@@ -206,6 +219,16 @@ that attempt fails. It is reused only within a displacement increment. There is 
 outer equilibrium iteration after the damage update, so this is a
 sequential secant scheme rather than a fully converged Newton solve.
 The post-update free-DOF residual is exported for each increment.
+
+For example, the projected-width calculation acts on each triangle's
+three gradient pairs. With \texttt{gradN}, \texttt{nx} and \texttt{ny}
+denoting those gradients and principal-direction components, its MATLAB form is
+\begin{verbatim}
+projected = gradN(:,1:2:end).*nx + gradN(:,2:2:end).*ny;
+h = max(2./max(sum(abs(projected),2),1e-14),1e-12);
+\end{verbatim}
+This width enters Eq.~\eqref{eq:softening}; \texttt{kappa} and
+\texttt{omega} retain the irreversible element histories.
 
 The optional Abaqus path uses \texttt{run\_3pb\_abaqus\_OLIVER\_T3\_FAST.py}
 to write a table of T3 shape-function gradients. The Fortran
@@ -315,9 +338,9 @@ The repository includes a parser that reproduces these counts and
 timings from the archived \texttt{.msg} and MATLAB timing file. MATLAB
 runs export per-step component timings, iteration counts, and the
 post-damage equilibrium residual. The implementation walkthrough maps
-these measurements to the corresponding solver functions. The preserved
-10{,}000-step run predates this per-step export; its aggregate timer and
-response data are retained without alteration.
+these measurements to the corresponding solver functions. The
+10{,}000-step archive supplies aggregate timing and response data;
+the controlled mesh and hardware archives also supply per-step diagnostics.
 
 
 Figure~\ref{fig:b1-damage} compares damage fields at peak and at
@@ -382,7 +405,7 @@ Total Abaqus wall clock & 832.00 & 100\% \\
 
 \subsubsection*{Size, mesh and computing configurations}
 
-Thirty runs combine depths of 100/200~mm, three meshes, and MATLAB
+Thirty configurations, each measured three times, combine depths of 100/200~mm, three meshes, and MATLAB
 CPU1/CPU8/hybrid GPU or Abaqus CPU1/CPU8. All dimensions scale by two;
 final displacement is $-0.1/-0.2$~mm. Absolute global/notch seeds are
 12.5/2.5, 6.25/1.25 and 4.6875/0.9375~mm; each computing comparison
@@ -392,26 +415,31 @@ increments of $1/2{,}000$, with SDV every 100 accepted increments.
 The two finest large-specimen Abaqus meshes use limits of 80 equilibrium
 iterations and 12 attempts, retaining default convergence tolerances;
 a failed default-control attempt is archived. Fresh processes run
-sequentially, once per setting. MATLAB CPU8 limits numerical-library
+sequentially; the third observation reverses the computing-configuration order.
+MATLAB CPU8 limits numerical-library
 threads; the hybrid backend uses an NVIDIA RTX A2000 12GB in double precision.
 
 All hardware-response checks pass: MATLAB load-history differences are
 below $1.76\times10^{-11}$ of peak load and final-damage differences below
 $1.34\times10^{-9}$; Abaqus pairs have identical curves at CSV precision
 and identical iteration counts. MATLAB CPU8 and hybrid GPU are slower
-than CPU1 in all six cases. CPU1 factorization occupies 67--74\% of loop time.
+than CPU1 in all six cases. CPU1 factorization occupies 67--76\% of loop time.
 Abaqus SMP speed ratios range from 0.68 to 2.90; the largest mesh reaches
-2.90. Abaqus CPU1 sparse-solver passes occupy 9.8--14.4\% of analysis wall
+2.90. Abaqus CPU1 sparse-solver passes occupy 9.5--14.4\% of analysis wall
 time; the remainder is unallocated. MATLAB/Abaqus peak differences are
 1.87--4.24\%. Table~\ref{tab:scaling} and Figure~\ref{fig:timing} report
-costs; complete phase, memory and residual records accompany the code.
+median costs and observed ranges from 90 runs; complete phase, memory and
+residual records accompany the code. All saved MATLAB numerical arrays
+and Abaqus response CSVs are identical across repeats within each setting.
 
 \input{tables/scaling_table.tex}
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.98\linewidth]{scaling_timings.pdf}
-\caption{Thirty size/mesh/computing runs. MATLAB bars cover the load loop;
+\caption{Thirty size/mesh/computing configurations with three observations
+each. Bars show medians; whiskers show the observed minimum and maximum.
+MATLAB bars cover the load loop;
 Abaqus bars cover analysis and output. CPU8 denotes a MATLAB library-thread
 limit or Abaqus SMP; GPU denotes element/damage work with CPU sparse
 factorization. These workstation observations establish no cross-program
@@ -424,8 +452,9 @@ speed ranking or GPU speed advantage.}
 % =====================================================================
 
 The Nooru-Mohamed specimen is a square double edge notched concrete
-panel, $200 \times 200 \times 50$~mm, with two horizontal notches 25~mm
-long cut from opposite edges at mid height \citep{nooru1992}; the
+panel, $200 \times 200 \times 50$~mm. The illustrative mesh uses two
+20~mm-deep, 5~mm-wide horizontal notches from opposite edges; the published
+specimen has 25~mm-deep notches \citep{nooru1992}. The
 central ligament between the notch tips experiences a mixed
 mode stress state. The illustrative proportional-displacement case prescribes a vertical (mode I)
 displacement on the top edge and a proportional horizontal
@@ -440,8 +469,9 @@ The proportional-loading damage panels illustrate the workflow. A separate
 pure-tension comparison uses specimen 47-05 with two glued platens
 (Figure 3.16, printed page 45 of \citep{nooru1992}). Its load--displacement
 curve is manually digitized; estimated reading uncertainty is
-$\pm 0.00102$~mm and $\pm 164$~N. The nominal mesh has 3,933 nodes and
-18,927 TET4 elements. Existing material parameters above are retained
+$\pm 0.00102$~mm and $\pm 164$~N. This quantitative case uses the published
+25~mm-deep, 5~mm-wide notches, 7,276 nodes and 35,917 TET4 elements
+(21,828 DOFs). Global/notch mesh seeds are 12/4~mm. Material parameters above are retained
 without fitting. Bottom vertical displacements are fixed, the top platen
 has a common unknown vertical displacement, and minimal lateral pins
 remove rigid modes. The mean displacement of four interpolated 65~mm
@@ -449,21 +479,30 @@ vertical gauges at $x=30/170$~mm on both faces controls the load history.
 An augmented Newton system solves this constraint with nodal equilibrium;
 a numerical constitutive tangent differentiates the same damage and
 projected-width update. The relative equilibrium tolerance is $10^{-6}$;
-unconverged increments are rejected.
+unconverged trials are rejected and their target intervals bisected without
+committing damage.
 % EXPERIMENTAL_METRICS_BEGIN
-With 600 increments to a mean gauge displacement of 0.2~mm, the peak
-is 18.18~kN at 0.0090~mm, versus digitized estimates of 19.85~kN at
-0.00659~mm: the peak-load error is $-8.45\%$. The RMS curve error on
-1,001 uniformly spaced points over 0--0.2~mm is 8.11\% of experimental
-peak load. The late softening tail is underpredicted. All accepted
-increments meet the equilibrium tolerance, with a maximum relative
-residual of $9.93\times10^{-7}$. A 1,200-increment attempt fails equilibrium
-at increment 55 (residual $4.19\times10^{-3}$); a 300-increment attempt
-also fails at increment 14 (residual $1.43\times10^{-2}$). Both are excluded. Thus this
-single nominal-mesh comparison provides quantitative experimental
-error measures, but does not establish increment convergence or general
-3D validation. Experimental notch scatter, idealized platens, and
-curve-digitization uncertainty also limit the comparison.
+The initial 600 target intervals to a mean gauge displacement of 0.2~mm
+produce 608 accepted increments after eight rejected/bisected trials.
+The peak is 16.64~kN at 0.00933~mm, versus digitized estimates of 19.85~kN
+at 0.00659~mm: the peak-load error is $-16.18\%$. The RMS curve error on
+1,001 uniformly spaced points over 0--0.2~mm is 9.27\% of experimental
+peak load. Both peak and late softening tail are underpredicted. All accepted
+increments meet the equilibrium tolerance; the maximum relative residual
+is $8.92\times10^{-7}$ and maximum gauge-constraint error is
+$1.24\times10^{-15}$~mm. This completed single-mesh comparison reports
+experimental error without establishing increment convergence or general
+3D mesh independence. Idealized platens, constitutive assumptions and
+curve-digitization uncertainty limit its interpretation. Further meshes
+are not included in the completed evidence reported here.
+
+Local TET4 checks cover four edge lengths (0.5, 1, 2 and 4~mm) and eight
+tensile directions. All 32 cases pass equivalent-strain mapping,
+principal direction, projected width, finite-interval post-peak work and
+fixed-direction unloading checks. Compression mapping and eight
+rotating-direction unloading checks also pass. These verify the local
+implementation and irreversible history, independently of structural
+mesh convergence; their source-linked data accompany the code.
 % EXPERIMENTAL_METRICS_END
 
 \begin{figure}[p]
@@ -480,7 +519,7 @@ curve-digitization uncertainty also limit the comparison.
   \begin{subfigure}{0.62\linewidth}
     \centering
     \includegraphics[width=\linewidth]{nooru_tension_comparison.pdf}
-    \caption{Separate pure-tension comparison.}
+    \caption{Pure tension: published 25~mm notches.}
     \label{fig:b2-nooru-mesh-3d}
   \end{subfigure}}
 
@@ -497,7 +536,9 @@ curve-digitization uncertainty also limit the comparison.
 
   \caption{Nooru-Mohamed cases: proportional-loading boundary conditions
     and damage panels; the load curve compares a separate pure-tension
-    simulation with digitized specimen 47-05 data. The controls differ.}
+    simulation with digitized specimen 47-05 data. Proportional-loading
+    panels use 20~mm notches; the pure-tension curve uses 25~mm notches.
+    The controls differ.}
   \label{fig:b2-overview}
 \end{figure}
 
@@ -698,7 +739,13 @@ Material-point tests verify strain mapping and softening calibration;
 the recorded timing scopes distinguish assembly from sparse factorization.
 The 2D and 3D examples provide starting cases for method development
 and classroom use. The supplied scripts permit the figures to be
-regenerated from the associated data.
+regenerated from the associated data. Users can investigate how mesh and
+increment size affect damage dissipation, and whether moving element work
+to a GPU helps when sparse factorization remains on the CPU. The fixed-law
+control, residual histories and measured component costs make these
+questions testable. The beginner entry script and array guide support
+classroom inspection. Independent adoption, download statistics and
+commercial use are not established by this study.
 
 % =====================================================================
 \subsection*{Limitations}
@@ -708,14 +755,16 @@ loading. A single damage scalar does not represent crack closure or
 anisotropic degradation. The material-point tests verify softening calibration. The controlled
 2D family tests mesh sensitivity for one geometry and mesh construction;
 it does not establish general mesh or orientation independence.
-The 3D pure-tension comparison uses one nominal mesh and idealized platens;
+The 3D pure-tension comparison uses one mesh with published 25~mm notches
+and idealized platens; its peak load is 16.18\% below the digitized experiment.
 3D mesh independence remains untested. Mixed-mode and torsion images
 remain qualitative. The 2D
 sequential update leaves a nonzero post-damage equilibrium residual;
 the increment and refinement studies quantify its effect. A fully coupled
 outer equilibrium iteration is future work. The hybrid GPU backend applies
-to 2D T3 elements and retains CPU sparse factorization. One observation per
-configuration on one workstation provides no statistical timing confidence.
+to 2D T3 elements and retains CPU sparse factorization. Three observations per
+configuration on one workstation describe observed timing variation,
+without establishing population confidence intervals.
 Different equilibrium algorithms and timing scopes prevent an
 accuracy-matched cross-program speed ranking.
 
@@ -725,18 +774,19 @@ accuracy-matched cross-program speed ranking.
 \texttt{FRACMATH} is an inspectable MATLAB example of local damage
 with an Oliver projected crack-band width. The study presents constitutive checks, controlled 2D mesh and increment studies,
 structural energy diagnostics, and timing scopes that separate sparse
-factorization from assembly in MATLAB. A nominal-mesh 3D pure-tension
-comparison provides experimental error measures without fitting material
-parameters. The hybrid GPU and SMP study measures hardware-dependent
+factorization from assembly in MATLAB. A geometry-matched 3D pure-tension
+comparison quantifies peak and curve errors without fitting material
+parameters; local TET4 checks verify projected width and irreversible history.
+Ninety observations in the hybrid GPU and SMP study measure hardware-dependent
 costs on matched meshes. The mixed-mode and torsion cases remain qualitative, and
 separate Abaqus material/assembly costs remain unmeasured.
 
 % =====================================================================
 \section*{Data availability}
 
-The 2D MATLAB source, UMAT source, mesh, material-point test,
-machine-readable response histories, and figure-generation script are
-available in the \href{https://github.com/Jaykumar9033/FRACMATH/tree/main}{FRACMATH GitHub repository}.
+The MATLAB and UMAT sources, 2D/3D meshes, material-point tests,
+machine-readable response histories, timing observations and figure scripts are
+available in the \href{https://github.com/Jaykumar9033/FRACMATH/tree/main}{FRACMATH GitHub repository} \citep{fracmath}.
 The code and study data are identified by the immutable Git commit
 listed in Table~\ref{tab:code-metadata}.
 
@@ -765,13 +815,13 @@ The authors declare no conflict of interest.
 
 \section*{Declaration of AI-assisted technologies}
 
-Generative AI tools were used to assist with manuscript wording,
+OpenAI Codex was used to assist with manuscript wording,
 formatting, and implementation support. The scientific claims, equations,
 code, numerical results, figures, and references are the responsibility
 of the authors.
 
 
-\begin{thebibliography}{10}
+\begin{thebibliography}{12}
 \small\setlength{\itemsep}{1pt}
 
 \bibitem{deVree}
@@ -808,6 +858,11 @@ A.~D. Jefferson, B.~I.~G. Barr, T. Bennett, S.~C. Hee, Three dimensional finite 
 A.~D. Jefferson, T. Bennett, Benchmark problems for assessing a combined
 micro-mechanical continuum based model for concrete, COMPLAS VIII,
 Barcelona, 2005. URL: \url{https://congress.cimne.com/complas05/admin/Files/FilePaper/p334.pdf}.
+
+\bibitem{fracmath}
+J. Mavani, M. Pathirage, FRACMATH: source and completed numerical evidence,
+GitHub, 2026, Git commit \texttt{3dd9107}. URL:
+\url{https://github.com/Jaykumar9033/FRACMATH/tree/3dd910742bef9af58132d8a6818f87ddf189fd48}.
 
 \end{thebibliography}
 
