@@ -58,7 +58,7 @@ the interpretation. Abaqus job diagnostics qualify the timing comparison.
 At 4,000 increments, the dissipation spreads are 6.44% (Oliver) and 20.76% (fixed law). All three Abaqus jobs completed on the identical exported meshes; MATLAB peak loads differ from Abaqus by 1.87%, 2.88%, and 2.78%, respectively.
 
 See [`softwarex/MESH_STUDY.md`](softwarex/MESH_STUDY.md),
-[`softwarex/REVIEWER_CHANGES.md`](softwarex/REVIEWER_CHANGES.md), and
+[`softwarex/VALIDATION_SCOPE.md`](softwarex/VALIDATION_SCOPE.md), and
 [`softwarex/reproducibility/mesh_study/summary.json`](softwarex/reproducibility/mesh_study/summary.json).
 To regenerate the study summary and Figure 6 without licensed solvers:
 

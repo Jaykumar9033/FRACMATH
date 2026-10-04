@@ -1,6 +1,6 @@
 # FRACMATH Smoke Checks
 
-This folder contains lightweight checks intended for reviewers before running the full MATLAB, Abaqus, and plotting workflows.
+This folder contains lightweight checks for users before running the full MATLAB, Abaqus, and plotting workflows.
 
 The smoke check verifies that key manuscript assets, benchmark input files,
 result files, and documentation files are present and readable. It does not

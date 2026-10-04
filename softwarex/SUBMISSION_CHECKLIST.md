@@ -1,109 +1,24 @@
 # SoftwareX submission checklist
 
-Checked 3 October 2026 against Elsevier's original SoftwareX article
-template, Version 6 (March 2026), retrieved again on this date.
+The official Original Software Publication template is Version 6 (March 2026), checked on 4 October 2026:
+https://legacyfileshare.elsevier.com/promis_misc/softwarex-osp-template.docx
 
-- [Official article template](https://legacyfileshare.elsevier.com/promis_misc/softwarex-osp-template.docx)
-- [Official reviewer form](https://legacyfileshare.elsevier.com/promis_misc/softwarex-reviewer-form.pdf)
-- [Guide for authors](https://www.sciencedirect.com/journal/softwarex/publish/guide-for-authors)
+## Manuscript and software files
 
-The live Guide for Authors returned HTTP 403 during this check. Template
-requirements and the reviewer form were accessible; submission-portal
-requirements still need a final check.
+- Five main sections: Motivation and significance, Software description, Illustrative examples, Impact and Conclusions.
+- Software architecture, functionalities and numerical implementation are described.
+- Six figures, six keywords and a 95-word abstract. Run `python softwarex/check_submission.py` for the current conservative word count and file checks.
+- C1–C8 metadata identify the code version, repository, license, dependencies, documentation and support contact.
+- The public repository contains README.md, Licence.txt, beginner documentation, input files and reproduction scripts.
+- Funding, funder role, competing interests, CRediT and AI assistance are disclosed. Author approval and exclusive submission were confirmed on 3 October 2026; no funder role was confirmed on 4 October 2026.
+- Separate cover letter and highlights are supplied.
 
-## Manuscript and repository requirements
+## Evidence and scope
 
-| Requirement | Current finding | Remaining action |
-|---|---|---|
-| Original software article template and five main sections | All five sections present | Preserve this structure in the final manuscript |
-| Main text no more than 4,000 words | Automated count is recorded in `submission_checks.json`, excluding figures, tables, metadata and references | Recount after all final evidence is incorporated |
-| Main text approximately six pages, excluding display material and references; word limit takes priority | Current evidence is incorporated into the manuscript source | Inspect the compiled body separately from total PDF pages |
-| Abstract approximately 100 words | Describes 30 configurations with three observations each, totaling 90 runs | Retain approximately 100 words |
-| Maximum six keywords | Six | Retain at most six |
-| Maximum six figures | Six; the 3D comparison occupies an existing figure | Retain at most six |
-| Metadata C1–C8, with template labels retained | Rows present | Pin C1/C2 to the final tested version and verify all links |
-| Public GitHub repository with documented README.md and Licence.txt | Files present locally | Publish and verify the final source/data/docs on GitHub |
-| Software citation when a DOI/PID is supplied | Release, immutable source and version DOI cited | Verified DOI 10.5281/zenodo.23138595 |
-| Clear software architecture, functions, dependencies, examples and impact | Descriptions, examples and beginner guide present | Confirm the documented beginner workflow runs and supports the impact claims |
+Use VALIDATION_SCOPE.md and the numerical-study guides for measurement definitions. The UMAT audit and archive-backed figure reconstruction pass. Figure 2 shows only fully damaged elements with an explicit cutoff; Figures 4 and 5 retain the shared colorbars. Scientific claims remain limited to the results shown in the paper.
 
-The reviewer form evaluates empirical evidence, readability, reproducibility,
-documentation, dependencies, licensing and potential research impact. Passing
-file checks does not predict editorial acceptance.
+## Final author checks
 
-## Completed numerical evidence
+Review author details, CRediT roles, scientific claims and the AI-use declaration. Check upload fields and declaration forms in the submission portal. The live author-guide page was inaccessible, so portal requirements have not been fully verified. Formatting checks do not predict acceptance.
 
-- **Timing:** 30 size/mesh/computing configurations with three observations each,
-  totaling 90 completed runs. Median times and observed ranges are archived.
-  Saved MATLAB numerical arrays and Abaqus response CSVs match exactly between
-  observations within each configuration; accepted-increment and solver-pass
-  counts also match. MATLAB load-loop and Abaqus analysis/output times have
-  different scopes.
-- **2D regularization:** the controlled three-mesh family and smaller-increment
-  checks are complete. At CMOD 0.10 mm, partial-dissipation spread is 6.86% with
-  Oliver regularization versus 18.21% with the fixed law; at 4,000 increments,
-  the spreads are 6.44% versus 20.76%. These measures qualify this mesh family,
-  rather than establishing general mesh independence.
-- **3D published geometry:** 35,917, 94,525 and 144,791 TET4 meshes
-  complete their full 0.20 mm gauge paths within the 1e-6 equilibrium tolerance.
-  Peak spread is 1.46%; medium/fine curve RMS difference is 0.35% of fine peak.
-  Experimental peak underprediction remains 16.18–17.39%; curve NRMSE is
-  9.09–9.27%. These errors remain explicit rather than removed by mesh choice.
-- **Local 3D checks:** 32 tetrahedron size/direction cases, the compression mapping
-  and eight rotating-direction damage-history cases pass. Projected width,
-  tensile response, post-peak energy calibration and damage irreversibility are
-  checked. These tests do not establish structural mesh convergence.
-
-The 712-case UMAT audit, fresh energy tests and missing-gradient failure check pass. All eight generated manuscript assets reproduce with identical pixels; two supplied geometry illustrations match archived source bytes. The manuscript describes these completed results and their limits. Figure 1
-retains the preserved 10,000-step MATLAB response; Figures 4 and 5 retain the
-large shared color bars. The illustrative 20 mm-notch geometry is distinct
-from the quantitative published 25 mm-notch geometry.
-
-## Final submission checks
-
-The separate Abaqus sampling collection and full beginner-entry execution are
-complete. The profile identifies named assembly and user-library self estimates;
-complete phase wall-time attribution remains unavailable. The entry exactly
-reproduces every benchmark numerical state, response and snapshot array. Their
-archives contain tested sources, paired-data checks and measurement scopes.
-
-1. The three published-geometry 3D pure-tension meshes are complete. Their
-   peaks are 16.64, 16.40 and 16.53 kN; peak spread is 1.46% and medium/fine
-   curve RMS difference is 0.35% of fine peak. All histories pass the full
-   equilibrium gate. Experimental underprediction remains 16.18–17.39%.
-2. The strict proportional mixed-mode attempt stops at bisection exhaustion.
-   Its failure record is preserved and explicitly delimited in the paper;
-   it does not supply quantitative mixed-mode validation.
-3. FRACMATH v1.1.1 is published at GitHub and automatically archived by
-   Zenodo, DOI 10.5281/zenodo.23138595. The tag points to the source commit
-   named in manuscript metadata and the software reference. All 366 archived
-   file hashes match that tagged Git source, including raw run logs.
-4. Review the contributions and affiliations/contact address. Jaykumar Mavani confirmed
-   both-author submission approval, exclusive submission, the funding acknowledgement
-   and no competing interests on 3 October 2026. Review the prepared `cover_letter.txt` and check the
-   separate highlights and any portal-required declaration files. `author_confirmation.txt`
-   lists the statements requiring author confirmation.
-   The original cover letter cites v1.0.0 and a 3.6-fold MATLAB speed claim;
-   it does not describe the present comparison. The original declaration
-   discloses NASA/Space Grant financial support, while the paper declares no
-   competing interests. Funding does not automatically imply a conflict;
-   authors must confirm consistent wording across the submission files.
-5. Repeat the PDF, file and delivery checks if further simulation results are
-   incorporated. The manuscript names OpenAI Codex in its AI-use declaration
-   and identifies the completed numerical evidence by immutable commit
-   `f4d208ecf45b6a4e4d4530e5f71fbf8bcb9f0fe0`.
-
-The three-mesh 3D study, GPU/SMP benchmarking and detailed Abaqus profiling
-are evidence goals of this manuscript, not universal mandatory SoftwareX
-tests. Claims must follow the completed evidence. The GPU implementation
-has no measured speed advantage on this workstation; the software contribution
-is inspectability, reproducible comparisons and regularization diagnostics.
-
-## Template and policy review — 4 October 2026
-
-The official Original Software Publication Word template retrieved today remains Version 6 (March 2026), SHA-256 `9fcf40ede96a2f188ee4ef77134e0596d01e1b65fd9db63f2874d29f2ecb916d`. The manuscript uses the five numbered main sections, explicit software architecture and functionalities, C1–C8 metadata, six figures, six keywords and a roughly 100-word abstract. The conservative main-text count includes equations and code and remains below 4,000 words. Figure assets and numerical sources are unchanged.
-
-Jaykumar Mavani confirmed on 4 October 2026 that the funders had no role in study design, data analysis, manuscript writing or the decision to submit. This statement appears in the manuscript and cover letter. The manuscript identifies AI assistance in the implementation description and under the journal-policy declaration heading. Author responsibility and final review remain necessary.
-
-The live ScienceDirect author-guide page returned HTTP 403; portal-specific upload fields and declaration forms must be checked at submission. The verified template and policy checks do not imply acceptance or verification of inaccessible portal requirements.
-
-Final formatting evidence: conservative main-text estimate 3,654 words; abstract 95 words; six figures and six keywords. A main-text-only compilation excluding metadata, figures, tables and references occupies six pages. The complete submission PDF occupies 15 pages. Two-pass local compilation has no undefined references or overfull-box warnings; figure and declaration layout was visually checked.
+The existing version-specific archive remains cited for the code and study data. No new Zenodo release is part of this manuscript edit. The current figure-display script is supplied in the repository and submission package.

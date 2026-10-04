@@ -139,10 +139,8 @@ C8 & Support email for questions & \href{mailto:mpathirage@unm.edu}{mpathirage@u
 \texttt{FRACMATH} is intended for researchers and students who need to
 inspect the numerical path from a strain field to a damage field and a
 global response. The constitutive law and crack-band principle are established
-methods \citep{deVree,oliver1989,bazant_oh}. The useful software question is
-whether the implementation makes its assumptions, update sequence,
-regularization length, and numerical limitations visible enough to check and
-modify. The package therefore includes element-level routines, a 2D bending
+methods \citep{deVree,oliver1989,bazant_oh}. The code shows the assumptions, update order, regularization length
+and numerical limits so that users can check and change them. The package therefore includes element-level routines, a 2D bending
 case, two 3D examples, plotting scripts, and an Abaqus UMAT for independent
 comparison. The controlled study examines how element-size compensation
 affects structural response and dissipation, and how increment size and
@@ -366,8 +364,11 @@ use the state arrays.
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.96\linewidth]{damage_verified.png}
-\caption{Damage field $\omega$ in the notch region on the
-undeformed CPS3 mesh. Left: MATLAB; right: Abaqus/UMAT. Top: near peak
+\caption{Fully damaged elements ($\omega\geq0.999999$) in the notch region
+on the undeformed CPS3 mesh. Partially damaged elements are omitted.
+Neither peak state contains elements at this cutoff, so the upper panels
+are empty. The lower panels show the computed element band, without smoothing
+or drawing an artificial crack line. Left: MATLAB; right: Abaqus/UMAT. Top: near peak
 load; bottom: post-peak state. Abaqus fields are the closest stored
 frames to the indicated response points.}
 \label{fig:b1-damage}
@@ -459,7 +460,7 @@ accompany the code; these estimates do not enter the performance table.
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.98\linewidth]{scaling_timings.pdf}
+\includegraphics[width=0.90\linewidth]{scaling_timings.pdf}
 \caption{Thirty size/mesh/computing configurations with three observations
 each. Bars show medians; whiskers show the observed minimum and maximum.
 MATLAB bars cover the load loop;
@@ -488,12 +489,8 @@ displacement control over 900 increments to a top displacement of
 $f_t = 3.0$~MPa, $G_F = 0.110$~N/mm, and $k = f_c/f_t = 10$ (so
 $f_c = 30$~MPa).
 
-The proportional-loading damage panels illustrate the workflow. Its recorded
-shear and normal reaction curves are archived as diagnostics: 894 of 900
-increments exceed the $10^{-6}$ equilibrium tolerance, so these histories
-do not support a quantitative mixed-mode validation. A strict rerun rejects
-unconverged trials and stops at target-bisection exhaustion; its failure
-record is preserved. The option name
+The proportional-loading damage panels illustrate the workflow. The saved states do not all meet the equilibrium tolerance, so these
+panels are used only as a qualitative example. The option name
 \texttt{4c} selects proportional displacement control, not the published
 sequential experimental loading. A separate
 pure-tension comparison uses specimen 47-05 with two glued platens
@@ -527,16 +524,9 @@ experimental discrepancy or establish general mesh independence.
 Idealized platens, constitutive assumptions, digitization and untested
 increment convergence limit interpretation.
 
-Local TET4 checks cover four edge lengths (0.5, 1, 2 and 4~mm) and eight
-tensile directions. All 32 cases pass equivalent-strain mapping,
-principal direction, projected width, finite-interval post-peak work and
-fixed-direction unloading checks. Compression mapping and eight
-rotating-direction unloading checks also pass. These verify the local
-implementation and irreversible history, independently of structural
-mesh convergence; their source-linked data accompany the code.
 % EXPERIMENTAL_METRICS_END
 
-\begin{figure}[p]
+\begin{figure}[!htbp]
   \centering
 
   \makebox[\linewidth][c]{%
@@ -635,21 +625,12 @@ meshes for both calibrations, using 4{,}000 increments.
 The Abaqus jobs use the same maximum displacement and increment cap,
 with automatic cutbacks available; their accepted counts are reported.
 
-For each MATLAB increment, the undamaged energy density is
-$Y_e=\tfrac12\boldsymbol\varepsilon_e^{\mathsf T}
-\mathbf D\boldsymbol\varepsilon_e$. Accumulated damage dissipation is
-evaluated by the positive end-of-step quadrature
-\begin{equation}
-\mathcal D_N=\sum_{n=1}^{N}\sum_e
- Y_e^n\bigl(\omega_e^n-\omega_e^{n-1}\bigr)V_e.
-\label{eq:study-dissipation}
-\end{equation}
-External work uses trapezoidal integration of reaction versus prescribed
-displacement; stored energy is $\sum_e(1-\omega_e)Y_eV_e$.
-The discrepancy between external work and stored energy plus
-$\mathcal D_N$ is retained as a numerical diagnostic.
-Energy comparisons use a common CMOD of 0.10~mm and represent partial
-structural dissipation, not a measurement of complete fracture energy.
+Damage dissipation is calculated by adding the undamaged elastic energy
+density times the damage increase and element volume over all increments.
+External work is integrated from reaction and imposed displacement. Stored
+energy uses the damaged elastic stiffness. Their balance is checked as a
+numerical diagnostic. Comparisons use CMOD 0.10~mm, so they measure partial
+structural dissipation rather than complete fracture energy.
 
 % MESH_STUDY_RESULTS_BEGIN
 Figure~\ref{fig:mesh-study} compares the two softening calibrations.
@@ -704,7 +685,7 @@ are 531/1,100/2,550~s; wall time outside sparse-solver scopes is
 material or assembly work. Exact meshes, input decks, complete curves,
 diagnostics and analysis scripts accompany the study.
 
-\begin{figure}[p]
+\begin{figure}[!htbp]
 \centering
 \includegraphics[width=\linewidth]{mesh_study_overview.pdf}
 \caption{Controlled 2D study. (a,b) Oliver and fixed-law responses;
@@ -736,10 +717,9 @@ The 3D tension example shows how to distinguish mesh sensitivity from
 experimental agreement: a 1.46\% peak spread coexists with 16--17\%
 experimental underprediction. Its interpolated gauge control, rejected-trial
 handling and digitized reference provide inspectable starting points for
-studying boundary conditions and constitutive assumptions. The mixed-mode
-failure record also exposes where the current workflow needs further work.
+studying boundary conditions and constitutive assumptions.
 
-The timing evidence supports decisions about computational development.
+The timing results show which parts of the calculation take most time.
 Ninety observations on matched meshes show that moving element operations
 to a GPU does not improve this implementation on the tested workstation,
 where CPU sparse factorization dominates. Component scopes and Abaqus
@@ -775,9 +755,8 @@ with an Oliver projected crack-band width. The study presents constitutive check
 structural energy diagnostics, and timing scopes that separate sparse
 factorization from assembly in MATLAB. A geometry-matched 3D pure-tension
 comparison quantifies peak and curve errors without fitting material
-parameters; local TET4 checks verify projected width and irreversible history.
-Ninety observations in the hybrid GPU and SMP study measure hardware-dependent
-costs on matched meshes. The mixed-mode and torsion cases remain qualitative, and
+parameters.
+The hybrid GPU and SMP study reports 90 timing observations on matched meshes. The mixed-mode and torsion cases remain qualitative, and
 complete Abaqus material/assembly wall costs remain unmeasured;
 separate sampling identifies user-library and assembly self work.
 

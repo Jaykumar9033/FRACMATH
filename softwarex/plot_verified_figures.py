@@ -94,8 +94,7 @@ def damage_figure(d):
     elems = d["elems"].astype(int) - 1
     panels = [(d["snap_peak"][0, 0], "At peak load"),
               (d["snap_pp"][0, 0], "Post peak, CMOD > 0.30 mm")]
-    cmap = LinearSegmentedColormap.from_list(
-        "damage_white_red", ["#f4f4f4", "#fff4cc", "#ffb06a", "#c9442d", "#711f22"])
+    cutoff = 0.999999  # Only elements with effectively complete damage are shown.
     pd = ABQ.parent / "plotdata"
     has_abq = (pd / "omega_peak.csv").exists() and (pd / "omega_postpeak.csv").exists()
     fig, axes = plt.subplots(2, 2 if has_abq else 1,
@@ -107,8 +106,9 @@ def damage_figure(d):
         abq_elems = np.loadtxt(pd / "mesh_elements.csv", delimiter=",", comments="#")[:, 1:4].astype(int) - 1
     for row, (snap, title) in enumerate(panels):
         omega = snap["omega"].ravel()
-        coll = PolyCollection(nodes[elems], array=omega, cmap=cmap,
-                              norm=Normalize(0, 1), edgecolors="none")
+        selected = omega >= cutoff
+        coll = PolyCollection(nodes[elems[selected]], facecolors="#711f22",
+                              edgecolors="none")
         ax = axes[row, 0]
         ax.add_collection(coll)
         ax.set_title("MATLAB: peak" if row == 0 else "MATLAB: postpeak",
@@ -118,8 +118,9 @@ def damage_figure(d):
             values = np.loadtxt(pd / fn, delimiter=",", comments="#")
             abq_w = np.zeros(len(abq_elems))
             abq_w[values[:, 0].astype(int)-1] = values[:, 2]
-            coll = PolyCollection(abq_nodes[abq_elems], array=abq_w, cmap=cmap,
-                                  norm=Normalize(0, 1), edgecolors="none")
+            selected = abq_w >= cutoff
+            coll = PolyCollection(abq_nodes[abq_elems[selected]], facecolors="#711f22",
+                                  edgecolors="none")
             ax = axes[row, 1]
             ax.add_collection(coll)
             ax.set_title("Abaqus: peak" if row == 0 else "Abaqus: postpeak",
@@ -127,7 +128,10 @@ def damage_figure(d):
     for ax in axes.ravel():
         ax.set(xlim=(145, 205), ylim=(0, 100), xlabel="x (mm)", ylabel="y (mm)")
         ax.set_aspect("equal")
-    fig.colorbar(coll, ax=axes, label="damage ω", shrink=.8, pad=.02)
+    fig.suptitle("Fully damaged elements: ω ≥ 0.999999", fontsize=11)
+    for ax in axes[0]:
+        ax.text(.5, .5, "No fully damaged elements", transform=ax.transAxes,
+                ha="center", va="center", fontsize=9, color="#555555")
     save(fig, "damage_verified.png")
 
 

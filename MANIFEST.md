@@ -17,7 +17,7 @@ documentation locations for the FRACMATH repository.
 | `.gitattributes` | Git LFS tracking for large Abaqus `.odb` files |
 | `.gitignore` | Local scratch-file ignore rules |
 
-## Reviewer checks
+## Verification checks
 
 | Path | Type | Description |
 | --- | --- | --- |
@@ -42,7 +42,7 @@ documentation locations for the FRACMATH repository.
 | `softwarex/plot_verified_figures.py` | source | Verified 2D response, timing, and damage figures |
 | `softwarex/reproducibility/` | data | Preserved historical checks and controlled three-mesh regularization/scaling study |
 | `softwarex/run_mesh_study.py`, `softwarex/analyze_mesh_study.py` | source | Sequential study runner and checked archived-data analysis |
-| `softwarex/MESH_STUDY.md`, `softwarex/REVIEWER_CHANGES.md` | documentation | Protocol, measurement scopes, reviewer changes, and limitations |
+| `softwarex/MESH_STUDY.md`, `softwarex/VALIDATION_SCOPE.md` | documentation | Protocol, measurement scopes, validation evidence, and limitations |
 | `softwarex/manuscript.tex`, `softwarex/manuscript.pdf` | draft | SoftwareX manuscript and figures |
 
 ## 3D Nooru-Mohamed benchmark

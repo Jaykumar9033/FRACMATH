@@ -15,7 +15,7 @@ Please use GitHub Issues to report problems, unclear documentation, failed repro
 
 ## Asking for support
 
-For reviewer or user support, open a GitHub Issue with a short title and the
+For user support, open a GitHub Issue with a short title and the
 workflow name, for example `3PB MATLAB solver`, `Abaqus UMAT`,
 `Nooru-Mohamed`, `torsion`, or `SoftwareX manuscript`.
 

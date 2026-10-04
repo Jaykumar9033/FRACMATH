@@ -1,4 +1,4 @@
-# Implementation walkthrough for reviewers
+# Implementation walkthrough
 
 The executable 2D implementation is `3pb/matlab/solver_main_3pb.m`. Its
 `softwarex/reproducibility/2d/` copy is kept identical for the submission
