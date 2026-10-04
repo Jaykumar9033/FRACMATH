@@ -119,7 +119,7 @@ continuum damage mechanics \sep crack-band regularization \sep MATLAB \sep hybri
 \midrule
 C1 & Current code version & SoftwareX study, commit 3dd9107 \\
 C2 & Permanent link to code/repository used for this code version &
-Source and study data: \href{https://github.com/Jaykumar9033/FRACMATH/tree/fb725be6c2026582a22ad9bc2d8c86b579930a03}{immutable GitHub commit}. \\
+Source and study data: \href{https://github.com/Jaykumar9033/FRACMATH/tree/c65a73254d6aa62e5ea35c6e6852b875cab37f36}{immutable GitHub commit}. \\
 C3 & Legal code license & MIT License \\
 C4 & Code versioning system used & git \\
 C5 & Software code languages, tools and services used & MATLAB; Fortran UMAT; Abaqus/Standard; Python analysis scripts \\
@@ -205,6 +205,8 @@ trials leave the committed state unchanged.
 Students open \texttt{start\_here.m}, edit the visible settings and run the
 supplied mesh. The beginner guide explains units, array dimensions and
 the function sequence. The entry script calls the benchmark solver directly.
+A headless 10{,}000-step execution of the entry exactly
+reproduces all saved benchmark response, state and snapshot arrays.
 
 The 2D driver \texttt{solver\_main\_3pb.m} reads the mesh and support/loading
 sets, precomputes elastic element matrices and shape-function gradients,
@@ -431,6 +433,14 @@ time; the remainder is unallocated. MATLAB/Abaqus peak differences are
 median costs and observed ranges from 90 runs; complete phase, memory and
 residual records accompany the code. All saved MATLAB numerical arrays
 and Abaqus response CSVs are identical across repeats within each setting.
+
+A separate small/coarse CPU1 VTune software-sampling run reproduces the
+same mesh, boundary sets and 2,001 response rows exactly. It identifies
+2.03~s of self-time estimates in the user-subroutine library and 3.81~s
+in four named assembly routines. These exclude callees and unresolved
+symbols; profiling effects and timer scopes prevent interpreting them
+as complete material/assembly wall times. Function and call-stack exports
+accompany the code; these estimates do not enter the performance table.
 
 \input{tables/scaling_table.tex}
 
@@ -719,6 +729,7 @@ Equilibrium algorithms differ. Timing comparisons appear separately in
 Fig.~\ref{fig:timing}.}
 \label{fig:mesh-study}
 \end{figure}
+\FloatBarrier
 
 % MESH_STUDY_RESULTS_END
 
@@ -772,7 +783,8 @@ comparison quantifies peak and curve errors without fitting material
 parameters; local TET4 checks verify projected width and irreversible history.
 Ninety observations in the hybrid GPU and SMP study measure hardware-dependent
 costs on matched meshes. The mixed-mode and torsion cases remain qualitative, and
-separate Abaqus material/assembly costs remain unmeasured.
+complete Abaqus material/assembly wall costs remain unmeasured;
+separate sampling identifies user-library and assembly self work.
 
 % =====================================================================
 \section*{Data availability}
@@ -855,7 +867,7 @@ Barcelona, 2005. URL: \url{https://congress.cimne.com/complas05/admin/Files/File
 \bibitem{fracmath}
 J. Mavani, M. Pathirage, FRACMATH: source and completed numerical evidence,
 GitHub, 2026, Git commit \texttt{3dd9107}. URL:
-\url{https://github.com/Jaykumar9033/FRACMATH/tree/fb725be6c2026582a22ad9bc2d8c86b579930a03}.
+\url{https://github.com/Jaykumar9033/FRACMATH/tree/c65a73254d6aa62e5ea35c6e6852b875cab37f36}.
 
 \end{thebibliography}
 

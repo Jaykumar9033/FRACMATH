@@ -60,22 +60,25 @@ from the quantitative published 25 mm-notch geometry.
 
 ## Remaining work for this submission
 
+The separate Abaqus sampling collection and full beginner-entry execution are
+complete. The profile identifies named assembly and user-library self estimates;
+complete phase wall-time attribution remains unavailable. The entry exactly
+reproduces every benchmark numerical state, response and snapshot array. Their
+archives contain tested sources, paired-data checks and measurement scopes.
+
 1. Finish and assess the medium/fine 3D pure-tension cases using the published
    25 mm notch geometry. The completed coarse case predicts 16.64 kN versus
    a digitized experimental peak of 19.85 kN (16.18% below). Explain this
    discrepancy and report only complete, converged histories. One mesh is
    insufficient for a 3D mesh-convergence claim.
-2. Complete the separate Abaqus profiling attempt. Sampling measures CPU
-   activity and cannot supply an exact material/assembly wall-time split.
-   If phase attribution remains unavailable, state that limitation clearly.
-3. Finish the actual beginner-entry 10,000-step check and compare its numerical
-   output with the preserved benchmark. This is separate from the 2,000-step
-   hardware study.
-4. Publish the final tested GitHub version, verify its automatic Zenodo archive,
+2. Finish or explicitly delimit the strict proportional mixed-mode run. Its
+   controls differ from the experimental 4a/4c sequence; do not add unmatched
+   experimental overlays or use rejected/unconverged histories as validation.
+3. Publish the final tested GitHub version, verify its automatic Zenodo archive,
    and add the correct software reference and metadata. The local citation
    metadata currently says `1.1.0-dev`; verify that the final manuscript's
    immutable source/data link contains every file supporting its results.
-5. Have the authors confirm the contributions, affiliations/contact address, funding statement
+4. Have the authors confirm the contributions, affiliations/contact address, funding statement
    and competing-interest declaration. Prepare the cover letter and check the
    separate highlights and any portal-required declaration files.
    The original cover letter cites v1.0.0 and a 3.6-fold MATLAB speed claim;
@@ -83,10 +86,10 @@ from the quantitative published 25 mm-notch geometry.
    discloses NASA/Space Grant financial support, while the paper declares no
    competing interests. Funding does not automatically imply a conflict;
    authors must confirm consistent wording across the submission files.
-6. Repeat the PDF, file and delivery checks if further simulation results are
+5. Repeat the PDF, file and delivery checks if further simulation results are
    incorporated. The manuscript names OpenAI Codex in its AI-use declaration
    and identifies the completed numerical evidence by immutable commit
-   `fb725be6c2026582a22ad9bc2d8c86b579930a03`.
+   `c65a73254d6aa62e5ea35c6e6852b875cab37f36`.
 
 The three-mesh 3D study, GPU/SMP benchmarking and detailed Abaqus profiling
 are evidence goals of this manuscript, not universal mandatory SoftwareX
