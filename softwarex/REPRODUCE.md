@@ -77,8 +77,17 @@ exceed the 1e-6 tolerance. The proportional `4c` option does not reproduce
 the published sequential experimental loading, so no 4a/4c experimental
 points are overlaid. See `reproducibility/nooru_proportional/README.md`.
 
-Run `python softwarex/plot_nooru_coarse.py` from the repository root to check the completed 25 mm-notch history and regenerate Figure 4b. Copy `softwarex/reproducibility/nooru_25mm_coarse` to a separate workspace and run `matlab -batch run_case` there for a structural rerun. See that folder's README for the mesh, gauge control, source-linked material checks, parameters and validation scope. The experimental source and digitization uncertainty are in `softwarex/reproducibility/experimental_3d/experimental_source.json`. The 20 mm-notch source and histories in that separate folder are idealized-geometry evidence. The proportional mixed-mode damage images and end-twist example remain qualitative.
+Run `python softwarex/analyze_nooru_mesh_study.py --workspace softwarex/reproducibility/nooru_25mm_mesh_study --require-all` from the repository root to check all three completed 25 mm-notch histories and regenerate Figure 4b. `plot_nooru_coarse.py` retains the separate individual coarse-case plot. Copy `softwarex/reproducibility/nooru_25mm_coarse` to a separate workspace and run `matlab -batch run_case` there for a structural rerun. See that folder's README for the mesh, gauge control, source-linked material checks, parameters and validation scope. The experimental source and digitization uncertainty are in `softwarex/reproducibility/experimental_3d/experimental_source.json`. The 20 mm-notch source and histories in that separate folder are idealized-geometry evidence. The proportional mixed-mode damage images and end-twist example remain qualitative.
 
 ## Size, mesh, CPU and hybrid GPU evidence
 
 See [SCALING_STUDY.md](SCALING_STUDY.md) for all 30 completed configurations, response checks, measured times, exact meshes and licensed-run/archive-replay commands. The hybrid GPU is functional and retains CPU sparse factorization; no GPU speedup is observed on this workstation. Abaqus SMP reaches a 2.90 speed ratio on the largest mesh.
+
+
+## UMAT and manuscript figure checks
+
+See [UMAT_GUIDE.md](UMAT_GUIDE.md) for the constitutive sequence and secant-tangent limitation. The actual UMAT passes 712 independent material-point comparisons and comparisons with the MATLAB damage functions. Fresh energy/unloading tests and the missing-gradient failure check pass. The tested sources and outputs are archived in `reproducibility/umat_audit/`.
+
+The complete three-mesh 25 mm-notch study is archived in `reproducibility/nooru_25mm_mesh_study/`. All histories reach 0.2 mm gauge displacement within the equilibrium tolerance. Peak underprediction remains 16.18–17.39%; the mesh spread does not explain the experimental discrepancy. The strict mixed-mode failure is preserved in `reproducibility/nooru_proportional_strict/`.
+
+Run `python softwarex/verify_paper_figures.py --workspace C:/runs/figure_replay` from the repository root to rebuild the manuscript figures in a separate folder. All eight generated assets pass pixel comparison; two supplied geometry illustrations match their archived sources. Runtime and PDF metadata are not numerical reproduction targets.

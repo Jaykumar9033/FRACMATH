@@ -1,6 +1,7 @@
 """Regenerate SoftwareX 2D figures from the local runs."""
 
 from pathlib import Path
+import argparse
 import csv
 import json
 
@@ -160,7 +161,10 @@ def timing_figure():
 
 
 if __name__ == "__main__":
-    OUT.mkdir(exist_ok=True)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--output', type=Path, default=OUT)
+    OUT = parser.parse_args().output
+    OUT.mkdir(parents=True, exist_ok=True)
     d10 = state(MAT10000)
     mesh_figure(d10)
     load_curve(d10)

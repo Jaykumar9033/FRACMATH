@@ -40,11 +40,11 @@ assert(size(elements, 1) > 0 && size(elements, 2) >= 4, '3PB element table has a
 assert(size(loadCmod, 1) > 0 && size(loadCmod, 2) >= 2, '3PB load-CMOD table has an unexpected shape.');
 assert(max(loadCmod(:, 2)) > 0, '3PB load-CMOD table does not contain positive load values.');
 assert(abs(max(loadCmod(:, 2)) - 4026.33) < 1, ...
-    'Current MATLAB CSV does not match the corrected 10,000-step run.');
+    'MATLAB CSV does not match the 10,000-step benchmark.');
 
 abaqusCmod = readmatrix(fullfile(root, '3pb/abaqus/Gregoire_3PB/results/abaqus_load_cmod.csv'), 'NumHeaderLines', 1);
 assert(abs(max(abaqusCmod(:, 2)) - 3999.14) < 1, ...
-    'Current Abaqus CSV does not match the corrected one-CPU run.');
+    'Abaqus CSV does not match the one-CPU benchmark.');
 
 fprintf('FRACMATH smoke checks passed.\n');
 end

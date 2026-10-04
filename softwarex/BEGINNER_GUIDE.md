@@ -59,3 +59,13 @@ With identical inputs, software, backend, and numerical settings, saved numerica
 Different CPU/GPU arithmetic can produce small floating-point differences. GPU and CPU curves are checked using declared tolerances, not promised to match bit for bit. Runtime, memory use, video compression, file timestamps, MAT-file headers, and image/PDF metadata are not exact numerical outputs.
 
 For archived paper figures, use `plot_verified_figures.py` and `rebuild_3d_figures.py`. Keep the 10,000-step history for Figure 1. The separate 2,000-step hardware study has different settings and does not replace it.
+
+For the Fortran material routine, follow the seven steps in
+[UMAT_GUIDE.md](UMAT_GUIDE.md). The guide explains how total strain,
+crack-band width, damage and stress are calculated, and why the secant
+matrix can lead to additional Abaqus iterations.
+
+Run `verify_paper_figures.py --workspace C:/runs/figure_replay` with Python
+to check all manuscript figure assets in a separate folder. The three-mesh
+pure-tension comparison uses the completed published-geometry archive;
+mixed-mode damage images remain qualitative.

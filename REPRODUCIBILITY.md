@@ -67,3 +67,12 @@ The scripts `run_nooru_tension.py` and `analyze_nooru_tension.py` reproduce the 
 See [SCALING_STUDY.md](softwarex/SCALING_STUDY.md) for 30 completed configurations with three sequential observations each (90 runs), response checks, median times, observed ranges, exact meshes and licensed-run/archive-replay commands. The [repeat archive](softwarex/reproducibility/timing_repeats/README.md) preserves both additional observations and the aggregate analysis; the original observation is in `softwarex/reproducibility/scaling_study/`. Saved MATLAB numerical arrays and Abaqus response CSVs match exactly across observations within each configuration. Runtime and image file headers are not expected to match exactly.
 
 The hybrid GPU is functional and retains CPU sparse factorization; no GPU speedup is observed on this workstation. Abaqus SMP reaches a 2.90 speed ratio on the largest mesh. MATLAB load-loop and Abaqus analysis/output times have different scopes, and three workstation observations do not establish statistical confidence intervals. The [separate profile](softwarex/reproducibility/abaqus_profile/README.md) supplies named assembly and user-library self estimates, while complete phase wall-time attribution remains unavailable. The [beginner-entry 10,000-step check](softwarex/reproducibility/beginner_entry_check/README.md) exactly reproduces the preserved numerical arrays.
+
+
+## UMAT and manuscript figure checks
+
+See [UMAT_GUIDE.md](softwarex/UMAT_GUIDE.md) for the constitutive sequence and secant-tangent limitation. The actual UMAT passes 712 independent material-point comparisons and comparisons with the MATLAB damage functions. Fresh energy/unloading tests and the missing-gradient failure check pass. The tested sources and outputs are archived in `softwarex/reproducibility/umat_audit/`.
+
+The complete three-mesh 25 mm-notch study is archived in `softwarex/reproducibility/nooru_25mm_mesh_study/`. All histories reach 0.2 mm gauge displacement within the equilibrium tolerance. Peak underprediction remains 16.18–17.39%; the mesh spread does not explain the experimental discrepancy. The strict mixed-mode failure is preserved in `softwarex/reproducibility/nooru_proportional_strict/`.
+
+Run `python softwarex/verify_paper_figures.py --workspace C:/runs/figure_replay` from the repository root to rebuild the manuscript figures in a separate folder. All eight generated assets pass pixel comparison; two supplied geometry illustrations match their archived sources. Runtime and PDF metadata are not numerical reproduction targets.

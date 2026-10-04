@@ -5,6 +5,7 @@ Only layout, panel labels, and color bars are drawn here.
 """
 
 from pathlib import Path
+import argparse
 import re
 
 import matplotlib
@@ -79,6 +80,10 @@ def torsion():
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--output', type=Path, default=OUT)
+    OUT = parser.parse_args().output
+    OUT.mkdir(parents=True, exist_ok=True)
     nooru()
     torsion()
     print("Saved Nooru-Mohamed and torsion damage montages")

@@ -1,5 +1,6 @@
 """Report completed, geometry-matched 3D cases and exclude failed histories."""
 import argparse
+import hashlib
 import json
 from pathlib import Path
 
@@ -12,6 +13,7 @@ import matplotlib.pyplot as plt
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--workspace',required=True,type=Path)
+    parser.add_argument('--output',type=Path,help='Separate directory for reports and plots')
     parser.add_argument('--require-all',action='store_true',
                         help='Fail the final verification gate unless all three meshes finish')
     args=parser.parse_args()
@@ -31,6 +33,12 @@ def main():
         meta=json.loads((folder/'mesh_metadata.json').read_text())
         if meta['notch_depth_mm']!=25 or meta['notch_width_mm']!=5:
             raise ValueError('Experimental geometry mismatch')
+        solver_hash=hashlib.sha256((folder/'damage_static.m').read_bytes()).hexdigest()
+        if solver_hash!=record['generated_solver_sha256']:
+            raise ValueError('Tested solver hash mismatch: '+name)
+        if record['initial_intervals']!=600 or record['material']!=dict(
+                E_MPa=29000,nu=.2,ft_MPa=3,GF_N_per_mm=.11,k=10):
+            raise ValueError('Study settings differ from the documented protocol')
         history=np.loadtxt(folder/'Job-1_gauge_results.csv',delimiter=',')
         targets=np.loadtxt(folder/'accepted_targets.csv',delimiter=',')
         if len(history)!=len(targets) or not np.isfinite(history).all() or history[:,6].max()>1e-6:
@@ -49,7 +57,8 @@ def main():
                     peak_N=float(y[peak]),peak_gauge_mm=float(x[peak]),
                     peak_error_percent=float(100*(y[peak]/experiment[:,1].max()-1)),
                     curve_NRMSE_percent=float(100*np.sqrt(np.mean(difference**2))/experiment[:,1].max()),
-                    max_equilibrium_residual=float(history[:,6].max()),max_gauge_constraint_error_mm=gauge_error)
+                    max_equilibrium_residual=float(history[:,6].max()),max_gauge_constraint_error_mm=gauge_error,
+                    verified_solver_sha256=solver_hash)
         accepted.append(result)
         curves[name]=(x,y)
         ax.plot(x,y/1000,lw=1.3,label='%s: %s TET4' % (name,format(meta['elements'],',')))
@@ -59,6 +68,8 @@ def main():
     else:
         spread=None
     response_difference=None
+    if len({row['verified_solver_sha256'] for row in accepted})>1:
+        raise ValueError('Meshes did not use the same numerical solver')
     if 'medium' in curves and 'fine' in curves:
         grid=np.linspace(0,0.2,1001)
         medium=np.interp(grid,*curves['medium'])
@@ -68,7 +79,7 @@ def main():
                  completed_meshes=len(accepted),peak_mesh_spread_percent=spread,
                  medium_fine_curve_RMS_difference_percent_of_fine_peak=response_difference,
                  scope='One pure-tension geometry with published 25 mm notches; three prescribed mesh seeds, local gauges and unchanged material parameters. Target bisections retain equilibrium tolerances. Does not establish general 3D mesh or orientation independence.')
-    output=args.workspace/'analysis'
+    output=args.output or args.workspace/'analysis'
     output.mkdir(exist_ok=True)
     (output/'summary.json').write_text(json.dumps(summary,indent=2),encoding='utf-8')
     if accepted:
