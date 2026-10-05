@@ -1,0 +1,44 @@
+Analysis initiated from SIMULIA established products
+Abaqus JOB Gregoire_3PB
+Abaqus 2024
+Successfully checked out SRU/15 from DSLS server r1132104283723-usw1-licensing-1.3dexperience.3ds.com
+Abaqus License Manager checked out the following licenses:
+Abaqus checked out 15 tokens from DSLS server r1132104283723-usw1-licensing-1.3dexperience.3ds.com.
+<314 out of 329 licenses remain available>.
+Begin Compiling Abaqus/Standard User Subroutines
+10/4/2026 2:05:52 PM
+Intel(R) Fortran Compiler for applications running on Intel(R) 64, Version 2025.0.4 Build 20241205
+Copyright (C) 1985-2024 Intel Corporation. All rights reserved.
+
+ifx: command line warning #10148: option '/Qprec-sqrt' not supported
+ifx: command line warning #10148: option '/Qfp-stack-check' not supported
+ifx: command line warning #10006: ignoring unknown option '/names;lowercase'
+End Compiling Abaqus/Standard User Subroutines
+Begin Linking Abaqus/Standard User Subroutines
+Microsoft (R) Incremental Linker Version 14.44.35228.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+   Creating library standardU.lib and object standardU.exp
+End Linking Abaqus/Standard User Subroutines
+10/4/2026 2:05:52 PM
+Begin Analysis Input File Processor
+10/4/2026 2:05:52 PM
+Run pre.exe
+10/4/2026 2:05:55 PM
+End Analysis Input File Processor
+Begin Abaqus/Standard Analysis
+10/4/2026 2:05:55 PM
+Run standard.exe
+ UMAT FAST: Oliver T3 gradN table loaded, n=        3584
+ FRAC_TIMER calls               18579456
+ FRAC_TIMER clock_rate                1000000
+ FRAC_TIMER umat_elapsed_s    2.99600000000000     
+ FRAC_TIMER empty_pair_mean_s   9.000000000000000E-008
+10/4/2026 2:08:39 PM
+End Abaqus/Standard Analysis
+Begin SIM Wrap-up
+10/4/2026 2:08:41 PM
+Run SMASimUtility.exe
+10/4/2026 2:08:41 PM
+End SIM Wrap-up
+Abaqus JOB Gregoire_3PB COMPLETED

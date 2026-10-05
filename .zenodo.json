@@ -1,0 +1,38 @@
+{
+  "title": "FRACMATH: A vectorized MATLAB framework for continuum damage mechanics with crack band regularization",
+  "upload_type": "software",
+  "description": "FRACMATH is a vectorized MATLAB framework for scalar continuum damage with direction-dependent Oliver crack-band regularization. The SoftwareX study includes a 712-state MATLAB-UMAT material-point audit, a matched 2D three-point-bending benchmark, a controlled three-mesh response study, and 90 timing observations across MATLAB CPU1/CPU8/hybrid GPU and Abaqus CPU1/CPU8 configurations. Three completed 3D pure-tension meshes provide a numerical mesh-consistency check; mixed-mode and torsion fields are qualitative demonstrations. The current article does not report experimental validation or structural dissipation as study results. The hybrid GPU retains CPU sparse factorization. Separate UMAT timers and native assembly profiles provide partial diagnostics rather than a complete assembly wall-time partition. Source code, meshes, numerical histories and plotting scripts support figure reconstruction.",
+  "creators": [
+    {
+      "name": "Mavani, Jaykumar",
+      "affiliation": "University of New Mexico",
+      "orcid": "0009-0009-1595-2278"
+    },
+    {
+      "name": "Pathirage, Madura",
+      "affiliation": "University of New Mexico",
+      "orcid": "0000-0002-6014-0158"
+    }
+  ],
+  "access_right": "open",
+  "license": "mit",
+  "version": "1.1.1",
+  "keywords": [
+    "fracture mechanics",
+    "continuum damage mechanics",
+    "crack-band regularization",
+    "finite element method",
+    "MATLAB",
+    "Abaqus",
+    "UMAT",
+    "hybrid GPU",
+    "SMP"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/Jaykumar9033/FRACMATH",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+type: software
+message: "For the SoftwareX article, use the current repository package and record its exact commit. Cite the v1.1.1 DOI as the numerical-core archive; the current study companions are identified separately in the manuscript."
+title: "FRACMATH: A vectorized MATLAB framework for continuum damage mechanics with crack band regularization"
+authors:
+  - family-names: Mavani
+    given-names: Jaykumar
+    email: jaymavani9033@gmail.com
+  - family-names: Pathirage
+    given-names: Madura
+    email: mpathirage@unm.edu
+repository-code: "https://github.com/Jaykumar9033/FRACMATH"
+version: "1.1.1"
+date-released: "2026-10-04"
+doi: "10.5281/zenodo.23138595"
+license: MIT
+keywords:
+  - fracture mechanics
+  - continuum damage mechanics
+  - crack-band regularization
+  - finite element method
+  - MATLAB
+  - Abaqus
+  - UMAT
+abstract: >-
+  FRACMATH is a MATLAB framework for finite element simulation of fracture in
+  quasibrittle materials using scalar isotropic continuum damage mechanics,
+  modified von Mises equivalent strain, exponential softening, and
+  direction-dependent Oliver crack-band regularization.
+  The SoftwareX study includes a hybrid 2D GPU backend with CPU sparse
+  factorization, CPU/SMP size and mesh comparisons, and three timing observations for each computing configuration, and a
+  three-mesh 3D pure-tension numerical mesh-consistency check.
+  Mixed-mode and torsion examples are qualitative demonstrations.

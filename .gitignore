@@ -1,0 +1,60 @@
+﻿# Operating system and editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+
+# MATLAB temporary files
+*.asv
+*.m~
+
+# LaTeX build products
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+
+# Abaqus scratch and lock files
+*.lck
+*.simdir/
+abaqus.rpy*
+
+# Keep scientific outputs in git unless intentionally removed.
+# Large Abaqus *.odb files are tracked through Git LFS via .gitattributes.
+*.spl
+
+# Preserve completed study logs as reproducibility evidence.
+!softwarex/reproducibility/mesh_study/**/run.log
+!softwarex/reproducibility/mesh_study/**/abaqus.log
+!softwarex/reproducibility/mesh_study/**/build.log
+!softwarex/reproducibility/mesh_study/material_tests/*_test.log
+!softwarex/reproducibility/mesh_study/**/Gregoire_3PB.log
+
+!softwarex/reproducibility/mesh_study/**/extract.log
+!softwarex/reproducibility/nooru_25mm_coarse/**/*.log
+!softwarex/reproducibility/nooru_25mm_coarse/*.log
+
+# Submission paperwork is maintained outside the software repository.
+/softwarex/manuscript.tex
+/softwarex/manuscript.pdf
+/softwarex/Highlights.txt
+/softwarex/cover_letter.txt
+/softwarex/author_confirmation.txt
+/softwarex/SUBMISSION_CHECKLIST.md
+/softwarex/submission_checks.json
+/softwarex/code_figure_audit.json

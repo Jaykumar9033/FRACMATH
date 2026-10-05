@@ -1,0 +1,24 @@
+{
+  "matlab": {
+    "wall_s": 785.7,
+    "steps": 10000,
+    "component_s": {
+      "assembly": 174.91,
+      "factorization": 519.54,
+      "damage": 17.95,
+      "solve": 71.52
+    },
+    "unattributed_s": 1.78
+  },
+  "abaqus": {
+    "wall_s": 832.0,
+    "accepted_increments": 1136,
+    "cutbacks": 1,
+    "solver_passes": 4817,
+    "factorizations": 4799,
+    "solver_time_entries": 4817,
+    "summed_solver_elapsed_s": 100.154,
+    "remaining_wall_s": 731.846
+  },
+  "interpretation": "Remaining Abaqus wall time combines UMAT, assembly, convergence, output, and overhead; the .msg file does not isolate these components. MATLAB and Abaqus use different increment histories, so wall times are not a speed ranking."
+}

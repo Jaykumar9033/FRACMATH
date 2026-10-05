@@ -1,0 +1,35 @@
+{
+  "scope": "Serial actual-UMAT elapsed-call timer; separate instrumented job.",
+  "response_arrays_exactly_equal": true,
+  "response_rows": 2001,
+  "mesh_sha256": {
+    "nodes.txt": "2bbf84826371618fb707c7d9cbb396d38853be046f315c03bcc60d758a214a47",
+    "elements.txt": "b738499b7d081ef2816ecc2393f46842e9e4b117b710218ef243f687ee2f476e",
+    "top_nodes.txt": "55ceb15690290a82458cba28191e162be4b826e87db438c0b4bd6d7a6bd6ea42",
+    "left_nodes.txt": "d91a915db080736443c7b2fa55b70a31d2e4cddb9182844bb91e04897b9d4598",
+    "right_nodes.txt": "df4e26a04a444901b95afef44e4a96cfae34690fff2ad2c66389c70079cdff2b",
+    "cmod1.txt": "5b677464f4941a4c274964d723bf47e3cd7cdcb5d53379a3b7176f0c456cf9a0",
+    "cmod2.txt": "8ce88a8842c1584e3d6871e84e166e3b513c3ce2a9da6166760c7af1645dea29"
+  },
+  "measurements": {
+    "calls": 18579456.0,
+    "clock_rate": 1000000.0,
+    "umat_elapsed_s": 24.934,
+    "empty_pair_mean_s": 8e-08
+  },
+  "diagnostics": {
+    "accepted_increments": 2000,
+    "solver_passes": 3184,
+    "factorizations": 3105,
+    "cutbacks": 0,
+    "solver_elapsed_s": 15.438,
+    "analysis_wall_s": 184.0
+  },
+  "empty_clock_pair_projection_s": 1.48635648,
+  "limitations": [
+    "Elapsed-call sum includes clock overhead and possible scheduling.",
+    "Empty-pair projection is a diagnostic, not a subtraction or exact overhead correction.",
+    "Measures UMAT calls only; excludes other Abaqus material routines and assembly.",
+    "Single CPU only; shared counters are not valid for SMP."
+  ]
+}

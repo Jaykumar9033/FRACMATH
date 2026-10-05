@@ -1,0 +1,30 @@
+{
+  "geometry_mm": [
+    200,
+    200,
+    50
+  ],
+  "notch_depth_mm": 20,
+  "notch_width_mm": 5,
+  "initial_intervals": 900,
+  "final_top_displacement_mm": 0.5,
+  "shear_tension_ratio": 0.6,
+  "material": {
+    "E_MPa": 29000,
+    "nu": 0.2,
+    "ft_MPa": 3,
+    "GF_N_per_mm": 0.11,
+    "k": 10
+  },
+  "equilibrium_tolerance": 1e-06,
+  "mesh_sha256": {
+    "Job-1_nodes.txt": "5f36d9213c40f2e4af7a9eab8ca993e0b981567ca30d375688adf25af53002e5",
+    "Job-1_elements.txt": "b4764c9c17e861b53ca0a31dd661d5b9ae134b060fa70c8ae69ff32c56d38f62",
+    "Job-1_top_nodes.txt": "033e83d39256422fa22458138df61ece834a291e1a2fe0fadb1a8b04cf91e90a",
+    "Job-1_bottom_nodes.txt": "2f6c8aa2144cdaaea68cf911f2249a5e41b53605c9c9da06aa1b04be06063832",
+    "Job-1_left_nodes.txt": "13028df51902dcd077e59a3122f07f9592a1e996dc81beaa487a9a7fde3dc0fd",
+    "Job-1_right_nodes.txt": "ed39f8715c90410bb28f93be00e4f56bd724b3e021cedff7567b9021d34b398a"
+  },
+  "generated_solver_sha256": "23ab8d9d0ec38d364e1124e5a679f497950d34afa18e5b7c57fccaf74fcc299d",
+  "scope": "Proportional illustrative controls, not experimental 4a/4c validation."
+}

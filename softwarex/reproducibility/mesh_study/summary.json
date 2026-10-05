@@ -1,0 +1,698 @@
+{
+  "common_cmod_mm": 0.1,
+  "main_steps": 2000,
+  "meshes": [
+    {
+      "mesh_scale": 1.0,
+      "elements": 14313,
+      "nodes": 7343,
+      "dofs": 14686,
+      "global_seed_mm": 6.25,
+      "notch_seed_mm": 1.25,
+      "max_displacement_mm": -0.1,
+      "max_increment": 0.0005,
+      "study_boundary_conditions": true,
+      "boundary_nodes": {
+        "Support_Left": [
+          [
+            14,
+            50.0,
+            0.0
+          ]
+        ],
+        "Support_Right": [
+          [
+            2,
+            300.0,
+            0.0
+          ]
+        ],
+        "Load_Nodes": [
+          [
+            7,
+            178.125,
+            100.0
+          ],
+          [
+            10,
+            171.875,
+            100.0
+          ],
+          [
+            809,
+            176.875,
+            100.0
+          ],
+          [
+            810,
+            175.625,
+            100.0
+          ],
+          [
+            811,
+            174.375,
+            100.0
+          ],
+          [
+            812,
+            173.125,
+            100.0
+          ]
+        ],
+        "CMOD1": [
+          [
+            17,
+            173.75,
+            0.0
+          ]
+        ],
+        "CMOD2": [
+          [
+            20,
+            176.25,
+            0.0
+          ]
+        ]
+      },
+      "mesh": "coarse"
+    },
+    {
+      "mesh_scale": 0.75,
+      "elements": 25042,
+      "nodes": 12767,
+      "dofs": 25534,
+      "global_seed_mm": 4.6875,
+      "notch_seed_mm": 0.9375,
+      "max_displacement_mm": -0.1,
+      "max_increment": 0.0005,
+      "study_boundary_conditions": true,
+      "boundary_nodes": {
+        "Support_Left": [
+          [
+            14,
+            50.0,
+            0.0
+          ]
+        ],
+        "Support_Right": [
+          [
+            2,
+            300.0,
+            0.0
+          ]
+        ],
+        "Load_Nodes": [
+          [
+            7,
+            178.125,
+            100.0
+          ],
+          [
+            10,
+            171.875,
+            100.0
+          ],
+          [
+            1077,
+            177.23214721679688,
+            100.0
+          ],
+          [
+            1078,
+            176.3392791748047,
+            100.0
+          ],
+          [
+            1079,
+            175.44642639160156,
+            100.0
+          ],
+          [
+            1080,
+            174.55357360839844,
+            100.0
+          ],
+          [
+            1081,
+            173.6607208251953,
+            100.0
+          ],
+          [
+            1082,
+            172.76785278320312,
+            100.0
+          ]
+        ],
+        "CMOD1": [
+          [
+            17,
+            173.75,
+            0.0
+          ]
+        ],
+        "CMOD2": [
+          [
+            20,
+            176.25,
+            0.0
+          ]
+        ]
+      },
+      "mesh": "medium"
+    },
+    {
+      "mesh_scale": 0.5,
+      "elements": 56216,
+      "nodes": 28477,
+      "dofs": 56954,
+      "global_seed_mm": 3.125,
+      "notch_seed_mm": 0.625,
+      "max_displacement_mm": -0.1,
+      "max_increment": 0.0005,
+      "study_boundary_conditions": true,
+      "boundary_nodes": {
+        "Support_Left": [
+          [
+            14,
+            50.0,
+            0.0
+          ]
+        ],
+        "Support_Right": [
+          [
+            2,
+            300.0,
+            0.0
+          ]
+        ],
+        "Load_Nodes": [
+          [
+            7,
+            178.125,
+            100.0
+          ],
+          [
+            10,
+            171.875,
+            100.0
+          ],
+          [
+            1613,
+            177.5,
+            100.0
+          ],
+          [
+            1614,
+            176.875,
+            100.0
+          ],
+          [
+            1615,
+            176.25,
+            100.0
+          ],
+          [
+            1616,
+            175.625,
+            100.0
+          ],
+          [
+            1617,
+            175.0,
+            100.0
+          ],
+          [
+            1618,
+            174.375,
+            100.0
+          ],
+          [
+            1619,
+            173.75,
+            100.0
+          ],
+          [
+            1620,
+            173.125,
+            100.0
+          ],
+          [
+            1621,
+            172.5,
+            100.0
+          ]
+        ],
+        "CMOD1": [
+          [
+            17,
+            173.75,
+            0.0
+          ]
+        ],
+        "CMOD2": [
+          [
+            20,
+            176.25,
+            0.0
+          ]
+        ]
+      },
+      "mesh": "fine"
+    }
+  ],
+  "matlab": [
+    {
+      "mesh": "coarse",
+      "elements": 14313,
+      "dofs": 14686,
+      "steps": 2000,
+      "peak_load_N": 4193.718,
+      "peak_cmod_mm": 0.02786444,
+      "dissipation_at_common_cmod_Nmm": 140.08202640693048,
+      "external_work_at_common_cmod_Nmm": 196.95712148388748,
+      "energy_balance_error_at_common_cmod_percent": 0.42172585552331665,
+      "peak_post_damage_relative_residual": 0.006529279451,
+      "max_post_damage_relative_residual": 0.01131573407,
+      "wall_s": 150.92,
+      "factorization_s": 102.83,
+      "assembly_s": 30.83,
+      "damage_s": 3.3,
+      "solve_s": 13.3,
+      "peak_process_working_set_MB": 1138.5,
+      "peak_high_damage_elements": 35,
+      "peak_high_damage_area_mm2": 22.8882770028722,
+      "peak_high_damage_area_in_refined_zone_fraction": 1.0,
+      "peak_high_damage_centroid_y_min_mm": 20.333208719889324,
+      "peak_high_damage_centroid_y_max_mm": 37.58197275797526,
+      "mesh_minimum_triangle_angle_deg": 11.309932474020227,
+      "peak_high_damage_minimum_triangle_angle_deg": 44.180433297915826,
+      "regularization": "oliver"
+    },
+    {
+      "mesh": "coarse",
+      "elements": 14313,
+      "dofs": 14686,
+      "steps": 2000,
+      "peak_load_N": 4025.078,
+      "peak_cmod_mm": 0.02528395,
+      "dissipation_at_common_cmod_Nmm": 132.12769118940076,
+      "external_work_at_common_cmod_Nmm": 174.51072058705265,
+      "energy_balance_error_at_common_cmod_percent": 0.5059964982806865,
+      "peak_post_damage_relative_residual": 0.007090862946,
+      "max_post_damage_relative_residual": 0.01134302486,
+      "wall_s": 127.1,
+      "factorization_s": 86.87,
+      "assembly_s": 25.09,
+      "damage_s": 2.81,
+      "solve_s": 11.73,
+      "peak_process_working_set_MB": 1142.0,
+      "peak_high_damage_elements": 32,
+      "peak_high_damage_area_mm2": 20.773872893623775,
+      "peak_high_damage_area_in_refined_zone_fraction": 1.0,
+      "peak_high_damage_centroid_y_min_mm": 20.333208719889324,
+      "peak_high_damage_centroid_y_max_mm": 36.85693613688151,
+      "mesh_minimum_triangle_angle_deg": 11.309932474020227,
+      "peak_high_damage_minimum_triangle_angle_deg": 44.180433297915826,
+      "regularization": "fixed"
+    },
+    {
+      "mesh": "medium",
+      "elements": 25042,
+      "dofs": 25534,
+      "steps": 2000,
+      "peak_load_N": 4205.029,
+      "peak_cmod_mm": 0.02697779,
+      "dissipation_at_common_cmod_Nmm": 140.93428797555646,
+      "external_work_at_common_cmod_Nmm": 196.4609652438278,
+      "energy_balance_error_at_common_cmod_percent": 0.46339370752729103,
+      "peak_post_damage_relative_residual": 0.006717572744,
+      "max_post_damage_relative_residual": 0.01574648962,
+      "wall_s": 233.52,
+      "factorization_s": 157.47,
+      "assembly_s": 45.16,
+      "damage_s": 5.81,
+      "solve_s": 24.21,
+      "peak_process_working_set_MB": 1206.8,
+      "peak_high_damage_elements": 43,
+      "peak_high_damage_area_mm2": 16.44862307125004,
+      "peak_high_damage_area_in_refined_zone_fraction": 1.0,
+      "peak_high_damage_centroid_y_min_mm": 20.300779342651367,
+      "peak_high_damage_centroid_y_max_mm": 36.857767740885414,
+      "mesh_minimum_triangle_angle_deg": 11.103753305138538,
+      "peak_high_damage_minimum_triangle_angle_deg": 49.07546190623594,
+      "regularization": "oliver"
+    },
+    {
+      "mesh": "medium",
+      "elements": 25042,
+      "dofs": 25534,
+      "steps": 2000,
+      "peak_load_N": 3808.404,
+      "peak_cmod_mm": 0.0211174,
+      "dissipation_at_common_cmod_Nmm": 117.2497584359546,
+      "external_work_at_common_cmod_Nmm": 143.35110143255318,
+      "energy_balance_error_at_common_cmod_percent": 0.7383981994686916,
+      "peak_post_damage_relative_residual": 0.009394524921,
+      "max_post_damage_relative_residual": 0.01583889069,
+      "wall_s": 230.38,
+      "factorization_s": 155.28,
+      "assembly_s": 44.42,
+      "damage_s": 5.85,
+      "solve_s": 23.96,
+      "peak_process_working_set_MB": 1209.3,
+      "peak_high_damage_elements": 37,
+      "peak_high_damage_area_mm2": 14.239143497456098,
+      "peak_high_damage_area_in_refined_zone_fraction": 1.0,
+      "peak_high_damage_centroid_y_min_mm": 20.300779342651367,
+      "peak_high_damage_centroid_y_max_mm": 34.415139516194664,
+      "mesh_minimum_triangle_angle_deg": 11.103753305138538,
+      "peak_high_damage_minimum_triangle_angle_deg": 49.07546190623594,
+      "regularization": "fixed"
+    },
+    {
+      "mesh": "fine",
+      "elements": 56216,
+      "dofs": 56954,
+      "steps": 2000,
+      "peak_load_N": 4458.989,
+      "peak_cmod_mm": 0.03081369,
+      "dissipation_at_common_cmod_Nmm": 149.94159352808757,
+      "external_work_at_common_cmod_Nmm": 217.32469349775002,
+      "energy_balance_error_at_common_cmod_percent": 0.4526670438158732,
+      "peak_post_damage_relative_residual": 0.005154266954,
+      "max_post_damage_relative_residual": 0.01360125886,
+      "wall_s": 621.04,
+      "factorization_s": 432.05,
+      "assembly_s": 104.11,
+      "damage_s": 13.53,
+      "solve_s": 69.03,
+      "peak_process_working_set_MB": 1442.4,
+      "peak_high_damage_elements": 152,
+      "peak_high_damage_area_mm2": 29.815207988998736,
+      "peak_high_damage_area_in_refined_zone_fraction": 1.0,
+      "peak_high_damage_centroid_y_min_mm": 20.17746353149414,
+      "peak_high_damage_centroid_y_max_mm": 37.16630299886068,
+      "mesh_minimum_triangle_angle_deg": 11.309932474020227,
+      "peak_high_damage_minimum_triangle_angle_deg": 37.49142909162878,
+      "regularization": "oliver"
+    },
+    {
+      "mesh": "fine",
+      "elements": 56216,
+      "dofs": 56954,
+      "steps": 2000,
+      "peak_load_N": 3763.047,
+      "peak_cmod_mm": 0.0194147,
+      "dissipation_at_common_cmod_Nmm": 110.30079657449866,
+      "external_work_at_common_cmod_Nmm": 130.9784990314467,
+      "energy_balance_error_at_common_cmod_percent": 0.9966934148690336,
+      "peak_post_damage_relative_residual": 0.009167563396,
+      "max_post_damage_relative_residual": 0.02231256572,
+      "wall_s": 599.65,
+      "factorization_s": 416.95,
+      "assembly_s": 100.69,
+      "damage_s": 13.24,
+      "solve_s": 66.54,
+      "peak_process_working_set_MB": 1436.7,
+      "peak_high_damage_elements": 60,
+      "peak_high_damage_area_mm2": 11.399299181255628,
+      "peak_high_damage_area_in_refined_zone_fraction": 1.0,
+      "peak_high_damage_centroid_y_min_mm": 20.17746353149414,
+      "peak_high_damage_centroid_y_max_mm": 31.293089548746746,
+      "mesh_minimum_triangle_angle_deg": 11.309932474020227,
+      "peak_high_damage_minimum_triangle_angle_deg": 37.49142909162878,
+      "regularization": "fixed"
+    }
+  ],
+  "abaqus": [
+    {
+      "wall_s": 890.0,
+      "accepted_increments": 2008,
+      "alternate_force_tolerance_acceptances": 4,
+      "cutbacks": 2,
+      "solver_passes": 5223,
+      "factorizations": 5152,
+      "solver_time_entries": 5223,
+      "summed_solver_elapsed_s": 95.802,
+      "remaining_wall_s": 794.198,
+      "mesh": "coarse",
+      "dofs": 14686,
+      "elements": 14313,
+      "analysis_user_cpu_s": 513.0,
+      "analysis_system_cpu_s": 18.0,
+      "analysis_total_cpu_s": 531.0,
+      "cpu_timer_scope": "Rounded Abaqus analysis-stage CPU totals from final .dat JOB TIME SUMMARY; not material or assembly timers.",
+      "gradient_rows_loaded": 14313,
+      "response_rows": 2009,
+      "peak_load_N": 4116.699,
+      "peak_cmod_mm": 0.02655081,
+      "matlab_peak_load_difference_percent": 1.8708921881342366,
+      "sampled_standard_working_set_MB": 280.6015625
+    },
+    {
+      "wall_s": 1794.0,
+      "accepted_increments": 2000,
+      "alternate_force_tolerance_acceptances": 3,
+      "cutbacks": 0,
+      "solver_passes": 6225,
+      "factorizations": 6153,
+      "solver_time_entries": 6225,
+      "summed_solver_elapsed_s": 208.376,
+      "remaining_wall_s": 1585.624,
+      "mesh": "medium",
+      "dofs": 25534,
+      "elements": 25042,
+      "analysis_user_cpu_s": 1070.0,
+      "analysis_system_cpu_s": 25.0,
+      "analysis_total_cpu_s": 1100.0,
+      "cpu_timer_scope": "Rounded Abaqus analysis-stage CPU totals from final .dat JOB TIME SUMMARY; not material or assembly timers.",
+      "gradient_rows_loaded": 25042,
+      "response_rows": 2001,
+      "peak_load_N": 4087.386,
+      "peak_cmod_mm": 0.02599142,
+      "matlab_peak_load_difference_percent": 2.878196480586871,
+      "sampled_standard_working_set_MB": 310.140625
+    },
+    {
+      "wall_s": 4585.0,
+      "accepted_increments": 2000,
+      "alternate_force_tolerance_acceptances": 5,
+      "cutbacks": 0,
+      "solver_passes": 7566,
+      "factorizations": 7502,
+      "solver_time_entries": 7566,
+      "summed_solver_elapsed_s": 605.273,
+      "remaining_wall_s": 3979.727,
+      "mesh": "fine",
+      "dofs": 56954,
+      "elements": 56216,
+      "analysis_user_cpu_s": 2510.0,
+      "analysis_system_cpu_s": 41.0,
+      "analysis_total_cpu_s": 2550.0,
+      "cpu_timer_scope": "Rounded Abaqus analysis-stage CPU totals from final .dat JOB TIME SUMMARY; not material or assembly timers.",
+      "gradient_rows_loaded": 56216,
+      "response_rows": 2001,
+      "peak_load_N": 4338.503,
+      "peak_cmod_mm": 0.02926192,
+      "matlab_peak_load_difference_percent": 2.7771330341364266,
+      "sampled_standard_working_set_MB": 381.33203125
+    }
+  ],
+  "increment_checks": [
+    {
+      "mesh": "coarse",
+      "elements": 14313,
+      "dofs": 14686,
+      "steps": 4000,
+      "peak_load_N": 3986.369,
+      "peak_cmod_mm": 0.02454047,
+      "dissipation_at_common_cmod_Nmm": 130.45117005075568,
+      "external_work_at_common_cmod_Nmm": 171.72865792681776,
+      "energy_balance_error_at_common_cmod_percent": 0.25031832268599535,
+      "peak_post_damage_relative_residual": 0.003978452673,
+      "max_post_damage_relative_residual": 0.006011155711,
+      "wall_s": 261.05,
+      "factorization_s": 178.64,
+      "assembly_s": 51.2,
+      "damage_s": 5.75,
+      "solve_s": 24.3,
+      "peak_process_working_set_MB": 1083.7,
+      "peak_high_damage_elements": 29,
+      "peak_high_damage_area_mm2": 19.105443641456077,
+      "peak_high_damage_area_in_refined_zone_fraction": 1.0,
+      "peak_high_damage_centroid_y_min_mm": 20.333208719889324,
+      "peak_high_damage_centroid_y_max_mm": 36.85693613688151,
+      "mesh_minimum_triangle_angle_deg": 11.309932474020227,
+      "peak_high_damage_minimum_triangle_angle_deg": 44.180433297915826,
+      "regularization": "fixed",
+      "peak_change_percent": -0.9616956491277892,
+      "dissipation_change_percent": -1.2688643262840695
+    },
+    {
+      "mesh": "coarse",
+      "elements": 14313,
+      "dofs": 14686,
+      "steps": 4000,
+      "peak_load_N": 4156.569,
+      "peak_cmod_mm": 0.02707504,
+      "dissipation_at_common_cmod_Nmm": 138.68992499113313,
+      "external_work_at_common_cmod_Nmm": 194.24117450408676,
+      "energy_balance_error_at_common_cmod_percent": 0.2093715226074207,
+      "peak_post_damage_relative_residual": 0.003510040477,
+      "max_post_damage_relative_residual": 0.005995771612,
+      "wall_s": 256.73,
+      "factorization_s": 175.99,
+      "assembly_s": 50.4,
+      "damage_s": 5.6,
+      "solve_s": 23.59,
+      "peak_process_working_set_MB": 1141.6,
+      "peak_high_damage_elements": 34,
+      "peak_high_damage_area_mm2": 22.306794549775077,
+      "peak_high_damage_area_in_refined_zone_fraction": 1.0,
+      "peak_high_damage_centroid_y_min_mm": 20.333208719889324,
+      "peak_high_damage_centroid_y_max_mm": 38.255471547444664,
+      "mesh_minimum_triangle_angle_deg": 11.309932474020227,
+      "peak_high_damage_minimum_triangle_angle_deg": 44.180433297915826,
+      "regularization": "oliver",
+      "peak_change_percent": -0.8858249410189105,
+      "dissipation_change_percent": -0.9937758979538024
+    },
+    {
+      "mesh": "medium",
+      "elements": 25042,
+      "dofs": 25534,
+      "steps": 4000,
+      "peak_load_N": 3738.026,
+      "peak_cmod_mm": 0.02046271,
+      "dissipation_at_common_cmod_Nmm": 114.26163185595837,
+      "external_work_at_common_cmod_Nmm": 139.28903962636957,
+      "energy_balance_error_at_common_cmod_percent": 0.35923982055634124,
+      "peak_post_damage_relative_residual": 0.005147832914,
+      "max_post_damage_relative_residual": 0.008372313278,
+      "wall_s": 457.28,
+      "factorization_s": 308.51,
+      "assembly_s": 87.91,
+      "damage_s": 11.61,
+      "solve_s": 47.54,
+      "peak_process_working_set_MB": 1209.3,
+      "peak_high_damage_elements": 36,
+      "peak_high_damage_area_mm2": 13.853289621809381,
+      "peak_high_damage_area_in_refined_zone_fraction": 1.0,
+      "peak_high_damage_centroid_y_min_mm": 20.300779342651367,
+      "peak_high_damage_centroid_y_max_mm": 34.91602579752604,
+      "mesh_minimum_triangle_angle_deg": 11.103753305138538,
+      "peak_high_damage_minimum_triangle_angle_deg": 49.07546190623594,
+      "regularization": "fixed",
+      "peak_change_percent": -1.8479657095203177,
+      "dissipation_change_percent": -2.5485140608016175
+    },
+    {
+      "mesh": "medium",
+      "elements": 25042,
+      "dofs": 25534,
+      "steps": 4000,
+      "peak_load_N": 4147.42,
+      "peak_cmod_mm": 0.02647941,
+      "dissipation_at_common_cmod_Nmm": 138.7725801960265,
+      "external_work_at_common_cmod_Nmm": 192.61565747177534,
+      "energy_balance_error_at_common_cmod_percent": 0.22814109510782019,
+      "peak_post_damage_relative_residual": 0.00363659684,
+      "max_post_damage_relative_residual": 0.008323809943,
+      "wall_s": 459.34,
+      "factorization_s": 310.24,
+      "assembly_s": 88.19,
+      "damage_s": 11.45,
+      "solve_s": 47.78,
+      "peak_process_working_set_MB": 1217.3,
+      "peak_high_damage_elements": 44,
+      "peak_high_damage_area_mm2": 16.80453467615007,
+      "peak_high_damage_area_in_refined_zone_fraction": 1.0,
+      "peak_high_damage_centroid_y_min_mm": 20.300779342651367,
+      "peak_high_damage_centroid_y_max_mm": 37.806602478027344,
+      "mesh_minimum_triangle_angle_deg": 11.103753305138538,
+      "peak_high_damage_minimum_triangle_angle_deg": 49.07546190623594,
+      "regularization": "oliver",
+      "peak_change_percent": -1.3700024423137243,
+      "dissipation_change_percent": -1.5338409201775562
+    },
+    {
+      "mesh": "fine",
+      "elements": 56216,
+      "dofs": 56954,
+      "steps": 4000,
+      "peak_load_N": 3680.287,
+      "peak_cmod_mm": 0.0193979,
+      "dissipation_at_common_cmod_Nmm": 106.17484766462282,
+      "external_work_at_common_cmod_Nmm": 125.63060949578288,
+      "energy_balance_error_at_common_cmod_percent": 0.4826364453219476,
+      "peak_post_damage_relative_residual": 0.004977737752,
+      "max_post_damage_relative_residual": 0.01116538572,
+      "wall_s": 1202.61,
+      "factorization_s": 837.09,
+      "assembly_s": 201.21,
+      "damage_s": 26.32,
+      "solve_s": 133.56,
+      "peak_process_working_set_MB": 1435.8,
+      "peak_high_damage_elements": 60,
+      "peak_high_damage_area_mm2": 11.562406278724666,
+      "peak_high_damage_area_in_refined_zone_fraction": 1.0,
+      "peak_high_damage_centroid_y_min_mm": 20.17746353149414,
+      "peak_high_damage_centroid_y_max_mm": 33.12187957763672,
+      "mesh_minimum_triangle_angle_deg": 11.309932474020227,
+      "peak_high_damage_minimum_triangle_angle_deg": 37.49142909162878,
+      "regularization": "fixed",
+      "peak_change_percent": -2.199281592815615,
+      "dissipation_change_percent": -3.7406338285953566
+    },
+    {
+      "mesh": "fine",
+      "elements": 56216,
+      "dofs": 56954,
+      "steps": 4000,
+      "peak_load_N": 4400.708,
+      "peak_cmod_mm": 0.03032729,
+      "dissipation_at_common_cmod_Nmm": 147.81432851988427,
+      "external_work_at_common_cmod_Nmm": 212.93121079175552,
+      "energy_balance_error_at_common_cmod_percent": 0.22408661109780223,
+      "peak_post_damage_relative_residual": 0.002905339626,
+      "max_post_damage_relative_residual": 0.007241835717,
+      "wall_s": 1195.26,
+      "factorization_s": 832.44,
+      "assembly_s": 199.92,
+      "damage_s": 25.95,
+      "solve_s": 132.53,
+      "peak_process_working_set_MB": 1436.7,
+      "peak_high_damage_elements": 130,
+      "peak_high_damage_area_mm2": 25.221630665502744,
+      "peak_high_damage_area_in_refined_zone_fraction": 1.0,
+      "peak_high_damage_centroid_y_min_mm": 20.17746353149414,
+      "peak_high_damage_centroid_y_max_mm": 37.87967300415039,
+      "mesh_minimum_triangle_angle_deg": 11.309932474020227,
+      "peak_high_damage_minimum_triangle_angle_deg": 40.59162083281679,
+      "regularization": "oliver",
+      "peak_change_percent": -1.307045162031123,
+      "dissipation_change_percent": -1.4187290918745696
+    }
+  ],
+  "matching_mesh_hashes_verified": true,
+  "mesh_spreads_percent": {
+    "oliver": {
+      "peak_load": 6.189371130345181,
+      "dissipation": 6.863478038233135
+    },
+    "fixed": {
+      "peak_load": 6.778692141415761,
+      "dissipation": 18.20535006955138
+    }
+  },
+  "refined_mesh_spreads_percent": {
+    "oliver": {
+      "peak_load": 5.980969085685386,
+      "dissipation": 6.436562826064901
+    },
+    "fixed": {
+      "peak_load": 8.051482715607511,
+      "dissipation": 20.755637095626007
+    }
+  }
+}
