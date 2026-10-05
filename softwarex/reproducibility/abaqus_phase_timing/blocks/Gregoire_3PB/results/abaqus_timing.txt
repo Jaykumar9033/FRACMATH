@@ -1,6 +1,0 @@
-Gregoire 3PB job: C:\Users\jmavani\Documents\Codex\2026-09-29\new-chat\work\abaqus_umat_blocks_2026_10_04\Gregoire_3PB\Gregoire_3PB.odb
-Peak load:  4074.09 N
-CMOD@peak:  0.024342 mm
-Rows:       2001
-Solver wall-clock (submit->done): 211.99 s
-Abaqus WALLCLOCK (.msg/.dat):     184.00 s (Gregoire_3PB.msg)

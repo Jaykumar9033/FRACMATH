@@ -1,1 +1,0 @@
-Exact computational source used for the completed 600-increment run. The current repository source additionally checks gauge_matrix dimensions before use; this does not change the numerical calculation.

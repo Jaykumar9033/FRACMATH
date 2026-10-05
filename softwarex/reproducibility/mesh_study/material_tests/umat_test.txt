@@ -1,9 +1,0 @@
-Microsoft (R) Incremental Linker Version 14.44.35228.0
-Copyright (C) Microsoft Corporation.  All rights reserved.
-
--out:umat_material_check.exe 
--subsystem:console 
-cdm_umat_2d_OLIVER_T3_FAST.obj 
-umat_material_check.obj 
- UMAT FAST: Oliver T3 gradN table loaded, n=           4
- UMAT mapping, width, energy, unload/reload, and rotated-strain checks passed.
