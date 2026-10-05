@@ -46,7 +46,7 @@ refer to the same labels. Use the supplied builder and archived input hashes.
   material-point caller. Multiaxial states, previous damage/history,
   zero/isotropic strain, pure shear and STRAN/DSTRAN splits are included.
 - Stress, strain history, damage, width and the documented secant matrix
-  pass absolute plus relative tolerances of 2e-10. These are local tests,
+  pass the tolerance `2e-10 + 2e-10 * abs(reference_value)`. These are local tests,
   not a proof of a consistent tangent or universal structural convergence.
 - Completed Abaqus CPU1/CPU8 studies reproduce response CSVs and iteration
   counts within the tested configurations. The separately profiled run
@@ -58,8 +58,7 @@ See `reproducibility/umat_audit/README.md` for replay and compilation commands.
 
 This routine is not a general 3D, finite-strain, thermal or cyclic concrete
 model. It does not populate the optional Abaqus energy bookkeeping outputs;
-the paper's work measures come from documented reaction/displacement
-integration, not UMAT `SSE` or `SPD`. Material constants and bandwidth must
+energy fields in the optional developer archives are not manuscript results. Material constants and bandwidth must
 permit the chosen softening calibration. A secant tangent and the declared
 constitutive assumptions must be considered when interpreting results.
 

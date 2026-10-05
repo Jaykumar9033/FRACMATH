@@ -6,7 +6,7 @@ This package contains source code, meshes, saved numerical histories and reprodu
 
 The paper follows one simple verification path:
 
-1. **Constitutive material-point check.** Prescribed strain states are sent directly to the MATLAB material update and to the Abaqus user material subroutine (UMAT). This is not a one-element structural finite-element test. The core audit contains 712 deterministic material states and checks equivalent strain, irreversible history, damage and stress consistency.
+1. **Constitutive material-point check.** Prescribed strain states are sent directly to the MATLAB material update and to the Abaqus user material subroutine (UMAT). This is not a one-element structural finite-element test. The core audit contains 712 deterministic material states and checks equivalent strain, irreversible history, damage and stress consistency using `2e-10 + 2e-10 * abs(reference_value)` as the permitted absolute difference.
 2. **2D structural cross-code benchmark.** MATLAB and Abaqus solve the same notched three-point-bending problem and are compared using load-CMOD curves and damage fields.
 3. **2D mesh/regularization study.** Three meshes are compared with the direction-dependent Oliver crack-band width and with a fixed-width control. The manuscript uses response curves and peak-load spread; it does not use dissipation as a reported study result.
 4. **3D MATLAB examples.** The Nooru-Mohamed pure-tension study is used as a numerical mesh-consistency check. The mixed-mode and torsion panels are qualitative demonstrations. No Abaqus 3D torsion solution and no experimental 3D response curve are claimed.

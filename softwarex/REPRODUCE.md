@@ -26,7 +26,7 @@ Replay the archived 712-case comparison:
 python audit_umat.py --workspace reproducibility/umat_audit --check
 ```
 
-The archive records the input states, UMAT outputs, MATLAB outputs, tolerances and maximum differences.
+The archive records the input states, UMAT outputs, MATLAB outputs and maximum differences. A checked value passes when its absolute difference is no greater than `2e-10 + 2e-10 * abs(reference_value)`.
 
 ## 3. Baseline 2D MATLAB-Abaqus benchmark
 
@@ -77,16 +77,6 @@ To rebuild and compare the generated manuscript assets in a separate workspace:
 ```text
 python verify_paper_figures.py --workspace ./figure_replay_check
 ```
-
-## 8. Submission checks
-
-Run:
-
-```text
-python check_submission.py
-```
-
-This checks the inspectable SoftwareX formatting/package requirements and also guards against reintroducing a dissipation-study claim or describing Section 2.4 as a one-element FEM test.
 
 ## Optional developer archives
 
