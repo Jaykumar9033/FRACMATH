@@ -1,0 +1,41 @@
+{
+  "cases": 10,
+  "passed": true,
+  "maximum_absolute_difference_by_column": [
+    4.440892098500626e-16,
+    2.702436463152275e-16,
+    8.881784197001252e-16,
+    2.710505431213761e-20,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    9.094947017729282e-13,
+    0.0,
+    9.094947017729282e-13,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.8189894035458565e-12
+  ],
+  "matlab_umat_state_width_comparison_passed": true,
+  "matlab_umat_maximum_absolute_difference": [
+    4.336808689942018e-19,
+    5.551115123125783e-16,
+    4.440892098500626e-16
+  ],
+  "tolerance": "absolute 2e-10 + relative 2e-10",
+  "checks": [
+    "engineering shear",
+    "plane-stress strain mapping",
+    "equivalent strain",
+    "projected width",
+    "irreversible history",
+    "stress",
+    "degraded elastic secant matrix",
+    "total strain split across STRAN/DSTRAN",
+    "eager gradient initialization"
+  ],
+  "scope": "Local CPS3 isothermal small-strain UMAT checks. Does not establish a consistent tangent or general structural convergence."
+}

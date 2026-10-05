@@ -4,7 +4,7 @@ FRACMATH implements established continuum-damage and crack-band concepts. The ar
 
 ## What is checked
 
-- **Material point:** 712 deterministic prescribed material states are evaluated by MATLAB and the Abaqus UMAT. Equivalent strain, irreversible history, damage and stress are compared with permitted absolute difference `2e-10 + 2e-10 * abs(reference_value)`. This is not a one-element structural FEM test.
+- **Material point:** Ten representative prescribed material states, one per selected case, are evaluated by MATLAB and the Abaqus UMAT. Equivalent strain, irreversible history, damage and stress are compared with permitted absolute difference `2e-10 + 2e-10 * abs(reference_value)`. This is not a one-element structural FEM test.
 - **2D structure:** MATLAB and Abaqus solve the same notched three-point-bending benchmark. Load-CMOD curves and damage fields provide the cross-code structural comparison.
 - **2D mesh sensitivity:** coarse, medium and fine meshes compare Oliver regularization with a fixed-width control. The manuscript discusses response curves, peak-load spread and increment sensitivity; dissipation is not a reported result.
 - **3D pure tension:** three MATLAB/FRACMATH TET4 meshes provide a numerical mesh-consistency and equilibrium check. No experimental response curve is used.

@@ -20,10 +20,10 @@ python analyze_beginner_entry.py --workspace reproducibility/beginner_entry_chec
 
 This is a constitutive check at a material integration point, not a one-element structural finite-element analysis. The same prescribed material states are evaluated by the MATLAB constitutive functions and the unchanged Abaqus UMAT.
 
-Replay the archived 712-case comparison:
+Replay the ten representative examples:
 
 ```text
-python audit_umat.py --workspace reproducibility/umat_audit --check
+python run_material_examples.py --workspace reproducibility/material_examples --check
 ```
 
 The archive records the input states, UMAT outputs, MATLAB outputs and maximum differences. A checked value passes when its absolute difference is no greater than `2e-10 + 2e-10 * abs(reference_value)`.

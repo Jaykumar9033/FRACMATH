@@ -17,7 +17,7 @@ SOURCE=HERE/'reproducibility/abaqus/cdm_umat_2d_OLIVER_T3_FAST.for'
 
 
 def history_cases(folder):
-    prepare(folder)
+    prepare(folder, suite="extended")
     rows=np.loadtxt(folder/'point_inputs.csv',delimiter=',').tolist()
     metadata=[]
     for element in range(1,5):

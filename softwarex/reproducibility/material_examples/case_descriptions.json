@@ -1,0 +1,152 @@
+[
+  {
+    "case": 1,
+    "name": "Zero strain",
+    "element": 2,
+    "total_strain": [
+      0,
+      0,
+      0
+    ],
+    "prior_history": [
+      0.0,
+      0.0
+    ],
+    "previous_strain_fraction": 0.0
+  },
+  {
+    "case": 2,
+    "name": "Elastic tension",
+    "element": 2,
+    "total_strain": [
+      2e-05,
+      -4e-06,
+      0.0
+    ],
+    "prior_history": [
+      0.0,
+      0.0
+    ],
+    "previous_strain_fraction": 0.0
+  },
+  {
+    "case": 3,
+    "name": "Damaging tension",
+    "element": 2,
+    "total_strain": [
+      0.0003,
+      -6e-05,
+      0.0
+    ],
+    "prior_history": [
+      0.0,
+      0.0
+    ],
+    "previous_strain_fraction": 0.0
+  },
+  {
+    "case": 4,
+    "name": "Compression",
+    "element": 2,
+    "total_strain": [
+      -0.002,
+      0.0004,
+      0.0
+    ],
+    "prior_history": [
+      0.0,
+      0.0
+    ],
+    "previous_strain_fraction": 0.0
+  },
+  {
+    "case": 5,
+    "name": "Pure engineering shear",
+    "element": 2,
+    "total_strain": [
+      0.0,
+      0.0,
+      0.001
+    ],
+    "prior_history": [
+      0.0,
+      0.0
+    ],
+    "previous_strain_fraction": 0.0
+  },
+  {
+    "case": 6,
+    "name": "Equal biaxial strain",
+    "element": 2,
+    "total_strain": [
+      0.0002,
+      0.0002,
+      0.0
+    ],
+    "prior_history": [
+      0.0,
+      0.0
+    ],
+    "previous_strain_fraction": 0.0
+  },
+  {
+    "case": 7,
+    "name": "Rotated tensile strain",
+    "element": 2,
+    "total_strain": [
+      0.00021,
+      2.9999999999999957e-05,
+      0.00031176914536239783
+    ],
+    "prior_history": [
+      0.0,
+      0.0
+    ],
+    "previous_strain_fraction": 0.0
+  },
+  {
+    "case": 8,
+    "name": "Unloading from tensile damage",
+    "element": 2,
+    "total_strain": [
+      0.0001,
+      -2e-05,
+      0.0
+    ],
+    "prior_history": [
+      0.0008000000000000001,
+      0.8849621846796689
+    ],
+    "previous_strain_fraction": 0.0
+  },
+  {
+    "case": 9,
+    "name": "Reloading beyond prior maximum",
+    "element": 2,
+    "total_strain": [
+      0.0012,
+      -0.00024,
+      0.0
+    ],
+    "prior_history": [
+      0.0008000000000000001,
+      0.8849621846796689
+    ],
+    "previous_strain_fraction": 0.0
+  },
+  {
+    "case": 10,
+    "name": "Split total-strain input",
+    "element": 2,
+    "total_strain": [
+      0.0003,
+      -6e-05,
+      0.0
+    ],
+    "prior_history": [
+      0.0,
+      0.0
+    ],
+    "previous_strain_fraction": 0.3
+  }
+]

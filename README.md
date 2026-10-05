@@ -54,7 +54,7 @@ See [UMAT_GUIDE.md](softwarex/UMAT_GUIDE.md) for state variables, the material s
 | Figure 4: 3D Nooru-Mohamed examples | `softwarex/analyze_nooru_mesh_study.py`, `softwarex/rebuild_3d_figures.py`; three-mesh pure-tension and mixed-mode archives |
 | Figure 5: MATLAB torsion demonstration | `Torsion/working/run_torsion.m`, `softwarex/rebuild_3d_figures.py`; supplied figure sources |
 | Figure 6: CPU/GPU/SMP timings | `softwarex/plot_timing_repeats.py`; `softwarex/reproducibility/timing_repeats/` |
-| Material-point verification | `softwarex/audit_umat.py`; core 712-case audit |
+| Material-point verification | `softwarex/run_material_examples.py`; ten representative examples |
 | Additional UMAT and assembly diagnostics | [Abaqus timing scope](softwarex/ABAQUS_TIMING_SCOPE.md); [phase-timing archive](softwarex/reproducibility/abaqus_phase_timing/README.md) |
 
 From the repository root:

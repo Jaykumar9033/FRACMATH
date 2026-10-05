@@ -47,7 +47,7 @@ This rebuilds eight generated assets and checks two supplied geometry illustrati
 
 [MESH_STUDY.md](softwarex/MESH_STUDY.md) describes exact paired 2D meshes and Oliver/constant-width controls. [SCALING_STUDY.md](softwarex/SCALING_STUDY.md) describes 30 configurations with three observations each. The three-mesh pure-tension archive is `softwarex/reproducibility/nooru_25mm_mesh_study/`.
 
-The core material-point audit has 712 cases. The optional `umat_precision` archive retains 824 cases and separate batch timing. Other archived energy and experimental diagnostics are retained for traceability but are not current manuscript conclusions. Do not treat material-point checks as a one-element structural test or numerical mesh agreement as physical validation.
+The paper uses ten explained material-point examples in `softwarex/reproducibility/material_examples/`, one state for each selected case. Larger developer audits and batch timings remain optional archival records. Other archived energy and experimental diagnostics are retained for traceability but are not current manuscript conclusions. Do not treat material-point checks as a one-element structural test or numerical mesh agreement as physical validation.
 
 ## Timing interpretation
 

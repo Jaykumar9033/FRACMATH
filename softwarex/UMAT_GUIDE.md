@@ -40,7 +40,7 @@ refer to the same labels. Use the supplied builder and archived input hashes.
 - The original material test checks tensile/compressive strain mapping,
   unloading/reloading and projected width, including 16
   rotated cases.
-- The manuscript-facing core audit contains 712 deterministic material states and links the actual UMAT without altering it. The separate 824-state precision archive is an optional developer extension, not a separate manuscript claim.
+- The manuscript uses ten explained material states and links the actual UMAT without altering it. The larger audits are optional developer records.
   An independent NumPy tensor eigensolve and deviatoric norm supply reference
   values. The actual MATLAB damage functions are copied verbatim into a
   material-point caller. Multiaxial states, previous damage/history,
@@ -52,7 +52,7 @@ refer to the same labels. Use the supplied builder and archived input hashes.
   counts within the tested configurations. The separately profiled run
   exactly reproduces its paired unprofiled response and mesh hashes.
 
-See `reproducibility/umat_audit/README.md` for replay and compilation commands.
+See `reproducibility/material_examples/README.md` for inputs, replay and compilation commands.
 
 ## Limits
 

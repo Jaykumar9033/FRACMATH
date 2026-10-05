@@ -45,23 +45,48 @@ def reference(row):
     return np.r_[stress, kappa, damage, width, 1., tangent.flatten(order='F')]
 
 
-def prepare(folder):
+def prepare(folder, suite="examples"):
     folder.mkdir(parents=True, exist_ok=True)
-    rng = np.random.default_rng(20261004)
     cases = []
-    for element in range(1, 5):
-        for index in range(160):
-            strain = rng.normal(0, .0008, 3)
-            old = rng.normal(0, .0002, 3)
-            history = [rng.uniform(0, .001), rng.uniform(0, .95)]
-            cases.append(np.r_[len(cases)+1, element, old, strain-old, history])
-        # Zero, nearly isotropic, shear, compression, and split-strain cases.
-        for strain in [[0,0,0], [1e-4,1e-4,0], [1e-4,1e-4,1e-19],
-                       [0,0,.001], [-.001,.0002,0], [.0003,-.00006,0]]:
-            for fraction in [0., .3, 1.]:
-                strain = np.asarray(strain)
-                cases.append(np.r_[len(cases)+1, element, fraction*strain,
-                                   (1-fraction)*strain, 0., 0.])
+    descriptions = []
+    if suite == "extended":
+        rng = np.random.default_rng(20261004)
+        cases = []
+        for element in range(1, 5):
+            for index in range(160):
+                strain = rng.normal(0, .0008, 3)
+                old = rng.normal(0, .0002, 3)
+                history = [rng.uniform(0, .001), rng.uniform(0, .95)]
+                cases.append(np.r_[len(cases)+1, element, old, strain-old, history])
+            # Zero, nearly isotropic, shear, compression, and split-strain cases.
+            for strain in [[0,0,0], [1e-4,1e-4,0], [1e-4,1e-4,1e-19],
+                           [0,0,.001], [-.001,.0002,0], [.0003,-.00006,0]]:
+                for fraction in [0., .3, 1.]:
+                    strain = np.asarray(strain)
+                    cases.append(np.r_[len(cases)+1, element, fraction*strain,
+                                       (1-fraction)*strain, 0., 0.])
+    else:
+        def add(name, strain, history=(0., 0.), split=0.):
+            strain = np.asarray(strain)
+            cases.append(np.r_[len(cases)+1, 2, split*strain, (1-split)*strain, history])
+            descriptions.append(dict(case=len(cases), name=name, element=2,
+                                     total_strain=strain.tolist(), prior_history=list(history),
+                                     previous_strain_fraction=split))
+        add("Zero strain", [0, 0, 0])
+        add("Elastic tension", [.00002, -.000004, 0])
+        add("Damaging tension", [.0003, -.00006, 0])
+        add("Compression", [-.002, .0004, 0])
+        add("Pure engineering shear", [0, 0, .001])
+        add("Equal biaxial strain", [.0002, .0002, 0])
+        angle=np.pi/6; c=np.cos(angle); t=np.sin(angle)
+        add("Rotated tensile strain", [.0003*c*c-.00006*t*t,
+                                      .0003*t*t-.00006*c*c,
+                                      2*(.0003+.00006)*c*t])
+        prior=reference(np.r_[0, 2, 0., 0., 0., .0008, -.00016, 0., 0., 0.])[3:5]
+        add("Unloading from tensile damage", [.0001, -.00002, 0], prior)
+        add("Reloading beyond prior maximum", [.0012, -.00024, 0], prior)
+        add("Split total-strain input", [.0003, -.00006, 0], split=.3)
+        (folder/'case_descriptions.json').write_text(json.dumps(descriptions, indent=2)+'\n')
     rows = np.asarray(cases)
     np.savetxt(folder/'point_inputs.csv', rows, delimiter=',', fmt='%.17g')
     table = [[i, -1/h, -1, 1/h, 0, 0, 1]
@@ -127,11 +152,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--workspace', type=Path, required=True)
     parser.add_argument('--check', action='store_true')
+    parser.add_argument('--suite', choices=['examples','extended'], default='examples')
     args = parser.parse_args()
     if args.check:
         check(args.workspace)
     else:
-        prepare(args.workspace)
+        prepare(args.workspace, args.suite)
 
 
 if __name__ == '__main__':
