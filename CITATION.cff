@@ -29,5 +29,5 @@ abstract: >-
   direction-dependent Oliver crack-band regularization.
   The SoftwareX study includes a hybrid 2D GPU backend with CPU sparse
   factorization, CPU/SMP size and mesh comparisons, and three timing observations for each computing configuration, and a
-  three-mesh 3D pure-tension comparison with published notch geometry and
-  digitized experimental data.
+  three-mesh 3D pure-tension numerical mesh-consistency check.
+  Mixed-mode and torsion examples are qualitative demonstrations.

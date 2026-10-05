@@ -6,14 +6,13 @@
 \usepackage{mathtools}
 \usepackage{enumitem}
 \usepackage{booktabs}
-\usepackage{xcolor}
-\usepackage{microtype}
-\usepackage[colorlinks=true,linkcolor=NavyBlue,urlcolor=NavyBlue,citecolor=NavyBlue]{hyperref}
 \usepackage[dvipsnames]{xcolor}
+\usepackage{microtype}
+\emergencystretch=2em
+\usepackage[colorlinks=true,linkcolor=NavyBlue,urlcolor=NavyBlue,citecolor=NavyBlue]{hyperref}
 \usepackage{titlesec}
 \usepackage{fancyhdr}
 \usepackage{tcolorbox}
-\tcbuselibrary{skins,breakable}
 
 % --- light styling ---------------------------------------------------
 \titleformat{\section}{\Large\bfseries\color{MidnightBlue}}{\thesection}{0.6em}{}
@@ -25,7 +24,7 @@
 \renewcommand{\headrulewidth}{0.3pt}
 
 \newtcolorbox{algobox}[1][]{
-  enhanced, breakable, colback=Gray!6, colframe=MidnightBlue!70,
+  colback=Gray!6, colframe=MidnightBlue!70,
   boxrule=0.6pt, arc=2pt, left=8pt, right=8pt, top=6pt, bottom=6pt, #1}
 
 % --- shorthand -------------------------------------------------------
@@ -338,6 +337,14 @@ It is positive throughout, as a softening law must be, since every factor is pos
 
 % =====================================================================
 \section{Crack band regularization and the calibration of $\varepsilon_f$}
+
+The calibration in this section describes the 2D and torsion implementations.
+The Nooru-Mohamed examples use a separate post-peak calibration,
+$\beta=f_t h/G_F$ and
+$\omega=1-(\kappa_0/\kappa)\exp[-\beta(\kappa-\kappa_0)]$ above onset.
+Here $\beta$ is the exponential coefficient and $G_F$ calibrates the post-peak tail.
+The two calibrations must be distinguished when reproducing these examples.
+
 % =====================================================================
 
 Plain softening has a famous problem. Refine the mesh and the damage localizes into one

@@ -3,8 +3,8 @@
 This folder contains the illustrative proportional-loading Nooru-Mohamed
 case used in the FRACMATH SoftwareX manuscript. Its archived response is
 diagnostic: 894 of 900 increments exceed the equilibrium tolerance. The
-separate published-geometry pure-tension experimental comparison is in
-[`softwarex/reproducibility/nooru_25mm_coarse/`](../softwarex/reproducibility/nooru_25mm_coarse/README.md).
+separate three-mesh pure-tension numerical consistency study is in
+[`softwarex/reproducibility/nooru_25mm_mesh_study/`](../softwarex/reproducibility/nooru_25mm_mesh_study/README.md).
 
 ## Folder map
 

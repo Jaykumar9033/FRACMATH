@@ -76,9 +76,9 @@ jobs. `run_mesh_study.py` runs licensed analyses sequentially;
 all elements, serving as a control for element-size compensation.
 The regularized default remains `oliver`.
 
-The energy history records trapezoidal external work, stored elastic energy,
+Optional developer energy histories record trapezoidal external work, stored elastic energy,
 positive end-of-step damage dissipation, and their balance discrepancy.
-Comparison at CMOD 0.10 mm measures partial structural dissipation. It is not
+These energy quantities are not current manuscript results. An archived comparison at CMOD 0.10 mm measures partial structural dissipation. It is not
 complete fracture energy. Refinement checks and post-damage residuals must be
 considered when interpreting the mesh comparison. Hardware timings are evaluated separately in the size/mesh study.
 
@@ -89,3 +89,7 @@ considered when interpreting the mesh comparison. Hardware timings are evaluated
 `FRACMATH_THREADS=8` limits supported MATLAB numerical libraries to eight computational threads; it does not create independent `parfor` simulations. Abaqus uses `ABQ_CPUS=8` in SMP mode, with UEXTERNALDB loading the shared gradient table before material calls. The secant tangent may need many iterations during localization. The two finest large-specimen meshes use the same extended iteration limits for both thread settings, retaining default convergence tolerances.
 
 [SCALING_STUDY.md](../softwarex/SCALING_STUDY.md) specifies matched meshes, source hashes, hardware-response checks, cost scopes, and the complete size/mesh protocol.
+
+## Softening calibration in the 3D examples
+
+The 2D and torsion solvers use `eps_f = kappa0/2 + GF/(h*ft)` and the exponential denominator `eps_f - kappa0`. The Nooru-Mohamed solver instead uses `beta = ft*h/GF` with `omega = 1 - (kappa0/kappa)*exp(-beta*(kappa-kappa0))` above onset. Here `GF` calibrates the post-peak tail. These calibrations are stated separately in the manuscript and must not be interchanged when reproducing the examples.

@@ -41,7 +41,7 @@ MATLAB uses 2,000 fixed increments; Abaqus uses maximum increments of 1/2,000 wi
 
 Solver wall time, component scopes, process-launch time, response peaks, nominal bending stress $3.75P/(bD)$, residuals and memory records accompany the results. MATLAB loop time excludes precomputation and output writing; Abaqus analysis wall time includes its analysis/output work. Launch-to-exit costs additionally include initialization and (for Abaqus) model construction. Within-program speed ratios are conditional on the response checks. Cross-program timings are descriptive because the equilibrium algorithms differ. Three sequential observations per case describe the observed timing range, without establishing population confidence intervals. Abaqus material and stiffness-assembly timers are not inferred from its unallocated remainder.
 
-The completed experimental comparison and original 10,000-step Figure 1 are separate studies. This hardware comparison does not change their histories or step counts.
+The 3D numerical mesh-consistency study and the 10,000-step Figure 1 benchmark are separate studies. The hardware comparison uses its own stated meshes and increment controls.
 
 MATLAB working set is the process-reported peak; Abaqus memory is the maximum sampled `standard.exe` working set at one-second intervals, which is a lower bound on its true peak.
 
