@@ -21,4 +21,4 @@ softwarex/reproducibility/abaqus_phase_timing/** -text
 softwarex/reproducibility/umat_precision/** -text
 
 # Preserve the ten published material examples and their verification hashes.
-softwarex/reproducibility/material_examples/** -text
+softwarex/reproducibility/material_examples/** -text whitespace=cr-at-eol
