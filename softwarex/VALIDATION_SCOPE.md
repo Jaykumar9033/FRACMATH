@@ -1,13 +1,18 @@
-# Validation scope
+# Validation and verification scope
 
-FRACMATH uses established damage and crack-band models. Its software contribution is a readable implementation with input files, numerical outputs and reproduction scripts.
+FRACMATH implements established continuum-damage and crack-band concepts. The article validates the **software implementation and numerical consistency**, not a new constitutive theory.
 
-- The 2D study includes two specimen sizes, three meshes and five computing configurations, with 90 timing observations. MATLAB assembly, factorization, damage and solve costs are measured separately. Abaqus sparse-solver costs and iteration counts are taken from job logs. A separate actual-UMAT timer records 2.996 s of raw call elapsed time with a 1.672 s clock-pair diagnostic. Native profiling identifies 2.873 s of assembly self estimates; full assembly wall time remains unavailable. These scopes are separate from the benchmark timing.
-- Material-point checks compare MATLAB and the actual UMAT. The UMAT returns a degraded elastic secant matrix, so its equilibrium iterations differ from the MATLAB sequential scheme.
-- The controlled 2D study compares Oliver and fixed-law load curves and partial dissipation on three identical exported meshes. Smaller-increment checks and energy/residual histories qualify the results.
-- Figure 2 displays peak and final saved states with the same damage cutoff of 0.99. The final band reaches y=94.8 mm; the stricter 0.999999 cutoff reaches y=55.4 mm. Each panel states its cutoff and element count. These are computed damage bands, not measured open-crack lengths. No smoothing is used.
-- The three-mesh 3D pure-tension plot shows numerical curves for the published specimen geometry. Digitized measurements are retained in the archive and textual comparison, without experimental points in the figure. The mixed-mode and torsion images are qualitative examples.
+## What is checked
 
-Figure 1 contains the 10,000-step MATLAB curve. Figures 3 and 4 use large shared colorbars. Figure 5 compares completed response curves. Timing is reported in tables.
+- **Material point:** 712 deterministic prescribed material states are evaluated by MATLAB and the Abaqus UMAT. Equivalent strain, irreversible history, damage and stress are compared within the stored numerical tolerance. This is not a one-element structural FEM test.
+- **2D structure:** MATLAB and Abaqus solve the same notched three-point-bending benchmark. Load-CMOD curves and damage fields provide the cross-code structural comparison.
+- **2D mesh sensitivity:** coarse, medium and fine meshes compare Oliver regularization with a fixed-width control. The manuscript discusses response curves, peak-load spread and increment sensitivity; dissipation is not a reported result.
+- **3D pure tension:** three MATLAB/FRACMATH TET4 meshes provide a numerical mesh-consistency and equilibrium check. No experimental response curve is used.
+- **3D mixed mode and torsion:** these panels are qualitative demonstrations. The torsion result shown in the manuscript is MATLAB/FRACMATH only; no Abaqus torsion solution is reported.
+- **Performance:** timing records describe the tested hardware/software configurations only and are not a universal speed claim.
 
-The [UMAT precision archive](reproducibility/umat_precision/README.md) supplies 824 local cases, ten external batches and an independently executed fresh-process replay. These measurements do not provide full Abaqus assembly wall time.
+## What is not claimed
+
+The package does not claim experimental validation of the 3D examples, universal mesh independence, a consistent damage tangent for the UMAT, or universal MATLAB/Abaqus/GPU speed superiority.
+
+Separate UMAT instrumentation and native profiling supply partial timing diagnostics. Clock overhead, unidentified work and differing timer boundaries prevent complete material/assembly wall-time attribution. See [ABAQUS_TIMING_SCOPE.md](ABAQUS_TIMING_SCOPE.md).

@@ -43,6 +43,7 @@ def main():
         'nooru_damage_evolution_shared_bar.png': 'nooru_damage_evolution_shared_bar.png',
         'torsion_damage_evolution_shared_bar.png': 'torsion_damage_evolution_shared_bar.png',
         'mesh_study_overview.pdf': 'mesh_study_overview.pdf',
+        'scaling_timings.pdf': 'scaling_timings.pdf',
     }
     checks = []
     for name, regenerated in generated.items():
@@ -67,7 +68,7 @@ def main():
                            hashlib.sha256(original.read_bytes()).digest()==hashlib.sha256(source.read_bytes()).digest(),
                            scope='Supplied geometry illustration; not a numerical response plot.'))
     passed = all(row.get('identical_pixels', row.get('identical_archived_source_bytes')) for row in checks)
-    report = dict(passed=passed, assets=checks, manuscript_figures=5,
+    report = dict(passed=passed, assets=checks, manuscript_figures=6,
                   scope='Archive-backed figure reproduction. Numerical solver verification and licensed full reruns are separate checks.')
     (folder/'summary.json').write_text(json.dumps(report, indent=2)+'\n')
     print(json.dumps(report, indent=2))

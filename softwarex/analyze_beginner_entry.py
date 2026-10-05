@@ -36,8 +36,21 @@ def main():
                 maximum_absolute_difference=float(np.max(np.abs(a-b))))
     original = (package/"start_here.m").read_text(encoding="utf-8")
     tested = (folder/"start_here.m").read_text(encoding="utf-8")
-    if tested != original.replace("show_figures = true;", "show_figures = false;"):
-        raise ValueError("Tested entry differs beyond the documented graphics option")
+
+    def executable_lines(text):
+        rows = []
+        for line in text.splitlines():
+            if line.lstrip().startswith("%"):
+                continue
+            line = line.strip()
+            if line:
+                rows.append(" ".join(line.split()))
+        return rows
+
+    expected = executable_lines(original.replace("show_figures = true;", "show_figures = false;"))
+    observed = executable_lines(tested)
+    if observed != expected:
+        raise ValueError("Tested entry differs beyond comments, whitespace and the documented graphics option")
     report = dict(steps=10000, comparisons=comparisons,
                   all_numerical_arrays_exactly_equal=all(row["exactly_equal"] for row in comparisons.values()),
                   graphics="Disabled only for the headless check; numerical settings unchanged.",

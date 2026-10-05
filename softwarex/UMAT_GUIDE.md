@@ -38,9 +38,9 @@ refer to the same labels. Use the supplied builder and archived input hashes.
 ## Executed checks
 
 - The original material test checks tensile/compressive strain mapping,
-  unloading/reloading, projected width and fracture energy, including 16
+  unloading/reloading and projected width, including 16
   rotated cases.
-- The additional 712-case audit links the actual UMAT without altering it.
+- The manuscript-facing core audit contains 712 deterministic material states and links the actual UMAT without altering it. The separate 824-state precision archive is an optional developer extension, not a separate manuscript claim.
   An independent NumPy tensor eigensolve and deviatoric norm supply reference
   values. The actual MATLAB damage functions are copied verbatim into a
   material-point caller. Multiaxial states, previous damage/history,
@@ -75,4 +75,4 @@ use the array-size table while reading the element operations.
 
 ## Batch timing and history checks
 
-The [material-point timing archive](reproducibility/umat_precision/README.md) contains ten high-resolution batches across two processes without per-call clocks and 824 independent UMAT/MATLAB cases, including 112 unloading/reloading and rotating-strain states. Batch elapsed time includes driver work; it is not an Abaqus job-phase measurement.
+The optional [material-point precision archive](reproducibility/umat_precision/README.md) contains additional states and timing batches for developer auditing. It is not needed for the manuscript verification path, and its batch elapsed time is not an Abaqus job-phase measurement.

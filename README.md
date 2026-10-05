@@ -38,36 +38,35 @@ See [UMAT_GUIDE.md](softwarex/UMAT_GUIDE.md) for state variables, the material s
 
 ## Reproduce the paper results
 
-[REPRODUCIBILITY.md](REPRODUCIBILITY.md) gives simulation commands. [softwarex/REPRODUCE.md](softwarex/REPRODUCE.md) gives archive and figure instructions. Archived-data plotting can be performed without MATLAB or Abaqus licenses.
+[REPRODUCIBILITY.md](REPRODUCIBILITY.md) provides run commands. [softwarex/REPRODUCE.md](softwarex/REPRODUCE.md) describes the current paper's studies and archive replay. Figure reconstruction does not require MATLAB or Abaqus licenses.
 
-| Paper result | Data and instructions |
+| Paper result | Code and data |
 | --- | --- |
-| Figure 1: 2D response and geometry | `softwarex/reproducibility/results_10000/`, `softwarex/reproducibility/abaqus/`; `plot_verified_figures.py` |
-| Figure 2: peak/final damage bands with mesh | Same archived 2D states; `plot_verified_figures.py` |
-| Figure 3: Nooru numerical response and damage | `softwarex/reproducibility/nooru_25mm_mesh_study/`, `softwarex/figure_sources/`; `analyze_nooru_mesh_study.py`, `rebuild_3d_figures.py` |
-| Figure 4: torsion damage example | `softwarex/figure_sources/`; `rebuild_3d_figures.py` |
-| Figure 5: structural mesh sensitivity | `softwarex/reproducibility/mesh_study/`; `analyze_mesh_study.py` |
-| MATLAB and Abaqus timing tables | `compare_solver_diagnostics.py`; [timing scope](softwarex/ABAQUS_TIMING_SCOPE.md) |
-| CPU and hybrid GPU comparisons | [SCALING_STUDY.md](softwarex/SCALING_STUDY.md); `softwarex/reproducibility/timing_repeats/` |
-| Material and UMAT verification | `audit_umat.py`; [824-case precision archive](softwarex/reproducibility/umat_precision/README.md) |
-| Additional UMAT and assembly measurements | [Abaqus phase-timing archive](softwarex/reproducibility/abaqus_phase_timing/README.md) |
+| Figure 1: baseline 2D response and geometry | `softwarex/plot_verified_figures.py`; `softwarex/reproducibility/results_10000/` and `abaqus/` |
+| Figure 2: peak/final damage bands | `softwarex/plot_verified_figures.py`; saved 2D states |
+| Figure 3: controlled 2D mesh response | `softwarex/analyze_mesh_study.py`; `softwarex/reproducibility/mesh_study/` |
+| Figure 4: 3D Nooru-Mohamed examples | `softwarex/analyze_nooru_mesh_study.py`, `softwarex/rebuild_3d_figures.py`; three-mesh pure-tension and mixed-mode archives |
+| Figure 5: MATLAB torsion demonstration | `Torsion/working/run_torsion.m`, `softwarex/rebuild_3d_figures.py`; supplied figure sources |
+| Figure 6: CPU/GPU/SMP timings | `softwarex/plot_timing_repeats.py`; `softwarex/reproducibility/timing_repeats/` |
+| Material-point verification | `softwarex/audit_umat.py`; core 712-case audit |
+| Additional UMAT and assembly diagnostics | [Abaqus timing scope](softwarex/ABAQUS_TIMING_SCOPE.md); [phase-timing archive](softwarex/reproducibility/abaqus_phase_timing/README.md) |
 
-Run from the repository root:
+From the repository root:
 
 ```powershell
-python softwarex/compare_solver_diagnostics.py
-python softwarex/analyze_mesh_study.py
-python softwarex/run_umat_precision.py --workspace softwarex/reproducibility/umat_precision --analyze-only
+python softwarex/analyze_mesh_study.py --output C:/runs/mesh_report --figures C:/runs/mesh_figures
 python softwarex/verify_paper_figures.py --workspace C:/runs/fracmath_figure_replay
 ```
 
-Verification compares seven generated assets by pixels and two supplied geometry illustrations by source bytes. Numerical reproduction concerns response and state arrays; elapsed times vary between machines and executions.
+Eight generated assets are compared by pixels; two supplied geometry illustrations are checked by source bytes. Runtime varies between machines and runs.
 
 ## Interpretation
 
-Read [VALIDATION_SCOPE.md](softwarex/VALIDATION_SCOPE.md) for measured scopes and limitations. The UMAT returns a degraded elastic secant matrix. MATLAB and Abaqus use different iteration histories and timing scopes. Hybrid GPU speedup was not observed on the tested workstation. The 3D mixed-mode and torsion fields are qualitative examples. Failed numerical checks remain documented where they qualify the reported evidence.
+The current manuscript reports material-point verification, 2D cross-code and mesh response checks, 3D numerical consistency and hardware timing observations. It does not claim experimental validation or report structural dissipation as a study result. Read [VALIDATION_SCOPE.md](softwarex/VALIDATION_SCOPE.md) for the numerical limits.
 
-Raw solver logs, input files, source snapshots and SHA256 manifests are retained as scientific evidence. Submission paperwork and temporary document-build files are maintained outside this software repository.
+The UMAT returns a secant matrix rather than a consistent damage tangent. MATLAB and Abaqus have different increment histories and timing boundaries. Complete Abaqus assembly wall time remains unallocated. The mixed-mode and torsion figures are qualitative; the 3D structural results shown are MATLAB results.
+
+Raw records retain additional checks and diagnostic fields, including the separate 824-case extended material audit. They are preserved for traceability. Submission paperwork is maintained outside this software repository.
 
 ## License, citation and support
 

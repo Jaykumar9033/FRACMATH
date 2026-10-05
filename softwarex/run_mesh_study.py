@@ -1,5 +1,9 @@
 """Run the controlled 2D mesh study; preserve each run in its own directory.
 
+The manuscript-facing completion criteria use structural response/state files.
+Energy/dissipation histories may still be written by the solver as optional
+internal diagnostics, but they are not required for the current paper.
+
 Requires licensed MATLAB and Abaqus/Standard with a configured Fortran compiler.
 Example: python softwarex/run_mesh_study.py --workspace C:/runs/mesh_study
 Run stages sequentially for timing: build, matlab, abaqus. No jobs run together.
@@ -147,7 +151,7 @@ def main():
                 runs.append(("fixed", 2*args.steps))
             for regularization, steps in runs:
                 result = folder / ("matlab_%s_%d" % (regularization, steps))
-                if (result / "verified_state.mat").exists() and (result / "matlab_energy_history.csv").exists():
+                if (result / "verified_state.mat").exists() and (result / "matlab_load_cmod.csv").exists():
                     settings = loadmat(result / "verified_state.mat", variable_names=["p"], simplify_cells=True)["p"]
                     if abs(settings["max_disp"]-args.max_disp) > 1.e-12 or settings["num_steps"] != steps or settings["regularization"] != regularization:
                         raise RuntimeError("Existing MATLAB run settings differ: %s" % result)

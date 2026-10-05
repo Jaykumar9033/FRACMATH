@@ -2,10 +2,12 @@
 
 ## Run the supplied example
 
-1. Open `softwarex/start_here.m` in MATLAB R2024b.
+Use the extracted submission folder as the package root. In the GitHub repository, first enter the `softwarex` folder.
+
+1. Open `start_here.m` in MATLAB R2024b.
 2. Leave `number_of_steps = 10000`, `backend = 'cpu'`, and `number_of_threads = 1` for the Figure 1 settings.
 3. Press **Run**. The mesh is supplied; no Abaqus license is needed for this MATLAB example.
-4. Open `softwarex/student_results/matlab_load_cmod.csv` for crack opening and load, and `verified_state.mat` for the saved numerical arrays.
+4. Open `student_results/matlab_load_cmod.csv` for crack opening and load, and `verified_state.mat` for the saved numerical arrays.
 
 Set `show_figures = false` when measuring computing time. Set `run_material_test = true` to run the short material check instead of a structural simulation. The GPU option requires Parallel Computing Toolbox and a supported GPU; CPU is the default. Results have a separate folder so the paper's archived data remain available.
 
@@ -36,7 +38,7 @@ MATLAB's `.*`, `./`, and `.^` act separately on each array entry. `pagemtimes` a
 2. **Element data:** `precompute_T3` calculates triangle areas, shape-function gradients, strain operators, and element displacement indices. Elastic matrices are computed once.
 3. **One displacement increment:** `assemble_K` multiplies each elastic stiffness by `1 - omega` and adds its entries to a sparse global matrix. `factor_free_stiffness` factors the free-displacement block. The inner loop solves with the previous damage held fixed.
 4. **Damage calculation:** `damage_update` obtains element strains, principal strain direction, equivalent strain, projected width, and irreversible damage/history.
-5. **Record the response:** the solver assembles the new damaged stiffness, calculates reaction and CMOD, records the residual and energy diagnostics, and saves arrays.
+5. **Record the response:** the solver assembles the new damaged stiffness, calculates reaction and CMOD, records the residual, and saves the numerical arrays used for the response plots.
 
 The old-damage equilibrium solve and the subsequent damage calculation are distinct operations. The solver reports the remaining free-node residual after damage changes; the inner loop's convergence flag does not imply equilibrium after that change.
 
@@ -44,7 +46,7 @@ The old-damage equilibrium solve and the subsequent damage calculation are disti
 
 For each triangle, project its three shape-function gradients onto the maximum-principal-strain direction `n`. The width is `h = 2 / sum(abs(gradN * n))`. The softening parameter is then `eps_f = eps0/2 + GF/(h*ft)`. The history is `max(kappa_old, equivalent_strain)`, and damage cannot decrease on unloading.
 
-The width changes with the direction. Replacing it with the fixed reference width provides the paper's control calculation. Material-point energy checks test this formula locally; the structural mesh study measures its effect for one bending geometry.
+The width changes with direction. Replacing it with the fixed reference width provides the paper's control calculation. The structural mesh study then shows how the two choices affect the load-CMOD response for one bending geometry.
 
 ## CPU, hybrid GPU, and Abaqus
 
@@ -54,7 +56,7 @@ MATLAB's eight-thread setting is a limit for supported numerical libraries. It i
 
 ## What can reproduce exactly?
 
-With identical inputs, software, backend, and numerical settings, saved numerical arrays can be compared directly. Compare `F`, `CMOD`, `omega`, `kappa`, displacement, and energy histories. Repeated-run checks report exact equality separately from tolerance-based agreement.
+With identical inputs, software, backend, and numerical settings, saved numerical arrays can be compared directly. Compare `F`, `CMOD`, `omega`, `kappa`, and displacement histories. Repeated-run checks report exact equality separately from tolerance-based agreement.
 
 Different CPU/GPU arithmetic can produce small floating-point differences. GPU and CPU curves are checked using declared tolerances, not promised to match bit for bit. Runtime, memory use, video compression, file timestamps, MAT-file headers, and image/PDF metadata are not exact numerical outputs.
 

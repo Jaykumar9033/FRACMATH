@@ -1,4 +1,10 @@
-"""Validate completed mesh-study histories and regenerate data and figures."""
+"""Validate completed mesh-study responses and regenerate manuscript figures.
+
+The current manuscript uses load-CMOD response, peak-load spread, residuals,
+increment sensitivity and cross-code comparisons. Raw energy/dissipation files
+may remain in archived run folders as developer diagnostics, but this script
+no longer reports them as manuscript study results.
+"""
 import argparse
 import csv
 import json
@@ -37,28 +43,18 @@ def interpolate(cmod, values, target):
 
 def matlab_result(folder, metadata, target):
     load = np.loadtxt(folder / "matlab_load_cmod.csv", delimiter=",", comments="#")
-    energy = np.genfromtxt(folder / "matlab_energy_history.csv", delimiter=",", names=True)
     diagnostic = np.genfromtxt(folder / "matlab_step_diagnostics.csv", delimiter=",", names=True)
-    if len(load) != len(energy) or len(load) != len(diagnostic):
-        raise ValueError("History lengths differ: %s" % folder)
+    if len(load) != len(diagnostic):
+        raise ValueError("Response and diagnostic history lengths differ: %s" % folder)
     if not np.all(np.isfinite(load)) or not np.all(diagnostic["old_damage_converged"] == 1):
         raise ValueError("Invalid response or failed old-damage solve: %s" % folder)
-    for data in (energy, diagnostic):
-        if any(not np.all(np.isfinite(data[field])) for field in data.dtype.names):
-            raise ValueError("Non-finite energy or diagnostic values: %s" % folder)
-    dissipation = energy["damage_dissipation_Nmm"]
-    if np.any(np.diff(dissipation) < -1.e-7):
-        raise ValueError("Damage dissipation decreased")
+    if any(not np.all(np.isfinite(diagnostic[field])) for field in diagnostic.dtype.names):
+        raise ValueError("Non-finite diagnostic values: %s" % folder)
     peak = int(np.argmax(load[:, 1]))
     timing = (folder / "matlab_timing.txt").read_text()
-    work = interpolate(energy["cmod_mm"], energy["external_work_Nmm"], target)
-    balance = interpolate(energy["cmod_mm"], energy["energy_balance_error_Nmm"], target)
     row = dict(mesh=metadata["mesh"], elements=metadata["elements"], dofs=metadata["dofs"],
                 steps=len(load), peak_load_N=float(load[peak, 1]),
                 peak_cmod_mm=float(load[peak, 0]),
-                dissipation_at_common_cmod_Nmm=interpolate(energy["cmod_mm"], dissipation, target),
-                external_work_at_common_cmod_Nmm=work,
-                energy_balance_error_at_common_cmod_percent=100*balance/max(work, 1.e-12),
                 peak_post_damage_relative_residual=float(diagnostic["post_damage_relative_residual"][peak]),
                 max_post_damage_relative_residual=float(np.max(diagnostic["post_damage_relative_residual"])),
                 wall_s=number(r"Solver wall-clock:\s*([\d.]+)", timing),
@@ -128,13 +124,12 @@ def collect(workspace, target, steps, require_abaqus):
             result["matlab"].append(row)
         for folder in sorted(case.glob("matlab_*_*")):
             mode, count = folder.name.split("_")[1:]
-            if int(count) == steps or not (folder / "matlab_energy_history.csv").exists():
+            if int(count) == steps or not (folder / "matlab_load_cmod.csv").exists():
                 continue
             row = matlab_result(folder, metadata, target)
             row["regularization"] = mode
             base = next(r for r in result["matlab"] if r["mesh"] == name and r["regularization"] == mode)
             row["peak_change_percent"] = 100*(row["peak_load_N"]-base["peak_load_N"])/base["peak_load_N"]
-            row["dissipation_change_percent"] = 100*(row["dissipation_at_common_cmod_Nmm"]-base["dissipation_at_common_cmod_Nmm"])/base["dissipation_at_common_cmod_Nmm"]
             result["increment_checks"].append(row)
         abq = case / "Gregoire_3PB"
         if not abq.exists():
@@ -184,15 +179,13 @@ def collect(workspace, target, steps, require_abaqus):
     for mode in ("oliver", "fixed"):
         rows = [r for r in result["matlab"] if r["regularization"] == mode]
         result["mesh_spreads_percent"][mode] = {
-            "peak_load": spread([r["peak_load_N"] for r in rows]),
-            "dissipation": spread([r["dissipation_at_common_cmod_Nmm"] for r in rows])}
+            "peak_load": spread([r["peak_load_N"] for r in rows])}
     refined_spreads = {}
     for mode in ("oliver", "fixed"):
         refined = [r for r in result["increment_checks"] if r["regularization"] == mode and r["steps"] == 2*steps]
         if len(refined) == 3 and {r["mesh"] for r in refined} == set(MESHES):
             refined_spreads[mode] = {
-                "peak_load": spread([r["peak_load_N"] for r in refined]),
-                "dissipation": spread([r["dissipation_at_common_cmod_Nmm"] for r in refined])}
+                "peak_load": spread([r["peak_load_N"] for r in refined])}
     if len(refined_spreads) == 2:
         result["refined_mesh_spreads_percent"] = refined_spreads
     return result

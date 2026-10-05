@@ -1,3 +1,5 @@
+! Optional developer-only material-point diagnostics; retained for auditability.
+! Energy/dissipation outputs from this program are not reported as manuscript study results.
 ! Standalone material-point verification linked to the unmodified repository UMAT.
 ! GETOUTDIR and XIT are test-only stubs; actual Abaqus supplies these utilities.
 program material_check
