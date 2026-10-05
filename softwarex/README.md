@@ -2,6 +2,8 @@
 
 This package contains source code, meshes, saved numerical histories and reproduction scripts for the FRACMATH SoftwareX article.
 
+Use this package from the current `main` branch for the SoftwareX article. Earlier release downloads are archival core versions and are superseded as complete study packages. Record the exact commit used for reproduction.
+
 ## Study scope
 
 The paper follows one simple verification path:

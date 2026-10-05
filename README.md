@@ -2,6 +2,12 @@
 
 FRACMATH is a MATLAB finite-element framework for scalar continuum damage with direction-dependent Oliver crack-band regularization. This repository contains the software and reproducible numerical material accompanying the SoftwareX manuscript by Jaykumar Mavani and Madura Pathirage, University of New Mexico.
 
+## Version to use for the SoftwareX article
+
+Use the current `main` branch for the SoftwareX code, meshes, data and reproduction guides. Download [the current package](https://github.com/Jaykumar9033/FRACMATH/archive/refs/heads/main.zip), or clone this repository and check out `main`.
+
+Earlier release downloads and historical commits are archival references. They are superseded as complete SoftwareX reproduction packages: use the current package for the reported figures and studies. For exact reproduction, record the commit you use and follow the immutable companion reference in the manuscript.
+
 ## Quick start
 
 1. Download or clone this repository.
@@ -70,6 +76,6 @@ Raw records retain additional checks and diagnostic fields, including the separa
 
 ## License, citation and support
 
-The code is [MIT licensed](LICENSE). Citation metadata is in [CITATION.cff](CITATION.cff); report the exact commit used for reproduction. The existing [v1.1.1 release](https://github.com/Jaykumar9033/FRACMATH/releases/tag/v1.1.1) is archived at [DOI 10.5281/zenodo.23138595](https://doi.org/10.5281/zenodo.23138595). Additional study evidence is identified separately in the manuscript.
+The code is [MIT licensed](LICENSE). Citation metadata is in [CITATION.cff](CITATION.cff); report the exact commit used for reproduction. The core-source archival [v1.1.1 release](https://github.com/Jaykumar9033/FRACMATH/releases/tag/v1.1.1) is archived at [DOI 10.5281/zenodo.23138595](https://doi.org/10.5281/zenodo.23138595). That archive identifies the numerical core; use the current package for the SoftwareX study companions.
 
 For questions or reproducibility issues, use [GitHub Issues](https://github.com/Jaykumar9033/FRACMATH/issues). Contribution guidance is in [CONTRIBUTING.md](CONTRIBUTING.md).
