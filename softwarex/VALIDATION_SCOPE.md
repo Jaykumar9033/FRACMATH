@@ -22,4 +22,4 @@ Matching increment counts does not make the nonlinear algorithms equivalent. The
 
 The package does not establish experimental 3D validation, universal mesh independence, universal GPU speed advantage or a complete Abaqus assembly/material wall-time partition. The optional hybrid GPU keeps global sparse assembly and factorization on the CPU. The stopped full sparse GPU experiment is not a completed manuscript result.
 
-Separate UMAT timers and native profiles provide partial diagnostics. Timer overhead, unidentified calls and differing timer boundaries remain. See [ABAQUS_TIMING_SCOPE.md](ABAQUS_TIMING_SCOPE.md). Older adaptive, constant-width and larger material-audit records are archival evidence with their original scope.
+Earlier UMAT timers and native profiles are optional developer archives, not current manuscript timing results. The current table reports matched-run MATLAB components and Abaqus message-file solver/total times with an unallocated remainder. See [ABAQUS_TIMING_SCOPE.md](ABAQUS_TIMING_SCOPE.md). Older adaptive, constant-width and larger material-audit records are archival evidence with their original scope.

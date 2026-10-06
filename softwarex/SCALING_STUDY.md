@@ -99,4 +99,4 @@ python softwarex/plot_timing_repeats.py --summary C:/runs/timing_repeats/analysi
 
 ## Separate UMAT and native assembly diagnostics
 
-The companion [phase measurement archive](reproducibility/abaqus_phase_timing/README.md) contains a direct serial UMAT call timer and a native-only VTune profile. Both use the matched small/coarse mesh and finish the same response path. Their results appear separately in the diagnostic paragraph and do not enter the 90 timing observations. Clock overhead and sampling scopes prevent a complete material/assembly wall-time partition.
+The companion [phase measurement archive](reproducibility/abaqus_phase_timing/README.md) contains a direct serial UMAT call timer and a native-only VTune profile. Both use the matched small/coarse mesh and finish the same response path. These optional archived diagnostics are not reported in the current manuscript and do not enter the 90 archived timing observations. Clock overhead and sampling scopes prevent a complete material/assembly wall-time partition.
