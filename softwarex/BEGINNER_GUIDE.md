@@ -48,13 +48,13 @@ For each triangle, project its three shape-function gradients onto the maximum-p
 
 The width changes with direction. The current manuscript compares it with `h = sqrt(2*A)`, where `A` is the area of each triangle. This area width follows element size but does not change with the strain direction. The two choices are compared on the same coarse, medium and fine meshes. A constant-width option remains only to reproduce older archives.
 
-The default damage driver is modified von Mises equivalent strain. The `rankine` option uses the largest positive principal strain, including the plane-stress out-of-plane component. It does not use the compression/tension strength ratio. The coarse-mesh comparison shows a formulation difference; it does not establish which option better matches experiments.
+The coarse-mesh CPU study compares five damage drivers: modified von Mises, Mazars, Rankine strain, Rankine stress and smooth Rankine stress. All use the same mesh, 2,000 fixed increments, Oliver width formula, tensile onset and exponential energy calibration. These are scalar-driver alternatives, not complete Mazars or Rankine concrete models. Only modified von Mises uses fc/ft; the compression response differs between the options. See [EQUIVALENT_STRAIN_STUDY.md](EQUIVALENT_STRAIN_STUDY.md) for formulas, checks and reproduction commands.
 
 ## CPU, hybrid GPU, and Abaqus
 
 Read the CPU branch first. The optional `gpu_damage_point` function is the scalar version of the same damage formula. `gpuArray.arrayfun` evaluates it across elements. Global sparse assembly and factorization remain on the CPU, so this is a hybrid implementation.
 
-The area-width and maximum-positive-principal-strain options are verified on CPU. GPU requests for these options are rejected until that path is tested. The hybrid kernel retains the existing modified-von-Mises formulation.
+The area-width and four alternative equivalent-strain options are verified on CPU. GPU requests for these options are rejected until that path is tested. The hybrid kernel retains the existing modified-von-Mises formulation.
 
 MATLAB's eight-thread setting is a limit for supported numerical libraries. It is not eight independent simulations. Abaqus can use SMP threads and initializes the gradient table before material calls. The completed medium/fine manuscript comparisons use the same exact mesh, 2,000 fixed increments and -0.1 mm final prescribed displacement in each pair. Abaqus's equilibrium algorithm differs from MATLAB's sequential update.
 

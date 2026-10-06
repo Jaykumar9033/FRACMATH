@@ -1,7 +1,20 @@
 {
-  "python_sources_checked": 63,
-  "archive_hashes_checked": 183,
-  "current_figure_reconstruction_passed": true,
-  "current_primary_and_package_mirrors_identical": true,
-  "scope": "Saved-result checks, Python syntax, figure reconstruction and source identity; no additional numerical jobs."
+  "python_syntax_passed": true,
+  "matlab_source_mirror_passed": true,
+  "archive_hashes_passed": 84,
+  "fresh_curve_reference_comparison": {
+    "modified_mises": {
+      "identical_saved_curve": true,
+      "maximum_absolute_difference": 0.0
+    },
+    "rankine": {
+      "identical_saved_curve": true,
+      "maximum_absolute_difference": 0.0
+    }
+  },
+  "five_driver_cases_verified": 5,
+  "all_cases_steps": 2000,
+  "final_prescribed_displacement_mm": -0.1,
+  "gpu_kernel_unchanged": true,
+  "scope": "CPU damage-driver sensitivity; no new Abaqus criteria or GPU execution."
 }

@@ -77,3 +77,5 @@ Read [VALIDATION_SCOPE.md](softwarex/VALIDATION_SCOPE.md) before interpreting th
 The code is [MIT licensed](LICENSE). Citation metadata is in [CITATION.cff](CITATION.cff); include the exact commit used. The archival [v1.1.1 core release](https://github.com/Jaykumar9033/FRACMATH/releases/tag/v1.1.1) is available at [DOI 10.5281/zenodo.23138595](https://doi.org/10.5281/zenodo.23138595). Use the current package for the SoftwareX study companions.
 
 Use [GitHub Issues](https://github.com/Jaykumar9033/FRACMATH/issues) for reproducibility questions. Contribution guidance is in [CONTRIBUTING.md](CONTRIBUTING.md).
+
+The CPU bending example also supplies five equivalent-strain definitions: modified von Mises, Mazars, Rankine strain, Rankine stress and smooth Rankine stress. The [controlled comparison](softwarex/EQUIVALENT_STRAIN_STUDY.md) provides formulas, verified histories and Figure 4 reproduction commands.

@@ -27,3 +27,6 @@ softwarex/reproducibility/material_examples/** -text whitespace=cr-at-eol
 softwarex/reproducibility/fixed_increment_extension/** -text -whitespace
 softwarex/reproducibility/fixed_increment_retry/** -text -whitespace
 softwarex/reproducibility/current_figure_replay/** -text whitespace=cr-at-eol
+
+# Preserve the five-driver execution snapshots and numerical evidence.
+softwarex/reproducibility/equivalent_strain_study/** -text -whitespace

@@ -89,11 +89,11 @@ assert(ismember(p.regularization, {'oliver', 'area', 'fixed'}), ...
     'FRACMATH_REGULARIZATION must be oliver, area or fixed');
 p.equivalent_strain = getenv('FRACMATH_EQUIVALENT_STRAIN');
 if isempty(p.equivalent_strain); p.equivalent_strain = 'modified_mises'; end
-assert(ismember(p.equivalent_strain, {'modified_mises', 'rankine'}), ...
-    'Equivalent strain must be modified_mises or rankine');
+assert(ismember(p.equivalent_strain, {'modified_mises', 'rankine', 'mazars', 'rankine_stress', 'smooth_rankine_stress'}), ...
+    'Unknown equivalent-strain option');
 assert(~use_gpu || (strcmp(p.regularization,'area') == 0 && ...
     strcmp(p.equivalent_strain,'modified_mises')), ...
-    'Area width and Rankine equivalent strain are currently available on CPU only.');
+    'Alternative widths and equivalent-strain definitions are available on CPU only.');
 if use_gpu; gpu_dev=gpuDevice; end
 p.fixed_width = 1.25; % mm: reference calibration for the local-law control
 width_env = str2double(getenv('FRACMATH_FIXED_WIDTH'));
@@ -725,7 +725,7 @@ function [omega_new, kappa_new, h_oliver, strain] = damage_update(u, B_all, grad
     gpu_mode=isa(B_all,'gpuArray');
     if gpu_mode && (strcmp(p.regularization,'area') || ...
             ~strcmp(p.equivalent_strain,'modified_mises'))
-        error('Area width and Rankine equivalent strain are currently available on CPU only.');
+        error('Alternative widths and equivalent-strain definitions are available on CPU only.');
     end
     if gpu_mode
         u=gpuArray(u);
@@ -796,8 +796,22 @@ function [omega_new, kappa_new, h_oliver, strain] = damage_update(u, B_all, grad
     a4 = 12*k/(1+p.nu)^2;
     eq_s = a1*I1 + a2*sqrt(max(a3*I1.^2 + a4*J2, 0));
     eq_s = max(eq_s, 0);
-    if strcmp(p.equivalent_strain, 'rankine')
-        eq_s = max(max(e1,e3),0); % maximum positive principal strain
+    switch p.equivalent_strain
+        case 'rankine'
+            eq_s = max(max(e1,e3),0); % Rankine strain; e1 >= e2
+        case 'mazars'
+            eq_s = sqrt(max(e1,0).^2 + max(e2,0).^2 + max(e3,0).^2);
+        case {'rankine_stress', 'smooth_rankine_stress'}
+            % Undamaged principal stress divided by E, using isotropic elasticity.
+            volumetric = p.nu*I1/((1+p.nu)*(1-2*p.nu));
+            q1 = e1/(1+p.nu) + volumetric;
+            q2 = e2/(1+p.nu) + volumetric;
+            q3 = e3/(1+p.nu) + volumetric;
+            if strcmp(p.equivalent_strain,'rankine_stress')
+                eq_s = max(max(q1,q3),0); % q1 >= q2
+            else
+                eq_s = sqrt(max(q1,0).^2 + max(q2,0).^2 + max(q3,0).^2);
+            end
     end
 
     kappa_new = max(kappa_old, eq_s);
@@ -1236,6 +1250,7 @@ end
 
 % Check the material law on simple strain paths without a full mesh solve.
 function material_selftest(p)
+    equivalent_strain_reference_check(p);
     widths = [0.5; 1; 2; 4];
     out = zeros(numel(widths), 4);
     curve_rows = [];
@@ -1283,6 +1298,11 @@ function material_selftest(p)
                 assert(abs(checked_kappa-expected_kappa) < 1e-12, ...
                     'Rankine principal-strain check failed');
             end
+        elseif strcmp(p.equivalent_strain,'mazars')
+            assert(abs(kc/(sqrt(2)*p.nu*e)-1) < 1e-10, ...
+                'Mazars lateral-strain compression check failed');
+        elseif ismember(p.equivalent_strain,{'rankine_stress','smooth_rankine_stress'})
+            assert(abs(kc) < 1e-12, 'Stress criterion pure-compression check failed');
         else
             assert(abs(kc/(e/(p.fc/p.ft)) - 1) < 1e-10, ...
                 'Uniaxial compression equivalence failed');
@@ -1333,4 +1353,41 @@ function material_selftest(p)
     writematrix(curve_rows, ['material_softening_' p.regularization '.csv']);
     fprintf('h_mm G_N_per_mm relative_error final_damage\n');
     disp(out);
+end
+
+function equivalent_strain_reference_check(p)
+    % Ten material states; tensor eigensolves independently check the driver.
+    nodes = [0 0; 1 0; 0 1];
+    [B,~,gradN,dofmat] = precompute_T3(nodes,[1 2 3]);
+    states = p.eps0*[0 0 0; 2 -0.4 0; -2 0.4 0; 0 0 2; ...
+        1 1 0; -1 -1 0; 2 -1 1; 0.4 1.2 1.6; -2 1 0.5; 1.3 0.2 -0.8];
+    result = zeros(size(states,1),6);
+    for i=1:size(states,1)
+        ex=states(i,1); ey=states(i,2); gamma=states(i,3);
+        u=zeros(6,1);
+        u(1:2:6)=ex*nodes(:,1)+gamma/2*nodes(:,2);
+        u(2:2:6)=gamma/2*nodes(:,1)+ey*nodes(:,2);
+        [~,computed] = damage_update(u,B,gradN,dofmat,0,0,p);
+        tensor=[ex gamma/2 0; gamma/2 ey 0; 0 0 -p.nu/(1-p.nu)*(ex+ey)];
+        principal=eig(tensor);
+        stress=p.E/(1+p.nu)*tensor + p.E*p.nu/((1+p.nu)*(1-2*p.nu))*trace(tensor)*eye(3);
+        switch p.equivalent_strain
+            case 'rankine'
+                expected=max([0;principal]);
+            case 'mazars'
+                expected=norm(max(principal,0));
+            case 'rankine_stress'
+                expected=max([0;eig(stress)])/p.E;
+            case 'smooth_rankine_stress'
+                expected=norm(max(eig(stress),0))/p.E;
+            otherwise
+                k=p.fc/p.ft; first=trace(tensor);
+                dev=tensor-first/3*eye(3); second=sum(dev(:).^2)/2;
+                expected=max((k-1)*first/(2*k*(1-2*p.nu)) + ...
+                    sqrt(((k-1)/(1-2*p.nu))^2*first^2 + 12*k/(1+p.nu)^2*second)/(2*k),0);
+        end
+        assert(abs(computed-expected)<2e-12, 'Independent equivalent-strain check failed');
+        result(i,:)=[i ex ey gamma computed expected];
+    end
+    writematrix(result,['equivalent_strain_check_' p.equivalent_strain '.csv']);
 end

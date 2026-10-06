@@ -153,7 +153,7 @@ def figure_one(workspace, curves, output):
         save(figure, output, "figure1_fixed_advanced", dpi=220)
 
 
-def formulation_figures(plan, curves, output):
+def formulation_figures(plan, curves, output, strain_study):
     """Use the execution analyzer's plot sizes, labels and numerical data."""
     with plt.rc_context(plt.rcParamsDefault):
         figure, axes = plt.subplots(1, 3, figsize=(4.1 * 3, 3.6), squeeze=False)
@@ -168,17 +168,8 @@ def formulation_figures(plan, curves, output):
             axis.legend(frameon=False)
         figure.tight_layout()
         save(figure, output, "area_versus_oliver")
-        figure, axis = plt.subplots(figsize=(6.1, 4.0))
-        values = curves["coarse"]
-        axis.plot(values["oliver"][:, 0], values["oliver"][:, 1] / 1000,
-                  color="#205b88", label="Modified von Mises")
-        axis.plot(values["rankine"][:, 0], values["rankine"][:, 1] / 1000, "--",
-                  color="#ba543a", label="Maximum positive principal strain")
-        axis.set_title("Same coarse mesh, Oliver width and %d fixed increments" % plan["cases"]["coarse"]["steps"])
-        response_axes(axis)
-        axis.legend(frameon=False)
-        figure.tight_layout()
-        save(figure, output, "equivalent_strain_comparison")
+    from run_equivalent_strain_study import plot
+    plot(strain_study, output)
 
 
 def three_dimensional_figures(output):
@@ -204,6 +195,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--extension", type=Path, default=PACKAGE / "reproducibility/fixed_increment_extension")
     parser.add_argument("--output", type=Path, default=PACKAGE / "figures")
+    parser.add_argument("--strain-study", type=Path, default=PACKAGE / "reproducibility/equivalent_strain_study")
     parser.add_argument("--only-bending", action="store_true", help="Build only the three new bending figures")
     args = parser.parse_args()
     output = args.output.resolve()
@@ -211,7 +203,7 @@ def main():
     workspace = args.extension.resolve()
     plan, curves = checked_inputs(workspace)
     figure_one(workspace, curves, output)
-    formulation_figures(plan, curves, output)
+    formulation_figures(plan, curves, output, args.strain_study.resolve())
     if not args.only_bending:
         three_dimensional_figures(output)
     print("Current archive-backed figures saved in " + str(output))

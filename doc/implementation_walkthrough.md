@@ -96,12 +96,7 @@ follows element size but does not depend on strain direction. Coarse,
 medium and fine pairs retain their exact mesh, material parameters and
 2,000-increment displacement schedule.
 
-The separate coarse-mesh CPU comparison selects
-`FRACMATH_EQUIVALENT_STRAIN=rankine` or the default `modified_mises`, with
-Oliver width in both. Rankine uses the largest positive principal strain,
-including the plane-stress out-of-plane component; it does not use the
-compression/tension strength ratio. This compares formulation sensitivity
-without claiming that either option better fits experiments.
+The coarse-mesh CPU study compares five damage drivers: modified von Mises, Mazars, Rankine strain, Rankine stress and smooth Rankine stress. All use the same mesh, 2,000 fixed increments, Oliver width formula, tensile onset and exponential energy calibration. These are scalar-driver alternatives, not complete Mazars or Rankine concrete models. Only modified von Mises uses fc/ft; the compression response differs between the options. See [EQUIVALENT_STRAIN_STUDY.md](../softwarex/EQUIVALENT_STRAIN_STUDY.md) for formulas, checks and reproduction commands.
 
 [COMPARISON_EXTENSION.md](../softwarex/COMPARISON_EXTENSION.md) explains the
 current execution and failure policy. Original failed fixed Abaqus cases
@@ -131,8 +126,8 @@ device setup and precomputation are excluded from the loop timer.
 
 The current hybrid kernel supports the Oliver/modified-von-Mises path.
 Its retained constant-width branch serves older archive reproduction.
-The new area-width and Rankine comparisons use CPU execution; selecting
-either with the hybrid backend raises an explicit error. Their CPU results
+The area-width and alternative equivalent-strain comparisons use CPU execution; selecting
+these options with the hybrid backend raises an explicit error. Their CPU results
 do not establish GPU performance or CPU/GPU agreement for those options.
 
 `FRACMATH_THREADS=8` limits supported MATLAB numerical libraries to eight

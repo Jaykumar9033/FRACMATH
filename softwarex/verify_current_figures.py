@@ -26,6 +26,7 @@ GENERATED = (
     "figure1_fixed_advanced.png", "figure1_fixed_advanced.pdf",
     "area_versus_oliver.png", "area_versus_oliver.pdf",
     "equivalent_strain_comparison.png", "equivalent_strain_comparison.pdf",
+    "equivalent_strain_load_displacement.png", "equivalent_strain_load_displacement.pdf",
     "nooru_tension_comparison.png", "nooru_tension_comparison.pdf",
     "nooru_damage_evolution_shared_bar.png", "torsion_damage_evolution_shared_bar.png",
 )
@@ -42,6 +43,7 @@ def main():
     parser.add_argument("--workspace", type=Path, required=True)
     parser.add_argument("--figures", type=Path, default=PACKAGE / "figures")
     parser.add_argument("--extension", type=Path, default=PACKAGE / "reproducibility/fixed_increment_extension")
+    parser.add_argument("--strain-study", type=Path, default=PACKAGE / "reproducibility/equivalent_strain_study")
     parser.add_argument("--pdftoppm", default="pdftoppm", help="Program name or absolute Poppler executable path")
     args = parser.parse_args()
     folder = args.workspace.resolve()
@@ -53,7 +55,8 @@ def main():
         raise SystemExit("pdftoppm was not found; supply --pdftoppm with its executable path")
     rebuilt = folder / "rebuilt"
     command = [sys.executable, str(PACKAGE / "plot_current_figures.py"),
-               "--extension", str(args.extension.resolve()), "--output", str(rebuilt)]
+               "--extension", str(args.extension.resolve()), "--strain-study", str(args.strain_study.resolve()),
+               "--output", str(rebuilt)]
     with (folder / "reconstruction.log").open("w", encoding="utf-8") as stream:
         subprocess.run(command, stdout=stream, stderr=subprocess.STDOUT, check=True)
     checks = []

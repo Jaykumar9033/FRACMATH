@@ -1,0 +1,36 @@
+==== MATLAB CDM 3PB solver: vectorized sequential secant update ====
+  mesh: 7343 nodes, 14313 CPS3 elements, 14686 DOFs
+  step    u(mm)   load(kN)    CMOD(mm)   dmax    iter
+     1   0.0001      0.010     0.00002   0.000     2
+     2   0.0001      0.020     0.00005   0.000     2
+     3   0.0002      0.029     0.00007   0.000     2
+   100   0.0050      0.977     0.00233   0.289     2
+   200   0.0100      1.926     0.00483   0.785     2
+   300   0.0150      2.808     0.00773   0.905     2
+   400   0.0200      3.584     0.01122   0.956     2
+   500   0.0250      4.217     0.01544   0.979     2
+   600   0.0300      4.632     0.02076   0.991     2
+   700   0.0350      4.776     0.02741   0.996     2
+   800   0.0400      4.560     0.03586   0.998     2
+   900   0.0450      4.157     0.04533   0.999     2
+  1000   0.0500      3.691     0.05524   0.999     2
+  1100   0.0550      3.214     0.06534   1.000     2
+  1200   0.0600      2.786     0.07534   1.000     2
+  1300   0.0650      2.418     0.08514   1.000     2
+  1400   0.0700      2.107     0.09474   1.000     2
+  1500   0.0750      1.847     0.10414   1.000     2
+  1600   0.0800      1.629     0.11337   1.000     2
+  1700   0.0850      1.445     0.12247   1.000     2
+  1800   0.0900      1.289     0.13144   1.000     2
+  1900   0.0950      1.154     0.14032   1.000     2
+  2000   0.1000      1.039     0.14912   1.000     2
+  wrote C:\Users\jmavani\Documents\FRACMATH_equivalent_strain_20261006\runs\rankine_stress\matlab_load_cmod.csv
+  wrote C:\Users\jmavani\Documents\FRACMATH_equivalent_strain_20261006\runs\rankine_stress\matlab_oliver_bandwidth_history.csv
+  wrote C:\Users\jmavani\Documents\FRACMATH_equivalent_strain_20261006\runs\rankine_stress\matlab_step_diagnostics.csv
+  wrote C:\Users\jmavani\Documents\FRACMATH_equivalent_strain_20261006\runs\rankine_stress\matlab_timing.txt
+
+==== summary ====
+  peak load : 4780.59 N at CMOD = 0.0264 mm
+  wall-clock: 128.2 s  (asm 25.2, dam 3.0, solve 11.7)
+  allocated memory delta: 116.8 MB
+  output -> C:\Users\jmavani\Documents\FRACMATH_equivalent_strain_20261006\runs\rankine_stress/

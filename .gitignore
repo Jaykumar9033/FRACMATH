@@ -65,3 +65,6 @@ softwarex/reproducibility/fixed_increment_retry/**/Gregoire_3PB.env
 /softwarex/SUBMISSION_CHECKLIST.md
 /softwarex/submission_checks.json
 /softwarex/code_figure_audit.json
+
+!softwarex/reproducibility/equivalent_strain_study/**/*.log
+/softwarex/equivalent_strain_results/

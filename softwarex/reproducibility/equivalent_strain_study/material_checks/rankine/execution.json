@@ -1,0 +1,7 @@
+{
+  "return_code": 0,
+  "launch_elapsed_s": 7.737457999959588,
+  "criterion": "rankine",
+  "stage": "checks",
+  "status": "executed_needs_verification"
+}
