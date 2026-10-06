@@ -10,7 +10,7 @@ All notable repository changes for FRACMATH are recorded here.
 - Ten explained material-point examples as the current manuscript verification suite.
 - Current figure reconstruction, native LaTeX/TikZ damage-update flowchart and documented checks.
 - Explicit MATLAB/Abaqus timing scopes, partial UMAT/assembly diagnostics and source-based efficiency review.
-- Original baseline/coarse fixed-increment failures preserved; baseline 20,000-increment retry also failed after 5,175 accepted increments. Its diagnostic logs, exact MATLAB reference and frozen source/plan are separate records. The coarse 4,000-increment retry is running and not included as a completed comparison.
+- Original baseline/coarse fixed-increment failures preserved; baseline 20,000-increment retry also failed after 5,174 converged increments (failure during attempt 5,175). Its diagnostic logs, exact MATLAB reference and frozen source/plan are separate records. The coarse 4,000-increment comparison completed and passed exact-mesh, schedule, loading-coverage and finite-history checks.
 - Descriptive mixed-mode panel headings with Nooru-Mohamed benchmark attribution and a separate pure-tension study.
 
 This entry describes the current study companion package. It is not a new release or Zenodo deposit. Earlier release entries below describe archival contents; their adaptive histories, constant-width controls, larger material audits and optional diagnostics are not the current manuscript plots or validation suite.

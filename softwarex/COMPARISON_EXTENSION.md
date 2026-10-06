@@ -8,11 +8,11 @@ The current extension archive is `reproducibility/fixed_increment_extension/`. I
 - Three MATLAB meshes: element-area width `sqrt(2*A)` versus directional Oliver width, with identical material and loading settings within each pair.
 - Coarse MATLAB mesh: maximum-positive-principal versus modified von Mises equivalent strain, with Oliver width and the same E, nu, ft and GF.
 
-The suite as a whole is not labelled complete merely because these cases passed. Original baseline/coarse fixed Abaqus failures, the failed baseline smaller-step retry and the running coarse retry remain explicit.
+The suite as a whole is not labelled complete merely because these cases passed. Original baseline/coarse fixed Abaqus failures, the failed baseline smaller-step retry remain explicit; the coarse 4,000-increment comparison is now verified complete.
 
 ## Preserved failures and separate retries
 
-The baseline 10,000-increment and coarse 2,000-increment fixed Abaqus jobs failed during convergence. Only their converged history portions are valid response points. The baseline 20,000-increment retry also failed, with 5,175 accepted increments recorded in `.sta`. Its logs, exact MATLAB reference and frozen source/plan are retained separately in `reproducibility/fixed_increment_retry/`. The coarse 4,000-increment retry is running and needs final schedule, loading coverage and finite-output checks before use as a full paired curve. The reported accepted count is a log diagnostic; no unverified ODB loading displacement is inferred from it.
+The baseline 10,000-increment and coarse 2,000-increment fixed Abaqus jobs failed during convergence. Only their converged history portions are valid response points. The baseline 20,000-increment retry also failed, with 5,174 converged increments (failure during attempt 5,175). Its logs, exact MATLAB reference and frozen source/plan are retained separately in `reproducibility/fixed_increment_retry/`. The coarse 4,000-increment comparison completed and passed exact-mesh, schedule, loading-coverage and finite-history checks. The baseline ODB verifies 5,174 converged increments and final displacement -0.051739998 mm; attempt 5,175 failed.
 
 Fixed increments are retained. There is no automatic adaptive replacement and no NO STOP override to accept unconverged increments. MATLAB can record a complete history while retaining a post-update force residual; it does not use Abaqus's equilibrium algorithm.
 
@@ -49,3 +49,7 @@ The UMAT loads gradients at synchronized UEXTERNALDB initialization, reads them 
 Matching fixed increments does not match equilibrium algorithms or solver-call counts. MATLAB component timers cover the load loop; Abaqus solver time comes from `.msg` and wall time includes analysis/output. Complete Abaqus assembly wall time is not separately allocated.
 
 The native LaTeX flowchart is `figure_sources/damage_update_flowchart.tex`. Current figures are reconstructed by `plot_current_figures.py` and checked by `verify_current_figures.py`. Pure-tension mesh responses and qualitative mixed-mode panel fields remain distinct, with Nooru-Mohamed credited as the benchmark source.
+
+## Smaller fixed-increment verification
+
+The completed coarse 4,000-increment pair has a 0.98% peak difference relative to Abaqus and 0.85% common-CMOD RMS relative to the MATLAB peak. It uses the same exact mesh and -0.1 mm endpoint. See `reproducibility/fixed_increment_retry/final_verification/summary.json` and replay with `verify_fixed_retry.py`. This separate increment refinement does not replace the 2,000-increment three-mesh width study.

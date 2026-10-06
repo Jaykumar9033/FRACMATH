@@ -105,8 +105,9 @@ without claiming that either option better fits experiments.
 
 [COMPARISON_EXTENSION.md](../softwarex/COMPARISON_EXTENSION.md) explains the
 current execution and failure policy. Original failed fixed Abaqus cases
-are preserved; smaller fixed-increment retries remain separate until their
-actual schedules, complete loading coverage and finite outputs are checked.
+are preserved. The coarse 4,000-increment pair passes actual schedule,
+complete loading-coverage and finite-output checks. The baseline 20,000-step
+attempt fails, with 5,174 converged increments verified from its ODB history.
 No adaptive history replaces a failed fixed-increment comparison.
 
 Optional developer energy histories record trapezoidal external work,

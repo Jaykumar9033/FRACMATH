@@ -9,9 +9,9 @@ import sys
 from pathlib import Path
 
 PACKAGE = Path(__file__).resolve().parent
-DEFAULT_MATLAB = PACKAGE / "reproducibility/results_10000/matlab_timing.txt"
-DEFAULT_MSG = PACKAGE / "reproducibility/abaqus/Gregoire_3PB/diagnostics/Gregoire_3PB.msg"
-DEFAULT_OUTPUT = PACKAGE / "reproducibility/solver_diagnostics.json"
+DEFAULT_MATLAB = PACKAGE / "reproducibility/fixed_increment_extension/medium/reference_matlab_oliver/matlab_timing.txt"
+DEFAULT_MSG = PACKAGE / "reproducibility/fixed_increment_extension/medium/Gregoire_3PB/Gregoire_3PB.msg"
+DEFAULT_OUTPUT = PACKAGE / "student_diagnostics/solver_diagnostics.json"
 
 
 def required_float(pattern, text, label):
@@ -45,6 +45,9 @@ def summarize(matlab_path, msg_path):
     if len(solver_seconds) != passes:
         raise ValueError("Solver timing entries (%d) differ from reported passes (%d)" %
                          (len(solver_seconds), passes))
+    reported_increments = count(r"TOTAL OF\s+(\d+)\s+INCREMENTS", "Abaqus increments")
+    status_path = Path(msg_path).with_suffix('.sta')
+    completed = status_path.exists() and 'THE ANALYSIS HAS COMPLETED SUCCESSFULLY' in status_path.read_text()
     return {
         "matlab": {
             "wall_s": mt,
@@ -54,7 +57,9 @@ def summarize(matlab_path, msg_path):
         },
         "abaqus": {
             "wall_s": at,
-            "accepted_increments": count(r"TOTAL OF\s+(\d+)\s+INCREMENTS", "Abaqus increments"),
+            "reported_increments": reported_increments,
+            "accepted_increments": reported_increments if completed else None,
+            "analysis_completed": completed,
             "alternate_force_tolerance_acceptances": len(re.findall(r"FORCE EQUILIBRIUM ACCEPTED USING THE ALTERNATE TOLERANCE", msg, re.I)),
             "cutbacks": count(r"(\d+)\s+CUTBACKS IN AUTOMATIC INCREMENTATION", "Abaqus cutbacks"),
             "solver_passes": passes,
@@ -63,7 +68,7 @@ def summarize(matlab_path, msg_path):
             "summed_solver_elapsed_s": round(sum(solver_seconds), 4),
             "remaining_wall_s": round(at - sum(solver_seconds), 4),
         },
-        "interpretation": "Remaining Abaqus wall time combines UMAT, assembly, convergence, output, and overhead; the .msg file does not isolate these components. MATLAB and Abaqus use different increment histories, so wall times are not a speed ranking.",
+        "interpretation": "Remaining Abaqus wall time combines UMAT, assembly, convergence, output, and overhead; the .msg file does not isolate these components. Even with matched increments, nonlinear algorithms and measurement scopes differ, so these observations are not an inherent speed ranking.",
     }
 
 

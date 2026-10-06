@@ -14,7 +14,7 @@ FRACMATH implements established continuum-damage and crack-band methods. The art
 
 ## Fixed-increment failures and retries
 
-Baseline 10,000-increment and coarse 2,000-increment Abaqus jobs stopped during equilibrium convergence. Partial converged histories and failure logs are retained. The baseline 20,000-increment retry also failed after 5,175 accepted increments recorded in `.sta`. Its exact MATLAB reference and failure logs are retained under `reproducibility/fixed_increment_retry/baseline/`; they do not form a complete cross-code comparison. The coarse 4,000-increment retry is running and needs complete loading and schedule checks before it can support a full paired curve. No adaptive-increment substitute is used in the current plots.
+Baseline 10,000-increment and coarse 2,000-increment Abaqus jobs stopped during equilibrium convergence. Partial converged histories and failure logs are retained. The baseline 20,000-increment retry also failed after 5,174 converged increments (failure during attempt 5,175). Its exact MATLAB reference and failure logs are retained under `reproducibility/fixed_increment_retry/baseline/`; they do not form a complete cross-code comparison. The coarse 4,000-increment comparison completed and passed exact-mesh, schedule, loading-coverage and finite-history checks. No adaptive-increment substitute is used in the current plots.
 
 ## Limits of the evidence
 

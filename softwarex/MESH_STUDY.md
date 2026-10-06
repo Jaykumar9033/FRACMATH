@@ -31,7 +31,7 @@ The peak-load spread is 6.19% for Oliver and 6.80% for area width. These observa
 
 Medium and fine Abaqus cases complete 2,000 fixed increments on the exact corresponding MATLAB meshes, to the same -0.1 mm endpoint. ODB times and loading displacement are checked rather than inferred from row count. The current response plots use these completed cases.
 
-The original coarse 2,000-increment and baseline 10,000-increment Abaqus jobs failed during convergence. Their partial curves and logs are preserved. The baseline 20,000-increment retry also failed after 5,175 accepted increments recorded in `.sta`; its logs and exact MATLAB reference are retained in `reproducibility/fixed_increment_retry/baseline/`. The coarse 4,000-increment retry is running and requires final verification before use as a complete comparison. There is no adaptive substitution.
+The original coarse 2,000-increment and baseline 10,000-increment Abaqus jobs failed during convergence. Their partial curves and logs are preserved. The baseline 20,000-increment retry also failed after 5,174 converged increments (failure during attempt 5,175); its logs and exact MATLAB reference are retained in `reproducibility/fixed_increment_retry/baseline/`. The coarse 4,000-increment comparison completed and passed exact-mesh, schedule, loading-coverage and finite-history checks. There is no adaptive substitution.
 
 ## Reconstruct the current plots
 

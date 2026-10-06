@@ -58,7 +58,7 @@ The area-width and maximum-positive-principal-strain options are verified on CPU
 
 MATLAB's eight-thread setting is a limit for supported numerical libraries. It is not eight independent simulations. Abaqus can use SMP threads and initializes the gradient table before material calls. The completed medium/fine manuscript comparisons use the same exact mesh, 2,000 fixed increments and -0.1 mm final prescribed displacement in each pair. Abaqus's equilibrium algorithm differs from MATLAB's sequential update.
 
-The original baseline and coarse fixed Abaqus cases stopped during convergence; their partial histories are preserved. The baseline 20,000-increment retry also failed, with 5,175 accepted increments recorded in `.sta`; its diagnostic record is in `reproducibility/fixed_increment_retry/baseline/`. The coarse 4,000-increment retry is running and is not yet a completed comparison. A complete MATLAB history does not imply that every point meets Abaqus's equilibrium criterion, and failed fixed cases are not replaced by adaptive histories.
+The original baseline and coarse fixed Abaqus cases stopped during convergence; their partial histories are preserved. The baseline 20,000-increment retry also failed, with 5,174 converged increments (failure during attempt 5,175); its diagnostic record is in `reproducibility/fixed_increment_retry/baseline/`. The coarse 4,000-increment comparison completed and passed exact-mesh, schedule, loading-coverage and finite-history checks. A complete MATLAB history does not imply that every point meets Abaqus's equilibrium criterion, and failed fixed cases are not replaced by adaptive histories.
 
 ## What can reproduce exactly?
 

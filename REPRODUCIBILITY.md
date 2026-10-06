@@ -39,7 +39,7 @@ This rechecks the ten saved states. Fresh compilation and MATLAB execution requi
 
 [COMPARISON_EXTENSION.md](softwarex/COMPARISON_EXTENSION.md) documents preparation and sequential execution. The completed medium/fine Abaqus cases and their MATLAB references use the same exact mesh, 2,000 fixed increments and final displacement of -0.1 mm. The builder sets `ABQ_INCREMENT_MODE=fixed`; unconverged points are not accepted through a NO STOP override.
 
-Original fixed baseline/coarse failures are retained. The baseline 20,000-increment retry also failed after 5,175 accepted increments recorded in `.sta`; its diagnostic record is `softwarex/reproducibility/fixed_increment_retry/baseline/`. The coarse 4,000-increment retry is running and requires final schedule and loading-coverage verification. Failed fixed jobs are not replaced with adaptive histories. [MESH_STUDY.md](softwarex/MESH_STUDY.md) covers the three-mesh `sqrt(2*A)`/Oliver comparison.
+Original fixed baseline/coarse failures are retained. The baseline 20,000-increment retry also failed after 5,174 converged increments (failure during attempt 5,175); its diagnostic record is `softwarex/reproducibility/fixed_increment_retry/baseline/`. The coarse 4,000-increment comparison completed and passed exact-mesh, schedule, loading-coverage and finite-history checks. Failed fixed jobs are not replaced with adaptive histories. [MESH_STUDY.md](softwarex/MESH_STUDY.md) covers the three-mesh `sqrt(2*A)`/Oliver comparison.
 
 ## 3D examples
 

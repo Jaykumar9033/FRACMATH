@@ -1,0 +1,141 @@
+{
+  "frozen_inputs_verified": true,
+  "cases": {
+    "baseline": {
+      "matlab": {
+        "passed_execution_checks": true,
+        "steps": 20000,
+        "peak_load_N": 4012.529,
+        "peak_cmod_mm": 0.0256333,
+        "final_cmod_mm": 0.3177035,
+        "maximum_post_damage_relative_residual": 0.001821706771,
+        "peak_post_damage_relative_residual": 0.001175245894,
+        "regularization": "oliver",
+        "equivalent_strain": "modified_mises",
+        "interpretation": "Old-damage equilibrium passes; post-damage residual is reported separately."
+      },
+      "timing": {
+        "matlab": {
+          "wall_s": 1878.99,
+          "steps": 20000,
+          "component_s": {
+            "assembly": 411.62,
+            "factorization": 1253.58,
+            "damage": 46.6,
+            "solve": 159.22
+          },
+          "unattributed_s": 7.97
+        },
+        "abaqus": {
+          "wall_s": 1793.0,
+          "reported_increments": 5175,
+          "accepted_increments": null,
+          "analysis_completed": false,
+          "alternate_force_tolerance_acceptances": 0,
+          "cutbacks": 1,
+          "solver_passes": 5692,
+          "factorizations": 5318,
+          "solver_time_entries": 5692,
+          "summed_solver_elapsed_s": 127.373,
+          "remaining_wall_s": 1665.627
+        },
+        "interpretation": "Remaining Abaqus wall time combines UMAT, assembly, convergence, output, and overhead; the .msg file does not isolate these components. Even with matched increments, nonlinear algorithms and measurement scopes differ, so these observations are not an inherent speed ranking."
+      },
+      "abaqus": {
+        "completed": false,
+        "accepted_fixed_increments": 5174,
+        "requested_fixed_increments": 20000,
+        "finite_partial_history": true,
+        "actual_fixed_schedule_verified": true,
+        "maximum_displacement_error_mm": 1.8620490982446114e-09,
+        "displacement_tolerance_mm": 4e-08,
+        "last_converged_normalized_time": 0.25870001316070557,
+        "last_converged_displacement_mm": -0.051739998161792755,
+        "last_converged_cmod_mm": 0.06158438744023442,
+        "last_converged_load_N": 2869.6299438476562,
+        "reported_failed_increment_attempt": 5175,
+        "reason": "Message file reports divergence followed by FIXED TIME INCREMENT IS TOO LARGE.",
+        "adaptive_replacement": false
+      },
+      "partial_response": {
+        "reference_peak_N": 4012.529,
+        "comparison_peak_N": 3998.5913696289062,
+        "peak_difference_percent": -0.3473527635836089,
+        "common_cmod_range_mm": [
+          4.412378530105343e-06,
+          0.06149046
+        ],
+        "curve_rms_N": 12.362081839970562,
+        "curve_rms_percent_reference_peak": 0.3080870403670743
+      }
+    },
+    "coarse": {
+      "matlab": {
+        "passed_execution_checks": true,
+        "steps": 4000,
+        "peak_load_N": 4156.569,
+        "peak_cmod_mm": 0.02707504,
+        "final_cmod_mm": 0.1521772,
+        "maximum_post_damage_relative_residual": 0.005995771612,
+        "peak_post_damage_relative_residual": 0.003510040477,
+        "regularization": "oliver",
+        "equivalent_strain": "modified_mises",
+        "interpretation": "Old-damage equilibrium passes; post-damage residual is reported separately."
+      },
+      "timing": {
+        "matlab": {
+          "wall_s": 410.99,
+          "steps": 4000,
+          "component_s": {
+            "assembly": 79.02,
+            "factorization": 282.7,
+            "damage": 10.19,
+            "solve": 37.25
+          },
+          "unattributed_s": 1.83
+        },
+        "abaqus": {
+          "wall_s": 1278.0,
+          "reported_increments": 4000,
+          "accepted_increments": 4000,
+          "analysis_completed": true,
+          "alternate_force_tolerance_acceptances": 2,
+          "cutbacks": 0,
+          "solver_passes": 6140,
+          "factorizations": 5997,
+          "solver_time_entries": 6140,
+          "summed_solver_elapsed_s": 113.85,
+          "remaining_wall_s": 1164.15
+        },
+        "interpretation": "Remaining Abaqus wall time combines UMAT, assembly, convergence, output, and overhead; the .msg file does not isolate these components. Even with matched increments, nonlinear algorithms and measurement scopes differ, so these observations are not an inherent speed ranking."
+      },
+      "abaqus": {
+        "passed_execution_checks": true,
+        "fixed_increments": 4000,
+        "maximum_history_time_error": 2.95639037695139e-08,
+        "maximum_displacement_error_mm": 3.719329844109609e-09,
+        "final_displacement_mm": -0.10000000149011612,
+        "final_cmod_mm": 0.15221290598856285,
+        "peak_load_N": 4116.424011230469,
+        "peak_cmod_mm": 0.026597841642796993,
+        "adaptive_increments": false,
+        "no_stop": false,
+        "time_tolerance": 1e-07,
+        "displacement_tolerance_mm": 2e-08
+      },
+      "response": {
+        "reference_peak_N": 4156.569,
+        "comparison_peak_N": 4116.424011230469,
+        "peak_difference_percent": -0.9658203381089466,
+        "common_cmod_range_mm": [
+          1.1597544471442234e-05,
+          0.1521772
+        ],
+        "curve_rms_N": 35.37715776882857,
+        "curve_rms_percent_reference_peak": 0.8511144111604682
+      },
+      "matlab_peak_excess_percent_relative_to_abaqus": 0.9752393985655416
+    }
+  },
+  "scope": "Matched fixed schedules, distinct nonlinear algorithms; no adaptive replacement."
+}

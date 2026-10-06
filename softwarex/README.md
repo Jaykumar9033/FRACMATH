@@ -32,7 +32,7 @@ This folder contains the software companions for the FRACMATH SoftwareX article:
 
 ## Execution status and archives
 
-The original baseline 10,000-increment and coarse 2,000-increment fixed Abaqus runs stopped during convergence. Their partial histories and logs remain available. The baseline 20,000-increment retry also failed, with 5,175 accepted increments recorded in `.sta`; its diagnostic logs and exact MATLAB reference are in `reproducibility/fixed_increment_retry/baseline/`. The coarse 4,000-increment retry is running and is not complete evidence. There is no adaptive substitution in the current fixed-increment curves.
+The original baseline 10,000-increment and coarse 2,000-increment fixed Abaqus runs stopped during convergence. Their partial histories and logs remain available. The baseline 20,000-increment retry also failed, with 5,174 converged increments (failure during attempt 5,175); its diagnostic logs and exact MATLAB reference are in `reproducibility/fixed_increment_retry/baseline/`. The coarse 4,000-increment comparison completed and passed exact-mesh, schedule, loading-coverage and finite-history checks. There is no adaptive substitution in the current fixed-increment curves.
 
 The larger `umat_audit`/`umat_precision` records, adaptive histories, constant-width controls and repeated scaling timings remain optional archives. They retain their original inputs and counts. The paper's material suite is ten examples. The stopped full sparse GPU experiment is not a complete result; the optional hybrid backend keeps sparse assembly/factorization on the CPU.
 

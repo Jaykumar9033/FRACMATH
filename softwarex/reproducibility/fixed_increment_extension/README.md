@@ -27,7 +27,7 @@ The aggregate execution summary therefore remains `completed_needs_review`.
 
 The fresh exact-mesh baseline 20,000-increment retry also failed. Its finished
 attempt is preserved in the separate `fixed_increment_retry` archive. The coarse
-4,000-increment retry remains running. Neither is evidence for the current plots.
+4,000-increment comparison is verified complete in that separate archive. The original medium/fine plots remain the 2,000-increment comparisons.
 
 ## Timing scope
 
