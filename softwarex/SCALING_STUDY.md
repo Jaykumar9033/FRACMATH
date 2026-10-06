@@ -103,5 +103,4 @@ The companion [phase measurement archive](reproducibility/abaqus_phase_timing/RE
 
 ## Current manuscript presentation
 
-The manuscript includes the five-configuration timing bar chart from igures/scaling_timings.pdf, covering both specimen sizes and all three meshes. Its caption identifies medians of three observations, observed minimum--maximum ranges, and the different MATLAB load-loop and Abaqus analysis/output scopes. The matched fixed-increment component table remains a separate comparison.
-
+The manuscript includes the five-configuration timing bar chart from figures/scaling_timings.pdf, covering both specimen sizes and all three meshes. Its caption identifies medians of three observations, observed minimum--maximum ranges, and the different MATLAB load-loop and Abaqus analysis/output scopes. The matched fixed-increment component table remains a separate comparison.
