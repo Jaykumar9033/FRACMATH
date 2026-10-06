@@ -40,7 +40,7 @@ Preparation alone does not execute a solver. Exact Oliver references are copied 
 
 `FRACMATH_EQUIVALENT_STRAIN=rankine` selects the largest positive principal strain, including the plane-stress out-of-plane component. The default is `modified_mises`. Rankine changes the multiaxial damage surface and does not use fc/ft. The coarse peak increases by 11.63% relative to modified von Mises; this is not evidence of greater physical accuracy.
 
-The bending exponential calibration accounts for total uniaxial work, including the elastic contribution. The panel helper uses its separately documented post-onset calibration. They are reported as distinct conventions with their own input settings, not as interchangeable parameter values.
+The two exponential calibrations are worked implementation examples for students and researchers. Following their equations and source code shows how a softening parameter enters the damage update and what must change when another law is implemented. The bending calibration includes elastic and post-peak tensile work; the panel helper calibrates the post-peak contribution. A comparison between these forms requires a common fracture-energy convention. The matched MATLAB-Abaqus bending pairs use the same law and calibration.
 
 ## UMAT and performance interpretation
 
