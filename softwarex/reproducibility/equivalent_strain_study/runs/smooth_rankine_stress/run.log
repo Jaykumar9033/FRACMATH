@@ -24,13 +24,13 @@
   1800   0.0900      1.280     0.13192   1.000     2
   1900   0.0950      1.144     0.14083   1.000     2
   2000   0.1000      1.027     0.14964   1.000     2
-  wrote C:\Users\jmavani\Documents\FRACMATH_equivalent_strain_20261006\runs\smooth_rankine_stress\matlab_load_cmod.csv
-  wrote C:\Users\jmavani\Documents\FRACMATH_equivalent_strain_20261006\runs\smooth_rankine_stress\matlab_oliver_bandwidth_history.csv
-  wrote C:\Users\jmavani\Documents\FRACMATH_equivalent_strain_20261006\runs\smooth_rankine_stress\matlab_step_diagnostics.csv
-  wrote C:\Users\jmavani\Documents\FRACMATH_equivalent_strain_20261006\runs\smooth_rankine_stress\matlab_timing.txt
+  wrote C:\Users\jmavani\Documents\FRACMATH_energy_driver_20261006\runs\smooth_rankine_stress\matlab_load_cmod.csv
+  wrote C:\Users\jmavani\Documents\FRACMATH_energy_driver_20261006\runs\smooth_rankine_stress\matlab_oliver_bandwidth_history.csv
+  wrote C:\Users\jmavani\Documents\FRACMATH_energy_driver_20261006\runs\smooth_rankine_stress\matlab_step_diagnostics.csv
+  wrote C:\Users\jmavani\Documents\FRACMATH_energy_driver_20261006\runs\smooth_rankine_stress\matlab_timing.txt
 
 ==== summary ====
   peak load : 4772.79 N at CMOD = 0.0292 mm
-  wall-clock: 128.7 s  (asm 25.2, dam 3.1, solve 11.8)
-  allocated memory delta: 106.6 MB
-  output -> C:\Users\jmavani\Documents\FRACMATH_equivalent_strain_20261006\runs\smooth_rankine_stress/
+  wall-clock: 129.5 s  (asm 25.4, dam 3.1, solve 11.9)
+  allocated memory delta: 99.4 MB
+  output -> C:\Users\jmavani\Documents\FRACMATH_energy_driver_20261006\runs\smooth_rankine_stress/

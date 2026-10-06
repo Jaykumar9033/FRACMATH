@@ -1,6 +1,6 @@
 {
   "return_code": 0,
-  "launch_elapsed_s": 135.7878266000189,
+  "launch_elapsed_s": 136.65774019993842,
   "criterion": "rankine_stress",
   "stage": "solve",
   "status": "executed_needs_verification"

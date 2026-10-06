@@ -1,20 +1,17 @@
 {
-  "python_syntax_passed": true,
-  "matlab_source_mirror_passed": true,
-  "archive_hashes_passed": 84,
-  "fresh_curve_reference_comparison": {
-    "modified_mises": {
-      "identical_saved_curve": true,
-      "maximum_absolute_difference": 0.0
-    },
-    "rankine": {
-      "identical_saved_curve": true,
-      "maximum_absolute_difference": 0.0
-    }
-  },
-  "five_driver_cases_verified": 5,
+  "current_cases": [
+    "modified_mises",
+    "elastic_energy",
+    "mazars",
+    "rankine_stress",
+    "smooth_rankine_stress"
+  ],
   "all_cases_steps": 2000,
-  "final_prescribed_displacement_mm": -0.1,
-  "gpu_kernel_unchanged": true,
-  "scope": "CPU damage-driver sensitivity; no new Abaqus criteria or GPU execution."
+  "all_execution_checks_passed": true,
+  "source_mirrors_identical": true,
+  "python_syntax_passed": true,
+  "archive_hashes_verified": 172,
+  "mazars_analytic_and_tensor_checks_passed": true,
+  "energy_normalization_checks_passed": true,
+  "scope": "Current CPU suite replaces Rankine strain with total undamaged elastic-energy norm; original archive preserved."
 }

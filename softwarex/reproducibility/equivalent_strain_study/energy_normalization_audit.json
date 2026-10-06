@@ -1,0 +1,31 @@
+{
+  "equivalent_strain": "sqrt(2*W0/E)",
+  "W0": "0.5*strain:C0:strain",
+  "plane_stress_implementation": "sqrt((ex^2+ey^2+2*nu*ex*ey)/(1-nu^2)+gamma_xy^2/(2*(1+nu)))",
+  "energy_is_undamaged": true,
+  "tension_compression_symmetric": true,
+  "analytic_cases": [
+    {
+      "state_number": 2,
+      "measured_over_eps0": 1.999999999999998,
+      "expected_over_eps0": 2.0
+    },
+    {
+      "state_number": 3,
+      "measured_over_eps0": 1.999999999999998,
+      "expected_over_eps0": 2.0
+    },
+    {
+      "state_number": 4,
+      "measured_over_eps0": 1.2909944487358092,
+      "expected_over_eps0": 1.2909944487358056
+    },
+    {
+      "state_number": 6,
+      "measured_over_eps0": 1.5811388300841949,
+      "expected_over_eps0": 1.5811388300841898
+    }
+  ],
+  "independent_tensor_states": 10,
+  "maximum_error": 0.0
+}

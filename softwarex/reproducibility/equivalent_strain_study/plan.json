@@ -1,5 +1,5 @@
 {
-  "created_utc": "2026-10-06T18:12:58.197243+00:00",
+  "created_utc": "2026-10-06T18:59:14.603370+00:00",
   "steps": 2000,
   "final_displacement_mm": -0.1,
   "regularization": "oliver",
@@ -8,7 +8,7 @@
   "size_scale": 1,
   "criteria": {
     "modified_mises": "Modified von Mises",
-    "rankine": "Rankine (strain)",
+    "elastic_energy": "Elastic energy",
     "mazars": "Mazars",
     "rankine_stress": "Rankine (stress)",
     "smooth_rankine_stress": "Smooth Rankine (stress)"
@@ -27,8 +27,8 @@
   "source_sha256": {
     "analyze_comparison_extension.py": "47227420065714d3edde86848eb75d5bccc67a906b1849c77315f3af54cf8446",
     "run_comparison_extension.py": "0828351915dc1b876f737fed6a130c86c40410df084a272161255f46c36c048c",
-    "run_equivalent_strain_study.py": "41c44a5e9fb71632ad3e31fe1f3201daaefa091b2a2c3a56cbf89641ea747c9d",
-    "solver_main_3pb.m": "95ca5bb7ab7a0aff4efd48c19f93c7bcf7a2eb3e3387b51b2c50f0039e12b2f2"
+    "run_equivalent_strain_study.py": "4a452af88cbada36afa4840ef72b0845f8deac02ae6fa1cbd373bc3527d101a1",
+    "solver_main_3pb.m": "3e4075953083ae82fe19762c41089272bc3ae98e08baa2c9b704ff4eae436290"
   },
   "scope": "Damage-driver sensitivity with the same exponential law, tensile onset, energy convention and mesh; not full Mazars/Rankine concrete models."
 }

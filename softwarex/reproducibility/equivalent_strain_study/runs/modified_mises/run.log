@@ -24,13 +24,13 @@
   1800   0.0900      0.949     0.13473   1.000     2
   1900   0.0950      0.848     0.14347   1.000     2
   2000   0.1000      0.762     0.15214   1.000     2
-  wrote C:\Users\jmavani\Documents\FRACMATH_equivalent_strain_20261006\runs\modified_mises\matlab_load_cmod.csv
-  wrote C:\Users\jmavani\Documents\FRACMATH_equivalent_strain_20261006\runs\modified_mises\matlab_oliver_bandwidth_history.csv
-  wrote C:\Users\jmavani\Documents\FRACMATH_equivalent_strain_20261006\runs\modified_mises\matlab_step_diagnostics.csv
-  wrote C:\Users\jmavani\Documents\FRACMATH_equivalent_strain_20261006\runs\modified_mises\matlab_timing.txt
+  wrote C:\Users\jmavani\Documents\FRACMATH_energy_driver_20261006\runs\modified_mises\matlab_load_cmod.csv
+  wrote C:\Users\jmavani\Documents\FRACMATH_energy_driver_20261006\runs\modified_mises\matlab_oliver_bandwidth_history.csv
+  wrote C:\Users\jmavani\Documents\FRACMATH_energy_driver_20261006\runs\modified_mises\matlab_step_diagnostics.csv
+  wrote C:\Users\jmavani\Documents\FRACMATH_energy_driver_20261006\runs\modified_mises\matlab_timing.txt
 
 ==== summary ====
   peak load : 4193.72 N at CMOD = 0.0279 mm
-  wall-clock: 135.2 s  (asm 27.1, dam 2.9, solve 12.2)
-  allocated memory delta: 64.3 MB
-  output -> C:\Users\jmavani\Documents\FRACMATH_equivalent_strain_20261006\runs\modified_mises/
+  wall-clock: 131.9 s  (asm 26.1, dam 2.9, solve 12.0)
+  allocated memory delta: 99.0 MB
+  output -> C:\Users\jmavani\Documents\FRACMATH_energy_driver_20261006\runs\modified_mises/

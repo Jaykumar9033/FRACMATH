@@ -1,9 +1,9 @@
 {
   "status": "verified_complete",
-  "pid": 117412,
+  "pid": 49604,
   "criteria": [
     "modified_mises",
-    "rankine",
+    "elastic_energy",
     "mazars",
     "rankine_stress",
     "smooth_rankine_stress"

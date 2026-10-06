@@ -3,7 +3,7 @@
     "identical_saved_curve": true,
     "maximum_absolute_difference": 0.0
   },
-  "rankine": {
+  "mazars": {
     "identical_saved_curve": true,
     "maximum_absolute_difference": 0.0
   }

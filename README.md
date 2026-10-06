@@ -78,4 +78,4 @@ The code is [MIT licensed](LICENSE). Citation metadata is in [CITATION.cff](CITA
 
 Use [GitHub Issues](https://github.com/Jaykumar9033/FRACMATH/issues) for reproducibility questions. Contribution guidance is in [CONTRIBUTING.md](CONTRIBUTING.md).
 
-The CPU bending example also supplies five equivalent-strain definitions: modified von Mises, Mazars, Rankine strain, Rankine stress and smooth Rankine stress. The [controlled comparison](softwarex/EQUIVALENT_STRAIN_STUDY.md) provides formulas, verified histories and Figure 4 reproduction commands.
+The CPU bending example also supplies five equivalent-strain definitions: modified von Mises, Mazars, elastic energy, Rankine stress and smooth Rankine stress. The [controlled comparison](softwarex/EQUIVALENT_STRAIN_STUDY.md) provides formulas, verified histories and Figure 4 reproduction commands.

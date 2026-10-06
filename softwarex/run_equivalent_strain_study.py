@@ -16,7 +16,7 @@ import time
 import numpy as np
 
 PACKAGE=Path(__file__).resolve().parent
-LABELS={'modified_mises':'Modified von Mises', 'rankine':'Rankine (strain)',
+LABELS={'modified_mises':'Modified von Mises', 'elastic_energy':'Elastic energy',
         'mazars':'Mazars', 'rankine_stress':'Rankine (stress)',
         'smooth_rankine_stress':'Smooth Rankine (stress)'}
 
@@ -132,33 +132,39 @@ def plot(workspace,output,summary=None):
     if not summary['all_execution_checks_passed']:
         raise ValueError('Only fully checked cases can be plotted')
     styles=[('#2166a5','-'),('#cc503e','--'),('#238b45','-.'),('#7b3294',':'),('#b57900',(0,(5,1,1,1)))]
+    curves={}
+    for mode in plan['criteria']:
+        values=np.loadtxt(workspace/'runs'/mode/'matlab_load_cmod.csv',delimiter=',',comments='#',ndmin=2)
+        history=np.genfromtxt(workspace/'runs'/mode/'matlab_energy_history.csv',delimiter=',',names=True)
+        if len(values)!=plan['steps'] or not np.isfinite(values).all():
+            raise ValueError('Incomplete or non-finite curve: '+mode)
+        if len(history)!=len(values) or not np.isfinite(history['displacement_mm']).all():
+            raise ValueError('Invalid prescribed-displacement history: '+mode)
+        if abs(float(np.max(values[:,1]))-summary['cases'][mode]['peak_load_N'])>1e-9:
+            raise ValueError('Curve peak differs from the verified summary: '+mode)
+        curves[mode]=(values,history['displacement_mm'])
+    output.mkdir(parents=True,exist_ok=True)
     with plt.rc_context({'font.size':11,'pdf.fonttype':42}):
-        fig,ax=plt.subplots(figsize=(8.4,5.2),layout='constrained')
-        for (mode,label),(color,line) in zip(plan['criteria'].items(),styles):
-            values=np.loadtxt(workspace/'runs'/mode/'matlab_load_cmod.csv',delimiter=',',comments='#',ndmin=2)
-            if len(values)!=plan['steps'] or not np.isfinite(values).all():
-                raise ValueError('Incomplete or non-finite curve: '+mode)
-            if abs(float(np.max(values[:,1]))-summary['cases'][mode]['peak_load_N'])>1e-9:
-                raise ValueError('Curve peak differs from the verified summary: '+mode)
-            ax.plot(values[:,0],values[:,1]/1000,label=label,color=color,linestyle=line,linewidth=2)
-            peak=np.argmax(values[:,1]);ax.plot(values[peak,0],values[peak,1]/1000,'o',color=color,markersize=4)
-        ax.set(xlabel='CMOD [mm]',ylabel='Load [kN]',xlim=(0,None),ylim=(0,None))
-        ax.set_title('Same coarse mesh, Oliver width and 2,000 fixed increments')
-        ax.spines[['top','right']].set_visible(False);ax.grid(alpha=.18)
-        ax.legend(frameon=False,fontsize=10)
-        output.mkdir(parents=True,exist_ok=True)
+        fig,axes=plt.subplots(2,1,figsize=(8.4,8.6),layout='constrained')
+        for panel,ax in enumerate(axes):
+            for (mode,label),(color,line) in zip(plan['criteria'].items(),styles):
+                values,displacement=curves[mode]
+                x=displacement if panel==0 else values[:,0]
+                ax.plot(x,values[:,1]/1000,label=label,color=color,linestyle=line,linewidth=2)
+                peak=np.argmax(values[:,1]);ax.plot(x[peak],values[peak,1]/1000,'o',color=color,markersize=4)
+            ax.set(xlabel='Prescribed downward displacement [mm]' if panel==0 else 'CMOD [mm]',
+                   ylabel='Load [kN]',xlim=(0,None),ylim=(0,None))
+            ax.set_title('(a) Response to prescribed loading' if panel==0 else '(b) Crack-mouth opening response',loc='left',fontsize=11)
+            ax.spines[['top','right']].set_visible(False);ax.grid(alpha=.18)
+        axes[0].legend(frameon=False,fontsize=9.5,loc='upper right')
         for extension in ('png','pdf'):
             fig.savefig(output/('equivalent_strain_comparison.'+extension),dpi=300)
         plt.close(fig)
-        # Prescribed displacement remains monotone even if a CMOD path reverses.
         fig,ax=plt.subplots(figsize=(8.4,5.2),layout='constrained')
         for (mode,label),(color,line) in zip(plan['criteria'].items(),styles):
-            history=np.genfromtxt(workspace/'runs'/mode/'matlab_energy_history.csv',delimiter=',',names=True)
-            values=np.loadtxt(workspace/'runs'/mode/'matlab_load_cmod.csv',delimiter=',',comments='#',ndmin=2)
-            if len(history)!=len(values) or not np.isfinite(history['displacement_mm']).all():
-                raise ValueError('Invalid prescribed-displacement history: '+mode)
-            ax.plot(history['displacement_mm'],values[:,1]/1000,label=label,color=color,linestyle=line,linewidth=2)
-            peak=np.argmax(values[:,1]);ax.plot(history['displacement_mm'][peak],values[peak,1]/1000,'o',color=color,markersize=4)
+            values,displacement=curves[mode]
+            ax.plot(displacement,values[:,1]/1000,label=label,color=color,linestyle=line,linewidth=2)
+            peak=np.argmax(values[:,1]);ax.plot(displacement[peak],values[peak,1]/1000,'o',color=color,markersize=4)
         ax.set(xlabel='Prescribed downward displacement [mm]',ylabel='Load [kN]',xlim=(0,None),ylim=(0,None))
         ax.set_title('Same coarse mesh, Oliver width and 2,000 fixed increments')
         ax.spines[['top','right']].set_visible(False);ax.grid(alpha=.18)

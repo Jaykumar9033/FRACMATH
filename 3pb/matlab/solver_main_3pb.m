@@ -89,7 +89,7 @@ assert(ismember(p.regularization, {'oliver', 'area', 'fixed'}), ...
     'FRACMATH_REGULARIZATION must be oliver, area or fixed');
 p.equivalent_strain = getenv('FRACMATH_EQUIVALENT_STRAIN');
 if isempty(p.equivalent_strain); p.equivalent_strain = 'modified_mises'; end
-assert(ismember(p.equivalent_strain, {'modified_mises', 'rankine', 'mazars', 'rankine_stress', 'smooth_rankine_stress'}), ...
+assert(ismember(p.equivalent_strain, {'modified_mises', 'rankine', 'mazars', 'rankine_stress', 'smooth_rankine_stress', 'elastic_energy'}), ...
     'Unknown equivalent-strain option');
 assert(~use_gpu || (strcmp(p.regularization,'area') == 0 && ...
     strcmp(p.equivalent_strain,'modified_mises')), ...
@@ -799,6 +799,11 @@ function [omega_new, kappa_new, h_oliver, strain] = damage_update(u, B_all, grad
     switch p.equivalent_strain
         case 'rankine'
             eq_s = max(max(e1,e3),0); % Rankine strain; e1 >= e2
+        case 'elastic_energy'
+            % sqrt(2*undamaged elastic energy/E), with engineering shear.
+            energy_norm = (ex.^2 + ey.^2 + 2*p.nu*ex.*ey)/(1-p.nu^2) ...
+                + gxy.^2/(2*(1+p.nu));
+            eq_s = sqrt(max(energy_norm,0));
         case 'mazars'
             eq_s = sqrt(max(e1,0).^2 + max(e2,0).^2 + max(e3,0).^2);
         case {'rankine_stress', 'smooth_rankine_stress'}
@@ -1298,6 +1303,8 @@ function material_selftest(p)
                 assert(abs(checked_kappa-expected_kappa) < 1e-12, ...
                     'Rankine principal-strain check failed');
             end
+        elseif strcmp(p.equivalent_strain,'elastic_energy')
+            assert(abs(kc/e-1) < 1e-10, 'Elastic-energy compression check failed');
         elseif strcmp(p.equivalent_strain,'mazars')
             assert(abs(kc/(sqrt(2)*p.nu*e)-1) < 1e-10, ...
                 'Mazars lateral-strain compression check failed');
@@ -1374,6 +1381,8 @@ function equivalent_strain_reference_check(p)
         switch p.equivalent_strain
             case 'rankine'
                 expected=max([0;principal]);
+            case 'elastic_energy'
+                expected=sqrt(max(sum(sum(tensor.*stress))/p.E,0));
             case 'mazars'
                 expected=norm(max(principal,0));
             case 'rankine_stress'

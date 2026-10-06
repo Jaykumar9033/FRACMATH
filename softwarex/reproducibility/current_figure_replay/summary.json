@@ -76,7 +76,7 @@
   "removed_adaptive_figures_checked": false,
   "native_flowchart": {
     "source": "softwarex/figure_sources/damage_update_flowchart.tex",
-    "sha256": "e3579e2e0a45fd09126ddbac25e3ac7d1385e82845cf61e9a1c2006ac9db5a10",
+    "sha256": "dad01b4443adc235ddcdf7ebd19a3474e389847edb1a9910ec3827d9ae03ebde",
     "scope": "Editable TikZ source identity recorded; compile separately in LaTeX."
   }
 }

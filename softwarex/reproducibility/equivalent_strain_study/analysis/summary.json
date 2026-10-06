@@ -27,30 +27,25 @@
         "curve_rms_percent_reference_peak": 0.0
       }
     },
-    "rankine": {
+    "elastic_energy": {
       "passed_execution_checks": true,
       "steps": 2000,
-      "peak_load_N": 4681.483,
-      "peak_cmod_mm": 0.02643724,
-      "final_cmod_mm": 0.14249,
-      "maximum_post_damage_relative_residual": 0.01818579026,
-      "peak_post_damage_relative_residual": 0.01000702468,
+      "peak_load_N": 1345.943,
+      "peak_cmod_mm": 0.003470986,
+      "final_cmod_mm": 0.0001074843,
+      "maximum_post_damage_relative_residual": 0.03527363243,
+      "peak_post_damage_relative_residual": 0.03397755455,
       "regularization": "oliver",
-      "equivalent_strain": "rankine",
+      "equivalent_strain": "elastic_energy",
       "interpretation": "Old-damage equilibrium passes; post-damage residual is reported separately.",
       "independent_material_states": 10,
       "maximum_equivalent_strain_error": 0.0,
-      "maximum_uniaxial_energy_relative_error": 1.77639955846927e-06,
+      "maximum_uniaxial_energy_relative_error": 1.77639955862347e-06,
       "relative_to_modified_mises": {
         "reference_peak_N": 4193.718,
-        "comparison_peak_N": 4681.483,
-        "peak_difference_percent": 11.630848807669002,
-        "common_cmod_range_mm": [
-          2.319509e-05,
-          0.14249
-        ],
-        "curve_rms_N": 447.52627418282293,
-        "curve_rms_percent_reference_peak": 10.671348769345554
+        "comparison_peak_N": 1345.943,
+        "peak_difference_percent": -67.90573424345651,
+        "curve_rms_status": "CMOD reversal requires explicit branch comparison"
       }
     },
     "mazars": {

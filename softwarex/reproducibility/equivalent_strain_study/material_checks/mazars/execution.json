@@ -1,6 +1,6 @@
 {
   "return_code": 0,
-  "launch_elapsed_s": 7.531681399792433,
+  "launch_elapsed_s": 7.570078500080854,
   "criterion": "mazars",
   "stage": "checks",
   "status": "executed_needs_verification"

@@ -1,0 +1,29 @@
+{
+  "definition": "sqrt(sum(max(principal_strain,0)^2)); all three recovered principal strains",
+  "plane_stress_recovery": "e3=-nu/(1-nu)*(ex+ey)",
+  "analytic_cases": [
+    {
+      "case": "Free uniaxial tension",
+      "equivalent_strain_over_eps0": 1.999999999999998,
+      "expected_over_eps0": 2.0
+    },
+    {
+      "case": "Free uniaxial compression",
+      "equivalent_strain_over_eps0": 0.5656854249492376,
+      "expected_over_eps0": 0.5656854249492381
+    },
+    {
+      "case": "Pure engineering shear",
+      "equivalent_strain_over_eps0": 1.0,
+      "expected_over_eps0": 1.0
+    },
+    {
+      "case": "Equal biaxial in-plane compression",
+      "equivalent_strain_over_eps0": 0.5,
+      "expected_over_eps0": 0.5
+    }
+  ],
+  "independent_tensor_states": 10,
+  "maximum_error": 0.0,
+  "scope": "Mazars scalar driver, not full tensile/compressive Mazars evolution laws."
+}

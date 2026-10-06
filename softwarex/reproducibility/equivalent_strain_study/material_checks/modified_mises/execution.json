@@ -1,6 +1,6 @@
 {
   "return_code": 0,
-  "launch_elapsed_s": 25.963537000119686,
+  "launch_elapsed_s": 8.314028299879283,
   "criterion": "modified_mises",
   "stage": "checks",
   "status": "executed_needs_verification"

@@ -16,7 +16,7 @@ import time
 import numpy as np
 
 PACKAGE=Path(__file__).resolve().parent
-LABELS={'modified_mises':'Modified von Mises', 'rankine':'Rankine (strain)',
+LABELS={'modified_mises':'Modified von Mises', 'elastic_energy':'Elastic energy',
         'mazars':'Mazars', 'rankine_stress':'Rankine (stress)',
         'smooth_rankine_stress':'Smooth Rankine (stress)'}
 
@@ -117,16 +117,18 @@ def analyze(workspace,output):
         summary['cases'][mode]['relative_to_modified_mises']=comparison(curves['modified_mises'],curves[mode])
     output.mkdir(parents=True,exist_ok=True)
     save(output/'summary.json',summary)
-    plot(workspace,output)
+    plot(workspace,output,summary)
     return summary
 
 
-def plot(workspace,output):
+def plot(workspace,output,summary=None):
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     plan=json.loads((workspace/'plan.json').read_text())
-    summary=json.loads((workspace/'analysis/summary.json').read_text())
+    validate(workspace,plan)
+    if summary is None:
+        summary=json.loads((workspace/'analysis/summary.json').read_text())
     if not summary['all_execution_checks_passed']:
         raise ValueError('Only fully checked cases can be plotted')
     styles=[('#2166a5','-'),('#cc503e','--'),('#238b45','-.'),('#7b3294',':'),('#b57900',(0,(5,1,1,1)))]
@@ -134,6 +136,10 @@ def plot(workspace,output):
         fig,ax=plt.subplots(figsize=(8.4,5.2),layout='constrained')
         for (mode,label),(color,line) in zip(plan['criteria'].items(),styles):
             values=np.loadtxt(workspace/'runs'/mode/'matlab_load_cmod.csv',delimiter=',',comments='#',ndmin=2)
+            if len(values)!=plan['steps'] or not np.isfinite(values).all():
+                raise ValueError('Incomplete or non-finite curve: '+mode)
+            if abs(float(np.max(values[:,1]))-summary['cases'][mode]['peak_load_N'])>1e-9:
+                raise ValueError('Curve peak differs from the verified summary: '+mode)
             ax.plot(values[:,0],values[:,1]/1000,label=label,color=color,linestyle=line,linewidth=2)
             peak=np.argmax(values[:,1]);ax.plot(values[peak,0],values[peak,1]/1000,'o',color=color,markersize=4)
         ax.set(xlabel='CMOD [mm]',ylabel='Load [kN]',xlim=(0,None),ylim=(0,None))
@@ -144,6 +150,22 @@ def plot(workspace,output):
         for extension in ('png','pdf'):
             fig.savefig(output/('equivalent_strain_comparison.'+extension),dpi=300)
         plt.close(fig)
+        # Prescribed displacement remains monotone even if a CMOD path reverses.
+        fig,ax=plt.subplots(figsize=(8.4,5.2),layout='constrained')
+        for (mode,label),(color,line) in zip(plan['criteria'].items(),styles):
+            history=np.genfromtxt(workspace/'runs'/mode/'matlab_energy_history.csv',delimiter=',',names=True)
+            values=np.loadtxt(workspace/'runs'/mode/'matlab_load_cmod.csv',delimiter=',',comments='#',ndmin=2)
+            if len(history)!=len(values) or not np.isfinite(history['displacement_mm']).all():
+                raise ValueError('Invalid prescribed-displacement history: '+mode)
+            ax.plot(history['displacement_mm'],values[:,1]/1000,label=label,color=color,linestyle=line,linewidth=2)
+            peak=np.argmax(values[:,1]);ax.plot(history['displacement_mm'][peak],values[peak,1]/1000,'o',color=color,markersize=4)
+        ax.set(xlabel='Prescribed downward displacement [mm]',ylabel='Load [kN]',xlim=(0,None),ylim=(0,None))
+        ax.set_title('Same coarse mesh, Oliver width and 2,000 fixed increments')
+        ax.spines[['top','right']].set_visible(False);ax.grid(alpha=.18)
+        ax.legend(frameon=False,fontsize=10)
+        for extension in ('png','pdf'):
+            fig.savefig(output/('equivalent_strain_load_displacement.'+extension),dpi=300)
+        plt.close(fig)
 
 
 def main():
@@ -151,14 +173,22 @@ def main():
     parser.add_argument('--workspace',type=Path,required=True)
     parser.add_argument('--stage',choices=['prepare','checks','solve','analyze','all'],default='prepare')
     parser.add_argument('--matlab',default='matlab')
+    parser.add_argument('--output',type=Path,help='Separate output folder required for the analysis-only stage')
     args=parser.parse_args();workspace=args.workspace.resolve()
+    if args.stage=='analyze' and args.output is None:
+        parser.error('Provide --output to preserve the archived result files')
+    if args.stage=='analyze':
+        output=args.output.resolve()
+        if output.is_relative_to(workspace) or (output.exists() and any(output.iterdir())):
+            parser.error('Use an empty output folder outside the archived workspace')
     plan=prepare(workspace) if args.stage in ('prepare','all') else json.loads((workspace/'plan.json').read_text())
     validate(workspace,plan)
     if args.stage in ('checks','all'):run(workspace,plan,'checks',args.matlab)
     if args.stage in ('solve','all'):run(workspace,plan,'solve',args.matlab)
     if args.stage in ('analyze','all'):
-        analyze(workspace,workspace/'analysis')
-        save(workspace/'execution_status.json',{'status':'verified_complete','pid':os.getpid(),'criteria':list(plan['criteria'])})
+        analyze(workspace,args.output.resolve() if args.output else workspace/'analysis')
+        if args.stage=='all':
+            save(workspace/'execution_status.json',{'status':'verified_complete','pid':os.getpid(),'criteria':list(plan['criteria'])})
 
 
 if __name__=='__main__':

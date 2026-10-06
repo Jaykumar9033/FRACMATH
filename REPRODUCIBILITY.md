@@ -57,4 +57,4 @@ Use the recorded mesh, material law, increment schedule and backend when compari
 
 ## Five equivalent-strain definitions
 
-[The study guide](softwarex/EQUIVALENT_STRAIN_STUDY.md) describes modified von Mises, Mazars, Rankine strain, Rankine stress and smooth Rankine stress. Fresh runs use one exact coarse mesh, Oliver width and 2,000 fixed increments. The UMAT and hybrid GPU kernel retain the default modified-von-Mises definition.
+[The study guide](softwarex/EQUIVALENT_STRAIN_STUDY.md) describes modified von Mises, Mazars, elastic energy, Rankine stress and smooth Rankine stress. Fresh runs use one exact coarse mesh, Oliver width and 2,000 fixed increments. The UMAT and hybrid GPU kernel retain the default modified-von-Mises definition.

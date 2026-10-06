@@ -4,15 +4,15 @@ Computational threads: 1
 Backend: cpu
 Peak load:    4780.59 N
 CMOD@peak:    0.026359 mm
-Solver wall-clock: 128.21 s
-End-to-end:        128.21 s   (incl. live fig + video)
+Solver wall-clock: 129.22 s
+End-to-end:        129.22 s   (incl. live fig + video)
 Visualization:     0.00 s
-  assembly:   25.21 s  (19.7%)
-  factorization: 87.72 s  (68.4%)
-  damage:     2.99 s  (2.3%)
-  solve:      11.69 s  (9.1%)
-MATLAB allocated memory delta: 116.8 MB
-Peak process working set: 1136.0 MB
+  assembly:   25.42 s  (19.7%)
+  factorization: 88.36 s  (68.4%)
+  damage:     3.02 s  (2.3%)
+  solve:      11.82 s  (9.1%)
+MATLAB allocated memory delta: 102.5 MB
+Peak process working set: 1139.8 MB
 Regularization: oliver (fixed reference width 1.25 mm)
 Equivalent strain: rankine_stress
 Target prescribed displacement: -1.000000000e-01 mm

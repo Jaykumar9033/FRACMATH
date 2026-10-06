@@ -19,17 +19,15 @@ where `I1 = e1+e2+e3`. Positive brackets mean `max(value,0)`.
 | Setting | Figure label | Equivalent strain |
 | --- | --- | --- |
 | `modified_mises` | Modified von Mises | Existing de Vree invariant expression, using `I1`, `J2` and `k=fc/ft` |
-| `rankine` | Rankine (strain) | `max(e1,e2,e3,0)` |
+| `elastic_energy` | Elastic energy | `sqrt(2*W0/E)`, where `W0 = 0.5*strain:C0:strain` |
 | `mazars` | Mazars | `sqrt(max(e1,0)^2 + max(e2,0)^2 + max(e3,0)^2)` |
 | `rankine_stress` | Rankine (stress) | `max(q1,q2,q3,0)` |
 | `smooth_rankine_stress` | Smooth Rankine (stress) | `sqrt(max(q1,0)^2 + max(q2,0)^2 + max(q3,0)^2)` |
 
-Stress-based and strain-based Rankine definitions are distinct under
-multiaxial loading. Smooth Rankine based on positive principal strain is
-the same norm as Mazars here, so it is not counted as a sixth distinct case.
+The energy definition uses the total undamaged elastic energy and is normalized so that free uniaxial tension gives the axial strain. It is not a tensile-only energy split.
 
-The four tensile alternatives do not use `fc/ft`. Under free uniaxial
-compression, strain Rankine gives `nu*abs(ex)` and Mazars gives
+The four alternatives do not use `fc/ft`. Under free uniaxial
+compression, the energy norm gives `abs(ex)` and Mazars gives
 `sqrt(2)*nu*abs(ex)` because of lateral extension. The stress-based measures
 give zero for this path. All five reproduce the same equivalent strain
 under free uniaxial tension. These differences must be considered when
@@ -43,8 +41,8 @@ and the same E, nu, ft, GF and exponential softening calibration. Only the
 equivalent-strain definition changes. The width formula remains identical;
 its values can differ as the predicted strain direction changes.
 
-The runner first checks ten material states with an independent tensor
-eigensolve for each criterion. It also checks tensile onset, four widths,
+The runner first checks ten material states with independent tensor
+calculations for each criterion. It also checks tensile onset, four widths,
 uniaxial fracture energy and unloading/reloading. Structural checks inspect
 exact mesh identity, increment sequence, final loading extent, finite
 states, damage bounds and the saved post-update force residual.
@@ -60,14 +58,17 @@ The Abaqus UMAT remains the default modified-von-Mises/Oliver implementation.
 | Driver | Peak load [kN] | Peak change from modified von Mises |
 | --- | ---: | ---: |
 | Modified von Mises | 4.194 | +0.00% |
-| Rankine (strain) | 4.681 | +11.63% |
+| Elastic energy | 1.346 | -67.91% |
 | Mazars | 4.689 | +11.82% |
 | Rankine (stress) | 4.781 | +13.99% |
 | Smooth Rankine (stress) | 4.773 | +13.81% |
 
-All five complete 2,000 increments and reach -0.1 mm prescribed displacement. The Mazars load-CMOD path reverses during later loading; points are retained in loading order. A single-valued common-CMOD RMS is therefore not reported for this case. The companion `equivalent_strain_load_displacement` plot uses the monotone prescribed displacement and helps interpret that path. No claim of experimental accuracy follows from the higher peaks.
+All five cases complete 2,000 increments and reach -0.1 mm prescribed displacement. Figure 4(a) uses the monotone prescribed downward displacement; Figure 4(b) retains load-CMOD points in loading order. Mazars and elastic energy reverse CMOD during later loading, so no single-valued common-CMOD RMS is reported for those paths. No claim of experimental accuracy follows from these differences.
 
-The maximum post-damage relative residual ranges from 1.08% to 1.82% across these sequential-secant runs. The preceding-damage linear equilibrium checks pass; this does not mean that every updated damage state is fully equilibrated. All five material checks pass, with tensile-energy relative error below 0.00018%. The fresh default and strain-Rankine curves reproduce their previous saved curves exactly.
+The total-energy norm activates in compression with the same onset as free uniaxial tension; it is not calibrated to the input compressive strength. Its lower response illustrates sensitivity to that choice. Maximum post-damage relative residuals range from 1.08% to 3.53%. Preceding-damage equilibrium checks pass, but fully equilibrated updated damage states are not claimed. Tensile-energy relative errors are below 0.00018%.
+
+The Mazars formula and code match ten independent tensor checks and analytical tension, compression, shear and biaxial checks. All three principal strains are included, with plane-stress recovery of the out-of-plane strain. Free compression can activate damage through lateral positive strain; this is not an algebraic error. The fresh Mazars and default curves exactly reproduce their saved references. Details are in `mazars_equation_audit.json` and `energy_normalization_audit.json`. The original Rankine-strain comparison remains under `reproducibility/equivalent_strain_study_20261006_rankine_strain/` for historical reproduction.
+
 
 ## Run and reconstruct
 
@@ -88,7 +89,7 @@ python softwarex/run_equivalent_strain_study.py --workspace softwarex/reproducib
 python softwarex/plot_current_figures.py --output C:/runs/current_figures
 ```
 
-The analysis-only stage requires a separate output folder to preserve the archive.
+The analysis-only stage requires a separate output folder to preserve the archive. The earlier Rankine-strain comparison is a historical archive; it is not part of the current Figure 4 suite.
 
 ## Sources
 

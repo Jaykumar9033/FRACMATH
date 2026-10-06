@@ -1,27 +1,7 @@
 {
-  "modified_mises": {
-    "parameters_match": true,
-    "final_loading_verified": true,
-    "post_damage_residual": 0.01131573407
-  },
-  "rankine": {
-    "parameters_match": true,
-    "final_loading_verified": true,
-    "post_damage_residual": 0.01818579026
-  },
-  "mazars": {
-    "parameters_match": true,
-    "final_loading_verified": true,
-    "post_damage_residual": 0.01081587682
-  },
-  "rankine_stress": {
-    "parameters_match": true,
-    "final_loading_verified": true,
-    "post_damage_residual": 0.01205219072
-  },
-  "smooth_rankine_stress": {
-    "parameters_match": true,
-    "final_loading_verified": true,
-    "post_damage_residual": 0.01106194778
-  }
+  "all_five_parameter_checks_passed": true,
+  "steps": 2000,
+  "final_displacement_mm": -0.1,
+  "regularization": "oliver",
+  "backend": "cpu"
 }

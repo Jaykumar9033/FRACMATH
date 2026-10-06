@@ -48,7 +48,7 @@ For each triangle, project its three shape-function gradients onto the maximum-p
 
 The width changes with direction. The current manuscript compares it with `h = sqrt(2*A)`, where `A` is the area of each triangle. This area width follows element size but does not change with the strain direction. The two choices are compared on the same coarse, medium and fine meshes. A constant-width option remains only to reproduce older archives.
 
-The coarse-mesh CPU study compares five damage drivers: modified von Mises, Mazars, Rankine strain, Rankine stress and smooth Rankine stress. All use the same mesh, 2,000 fixed increments, Oliver width formula, tensile onset and exponential energy calibration. These are scalar-driver alternatives, not complete Mazars or Rankine concrete models. Only modified von Mises uses fc/ft; the compression response differs between the options. See [EQUIVALENT_STRAIN_STUDY.md](EQUIVALENT_STRAIN_STUDY.md) for formulas, checks and reproduction commands.
+The coarse-mesh CPU study compares five damage drivers: modified von Mises, Mazars, elastic energy, Rankine stress and smooth Rankine stress. All use the same mesh, 2,000 fixed increments, Oliver width formula, tensile onset and exponential energy calibration. These are scalar-driver alternatives, not complete Mazars or Rankine concrete models. Only modified von Mises uses fc/ft; the compression response differs between the options. See [EQUIVALENT_STRAIN_STUDY.md](EQUIVALENT_STRAIN_STUDY.md) for formulas, checks and reproduction commands.
 
 ## CPU, hybrid GPU, and Abaqus
 

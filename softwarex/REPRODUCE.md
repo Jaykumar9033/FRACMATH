@@ -59,7 +59,7 @@ The completed current cross-code plots use medium/fine, 2,000 increments and -0.
 
 For fresh Figure 4 simulations, run `python softwarex/run_equivalent_strain_study.py --workspace C:/runs/strain_study --stage all`. This performs the material checks and all five structural cases sequentially.
 
-The coarse-mesh CPU study compares five damage drivers: modified von Mises, Mazars, Rankine strain, Rankine stress and smooth Rankine stress. All use the same mesh, 2,000 fixed increments, Oliver width formula, tensile onset and exponential energy calibration. These are scalar-driver alternatives, not complete Mazars or Rankine concrete models. Only modified von Mises uses fc/ft; the compression response differs between the options. See [EQUIVALENT_STRAIN_STUDY.md](EQUIVALENT_STRAIN_STUDY.md) for formulas, checks and reproduction commands.
+The coarse-mesh CPU study compares five damage drivers: modified von Mises, Mazars, elastic energy, Rankine stress and smooth Rankine stress. All use the same mesh, 2,000 fixed increments, Oliver width formula, tensile onset and exponential energy calibration. These are scalar-driver alternatives, not complete Mazars or Rankine concrete models. Only modified von Mises uses fc/ft; the compression response differs between the options. See [EQUIVALENT_STRAIN_STUDY.md](EQUIVALENT_STRAIN_STUDY.md) for formulas, checks and reproduction commands.
 
 ## 6. 3D numerical examples
 
