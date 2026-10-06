@@ -6,7 +6,7 @@ The current extension archive is `reproducibility/fixed_increment_extension/`. I
 
 - Medium/fine MATLAB-Abaqus response comparisons: same exact mesh in each pair, 2,000 fixed increments and -0.1 mm final displacement. Actual ODB times and loading-node displacement are checked.
 - Three MATLAB meshes: element-area width `sqrt(2*A)` versus directional Oliver width, with identical material and loading settings within each pair.
-- Coarse MATLAB mesh: three current equivalent-strain definitions with Oliver width and the same E, nu, ft and GF. Figure 4 selects their load-CMOD histories from the preserved five-run archive in `reproducibility/equivalent_strain_study/`; the original two-driver extension remains archived.
+- Coarse MATLAB mesh: two current equivalent-strain definitions with Oliver width and the same E, nu, ft and GF. Figure 4 selects their load-CMOD histories from the preserved five-run archive in `reproducibility/equivalent_strain_study/`; the original two-driver extension remains archived.
 
 The suite as a whole is not labelled complete merely because these cases passed. Original baseline/coarse fixed Abaqus failures, the failed baseline smaller-step retry remain explicit; the coarse 4,000-increment comparison is now verified complete.
 
@@ -38,7 +38,7 @@ Preparation alone does not execute a solver. Exact Oliver references are copied 
 
 `FRACMATH_REGULARIZATION=area` selects elementwise `sqrt(2*A)`; `oliver` selects directional width. The historical `fixed` option remains only for reproducing old records.
 
-The current coarse-mesh CPU comparison uses three damage drivers: modified von Mises, elastic energy and Rankine stress. Figure 4 shows load versus CMOD. All use the same mesh, 2,000 fixed increments, Oliver width formula, tensile onset and exponential energy calibration. These are scalar-driver alternatives within the same damage update, not complete independently calibrated concrete models. Only modified von Mises uses fc/ft. The total-energy definition also activates in compression and is not calibrated to fc. See [EQUIVALENT_STRAIN_STUDY.md](EQUIVALENT_STRAIN_STUDY.md) for formulas, checks and reproduction commands.
+The current coarse-mesh CPU comparison uses two damage drivers: modified von Mises and Rankine stress. Figure 4 shows load versus CMOD. All use the same mesh, 2,000 fixed increments, Oliver width formula, tensile onset and exponential energy calibration. These are scalar-driver alternatives within the same damage update, not complete independently calibrated concrete models. Only modified von Mises uses fc/ft. See [EQUIVALENT_STRAIN_STUDY.md](EQUIVALENT_STRAIN_STUDY.md) for formulas, checks and reproduction commands.
 
 The two exponential calibrations are worked implementation examples for students and researchers. Following their equations and source code shows how a softening parameter enters the damage update and what must change when another law is implemented. The bending calibration includes elastic and post-peak tensile work; the panel helper calibrates the post-peak contribution. A comparison between these forms requires a common fracture-energy convention. The matched MATLAB-Abaqus bending pairs use the same law and calibration.
 

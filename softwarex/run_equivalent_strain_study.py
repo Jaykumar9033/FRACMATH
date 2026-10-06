@@ -1,4 +1,4 @@
-"""Run three damage-driver examples on one exact mesh and fixed schedule.
+"""Run two damage-driver examples on one exact mesh and fixed schedule.
 
 python softwarex/run_equivalent_strain_study.py --workspace C:/runs/strain_study --stage all
 Numerical runs are sequential. Use a new workspace; saved evidence is not overwritten.
@@ -17,7 +17,7 @@ import time
 import numpy as np
 
 PACKAGE=Path(__file__).resolve().parent
-LABELS={'modified_mises':'Modified von Mises', 'elastic_energy':'Elastic energy',
+LABELS={'modified_mises':'Modified von Mises',
         'rankine_stress':'Rankine (stress)'}
 
 
@@ -131,7 +131,7 @@ def plot(workspace,output,summary=None):
         summary=json.loads((workspace/'analysis/summary.json').read_text())
     if not summary['all_execution_checks_passed']:
         raise ValueError('Only fully checked cases can be plotted')
-    styles={'modified_mises':('#2166a5','-'), 'elastic_energy':('#cc503e','--'),
+    styles={'modified_mises':('#2166a5','-'),
             'rankine_stress':('#7b3294',':')}
     curves={}
     # The immutable archive also contains optional drivers outside Figure 4.
@@ -157,7 +157,7 @@ def plot(workspace,output,summary=None):
         fig,ax=plt.subplots(figsize=(8.4,5.2),layout='constrained')
         for mode,label in LABELS.items():
             values=curves[mode];color,line=styles[mode]
-            # Preserve loading order, including the elastic-energy CMOD reversal.
+            # Preserve the chronological loading sequence.
             ax.plot(values[:,0],values[:,1]/1000,label=label,color=color,linestyle=line,linewidth=2)
             peak=np.argmax(values[:,1]);ax.plot(values[peak,0],values[peak,1]/1000,'o',color=color,markersize=4)
         ax.plot(experiment[:,1],experiment[:,2],color='#444444',linewidth=1,

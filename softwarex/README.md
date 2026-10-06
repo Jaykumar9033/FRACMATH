@@ -7,7 +7,7 @@ This folder contains the software companions for the FRACMATH SoftwareX article:
 1. **Material examples:** ten prescribed strain states compare MATLAB, the actual Abaqus UMAT and an independent reference. The permitted difference is `2e-10 + 2e-10 * abs(reference_value)`. These are material-point checks, not one-element structural analyses.
 2. **Fixed-increment bending:** medium and fine meshes have completed MATLAB/Abaqus responses at 2,000 fixed increments to -0.1 mm. Each paired comparison uses the exact same mesh. MATLAB and Abaqus still use different nonlinear equilibrium procedures.
 3. **Width comparison:** coarse, medium and fine MATLAB responses compare Oliver's directional width with `h = sqrt(2*A)`, where A is each triangle's area. A constant width is not used in the current manuscript plots.
-4. **Damage-driver comparison:** The current coarse-mesh CPU comparison uses modified von Mises, elastic energy and Rankine stress. Figure 4 shows load versus CMOD. All use the same mesh, 2,000 fixed increments, Oliver width formula, tensile onset and exponential energy calibration. These are scalar-driver alternatives within the same damage update, not complete independently calibrated concrete models. Only modified von Mises uses fc/ft. The total-energy definition also activates in compression and is not calibrated to fc. See [EQUIVALENT_STRAIN_STUDY.md](EQUIVALENT_STRAIN_STUDY.md) for formulas, checks and reproduction commands.
+4. **Damage-driver comparison:** The current coarse-mesh CPU comparison uses modified von Mises and Rankine stress. Figure 4 shows load versus CMOD. All use the same mesh, 2,000 fixed increments, Oliver width formula, tensile onset and exponential energy calibration. These are scalar-driver alternatives within the same damage update, not complete independently calibrated concrete models. Only modified von Mises uses fc/ft. See [EQUIVALENT_STRAIN_STUDY.md](EQUIVALENT_STRAIN_STUDY.md) for formulas, checks and reproduction commands.
 5. **3D MATLAB examples:** the separate pure-tension study checks three-mesh numerical consistency. The mixed-mode panel and torsion fields are qualitative demonstrations. No experimental 3D curve or Abaqus torsion solution is claimed.
 6. **Timing:** saved MATLAB load-loop components and separate fixed-increment Abaqus analysis records describe the measured work. Partial UMAT/native profiles do not identify complete assembly wall time.
 
@@ -21,7 +21,7 @@ This folder contains the software companions for the FRACMATH SoftwareX article:
 | `reproducibility/abaqus/` | Abaqus model builder and plane-stress UMAT |
 | `reproducibility/material_examples/` | Ten explained material-point examples |
 | `reproducibility/fixed_increment_extension/` | Current fixed-increment, area-width and strain-driver records |
-| `reproducibility/equivalent_strain_study/` | Preserved five-run execution archive; three responses selected for current Figure 4 |
+| `reproducibility/equivalent_strain_study/` | Preserved five-run execution archive; two responses selected for current Figure 4 |
 | `reproducibility/experimental_2d/` | Published 100 mm beam graphic vertices, source provenance and comparison limits |
 | `extract_published_beam_curve.py` | Recover the experimental trace from the native author figure |
 | `reproducibility/mesh_study/` | Exact mesh family and optional original study records |

@@ -47,7 +47,7 @@ See [UMAT_GUIDE.md](softwarex/UMAT_GUIDE.md) for strain input, state variables, 
 | Fixed-increment bending responses | Medium and fine exact meshes; MATLAB and Abaqus each use 2,000 fixed increments to -0.1 mm; `softwarex/reproducibility/fixed_increment_extension/` |
 | Damage calculation flowchart | Native TikZ source: `softwarex/figure_sources/damage_update_flowchart.tex` |
 | Oliver versus element-area width | Three MATLAB meshes; `h = sqrt(2*A)` versus directional Oliver width; current extension archive |
-| Equivalent-strain comparison | Coarse MATLAB mesh; modified von Mises, elastic energy and Rankine stress; load-CMOD curves in `softwarex/reproducibility/equivalent_strain_study/` |
+| Equivalent-strain comparison | Coarse MATLAB mesh; modified von Mises and Rankine stress; load-CMOD curves in `softwarex/reproducibility/equivalent_strain_study/` |
 | Material consistency | Ten explained MATLAB-UMAT states; `softwarex/reproducibility/material_examples/` |
 | Pure-tension mesh consistency | Three MATLAB meshes; `softwarex/reproducibility/nooru_25mm_mesh_study/` |
 | Mixed-mode panel and torsion | Qualitative MATLAB damage illustrations and supplied geometry sources |
@@ -78,6 +78,6 @@ The code is [MIT licensed](LICENSE). Citation metadata is in [CITATION.cff](CITA
 
 Use [GitHub Issues](https://github.com/Jaykumar9033/FRACMATH/issues) for reproducibility questions. Contribution guidance is in [CONTRIBUTING.md](CONTRIBUTING.md).
 
-Figure 4 compares three CPU damage drivers: modified von Mises, elastic energy and Rankine stress. It shows load versus CMOD. The [controlled comparison](softwarex/EQUIVALENT_STRAIN_STUDY.md) provides formulas, verified histories and reproduction commands. The original five-run execution archive is preserved; only these three responses form the current figure.
+Figure 4 compares two CPU damage drivers: modified von Mises and Rankine stress. It shows load versus CMOD. The [controlled comparison](softwarex/EQUIVALENT_STRAIN_STUDY.md) provides formulas, verified histories and reproduction commands. The original five-run execution archive is preserved; only these two responses form the current figure.
 
 Figure 4 also includes the published experimental 100 mm beam trace from Grassl et al. (2012), recovered from their native figure. Its nominal dimensions match the bending example. These are graphic vertices, not raw laboratory samples; the [source record](softwarex/reproducibility/experimental_2d/README.md) states the geometry and comparison limits. No material fitting is performed.

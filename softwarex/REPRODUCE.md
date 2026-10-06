@@ -33,7 +33,7 @@ python softwarex/verify_current_figures.py --workspace C:/runs/current_figure_ch
 
 These scripts use saved outputs rather than running MATLAB or Abaqus. They draw the advanced bending figure, element-area/Oliver comparison, equivalent-strain comparison and current 3D assets. The numerical flowchart is native TikZ source in `softwarex/figure_sources/damage_update_flowchart.tex`.
 
-Figure 4 reconstruction selects three numerical load-CMOD curves and reads the published experimental 100 mm beam trace in [experimental_2d](reproducibility/experimental_2d/README.md). Open markers select recovered graphic vertices. [extract_published_beam_curve.py](extract_published_beam_curve.py) documents their recovery from the native author figure and source checks. These are not raw laboratory samples or points generated from numerical curves. The plot shows CMOD 0–0.16 mm; the full recovered trace extends to 0.3363 mm. Nominal beam dimensions match, but exact experimental notch width, loading control and replicate identity are unverified. No material fitting is performed.
+Figure 4 reconstruction selects three numerical load-CMOD curves and reads the published experimental 100 mm beam trace in [experimental_2d](reproducibility/experimental_2d/README.md). Open markers select recovered graphic vertices. [extract_published_beam_curve.py](extract_published_beam_curve.py) documents their recovery from the native author figure and source checks. These are not raw laboratory samples or points generated from numerical curves. The plot shows CMOD 0â€“0.16 mm; the full recovered trace extends to 0.3363 mm. Nominal beam dimensions match, but exact experimental notch width, loading control and replicate identity are unverified. No material fitting is performed.
 
 ## 4. Prepare and run the structural extension
 
@@ -59,9 +59,9 @@ The completed current cross-code plots use medium/fine, 2,000 increments and -0.
 
 `h = sqrt(2*A)` uses the area of each triangle. Oliver width uses projected shape-function gradients and the maximum-principal-strain direction. All current width-study cases keep the mesh, material, increment count and final displacement fixed within a pair.
 
-For fresh Figure 4 simulations, run `python softwarex/run_equivalent_strain_study.py --workspace C:/runs/strain_study --stage all`. This performs the material checks and the three current structural cases sequentially.
+For fresh Figure 4 simulations, run `python softwarex/run_equivalent_strain_study.py --workspace C:/runs/strain_study --stage all`. This performs the material checks and the two current structural cases sequentially.
 
-The current coarse-mesh CPU comparison uses three damage drivers: modified von Mises, elastic energy and Rankine stress. Figure 4 shows load versus CMOD. All use the same mesh, 2,000 fixed increments, Oliver width formula, tensile onset and exponential energy calibration. These are scalar-driver alternatives within the same damage update, not complete independently calibrated concrete models. Only modified von Mises uses fc/ft. The total-energy definition also activates in compression and is not calibrated to fc. See [EQUIVALENT_STRAIN_STUDY.md](EQUIVALENT_STRAIN_STUDY.md) for formulas, checks and reproduction commands.
+The current coarse-mesh CPU comparison uses two damage drivers: modified von Mises and Rankine stress. Figure 4 shows load versus CMOD. All use the same mesh, 2,000 fixed increments, Oliver width formula, tensile onset and exponential energy calibration. These are scalar-driver alternatives within the same damage update, not complete independently calibrated concrete models. Only modified von Mises uses fc/ft. See [EQUIVALENT_STRAIN_STUDY.md](EQUIVALENT_STRAIN_STUDY.md) for formulas, checks and reproduction commands.
 
 ## 6. 3D numerical examples
 
