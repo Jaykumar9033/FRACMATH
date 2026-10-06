@@ -1,6 +1,6 @@
 # Reproducing the FRACMATH study
 
-The current manuscript uses ten material examples, completed fixed-increment MATLAB-Abaqus bending comparisons, an element-area/Oliver width study, a five-driver CPU equivalent-strain comparison, and MATLAB panel/torsion examples. [softwarex/REPRODUCE.md](softwarex/REPRODUCE.md) gives the detailed sequence. [VALIDATION_SCOPE.md](softwarex/VALIDATION_SCOPE.md) explains the limits.
+The current manuscript uses ten material examples, completed fixed-increment MATLAB-Abaqus bending comparisons, an element-area/Oliver width study, a three-driver CPU equivalent-strain comparison, and MATLAB panel/torsion examples. [softwarex/REPRODUCE.md](softwarex/REPRODUCE.md) gives the detailed sequence. [VALIDATION_SCOPE.md](softwarex/VALIDATION_SCOPE.md) explains the limits.
 
 ## Environment
 
@@ -25,7 +25,9 @@ python softwarex/plot_current_figures.py --output C:/runs/current_figures
 python softwarex/verify_current_figures.py --workspace C:/runs/current_figure_check
 ```
 
-The figure scripts read the fixed-increment extension, the five-driver equivalent-strain archive and the supplied 3D figure sources. They do not solve the model. The native damage-update flowchart is in `softwarex/figure_sources/damage_update_flowchart.tex`.
+The figure scripts read the fixed-increment extension, the equivalent-strain archive and the supplied 3D figure sources. Figure 4 selects three completed load-CMOD histories from the preserved five-run archive. It has no load-displacement panel. The scripts do not solve the model. The native damage-update flowchart is in `softwarex/figure_sources/damage_update_flowchart.tex`.
+
+Figure 4 includes the published experimental 100 mm beam trace stored in [experimental_2d](softwarex/reproducibility/experimental_2d/README.md). [extract_published_beam_curve.py](softwarex/extract_published_beam_curve.py) recovers its vertices from the native author figure and records source hashes and axis calibration. The open markers select actual graphic vertices; they are not generated from simulation results. The figure shows CMOD from 0 to 0.16 mm; the recovered experimental trace extends to 0.3363 mm. The exact experimental notch width, loading control and replicate identity are unverified, and the numerical parameters are not fitted to the trace.
 
 ## Material examples
 
@@ -55,6 +57,6 @@ Separate material-call timers and native profiles are described in [ABAQUS_TIMIN
 
 Use the recorded mesh, material law, increment schedule and backend when comparing arrays. Check finite histories, prescribed displacement coverage and post-update residuals. Matching increment counts does not imply matching nonlinear equilibrium accuracy. Runtime, timestamps and PDF metadata are not exact reproduction targets. CPU/GPU comparisons use tolerances rather than a promise of bit-for-bit equality.
 
-## Five equivalent-strain definitions
+## Three equivalent-strain definitions
 
-[The study guide](softwarex/EQUIVALENT_STRAIN_STUDY.md) describes modified von Mises, Mazars, elastic energy, Rankine stress and smooth Rankine stress. Fresh runs use one exact coarse mesh, Oliver width and 2,000 fixed increments. The UMAT and hybrid GPU kernel retain the default modified-von-Mises definition.
+[The study guide](softwarex/EQUIVALENT_STRAIN_STUDY.md) describes modified von Mises, elastic energy and Rankine stress. The selected completed runs use one exact coarse mesh, Oliver width and 2,000 fixed increments. The UMAT and hybrid GPU kernel retain the default modified-von-Mises definition.

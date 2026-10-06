@@ -26,7 +26,6 @@ GENERATED = (
     "figure1_fixed_advanced.png", "figure1_fixed_advanced.pdf",
     "area_versus_oliver.png", "area_versus_oliver.pdf",
     "equivalent_strain_comparison.png", "equivalent_strain_comparison.pdf",
-    "equivalent_strain_load_displacement.png", "equivalent_strain_load_displacement.pdf",
     "nooru_tension_comparison.png", "nooru_tension_comparison.pdf",
     "nooru_damage_evolution_shared_bar.png", "torsion_damage_evolution_shared_bar.png",
 )

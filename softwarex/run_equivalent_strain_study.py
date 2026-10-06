@@ -1,4 +1,4 @@
-"""Run five damage-driver examples on one exact mesh and fixed schedule.
+"""Run three damage-driver examples on one exact mesh and fixed schedule.
 
 python softwarex/run_equivalent_strain_study.py --workspace C:/runs/strain_study --stage all
 Numerical runs are sequential. Use a new workspace; saved evidence is not overwritten.
@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -17,8 +18,7 @@ import numpy as np
 
 PACKAGE=Path(__file__).resolve().parent
 LABELS={'modified_mises':'Modified von Mises', 'elastic_energy':'Elastic energy',
-        'mazars':'Mazars', 'rankine_stress':'Rankine (stress)',
-        'smooth_rankine_stress':'Smooth Rankine (stress)'}
+        'rankine_stress':'Rankine (stress)'}
 
 
 def digest(path):
@@ -46,7 +46,7 @@ def prepare(workspace):
           'mesh_source':str(mesh),
           'mesh_sha256':{p.name:digest(p) for p in (workspace/'mesh').iterdir() if p.is_file()},
           'source_sha256':{p.name:digest(p) for p in snapshot.iterdir()},
-          'scope':'Damage-driver sensitivity with the same exponential law, tensile onset, energy convention and mesh; not full Mazars/Rankine concrete models.'}
+          'scope':'Damage-driver sensitivity with the same exponential law, tensile onset, energy convention and mesh; not complete concrete models.'}
     save(workspace/'plan.json',plan)
     return plan
 
@@ -131,47 +131,82 @@ def plot(workspace,output,summary=None):
         summary=json.loads((workspace/'analysis/summary.json').read_text())
     if not summary['all_execution_checks_passed']:
         raise ValueError('Only fully checked cases can be plotted')
-    styles=[('#2166a5','-'),('#cc503e','--'),('#238b45','-.'),('#7b3294',':'),('#b57900',(0,(5,1,1,1)))]
+    styles={'modified_mises':('#2166a5','-'), 'elastic_energy':('#cc503e','--'),
+            'rankine_stress':('#7b3294',':')}
     curves={}
-    for mode in plan['criteria']:
+    # The immutable archive also contains optional drivers outside Figure 4.
+    for mode in LABELS:
+        if mode not in plan['criteria'] or mode not in summary['cases']:
+            raise ValueError('Current comparison driver is missing: '+mode)
         values=np.loadtxt(workspace/'runs'/mode/'matlab_load_cmod.csv',delimiter=',',comments='#',ndmin=2)
-        history=np.genfromtxt(workspace/'runs'/mode/'matlab_energy_history.csv',delimiter=',',names=True)
         if len(values)!=plan['steps'] or not np.isfinite(values).all():
             raise ValueError('Incomplete or non-finite curve: '+mode)
-        if len(history)!=len(values) or not np.isfinite(history['displacement_mm']).all():
-            raise ValueError('Invalid prescribed-displacement history: '+mode)
         if abs(float(np.max(values[:,1]))-summary['cases'][mode]['peak_load_N'])>1e-9:
             raise ValueError('Curve peak differs from the verified summary: '+mode)
-        curves[mode]=(values,history['displacement_mm'])
+        curves[mode]=values
+    experiment=read_experiment(workspace/'mesh')
+    upper_cmod=float(np.ceil(max(values[:,0].max() for values in curves.values())/0.01)*0.01)
+    visible=np.flatnonzero(experiment[:,1]<=upper_cmod)
+    markers=[];last=-np.inf
+    for index in visible:
+        if experiment[index,1]-last>=0.006:
+            markers.append(int(index));last=experiment[index,1]
+    markers=sorted(set(markers+[int(np.argmax(experiment[:,2]))]))
     output.mkdir(parents=True,exist_ok=True)
     with plt.rc_context({'font.size':11,'pdf.fonttype':42}):
-        fig,axes=plt.subplots(2,1,figsize=(8.4,8.6),layout='constrained')
-        for panel,ax in enumerate(axes):
-            for (mode,label),(color,line) in zip(plan['criteria'].items(),styles):
-                values,displacement=curves[mode]
-                x=displacement if panel==0 else values[:,0]
-                ax.plot(x,values[:,1]/1000,label=label,color=color,linestyle=line,linewidth=2)
-                peak=np.argmax(values[:,1]);ax.plot(x[peak],values[peak,1]/1000,'o',color=color,markersize=4)
-            ax.set(xlabel='Prescribed downward displacement [mm]' if panel==0 else 'CMOD [mm]',
-                   ylabel='Load [kN]',xlim=(0,None),ylim=(0,None))
-            ax.set_title('(a) Response to prescribed loading' if panel==0 else '(b) Crack-mouth opening response',loc='left',fontsize=11)
-            ax.spines[['top','right']].set_visible(False);ax.grid(alpha=.18)
-        axes[0].legend(frameon=False,fontsize=9.5,loc='upper right')
+        fig,ax=plt.subplots(figsize=(8.4,5.2),layout='constrained')
+        for mode,label in LABELS.items():
+            values=curves[mode];color,line=styles[mode]
+            # Preserve loading order, including the elastic-energy CMOD reversal.
+            ax.plot(values[:,0],values[:,1]/1000,label=label,color=color,linestyle=line,linewidth=2)
+            peak=np.argmax(values[:,1]);ax.plot(values[peak,0],values[peak,1]/1000,'o',color=color,markersize=4)
+        ax.plot(experiment[:,1],experiment[:,2],color='#444444',linewidth=1,
+                marker='o',markerfacecolor='white',markeredgewidth=1,
+                markersize=4.5,markevery=markers,label='Experiment (digitized)',zorder=1)
+        ax.set(xlabel='CMOD [mm]',ylabel='Load [kN]',xlim=(0,upper_cmod),ylim=(0,None))
+        ax.spines[['top','right']].set_visible(False);ax.grid(alpha=.18)
+        ax.legend(frameon=False,fontsize=10,loc='upper right')
         for extension in ('png','pdf'):
             fig.savefig(output/('equivalent_strain_comparison.'+extension),dpi=300)
         plt.close(fig)
-        fig,ax=plt.subplots(figsize=(8.4,5.2),layout='constrained')
-        for (mode,label),(color,line) in zip(plan['criteria'].items(),styles):
-            values,displacement=curves[mode]
-            ax.plot(displacement,values[:,1]/1000,label=label,color=color,linestyle=line,linewidth=2)
-            peak=np.argmax(values[:,1]);ax.plot(displacement[peak],values[peak,1]/1000,'o',color=color,markersize=4)
-        ax.set(xlabel='Prescribed downward displacement [mm]',ylabel='Load [kN]',xlim=(0,None),ylim=(0,None))
-        ax.set_title('Same coarse mesh, Oliver width and 2,000 fixed increments')
-        ax.spines[['top','right']].set_visible(False);ax.grid(alpha=.18)
-        ax.legend(frameon=False,fontsize=10)
-        for extension in ('png','pdf'):
-            fig.savefig(output/('equivalent_strain_load_displacement.'+extension),dpi=300)
-        plt.close(fig)
+
+
+def read_experiment(mesh):
+    """Read published graphic vertices, with source and nominal-geometry checks."""
+    folder=PACKAGE/'reproducibility/experimental_2d'
+    provenance=json.loads((folder/'provenance.json').read_text(encoding='utf-8'))
+    path=folder/'published_experimental_100mm_vertices.csv'
+    if digest(path)!=provenance['data_file_sha256']:
+        raise ValueError('Published experimental digitization has changed')
+    data=np.loadtxt(path,delimiter=',',skiprows=1,ndmin=2)
+    if data.shape!=(provenance['graphic_vertex_count'],5) or not np.isfinite(data).all():
+        raise ValueError('Invalid published experimental vertices')
+    calibration=provenance['axis_calibration']
+    x=(data[:,3]-calibration['x0'])*(calibration['CMOD1_mm']-calibration['CMOD0_mm'])/(calibration['x1']-calibration['x0'])+calibration['CMOD0_mm']
+    y=(data[:,4]-calibration['y0'])*(calibration['load1_kN']-calibration['load0_kN'])/(calibration['y1']-calibration['y0'])+calibration['load0_kN']
+    if not np.allclose(data[:,1],x,rtol=0,atol=5e-12) or not np.allclose(data[:,2],y,rtol=0,atol=5e-11):
+        raise ValueError('Experimental axis calibration failed')
+    if np.any(np.diff(data[:,1])<0) or provenance['legend_series']!='experiments 100 mm':
+        raise ValueError('Unexpected published experimental trace')
+    nodes=np.loadtxt(mesh/'nodes.txt')
+    # Compare physical dimensions, not the bibliographic filename.
+    coordinates=nodes[:,1:3]
+    if not np.allclose(np.ptp(coordinates,axis=0),[350,100],atol=1e-8):
+        raise ValueError('Experiment is only supplied for the 350 x 100 mm beam')
+    metadata=json.loads((mesh/'mesh_metadata.json').read_text(encoding='utf-8'))
+    boundary=metadata['boundary_nodes']
+    span=boundary['Support_Right'][0][1]-boundary['Support_Left'][0][1]
+    if abs(span-provenance['geometry']['support_span_mm'])>1e-10:
+        raise ValueError('Experimental and numerical support spans differ')
+    left=boundary['CMOD1'][0][1];right=boundary['CMOD2'][0][1]
+    ligament=coordinates[(coordinates[:,0]>left)&(coordinates[:,0]<right),1]
+    if not len(ligament) or abs(ligament.min()-provenance['geometry']['notch_depth_mm'])>1e-8:
+        raise ValueError('Experimental and numerical notch depths differ')
+    source=(mesh.parent/'source_snapshot/solver_main_3pb.m').read_text(encoding='utf-8')
+    thickness=re.search(r'p\.t\s*=\s*([\d.]+)',source)
+    if not thickness or float(thickness.group(1))!=provenance['geometry']['thickness_mm']:
+        raise ValueError('Experimental and numerical thickness differ')
+    return data
 
 
 def main():

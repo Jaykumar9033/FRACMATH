@@ -30,3 +30,6 @@ softwarex/reproducibility/current_figure_replay/** -text whitespace=cr-at-eol
 
 # Preserve the five-driver execution snapshots and numerical evidence.
 softwarex/reproducibility/equivalent_strain_study*/** -text -whitespace
+
+# Preserve digitized published numerical facts and source-calibration hashes.
+softwarex/reproducibility/experimental_2d/** -text -whitespace

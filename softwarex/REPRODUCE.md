@@ -33,6 +33,8 @@ python softwarex/verify_current_figures.py --workspace C:/runs/current_figure_ch
 
 These scripts use saved outputs rather than running MATLAB or Abaqus. They draw the advanced bending figure, element-area/Oliver comparison, equivalent-strain comparison and current 3D assets. The numerical flowchart is native TikZ source in `softwarex/figure_sources/damage_update_flowchart.tex`.
 
+Figure 4 reconstruction selects three numerical load-CMOD curves and reads the published experimental 100 mm beam trace in [experimental_2d](reproducibility/experimental_2d/README.md). Open markers select recovered graphic vertices. [extract_published_beam_curve.py](extract_published_beam_curve.py) documents their recovery from the native author figure and source checks. These are not raw laboratory samples or points generated from numerical curves. The plot shows CMOD 0–0.16 mm; the full recovered trace extends to 0.3363 mm. Nominal beam dimensions match, but exact experimental notch width, loading control and replicate identity are unverified. No material fitting is performed.
+
 ## 4. Prepare and run the structural extension
 
 Abaqus/Standard, configured Intel Fortran and MATLAB are required. Prepare exact preserved mesh cases in an empty workspace:
@@ -57,9 +59,9 @@ The completed current cross-code plots use medium/fine, 2,000 increments and -0.
 
 `h = sqrt(2*A)` uses the area of each triangle. Oliver width uses projected shape-function gradients and the maximum-principal-strain direction. All current width-study cases keep the mesh, material, increment count and final displacement fixed within a pair.
 
-For fresh Figure 4 simulations, run `python softwarex/run_equivalent_strain_study.py --workspace C:/runs/strain_study --stage all`. This performs the material checks and all five structural cases sequentially.
+For fresh Figure 4 simulations, run `python softwarex/run_equivalent_strain_study.py --workspace C:/runs/strain_study --stage all`. This performs the material checks and the three current structural cases sequentially.
 
-The coarse-mesh CPU study compares five damage drivers: modified von Mises, Mazars, elastic energy, Rankine stress and smooth Rankine stress. All use the same mesh, 2,000 fixed increments, Oliver width formula, tensile onset and exponential energy calibration. These are scalar-driver alternatives, not complete Mazars or Rankine concrete models. Only modified von Mises uses fc/ft; the compression response differs between the options. See [EQUIVALENT_STRAIN_STUDY.md](EQUIVALENT_STRAIN_STUDY.md) for formulas, checks and reproduction commands.
+The current coarse-mesh CPU comparison uses three damage drivers: modified von Mises, elastic energy and Rankine stress. Figure 4 shows load versus CMOD. All use the same mesh, 2,000 fixed increments, Oliver width formula, tensile onset and exponential energy calibration. These are scalar-driver alternatives within the same damage update, not complete independently calibrated concrete models. Only modified von Mises uses fc/ft. The total-energy definition also activates in compression and is not calibrated to fc. See [EQUIVALENT_STRAIN_STUDY.md](EQUIVALENT_STRAIN_STUDY.md) for formulas, checks and reproduction commands.
 
 ## 6. 3D numerical examples
 
@@ -79,4 +81,4 @@ Matching fixed increments does not match the nonlinear algorithms. MATLAB record
 
 ## Optional archives
 
-Earlier adaptive-increment histories, constant-width controls, larger material audits, hardware scaling and partial timing profiles remain available for traceability. Their original source snapshots and checksums are retained. They are not replacements for current fixed-increment response figures. `plot_verified_figures.py` and `verify_paper_figures.py` replay earlier figure sets; use the `current` scripts above for the present manuscript.
+Earlier adaptive-increment histories, constant-width controls, larger material audits, hardware scaling and partial timing profiles remain available for traceability. The original equivalent-strain execution archive retains five completed runs; the current figure selects three load-CMOD histories from it. Original source snapshots and checksums are retained. These archives are not replacements for current fixed-increment response figures. `plot_verified_figures.py` and `verify_paper_figures.py` replay earlier figure sets; use the `current` scripts above for the present manuscript.

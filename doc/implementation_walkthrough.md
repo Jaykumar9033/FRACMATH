@@ -96,7 +96,7 @@ follows element size but does not depend on strain direction. Coarse,
 medium and fine pairs retain their exact mesh, material parameters and
 2,000-increment displacement schedule.
 
-The coarse-mesh CPU study compares five damage drivers: modified von Mises, Mazars, elastic energy, Rankine stress and smooth Rankine stress. All use the same mesh, 2,000 fixed increments, Oliver width formula, tensile onset and exponential energy calibration. These are scalar-driver alternatives, not complete Mazars or Rankine concrete models. Only modified von Mises uses fc/ft; the compression response differs between the options. See [EQUIVALENT_STRAIN_STUDY.md](../softwarex/EQUIVALENT_STRAIN_STUDY.md) for formulas, checks and reproduction commands.
+The current coarse-mesh CPU comparison uses three damage drivers: modified von Mises, elastic energy and Rankine stress. Figure 4 shows load versus CMOD. All use the same mesh, 2,000 fixed increments, Oliver width formula, tensile onset and exponential energy calibration. These are scalar-driver alternatives within the same damage update, not complete independently calibrated concrete models. Only modified von Mises uses fc/ft. The total-energy definition also activates in compression and is not calibrated to fc. See [EQUIVALENT_STRAIN_STUDY.md](../softwarex/EQUIVALENT_STRAIN_STUDY.md) for formulas, checks and reproduction commands.
 
 [COMPARISON_EXTENSION.md](../softwarex/COMPARISON_EXTENSION.md) explains the
 current execution and failure policy. Original failed fixed Abaqus cases
