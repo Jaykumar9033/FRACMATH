@@ -29,7 +29,7 @@ abstract: >-
   direction-dependent Oliver crack-band regularization.
   The current SoftwareX companions include ten material-point examples,
   completed exact-mesh fixed-increment bending comparisons, element-area
-  versus Oliver width, and five equivalent-strain definitions verified on CPU.
+  versus Oliver width, and two equivalent-strain definitions verified on CPU.
   A hybrid GPU backend retains CPU sparse assembly and factorization.
   Three 3D pure-tension meshes provide a numerical mesh-consistency check;
   mixed-mode and torsion fields are qualitative demonstrations.

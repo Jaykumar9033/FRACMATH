@@ -111,6 +111,6 @@ as software under the repository's MIT licence.
 
 ## Sources
 
-- [COMSOL Structural Mechanics Module, Damage Models, version 6.3](https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_theory.06.036.html), energy and stress-based equivalent-strain definitions.
-- J. H. P. de Vree, W. A. M. Brekelmans and M. A. J. van Gils, *Comparison of nonlocal approaches in continuum damage mechanics*, Computers & Structures 55(4), 581â€“588 (1995), [DOI](https://doi.org/10.1016/0045-7949(94)00501-S).
-- P. Grassl, D. GrÃ©goire, L. B. Rojas-Solano and G. Pijaudier-Cabot, *Meso-scale modelling of the size effect on the fracture process zone of concrete*, International Journal of Solids and Structures 49, 1818â€“1827 (2012), [DOI](https://doi.org/10.1016/j.ijsolstr.2012.03.023), [author source version](https://arxiv.org/abs/1107.2311v2), Figure 5.
+- [COMSOL Structural Mechanics Module, Damage Models, version 6.3](https://doc.comsol.com/6.3/doc/com.comsol.help.sme/sme_ug_theory.06.036.html), stress-based equivalent-strain definitions.
+- J. H. P. de Vree, W. A. M. Brekelmans and M. A. J. van Gils, *Comparison of nonlocal approaches in continuum damage mechanics*, Computers & Structures 55(4), 581–588 (1995), [DOI](https://doi.org/10.1016/0045-7949(94)00501-S).
+- P. Grassl, D. Grégoire, L. B. Rojas-Solano and G. Pijaudier-Cabot, *Meso-scale modelling of the size effect on the fracture process zone of concrete*, International Journal of Solids and Structures 49, 1818–1827 (2012), [DOI](https://doi.org/10.1016/j.ijsolstr.2012.03.023), [author source version](https://arxiv.org/abs/1107.2311v2), Figure 5.

@@ -1,17 +1,41 @@
 {
   "current_cases": [
     "modified_mises",
-    "elastic_energy",
-    "mazars",
-    "rankine_stress",
-    "smooth_rankine_stress"
+    "rankine_stress"
   ],
   "all_cases_steps": 2000,
   "all_execution_checks_passed": true,
+  "verified_case_values": {
+    "modified_mises": {
+      "passed_execution_checks": true,
+      "steps": 2000,
+      "peak_load_N": 4193.718,
+      "peak_cmod_mm": 0.02786444,
+      "final_cmod_mm": 0.1521367,
+      "maximum_post_damage_relative_residual": 0.01131573407,
+      "peak_post_damage_relative_residual": 0.006529279451,
+      "regularization": "oliver",
+      "equivalent_strain": "modified_mises",
+      "interpretation": "Old-damage equilibrium passes; post-damage residual is reported separately."
+    },
+    "rankine_stress": {
+      "passed_execution_checks": true,
+      "steps": 2000,
+      "peak_load_N": 4780.586,
+      "peak_cmod_mm": 0.02635935,
+      "final_cmod_mm": 0.1491213,
+      "maximum_post_damage_relative_residual": 0.01205219072,
+      "peak_post_damage_relative_residual": 0.01074161599,
+      "regularization": "oliver",
+      "equivalent_strain": "rankine_stress",
+      "interpretation": "Old-damage equilibrium passes; post-damage residual is reported separately."
+    }
+  },
   "source_mirrors_identical": true,
+  "local_repository_files_compared": 1126,
   "python_syntax_passed": true,
-  "archive_hashes_verified": 172,
-  "mazars_analytic_and_tensor_checks_passed": true,
-  "energy_normalization_checks_passed": true,
-  "scope": "Current CPU suite replaces Rankine strain with total undamaged elastic-energy norm; original archive preserved."
+  "python_files_checked": 38,
+  "archive_hashes_verified": 176,
+  "published_experiment_calibration_and_geometry_checks_passed": true,
+  "scope": "Current Figure 4: modified von Mises and Rankine stress, load versus CMOD, with digitized published experiment. Other completed driver runs remain optional immutable archives."
 }

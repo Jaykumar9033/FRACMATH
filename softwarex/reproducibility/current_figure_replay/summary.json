@@ -32,16 +32,6 @@
       "shape_matches": true
     },
     {
-      "asset": "equivalent_strain_load_displacement.png",
-      "identical_pixels": true,
-      "shape_matches": true
-    },
-    {
-      "asset": "equivalent_strain_load_displacement.pdf",
-      "identical_pixels": true,
-      "shape_matches": true
-    },
-    {
       "asset": "nooru_tension_comparison.png",
       "identical_pixels": true,
       "shape_matches": true
@@ -76,7 +66,7 @@
   "removed_adaptive_figures_checked": false,
   "native_flowchart": {
     "source": "softwarex/figure_sources/damage_update_flowchart.tex",
-    "sha256": "dad01b4443adc235ddcdf7ebd19a3474e389847edb1a9910ec3827d9ae03ebde",
+    "sha256": "a2caeadc081c070d834aca0125c7ecea17e7b6a076da6966c094798436d988a9",
     "scope": "Editable TikZ source identity recorded; compile separately in LaTeX."
   }
 }
