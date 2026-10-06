@@ -22,3 +22,8 @@ softwarex/reproducibility/umat_precision/** -text
 
 # Preserve the ten published material examples and their verification hashes.
 softwarex/reproducibility/material_examples/** -text whitespace=cr-at-eol
+
+# Preserve fixed-increment inputs, source snapshots and numerical evidence.
+softwarex/reproducibility/fixed_increment_extension/** -text -whitespace
+softwarex/reproducibility/fixed_increment_retry/** -text -whitespace
+softwarex/reproducibility/current_figure_replay/** -text whitespace=cr-at-eol

@@ -30,3 +30,10 @@ pdflatex theory_manual.tex
 ```
 
 A complete LaTeX distribution is required to rebuild the PDF.
+
+The manual describes the default Oliver/modified-von-Mises formulation.
+The current CPU area-width and principal-strain alternatives, fixed-increment
+comparisons and their verification limits are documented in
+[`softwarex/COMPARISON_EXTENSION.md`](../softwarex/COMPARISON_EXTENSION.md).
+The editable calculation diagram is in
+[`softwarex/figure_sources/damage_update_flowchart.tex`](../softwarex/figure_sources/damage_update_flowchart.tex).

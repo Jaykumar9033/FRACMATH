@@ -1,0 +1,72 @@
+{
+  "passed": true,
+  "assets": [
+    {
+      "asset": "figure1_fixed_advanced.png",
+      "identical_pixels": true,
+      "shape_matches": true
+    },
+    {
+      "asset": "figure1_fixed_advanced.pdf",
+      "identical_pixels": true,
+      "shape_matches": true
+    },
+    {
+      "asset": "area_versus_oliver.png",
+      "identical_pixels": true,
+      "shape_matches": true
+    },
+    {
+      "asset": "area_versus_oliver.pdf",
+      "identical_pixels": true,
+      "shape_matches": true
+    },
+    {
+      "asset": "equivalent_strain_comparison.png",
+      "identical_pixels": true,
+      "shape_matches": true
+    },
+    {
+      "asset": "equivalent_strain_comparison.pdf",
+      "identical_pixels": true,
+      "shape_matches": true
+    },
+    {
+      "asset": "nooru_tension_comparison.png",
+      "identical_pixels": true,
+      "shape_matches": true
+    },
+    {
+      "asset": "nooru_tension_comparison.pdf",
+      "identical_pixels": true,
+      "shape_matches": true
+    },
+    {
+      "asset": "nooru_damage_evolution_shared_bar.png",
+      "identical_pixels": true,
+      "shape_matches": true
+    },
+    {
+      "asset": "torsion_damage_evolution_shared_bar.png",
+      "identical_pixels": true,
+      "shape_matches": true
+    },
+    {
+      "asset": "nooru_BC_2D.png",
+      "identical_archived_source_bytes": true,
+      "scope": "Supplied geometry illustration, not a numerical response plot."
+    },
+    {
+      "asset": "torsion.png",
+      "identical_archived_source_bytes": true,
+      "scope": "Supplied geometry illustration, not a numerical response plot."
+    }
+  ],
+  "scope": "Current archived-data figure reproduction; numerical solver validation and native TikZ compilation are separate checks.",
+  "removed_adaptive_figures_checked": false,
+  "native_flowchart": {
+    "source": "softwarex/figure_sources/damage_update_flowchart.tex",
+    "sha256": "a11376f66036cd825af17b891316d3e43d20d2d975875564e4b66c5bf5344f14",
+    "scope": "Editable TikZ source identity recorded; compile separately in LaTeX."
+  }
+}

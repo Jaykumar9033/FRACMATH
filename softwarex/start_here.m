@@ -4,8 +4,8 @@
 
 clear;
 
-% 1. Choose settings. The paper's Figure 1 uses 10,000 steps.
-number_of_steps = 10000;
+% 1. Choose settings. Figure 1 uses this medium mesh and 2,000 steps.
+number_of_steps = 2000;
 number_of_threads = 1;
 backend = 'cpu';                 % 'cpu' or 'gpu_hybrid'
 show_figures = true;             % false omits live graphics and video
@@ -14,7 +14,8 @@ run_material_test = false;       % true checks the material law only
 % 2. Locate the supplied solver and mesh. Results go to a separate folder.
 package_folder = fileparts(mfilename('fullpath'));
 solver_folder = fullfile(package_folder, 'reproducibility', '2d');
-mesh_folder = fullfile(solver_folder, 'Gregoire_3PB');
+mesh_folder = fullfile(package_folder, 'reproducibility', ...
+    'fixed_increment_extension', 'medium', 'Gregoire_3PB', 'matlab_mesh');
 results_folder = fullfile(package_folder, 'student_results');
 addpath(solver_folder);
 
@@ -27,8 +28,9 @@ setenv('FRACMATH_STEPS', num2str(number_of_steps));
 setenv('FRACMATH_THREADS', num2str(number_of_threads));
 setenv('FRACMATH_BACKEND', backend);
 setenv('FRACMATH_SIZE_SCALE', '1');
-setenv('FRACMATH_MAX_DISP', '-0.2');
+setenv('FRACMATH_MAX_DISP', '-0.1');
 setenv('FRACMATH_REGULARIZATION', 'oliver');
+setenv('FRACMATH_EQUIVALENT_STRAIN', 'modified_mises');
 setenv('FRACMATH_FIXED_WIDTH', '1.25');
 setenv('FRACMATH_HEADLESS', num2str(~show_figures));
 setenv('FRACMATH_SELFTEST', num2str(run_material_test));

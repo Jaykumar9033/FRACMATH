@@ -1,18 +1,25 @@
 # Validation and verification scope
 
-FRACMATH implements established continuum-damage and crack-band concepts. The article validates the **software implementation and numerical consistency**, not a new constitutive theory.
+FRACMATH implements established continuum-damage and crack-band methods. The article checks the software implementation and numerical behavior; it does not introduce a new constitutive theory.
 
 ## What is checked
 
-- **Material point:** Ten representative prescribed material states, one per selected case, are evaluated by MATLAB and the Abaqus UMAT. Equivalent strain, irreversible history, damage and stress are compared with permitted absolute difference `2e-10 + 2e-10 * abs(reference_value)`. This is not a one-element structural FEM test.
-- **2D structure:** MATLAB and Abaqus solve the same notched three-point-bending benchmark. Load-CMOD curves and damage fields provide the cross-code structural comparison.
-- **2D mesh sensitivity:** coarse, medium and fine meshes compare Oliver regularization with a fixed-width control. The manuscript discusses response curves, peak-load spread and increment sensitivity; dissipation is not a reported result.
-- **3D pure tension:** three MATLAB/FRACMATH TET4 meshes provide a numerical mesh-consistency and equilibrium check. No experimental response curve is used.
-- **3D mixed mode and torsion:** these panels are qualitative demonstrations. The torsion result shown in the manuscript is MATLAB/FRACMATH only; no Abaqus torsion solution is reported.
-- **Performance:** timing records describe the tested hardware/software configurations only and are not a universal speed claim.
+- **Material point:** ten prescribed states compare MATLAB, the actual Abaqus UMAT and independent reference calculations. The permitted difference is `2e-10 + 2e-10 * abs(reference_value)`. These are not one-element structural analyses.
+- **Matched fixed increments:** completed medium/fine bending cases use identical meshes, 2,000 fixed increments and -0.1 mm final displacement in MATLAB and Abaqus. Actual ODB times and loading displacement are checked; load-CMOD curves provide structural response comparisons.
+- **Width sensitivity:** three MATLAB meshes compare the directional Oliver width with the element-area width `sqrt(2*A)`. The observed peak-load spreads are 6.19% and 6.80%, respectively, using the same spread definition. This is sensitivity for one geometry, not universal mesh independence.
+- **Equivalent-strain sensitivity:** coarse-mesh modified von Mises and maximum-positive-principal options use the same mesh, loading, Oliver width and E, nu, ft, GF. The principal-strain peak is 11.63% higher relative to the modified von Mises peak. That option does not use fc/ft; no claim of improved physical accuracy follows.
+- **3D pure tension:** three MATLAB TET4 meshes provide numerical mesh-consistency and equilibrium evidence. No experimental curve is used.
+- **Mixed-mode panel and torsion:** these are qualitative MATLAB damage demonstrations. Mixed-mode fields are distinct from the pure-tension mesh study. No Abaqus torsion response is claimed.
+- **Timing:** component records describe the observed software/hardware work. Saved MATLAB load-loop times and fresh Abaqus analysis/output times have different boundaries.
 
-## What is not claimed
+## Fixed-increment failures and retries
 
-The package does not claim experimental validation of the 3D examples, universal mesh independence, a consistent damage tangent for the UMAT, or universal MATLAB/Abaqus/GPU speed superiority.
+Baseline 10,000-increment and coarse 2,000-increment Abaqus jobs stopped during equilibrium convergence. Partial converged histories and failure logs are retained. The baseline 20,000-increment retry also failed after 5,175 accepted increments recorded in `.sta`. Its exact MATLAB reference and failure logs are retained under `reproducibility/fixed_increment_retry/baseline/`; they do not form a complete cross-code comparison. The coarse 4,000-increment retry is running and needs complete loading and schedule checks before it can support a full paired curve. No adaptive-increment substitute is used in the current plots.
 
-Separate UMAT instrumentation and native profiling supply partial timing diagnostics. Clock overhead, unidentified work and differing timer boundaries prevent complete material/assembly wall-time attribution. See [ABAQUS_TIMING_SCOPE.md](ABAQUS_TIMING_SCOPE.md).
+## Limits of the evidence
+
+Matching increment counts does not make the nonlinear algorithms equivalent. The MATLAB bending solver solves with the preceding damage state, updates damage and records the resulting force imbalance. The UMAT returns degraded elastic stiffness, a secant matrix rather than a consistent damage tangent; Abaqus controls nonlinear equilibrium. A fixed-step convergence failure alone does not prove a material-law bug, and a complete MATLAB history does not imply equal equilibrium accuracy.
+
+The package does not establish experimental 3D validation, universal mesh independence, universal GPU speed advantage or a complete Abaqus assembly/material wall-time partition. The optional hybrid GPU keeps global sparse assembly and factorization on the CPU. The stopped full sparse GPU experiment is not a completed manuscript result.
+
+Separate UMAT timers and native profiles provide partial diagnostics. Timer overhead, unidentified calls and differing timer boundaries remain. See [ABAQUS_TIMING_SCOPE.md](ABAQUS_TIMING_SCOPE.md). Older adaptive, constant-width and larger material-audit records are archival evidence with their original scope.

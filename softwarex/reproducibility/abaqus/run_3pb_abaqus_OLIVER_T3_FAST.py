@@ -419,6 +419,9 @@ def build_model(case_dir, umat_file):
     m.StaticStep(name='Loading', previous='Initial', maxNumInc=20000,
                  initialInc=1.0 / float(N_INC), minInc=1.0e-10,
                  maxInc=1.0 / float(N_INC), nlgeom=OFF)
+    if os.environ.get('ABQ_INCREMENT_MODE', 'adaptive') == 'fixed':
+        m.steps['Loading'].setValues(timeIncrementationMethod=FIXED,
+                                    initialInc=1.0/float(N_INC), noStop=OFF)
     # The secant UMAT can converge slowly during localized damage. Increase
     # iteration/attempt limits when requested, without changing field tolerances.
     eq_limit = int(os.environ.get('ABQ_EQ_LIMIT', '0'))

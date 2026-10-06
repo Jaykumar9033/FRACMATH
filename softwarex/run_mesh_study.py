@@ -70,7 +70,9 @@ def abaqus_env(name, build_only, args):
     env.update(ABQ_MESH_SCALE=str(SCALES[name]), ABQ_U_FINAL=str(args.max_disp),
                ABQ_STUDY_BC="1", ABQ_BUILD_ONLY="1" if build_only else "0",
                ABQ_N_INC=str(args.steps), ABQ_CPUS="1", ABQ_AUTO_PLOT="0",
-               ABQ_FIELD_FREQ=str(max(1, args.steps // 20)))
+               ABQ_FIELD_FREQ=str(max(1, args.steps // 20)),
+               ABQ_INCREMENT_MODE="adaptive", ABQ_SIZE_SCALE="1",
+               ABQ_EXTRACT_ONLY="0", ABQ_EQ_LIMIT="0")
     return env
 
 
@@ -162,7 +164,9 @@ def main():
                 env.update(FRACMATH_CASE_DIR=str(mesh), FRACMATH_RESULTS_DIR=str(result),
                            FRACMATH_HEADLESS="1", FRACMATH_STEPS=str(steps),
                            FRACMATH_MAX_DISP=str(args.max_disp), FRACMATH_REGULARIZATION=regularization,
-                           FRACMATH_FIXED_WIDTH="1.25", FRACMATH_SELFTEST="0")
+                           FRACMATH_FIXED_WIDTH="1.25", FRACMATH_SELFTEST="0",
+                           FRACMATH_EQUIVALENT_STRAIN="modified_mises",
+                           FRACMATH_BACKEND="cpu", FRACMATH_THREADS="1", FRACMATH_SIZE_SCALE="1")
                 solver_dir = str(MATLAB_SOURCE).replace("'", "''")
                 launch(["matlab", "-batch", "addpath('%s'); solver_main_3pb" % solver_dir],
                        folder, env, result / "run.log")

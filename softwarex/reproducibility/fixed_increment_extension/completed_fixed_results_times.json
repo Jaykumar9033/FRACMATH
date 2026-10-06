@@ -1,0 +1,20 @@
+[
+  {
+    "mesh": "medium",
+    "steps": 2000,
+    "matlab_load_loop_s": 337.3,
+    "abaqus_analysis_wall_s": 2843.0,
+    "matlab_peak_N": 4205.029,
+    "abaqus_peak_N": 4087.3858642578125,
+    "peak_difference_percent": 2.8781998971743716
+  },
+  {
+    "mesh": "fine",
+    "steps": 2000,
+    "matlab_load_loop_s": 967.09,
+    "abaqus_analysis_wall_s": 4538.0,
+    "matlab_peak_N": 4458.989,
+    "abaqus_peak_N": 4338.5030517578125,
+    "peak_difference_percent": 2.777131808017752
+  }
+]

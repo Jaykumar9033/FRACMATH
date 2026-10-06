@@ -34,7 +34,8 @@ def env_abq(size, mesh, steps, displacement, cpus=1, build=False):
                ABQ_STUDY_BC='1', ABQ_U_FINAL=str(displacement*SIZES[size]),
                ABQ_N_INC=str(steps), ABQ_CPUS=str(cpus), ABQ_AUTO_PLOT='0',
                ABQ_BUILD_ONLY='1' if build else '0',
-               ABQ_FIELD_FREQ=str(max(1, steps//20)))
+               ABQ_FIELD_FREQ=str(max(1, steps//20)),
+               ABQ_INCREMENT_MODE='adaptive', ABQ_EXTRACT_ONLY='0')
     env['ABQ_EQ_LIMIT'] = '80' if size == 'large' and mesh in ['medium','fine'] else '0'
     return env
 
@@ -111,6 +112,7 @@ def main():
                                FRACMATH_HEADLESS='1',FRACMATH_STEPS=str(steps),
                                FRACMATH_MAX_DISP=str(displacement*SIZES[size]),
                                FRACMATH_REGULARIZATION='oliver',FRACMATH_SELFTEST='0',
+                               FRACMATH_EQUIVALENT_STRAIN='modified_mises',
                                FRACMATH_SIZE_SCALE=str(SIZES[size]),FRACMATH_THREADS=str(cpus),
                                FRACMATH_BACKEND=backend)
                     solver=str(snapshot).replace("'","''")

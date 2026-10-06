@@ -46,6 +46,13 @@ abaqus.rpy*
 !softwarex/reproducibility/mesh_study/**/Gregoire_3PB.log
 
 !softwarex/reproducibility/mesh_study/**/extract.log
+!softwarex/reproducibility/fixed_increment_extension/**/*.log
+!softwarex/reproducibility/fixed_increment_retry/**/*.log
+# The previous baseline reference remains in the local archive only.
+softwarex/reproducibility/fixed_increment_retry/baseline/archived_reference_before_fresh_retry/
+# Abaqus host environment dumps are not scientific input files.
+softwarex/reproducibility/fixed_increment_extension/**/Gregoire_3PB.env
+softwarex/reproducibility/fixed_increment_retry/**/Gregoire_3PB.env
 !softwarex/reproducibility/nooru_25mm_coarse/**/*.log
 !softwarex/reproducibility/nooru_25mm_coarse/*.log
 

@@ -70,9 +70,6 @@ if isempty(p.backend);
 end
 assert(ismember(p.backend,{'cpu','gpu_hybrid'}));
 use_gpu=strcmp(p.backend,'gpu_hybrid');
-if use_gpu;
-    gpu_dev=gpuDevice;
-end
 p.ft        = 3.50;        % MPa
 p.fc        = 35.0;        % MPa
 p.GF        = 0.090;       % N/mm
@@ -88,8 +85,16 @@ p.regularization = getenv('FRACMATH_REGULARIZATION');
 if isempty(p.regularization);
     p.regularization = 'oliver';
 end
-assert(ismember(p.regularization, {'oliver', 'fixed'}), ...
-    'FRACMATH_REGULARIZATION must be oliver or fixed');
+assert(ismember(p.regularization, {'oliver', 'area', 'fixed'}), ...
+    'FRACMATH_REGULARIZATION must be oliver, area or fixed');
+p.equivalent_strain = getenv('FRACMATH_EQUIVALENT_STRAIN');
+if isempty(p.equivalent_strain); p.equivalent_strain = 'modified_mises'; end
+assert(ismember(p.equivalent_strain, {'modified_mises', 'rankine'}), ...
+    'Equivalent strain must be modified_mises or rankine');
+assert(~use_gpu || (strcmp(p.regularization,'area') == 0 && ...
+    strcmp(p.equivalent_strain,'modified_mises')), ...
+    'Area width and Rankine equivalent strain are currently available on CPU only.');
+if use_gpu; gpu_dev=gpuDevice; end
 p.fixed_width = 1.25; % mm: reference calibration for the local-law control
 width_env = str2double(getenv('FRACMATH_FIXED_WIDTH'));
 if isfinite(width_env) && width_env > 0;
@@ -419,9 +424,13 @@ if ispc
     end
 end
 fprintf(fid, 'Regularization: %s (fixed reference width %.6g mm)\n', p.regularization, p.fixed_width);
-fprintf(fid, 'Final prescribed displacement: %.9e mm\n', p.max_disp);
+fprintf(fid, 'Equivalent strain: %s\n', p.equivalent_strain);
+fprintf(fid, 'Target prescribed displacement: %.9e mm\n', p.max_disp);
+fprintf(fid, 'Completed prescribed displacement: %.9e mm\n', mean(u(dof.prescribed)));
+fprintf(fid, 'Loading extent: %.9e of target\n', mean(u(dof.prescribed))/p.max_disp);
 fprintf(fid, 'Mesh:         %d CPS3, %d DOFs\n', nE, 2*nN);
 fprintf(fid, 'Load steps:   %d\n',        numel(F));
+fprintf(fid, 'Completed load steps: %d / %d\n', steps_done, p.num_steps);
 fprintf(fid, 'Old-damage steps converged: %d / %d\n', sum(StepConverged), steps_done);
 fprintf(fid, 'Peak free-DOF residual / reaction: %.6e\n', RelRes(ip));
 fprintf(fid, 'Maximum free-DOF residual / reaction: %.6e\n', max(RelRes));
@@ -478,7 +487,7 @@ function live = open_live_fig(nodes, elems)
 
     FULL_DAMAGE_THRESH = 0.99;   % "full damage" threshold. Use 0.99 if stricter is needed.
 
-    fh = figure('Name','CDM 3PB – Live', ...
+    fh = figure('Name','CDM 3PB - Live', ...
                 'Color','w', ...
                 'Position',[60 60 1100 420], ...
                 'NumberTitle','off');
@@ -711,8 +720,13 @@ end
 % Damage cannot fall when the specimen unloads.
 function [omega_new, kappa_new, h_oliver, strain] = damage_update(u, B_all, gradN_all, dof_mat, ...
                                                 kappa_old, omega_old, p)
+    if ~isfield(p,'equivalent_strain'); p.equivalent_strain='modified_mises'; end
     nE   = size(B_all,3);
     gpu_mode=isa(B_all,'gpuArray');
+    if gpu_mode && (strcmp(p.regularization,'area') || ...
+            ~strcmp(p.equivalent_strain,'modified_mises'))
+        error('Area width and Rankine equivalent strain are currently available on CPU only.');
+    end
     if gpu_mode
         u=gpuArray(u);
     end
@@ -759,6 +773,12 @@ function [omega_new, kappa_new, h_oliver, strain] = damage_update(u, B_all, grad
         h_oliver(:) = p.fixed_width;
     end
 
+    if strcmp(p.regularization, 'area')
+        % For T3: det(grad N1, grad N2) = 1/(2*signed area).
+        determinant = gradN_all(:,1).*gradN_all(:,4) - gradN_all(:,2).*gradN_all(:,3);
+        h_oliver = sqrt(1 ./ abs(determinant)); % sqrt(2*A)
+    end
+
     % Exponential stress-strain softening parameter with Oliver bandwidth.
     % eps_f = eps0/2 + GF/(h_oliver*ft)
     ef_e = max(p.eps0/2 + p.GF ./ (h_oliver * p.ft), p.eps0 + 1e-12);
@@ -776,6 +796,9 @@ function [omega_new, kappa_new, h_oliver, strain] = damage_update(u, B_all, grad
     a4 = 12*k/(1+p.nu)^2;
     eq_s = a1*I1 + a2*sqrt(max(a3*I1.^2 + a4*J2, 0));
     eq_s = max(eq_s, 0);
+    if strcmp(p.equivalent_strain, 'rankine')
+        eq_s = max(max(e1,e3),0); % maximum positive principal strain
+    end
 
     kappa_new = max(kappa_old, eq_s);
     omega_new = zeros(nE,1,'like',kappa_new);
@@ -993,7 +1016,7 @@ function fig_load_cmod(CMOD, F, pk_load, pk_cmod, res_dir)
          'MarkerEdgeColor',[0.40 0.28 0.0], ...
          'LineWidth',1.0);
 
-    % peak label — positioned to avoid overlap within the 0.35 limit
+    % peak label - positioned to avoid overlap within the 0.35 limit
     lbl_x  = pk_cmod + 0.35 * 0.03;
     lbl_y  = pk_load/1000 * 1.04;
     ha_str = 'left';
@@ -1106,7 +1129,7 @@ function fig_mesh(nodes, elems, dof, res_dir)
 
     xlabel(ax,'$x$ [mm]','Interpreter','latex','FontSize',13);
     ylabel(ax,'$y$ [mm]','Interpreter','latex','FontSize',13);
-    title(ax,'FE mesh — boundary conditions and load point', ...
+    title(ax,'FE mesh - boundary conditions and load point', ...
           'FontSize',15,'FontWeight','bold');
 
     save_fig_hq(fh, fullfile(res_dir,'fig_mesh'));
@@ -1114,7 +1137,7 @@ function fig_mesh(nodes, elems, dof, res_dir)
 end
 
 % =====================================================================
-%  COLORMAP  — blue -> cyan -> green -> yellow -> red  (crack style)
+%  COLORMAP  - blue -> cyan -> green -> yellow -> red  (crack style)
 % =====================================================================
 function c = crack_cmap()
 % Spectral crack colormap matching reference publication images.
@@ -1229,16 +1252,44 @@ function material_selftest(p)
         assert(abs(kt/e - 1) < 1e-10, 'Uniaxial tension equivalence failed');
         if strcmp(p.regularization, 'oliver')
             assert(abs(bw/h - 1) < 1e-10, 'Oliver width failed');
+        elseif strcmp(p.regularization, 'area')
+            % Coordinate-based area is independent of the gradient formula.
+            expected_width = sqrt(2*polyarea(nodes(:,1),nodes(:,2)));
+            assert(abs(bw/expected_width - 1) < 1e-10, 'Area width failed');
         else
             assert(abs(bw/p.fixed_width - 1) < 1e-10, 'Fixed width failed');
         end
         u(1:2:6) = -e * nodes(:,1);
         u(2:2:6) = p.nu * e * nodes(:,2);
         [~, kc] = damage_update(u, B, gradN, dofmat, 0, 0, p);
-        assert(abs(kc/(e/(p.fc/p.ft)) - 1) < 1e-10, ...
-            'Uniaxial compression equivalence failed');
+        if strcmp(p.equivalent_strain, 'rankine')
+            % Free uniaxial compression has positive lateral strains nu*e.
+            % This criterion does not preserve the specified fc/ft ratio;
+            % its compression onset is ft/nu for this elastic strain path.
+            assert(abs(kc/(p.nu*e) - 1) < 1e-10, ...
+                'Rankine compression equivalence failed');
+            % Compare rotated, shear and biaxial states with a tensor eigensolve.
+            strain_cases = p.eps0*[2, -0.5, 0; 0, 0, 4; ...
+                -1, -1, 0; 1.2, 0.4, 1.6];
+            for state = 1:size(strain_cases,1)
+                ex = strain_cases(state,1); ey = strain_cases(state,2);
+                gamma = strain_cases(state,3);
+                u(1:2:6) = ex*nodes(:,1) + gamma/2*nodes(:,2);
+                u(2:2:6) = gamma/2*nodes(:,1) + ey*nodes(:,2);
+                [~, checked_kappa] = damage_update(u,B,gradN,dofmat,0,0,p);
+                principal = eig([ex, gamma/2; gamma/2, ey]);
+                out_of_plane = -p.nu/(1-p.nu)*(ex+ey);
+                expected_kappa = max([0; principal; out_of_plane]);
+                assert(abs(checked_kappa-expected_kappa) < 1e-12, ...
+                    'Rankine principal-strain check failed');
+            end
+        else
+            assert(abs(kc/(e/(p.fc/p.ft)) - 1) < 1e-10, ...
+                'Uniaxial compression equivalence failed');
+        end
         calibration_h = h;
         if strcmp(p.regularization, 'fixed'); calibration_h = p.fixed_width; end
+        if strcmp(p.regularization, 'area'); calibration_h = expected_width; end
         ef = max(p.eps0/2 + p.GF/(calibration_h*p.ft), p.eps0 + 1e-12);
         decay = ef - p.eps0;
         strain = [linspace(0,p.eps0,80), ...
@@ -1274,6 +1325,8 @@ function material_selftest(p)
     end
     if strcmp(p.regularization, 'oliver')
         writematrix(out, 'material_energy.csv');
+    elseif strcmp(p.regularization, 'area')
+        writematrix(out, 'material_energy_area.csv');
     else
         writematrix(out, 'material_energy_fixed.csv');
     end

@@ -1,83 +1,80 @@
 # Reproducing the FRACMATH SoftwareX results
 
-This guide follows the same order as the manuscript. Only the checks used to support manuscript claims are listed first. Additional developer diagnostics are retained in the archive but are not required for the paper.
+Commands below are run from the repository root. Use fresh folders for numerical runs; keep supplied reference data unchanged.
 
-## 1. Beginner 2D MATLAB run
+## 1. First MATLAB run
 
-From the package folder, open MATLAB and run:
+Open `softwarex/start_here.m` and press Run. It selects the supplied medium mesh, 2,000 fixed increments, -0.1 mm final displacement, Oliver width, modified von Mises equivalent strain and one CPU thread. Outputs are saved separately in `softwarex/student_results`.
 
-```matlab
-start_here
+Read `BEGINNER_GUIDE.md` before changing a setting. Historical beginner and baseline archives use different schedules and are not the current Figure 1 reference.
+
+## 2. Material-point consistency
+
+Recheck the ten saved material examples:
+
+```powershell
+python softwarex/run_material_examples.py --workspace softwarex/reproducibility/material_examples --check
 ```
 
-The preserved reference execution is in `reproducibility/beginner_entry_check/`. To compare the saved arrays with the reference run:
+For fresh compilation and MATLAB evaluation, use an empty workspace:
 
-```text
-python analyze_beginner_entry.py --workspace reproducibility/beginner_entry_check
+```powershell
+python softwarex/run_material_examples.py --workspace C:/runs/material_examples
 ```
 
-## 2. Material-point MATLAB-UMAT consistency check
+The source UMAT is compiled without changing its material equations. The comparison includes equivalent strain, history, damage, width, stress and the documented secant stiffness. A checked value passes when its difference is at most `2e-10 + 2e-10 * abs(reference_value)`.
 
-This is a constitutive check at a material integration point, not a one-element structural finite-element analysis. The same prescribed material states are evaluated by the MATLAB constitutive functions and the unchanged Abaqus UMAT.
+## 3. Reconstruct the current figures
 
-Replay the ten representative examples:
-
-```text
-python run_material_examples.py --workspace reproducibility/material_examples --check
+```powershell
+python softwarex/plot_current_figures.py --output C:/runs/current_figures
+python softwarex/verify_current_figures.py --workspace C:/runs/current_figure_check
 ```
 
-The archive records the input states, UMAT outputs, MATLAB outputs and maximum differences. A checked value passes when its absolute difference is no greater than `2e-10 + 2e-10 * abs(reference_value)`.
+These scripts use saved outputs rather than running MATLAB or Abaqus. They draw the advanced bending figure, element-area/Oliver comparison, equivalent-strain comparison and current 3D assets. The numerical flowchart is native TikZ source in `softwarex/figure_sources/damage_update_flowchart.tex`.
 
-## 3. Baseline 2D MATLAB-Abaqus benchmark
+## 4. Prepare and run the structural extension
 
-The baseline MATLAB histories are stored in `reproducibility/results_1000/` and `reproducibility/results_10000/`. The 10,000-step history is used for the main MATLAB curve.
+Abaqus/Standard, configured Intel Fortran and MATLAB are required. Prepare exact preserved mesh cases in an empty workspace:
 
-For Abaqus, from `reproducibility/abaqus/` run the supplied no-GUI builder with a licensed Abaqus installation. The script rebuilds the model, writes the Oliver shape-function-gradient table and extracts the load-CMOD response.
-
-The MATLAB and Abaqus solvers use different equilibrium/increment procedures, so the manuscript compares structural response curves, damage fields and constitutive consistency rather than matching iteration counts.
-
-## 4. Controlled 2D mesh/regularization study
-
-The archived study is in `reproducibility/mesh_study/`. Reanalyze the completed runs and rebuild the four-panel mesh figure with:
-
-```text
-python analyze_mesh_study.py --workspace reproducibility/mesh_study
+```powershell
+python softwarex/run_comparison_extension.py --workspace C:/runs/fixed_extension --cases coarse medium fine --mesh-steps 2000 --stage prepare
 ```
 
-The current manuscript uses:
+Inspect `plan.json`, mesh hashes, final displacement and input schedules before execution. Run each stage sequentially:
 
-- coarse, medium and fine load-CMOD curves,
-- Oliver-width versus constant-width response,
-- Abaqus/UMAT mesh responses,
-- the fine-mesh MATLAB-Abaqus comparison,
-- peak-load spread and increment sensitivity.
-
-Energy/dissipation histories may exist in the raw solver folders as developer diagnostics, but they are not used as manuscript results.
-
-## 5. 3D pure-tension numerical consistency
-
-Run:
-
-```text
-python analyze_nooru_mesh_study.py --workspace reproducibility/nooru_25mm_mesh_study --require-all
+```powershell
+python softwarex/run_comparison_extension.py --workspace C:/runs/fixed_extension --cases coarse medium fine --stage abaqus
+python softwarex/run_comparison_extension.py --workspace C:/runs/fixed_extension --cases coarse medium fine --stage matlab
+python softwarex/run_comparison_extension.py --workspace C:/runs/fixed_extension --cases coarse medium fine --stage analyze
 ```
 
-This checks the three completed published-geometry TET4 histories and rebuilds the pure-tension comparison figure. The result is a numerical mesh-consistency/equilibrium check, not experimental validation.
+The runner copies the exact Oliver MATLAB references with provenance; it does not count them as new runs. The MATLAB stage adds three area-width cases and a coarse principal-strain case. The Abaqus stage uses fixed increments and retains normal equilibrium acceptance. A failed job is preserved and is not rerun with adaptive increments. Baseline preparation needs its separate exact preserved input source and is not included in this shortest command.
 
-## 6. Qualitative 3D examples
+The completed current cross-code plots use medium/fine, 2,000 increments and -0.1 mm final displacement. Their actual ODB history times and loading-node displacement are checked. The baseline 10,000-step and coarse 2,000-step Abaqus failures are not complete curves. The baseline 20,000-step retry also failed, with 5,175 accepted increments recorded in `.sta`. Its diagnostic logs and exact MATLAB reference are preserved in `reproducibility/fixed_increment_retry/baseline/`. The coarse 4,000-step retry is running and needs final schedule and loading-coverage checks.
 
-The proportional mixed-mode archive is in `reproducibility/nooru_proportional/`. Its damage images are used only as a qualitative illustration.
+## 5. Interpret width and equivalent-strain studies
 
-The torsion figure is generated from the MATLAB/FRACMATH torsion workflow. No Abaqus 3D torsion response is used in the paper.
+`h = sqrt(2*A)` uses the area of each triangle. Oliver width uses projected shape-function gradients and the maximum-principal-strain direction. All current width-study cases keep the mesh, material, increment count and final displacement fixed within a pair.
 
-## 7. Rebuild manuscript figures
+The coarse driver comparison changes only the equivalent-strain option: `modified_mises` or `rankine`. Rankine means the largest positive principal strain, including the plane-stress out-of-plane strain; the compression/tension ratio is unused in that option. A higher peak is a formulation difference, not proof that one option is more accurate.
 
-To rebuild and compare the generated manuscript assets in a separate workspace:
+## 6. 3D numerical examples
 
-```text
-python verify_paper_figures.py --workspace ./figure_replay_check
+```powershell
+python softwarex/analyze_nooru_mesh_study.py --workspace softwarex/reproducibility/nooru_25mm_mesh_study --require-all
 ```
 
-## Optional developer archives
+This checks the three completed pure-tension histories. It is a mesh-consistency/equilibrium check, not experimental validation. The mixed-mode panel archive `reproducibility/nooru_proportional/` supplies qualitative damage illustrations. Its loading and notch geometry differ from the pure-tension case. Preserve Nooru-Mohamed's benchmark attribution.
 
-`reproducibility/umat_precision/`, detailed Abaqus profiling folders, and energy/dissipation histories are retained for software development and auditability. They are not required for the manuscript's main scientific claims.
+Torsion fields are generated by the MATLAB workflow. Abaqus torsion files are geometry resources; no Abaqus torsion response is used in the article.
+
+## 7. Timing and numerical limits
+
+MATLAB records load-loop assembly, factorization, backsolve, damage and remaining work. Abaqus reports combined solver time from `.msg`; its remaining wall time includes several types of work and cannot be called assembly alone. Current MATLAB timings are saved reference observations; Abaqus timings are from separate fresh fixed-increment runs and include analysis/output.
+
+Matching fixed increments does not match the nonlinear algorithms. MATLAB records a residual after its damage update; Abaqus converges through equilibrium iterations with a secant material matrix. See `VALIDATION_SCOPE.md` and `ABAQUS_TIMING_SCOPE.md`.
+
+## Optional archives
+
+Earlier adaptive-increment histories, constant-width controls, larger material audits, hardware scaling and partial timing profiles remain available for traceability. Their original source snapshots and checksums are retained. They are not replacements for current fixed-increment response figures. `plot_verified_figures.py` and `verify_paper_figures.py` replay earlier figure sets; use the `current` scripts above for the present manuscript.

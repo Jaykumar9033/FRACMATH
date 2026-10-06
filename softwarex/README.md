@@ -1,40 +1,41 @@
 # FRACMATH study and reproduction package
 
-This package contains source code, meshes, saved numerical histories and reproduction scripts for the FRACMATH SoftwareX article.
+This folder contains the software companions for the FRACMATH SoftwareX article: study runners, saved histories, source snapshots and figure reconstruction tools. Use the current `main` branch and record the exact commit. Earlier release packages identify archival core versions.
 
-Use this package from the current `main` branch for the SoftwareX article. Earlier release downloads are archival core versions and are superseded as complete study packages. Record the exact commit used for reproduction.
+## Study sequence
 
-## Study scope
-
-The paper follows one simple verification path:
-
-1. **Constitutive material-point check.** Prescribed strain states are sent directly to the MATLAB material update and to the Abaqus user material subroutine (UMAT). This is not a one-element structural finite-element test. The paper uses ten representative prescribed material states, one example per selected case and checks equivalent strain, irreversible history, damage and stress consistency using `2e-10 + 2e-10 * abs(reference_value)` as the permitted absolute difference.
-2. **2D structural cross-code benchmark.** MATLAB and Abaqus solve the same notched three-point-bending problem and are compared using load-CMOD curves and damage fields.
-3. **2D mesh/regularization study.** Three meshes are compared with the direction-dependent Oliver crack-band width and with a fixed-width control. The manuscript uses response curves and peak-load spread; it does not use dissipation as a reported study result.
-4. **3D MATLAB examples.** The Nooru-Mohamed pure-tension study is used as a numerical mesh-consistency check. The mixed-mode and torsion panels are qualitative demonstrations. No Abaqus 3D torsion solution and no experimental 3D response curve are claimed.
-5. **Computational behavior.** Timing records are retained to document the tested MATLAB CPU/GPU and Abaqus configurations, without claiming universal speed superiority.
+1. **Material examples:** ten prescribed strain states compare MATLAB, the actual Abaqus UMAT and an independent reference. The permitted difference is `2e-10 + 2e-10 * abs(reference_value)`. These are material-point checks, not one-element structural analyses.
+2. **Fixed-increment bending:** medium and fine meshes have completed MATLAB/Abaqus responses at 2,000 fixed increments to -0.1 mm. Each paired comparison uses the exact same mesh. MATLAB and Abaqus still use different nonlinear equilibrium procedures.
+3. **Width comparison:** coarse, medium and fine MATLAB responses compare Oliver's directional width with `h = sqrt(2*A)`, where A is each triangle's area. A constant width is not used in the current manuscript plots.
+4. **Damage-driver comparison:** the coarse MATLAB case compares modified von Mises equivalent strain with the maximum positive principal strain. The latter does not use the compression/tension strength ratio.
+5. **3D MATLAB examples:** the separate pure-tension study checks three-mesh numerical consistency. The mixed-mode panel and torsion fields are qualitative demonstrations. No experimental 3D curve or Abaqus torsion solution is claimed.
+6. **Timing:** saved MATLAB load-loop components and separate fixed-increment Abaqus analysis records describe the measured work. Partial UMAT/native profiles do not identify complete assembly wall time.
 
 ## Main entry points
 
 | File or folder | Purpose |
 | --- | --- |
-| `start_here.m` | Beginner MATLAB entry point |
-| `BEGINNER_GUIDE.md` | Short explanation of inputs, solver sequence and outputs |
-| `reproducibility/2d/` | MATLAB 2D solver and benchmark mesh |
-| `reproducibility/abaqus/` | Abaqus 2D model builder and UMAT |
-| `reproducibility/material_examples/` | Ten explained MATLAB-UMAT material examples |
-| `reproducibility/mesh_study/` | Controlled 2D mesh/regularization runs |
-| `reproducibility/nooru_25mm_mesh_study/` | Three 3D pure-tension meshes and response histories |
-| `reproducibility/nooru_proportional/` | Qualitative mixed-mode demonstration data |
-| `figures/`, `verify_paper_figures.py` | Manuscript figures and reconstruction check |
-| `REPRODUCE.md` | Commands for reproducing the manuscript results |
-| `VALIDATION_SCOPE.md` | What each check does and does not establish |
+| `start_here.m` | Medium-mesh, 2,000-step MATLAB example |
+| `BEGINNER_GUIDE.md` | Units, array sizes, settings and calculation sequence |
+| `reproducibility/2d/` | MATLAB bending solver and supplied inputs |
+| `reproducibility/abaqus/` | Abaqus model builder and plane-stress UMAT |
+| `reproducibility/material_examples/` | Ten explained material-point examples |
+| `reproducibility/fixed_increment_extension/` | Current fixed-increment, area-width and strain-driver records |
+| `reproducibility/mesh_study/` | Exact mesh family and optional original study records |
+| `reproducibility/nooru_25mm_mesh_study/` | Three pure-tension meshes and histories |
+| `reproducibility/nooru_proportional/` | Qualitative mixed-mode panel records |
+| `plot_current_figures.py` | Draw current manuscript assets from saved outputs |
+| `verify_current_figures.py` | Rebuild and compare those assets in a separate folder |
+| `figure_sources/damage_update_flowchart.tex` | Editable native LaTeX/TikZ numerical flowchart |
+| `REPRODUCE.md` | Short reproduction workflow |
+| `VALIDATION_SCOPE.md` | Supported conclusions and limitations |
 
-## Important scope notes
+## Execution status and archives
 
-- The main manuscript does **not** report a dissipation study. Some archived developer diagnostics still contain energy or dissipation fields because the solver records them internally; those files are not used for the manuscript conclusions.
-- The core numerical solvers are preserved. Documentation and analysis scripts are synchronized to the manuscript without changing the constitutive equations or the structural results.
-- The 3D torsion result shown in the paper is generated by MATLAB/FRACMATH. Abaqus torsion files in the repository are geometry/mesh resources only.
-- The paper uses ten material examples. The larger `umat_audit` and `umat_precision` developer archives are optional records and are not the material checks presented in the manuscript.
+The original baseline 10,000-increment and coarse 2,000-increment fixed Abaqus runs stopped during convergence. Their partial histories and logs remain available. The baseline 20,000-increment retry also failed, with 5,175 accepted increments recorded in `.sta`; its diagnostic logs and exact MATLAB reference are in `reproducibility/fixed_increment_retry/baseline/`. The coarse 4,000-increment retry is running and is not complete evidence. There is no adaptive substitution in the current fixed-increment curves.
 
-See `REPRODUCE.md` for the shortest reproduction workflow.
+The larger `umat_audit`/`umat_precision` records, adaptive histories, constant-width controls and repeated scaling timings remain optional archives. They retain their original inputs and counts. The paper's material suite is ten examples. The stopped full sparse GPU experiment is not a complete result; the optional hybrid backend keeps sparse assembly/factorization on the CPU.
+
+Nooru-Mohamed is retained as the panel benchmark source attribution. Descriptive headings distinguish mixed-mode panel fields from pure-tension mesh responses.
+
+See `REPRODUCE.md` for commands and `UMAT_GUIDE.md` for the secant material matrix.

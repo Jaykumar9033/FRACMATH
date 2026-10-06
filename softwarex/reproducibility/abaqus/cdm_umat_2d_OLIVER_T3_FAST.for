@@ -86,7 +86,7 @@ C----- Modified von Mises equivalent strain ---------------------------
       IF (EQ .LT. 0.0D0) EQ = 0.0D0
       IF (EQ .GT. KAPPA) KAPPA = EQ
 
-C----- Oliver bandwidth from table; CELENT only if table unavailable ---
+C----- Oliver bandwidth; real elements require table gradients --------
       CALL OLIVER_H_T3_FAST(NOEL, EXX, EYY, GXY, CELENT, H, IHFLAG)
 
       IF (NSTATV .GE. 3) STATEV(3) = H
@@ -275,7 +275,7 @@ C=======================================================================
          IF (.NOT. READY) THEN
             WRITE(6,*) 'UMAT WARNING: Oliver table not found.'
             WRITE(6,*) 'UMAT WARNING: ABQ_OLIVER_TABLE=', TABLEPATH
-            WRITE(6,*) 'UMAT WARNING: using Abaqus CELENT fallback.'
+            WRITE(6,*) 'UMAT WARNING: real elements require gradients.'
          END IF
       END IF
 

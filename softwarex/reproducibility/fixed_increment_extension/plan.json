@@ -1,0 +1,142 @@
+{
+  "created_utc": "2026-10-06T00:10:06.738017+00:00",
+  "status": "prepared_not_executed",
+  "execution": "sequential",
+  "increment_policy": "fixed for both; no adaptive fallback; no NO STOP",
+  "abaqus_cpus": 1,
+  "matlab_threads": 1,
+  "timing_scope": "Single observations; not replacements for repeated timing study",
+  "source_sha256": {
+    "analyze_comparison_extension.py": "47227420065714d3edde86848eb75d5bccc67a906b1849c77315f3af54cf8446",
+    "cdm_umat_2d_OLIVER_T3_FAST.for": "4ed5577a0cf71c45efd3a1cbd67e687c46e3d44ffbb4abb4de1773157ca2e5a5",
+    "run_3pb_abaqus_OLIVER_T3_FAST.py": "674b10fe6eb672931dd16c8f3b32cdb9d0b63ac7ca0221aa1899555455945936",
+    "run_comparison_extension.py": "aa244a0eb010a5a0a362b96d79c22a17ec34bba49048374493e087859eac0070",
+    "solver_main_3pb.m": "136cfd0e9bb30be451970823ee0b5b102697996b9841ab8bad298ffa6ce10e61"
+  },
+  "cases": {
+    "baseline": {
+      "steps": 10000,
+      "final_displacement_mm": -0.2,
+      "original_input": "C:\\Users\\jmavani\\Documents\\FRACMATH_final_rerun_20261004\\baseline\\abaqus\\Gregoire_3PB\\Gregoire_3PB.inp",
+      "original_input_sha256": "bbd414b34c01de36edf8ccac9210afb796ac8e488d2bd1cf72d57145aa7e0731",
+      "fixed_input_sha256": "d28de4e85c39a3233535e072d9d59b5f73e7e2d27ab0e762b1dba93feef3fb8d",
+      "mesh_sha256": {
+        "cmod1.txt": "69fa4dd4fdc0b43ba7ca7c997539c4500f03ab9b220228e2b1e97bd305397806",
+        "cmod2.txt": "f2bf6cb915ec521520920f625e9a641f22bae7808a5f5db7867c431c1a79440f",
+        "elements.txt": "d21ed16e90fc30ac6676cb020f74bbd59cc77e7f8488cf9572f9064e3f5aaca3",
+        "left_nodes.txt": "300ebb40c404965b5ca92647363c497d0b196278bee390ceb7462320a26a3395",
+        "mesh_metadata.json": "6fa12d8f8089704885aa26c8f52110edad0dd266793de0de97e1e43c9dcab7e3",
+        "nodes.txt": "77f0df7174c73778c048ed473d88449c5f4142f05e4731cc2621ebefd8976695",
+        "right_nodes.txt": "dd2e05f1248a2b6057730a1847e6220a0ab6d9753a8c018e3e68ad2de0e9872e",
+        "top_nodes.txt": "8f0a9fe565871cadc1eb6256953dd2a568f6c6dff734699869fc1d93498d018a"
+      },
+      "original_metadata_sha256": "4e4e9bb416625c79d548bed91291005c963e3aaedfb6140e3f9de43b64d4d715",
+      "oliver_table_sha256": "49c41631a08a20c4128fe9ea46329bd418dc92231194cb883f6647c881e7a7bd",
+      "reference_source": "C:\\Users\\jmavani\\Documents\\FRACMATH_final_rerun_20261004\\baseline\\matlab_10000",
+      "reference_sha256": {
+        "matlab_energy_history.csv": "46895ab56f88927fdb45402ad1ae1fb847f350a75fa8fccc4a826342620165af",
+        "matlab_load_cmod.csv": "44190b07b4108e89f855331eda64039cbd3a7d3a5a4fc50bf4bbe391c1666e95",
+        "matlab_step_diagnostics.csv": "3a5f97aca37ef729ce4f1510d39c48ece5cfd9cee8572ff4a3154c939877beab",
+        "matlab_timing.txt": "3f5995dadaa5464ffcd3a0f501d0d0fbcc3030dd03ae5fbb77f6ac0c46ff18dc",
+        "verified_state.mat": "0cbe61e97d0b7ea2426961848af3340ef57d72f548592867c309bf43038551e8"
+      },
+      "matlab_new_runs": []
+    },
+    "coarse": {
+      "steps": 2000,
+      "final_displacement_mm": -0.1,
+      "original_input": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\FRACMATH-github\\softwarex\\reproducibility\\mesh_study\\coarse\\abaqus\\diagnostics\\Gregoire_3PB.inp",
+      "original_input_sha256": "d9ca1cf84e85fe80a616a6010134aa844efe83f5da25589255a0d099f492baf2",
+      "fixed_input_sha256": "bb9fe5ddb12bda0e1e58898b2fd80f15633b24db0b4b0f3c725a4cb1b50172ab",
+      "mesh_sha256": {
+        "cmod1.txt": "5b677464f4941a4c274964d723bf47e3cd7cdcb5d53379a3b7176f0c456cf9a0",
+        "cmod2.txt": "8ce88a8842c1584e3d6871e84e166e3b513c3ce2a9da6166760c7af1645dea29",
+        "elements.txt": "8476b18c86632cc259f6cd224c61ab1f8763090d01ad0468c29c332c76b45998",
+        "left_nodes.txt": "d91a915db080736443c7b2fa55b70a31d2e4cddb9182844bb91e04897b9d4598",
+        "mesh_metadata.json": "479ebcff6a9c29db9ad332e41024b6aca4db43f182b1c26316f0d6c9788375aa",
+        "nodes.txt": "700339bcbd676d0dd31244a9500f83a61a2121151a379da80e42c90879c5256e",
+        "right_nodes.txt": "df4e26a04a444901b95afef44e4a96cfae34690fff2ad2c66389c70079cdff2b",
+        "top_nodes.txt": "901f85305a102f5aec9b6a395866f23e5666c710f03b2daf4716dba13f915b35"
+      },
+      "original_metadata_sha256": "c945fb20761b8b0be735f27c8db29b7cfc63840325e4393b5d94fce5a6e4f8a3",
+      "oliver_table_sha256": "cc479afe794e10e815395dc60a70b43a4d4568eed06e21622a4b7f3164a8ce49",
+      "reference_source": "C:\\Users\\jmavani\\Documents\\FRACMATH_final_rerun_20261004\\mesh_study\\coarse\\matlab_oliver_2000",
+      "reference_sha256": {
+        "matlab_energy_history.csv": "e0755b5228280348d34c76b6441add8f02ac2b3cdbc161c47fdd4812b8f3a0d3",
+        "matlab_load_cmod.csv": "304ab44417070e9741707513f7bc143390a88ab781f54087dafd703ebe5f923b",
+        "matlab_step_diagnostics.csv": "6814a1ad3eea9be6cdffbd3028af3a0f0cb4cf3637f8dc7001b5a953505c9c4f",
+        "matlab_timing.txt": "093ef7a87a5b76cf0fff875c4294f1c6816a91183ae2481294811c390aefb3c7",
+        "verified_state.mat": "e0b84e259e24b2320ef81c4c00f9db47ea80fff450361d084489edcc13618b83"
+      },
+      "matlab_new_runs": [
+        "area",
+        "rankine"
+      ]
+    },
+    "medium": {
+      "steps": 2000,
+      "final_displacement_mm": -0.1,
+      "original_input": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\FRACMATH-github\\softwarex\\reproducibility\\mesh_study\\medium\\abaqus\\diagnostics\\Gregoire_3PB.inp",
+      "original_input_sha256": "286f2db19e6fab1f87a82e3b129e8fe052586534298471350b09463ae9c01956",
+      "fixed_input_sha256": "01da2edb2ffac4363acd0298bb10eabba46d1cec8df2d112c2d53e89679ce22b",
+      "mesh_sha256": {
+        "cmod1.txt": "5b677464f4941a4c274964d723bf47e3cd7cdcb5d53379a3b7176f0c456cf9a0",
+        "cmod2.txt": "8ce88a8842c1584e3d6871e84e166e3b513c3ce2a9da6166760c7af1645dea29",
+        "elements.txt": "0a33cf7bb10fbb6808fb993ef3264cac4ff7ac91ccf99453261819f19071c150",
+        "left_nodes.txt": "d91a915db080736443c7b2fa55b70a31d2e4cddb9182844bb91e04897b9d4598",
+        "mesh_metadata.json": "512a923ce6b0cc3464d58911d34ce75b43230c25a9de0383d597cf9a4e6c981c",
+        "nodes.txt": "e1d90b1899e8e0a3482162b7e7e1f07cd2a513fd22b22b4cb5a30686fd3184e7",
+        "right_nodes.txt": "df4e26a04a444901b95afef44e4a96cfae34690fff2ad2c66389c70079cdff2b",
+        "top_nodes.txt": "a4dd44d7ca0b98e9a13bdc8e09abba39ef0e71db655b7a42d7a7a22fbbb89e21"
+      },
+      "original_metadata_sha256": "bb78393f0a09e9efce6ff7f22f534df8926071934260955dc4824bce834351d2",
+      "oliver_table_sha256": "df4530787aac4fcc37e023ebb724d879f0d16d179d1497614fad5e2bcca202ee",
+      "reference_source": "C:\\Users\\jmavani\\Documents\\FRACMATH_final_rerun_20261004\\mesh_study\\medium\\matlab_oliver_2000",
+      "reference_sha256": {
+        "matlab_energy_history.csv": "98685639d3c143e33552833cd401d91914fbf14cd3a5238c199ec78400fad5a0",
+        "matlab_load_cmod.csv": "04b8cbb2f71069e2395d7d8db8a58930f1e22eed90b96dbf06d042baf10353c0",
+        "matlab_step_diagnostics.csv": "aefbbfd69ad073bd5ee40b879557fb73f51e22458466993b846458b6d31ac29c",
+        "matlab_timing.txt": "d0a3b020c26dc2a37632a569ab7ee065be6b155ccee64abed84f9c4e4422b5a6",
+        "verified_state.mat": "c33520438862616593a6ffba36a54e3580dc85d08b24f276324dfbbb8e609fe2"
+      },
+      "matlab_new_runs": [
+        "area"
+      ]
+    },
+    "fine": {
+      "steps": 2000,
+      "final_displacement_mm": -0.1,
+      "original_input": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\FRACMATH-github\\softwarex\\reproducibility\\mesh_study\\fine\\abaqus\\diagnostics\\Gregoire_3PB.inp",
+      "original_input_sha256": "285b4738d4d31959292150060008331a8a57390ccbfb217151d092a2e2b9cef3",
+      "fixed_input_sha256": "6d067a714e2a2ec6a6d4169db4599d753f1fad4602f0bad8c4c0fcca970f5863",
+      "mesh_sha256": {
+        "cmod1.txt": "5b677464f4941a4c274964d723bf47e3cd7cdcb5d53379a3b7176f0c456cf9a0",
+        "cmod2.txt": "8ce88a8842c1584e3d6871e84e166e3b513c3ce2a9da6166760c7af1645dea29",
+        "elements.txt": "1f6876afb193f845386cfc314adff3c07de9ebec4f131a66b9d8dd1b9e0fff7d",
+        "left_nodes.txt": "d91a915db080736443c7b2fa55b70a31d2e4cddb9182844bb91e04897b9d4598",
+        "mesh_metadata.json": "0a75f235c0923db5409db79f31c4a69f0948b5f21147f6cff27f8e9c934bd164",
+        "nodes.txt": "b05addfc56bf2de5b38feb0edf7b26cb568e3dbfa00fb5c2ea3316603c57886c",
+        "right_nodes.txt": "df4e26a04a444901b95afef44e4a96cfae34690fff2ad2c66389c70079cdff2b",
+        "top_nodes.txt": "c8a888d16c87beb7d10710cc67347b2d3c7756e059483be15b5c8a8ab7d337bd"
+      },
+      "original_metadata_sha256": "c585bc08660c5b99078cccef3dc0d58a03799ec62f5d32732bc53ae273f43660",
+      "oliver_table_sha256": "87fb0a29f66d0b6743dfe1c6fd09b5049a76e30cfdaf5979f2123c0ae20b2b76",
+      "reference_source": "C:\\Users\\jmavani\\Documents\\FRACMATH_final_rerun_20261004\\mesh_study\\fine\\matlab_oliver_2000",
+      "reference_sha256": {
+        "matlab_energy_history.csv": "28f38c0951d6be4370a4f0002e32b2dd7969552887f8b89b7ace78aaeb97e63d",
+        "matlab_load_cmod.csv": "36bf1b1ee7efd651b4003dd65f5d20ca1445df450ee53ec7c65861edd8a3276e",
+        "matlab_step_diagnostics.csv": "cdcf1fd39358c2fbc79bbb41add77b9730f0e9bc21d4658bbe71213299ad4d6f",
+        "matlab_timing.txt": "e12d893a079e3aec98f38b675b2c13c1eee5fd94f9a37319706f304b8e12ee4f",
+        "verified_state.mat": "218eec7ebff99f3456d81bb9b580ba101648630dd020cad569137b7bd07d76e5"
+      },
+      "matlab_new_runs": [
+        "area"
+      ]
+    }
+  },
+  "limitations": [
+    "Matching increments does not make the nonlinear algorithms identical.",
+    "MATLAB updates damage after solving at the previous damage state.",
+    "Rankine changes the multiaxial damage surface; fc/ft has no role in that option."
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "mesh_scale": 1.0,
+  "elements": 14268,
+  "nodes": 7319,
+  "dofs": 14638,
+  "global_seed_mm": 6.25,
+  "notch_seed_mm": 1.25,
+  "max_displacement_mm": -0.2,
+  "max_increment": 0.0001,
+  "study_boundary_conditions": false,
+  "size_scale": 1.0,
+  "depth_mm": 100.0,
+  "length_mm": 350.0,
+  "thickness_mm": 50.0,
+  "boundary_nodes": {
+    "Support_Left": [
+      [
+        201,
+        50.0,
+        0.0
+      ]
+    ],
+    "Support_Right": [
+      [
+        311,
+        300.0,
+        0.0
+      ]
+    ],
+    "Load_Nodes": [
+      [
+        439,
+        176.25,
+        100.0
+      ],
+      [
+        440,
+        175.0,
+        100.0
+      ],
+      [
+        441,
+        173.75,
+        100.0
+      ]
+    ],
+    "CMOD1": [
+      [
+        9,
+        173.75,
+        0.0
+      ]
+    ],
+    "CMOD2": [
+      [
+        12,
+        176.25,
+        0.0
+      ]
+    ]
+  },
+  "original_increment_metadata": 0.001,
+  "increment_mode": "fixed"
+}

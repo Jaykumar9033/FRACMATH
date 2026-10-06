@@ -5,13 +5,13 @@
 Use the extracted submission folder as the package root. In the GitHub repository, first enter the `softwarex` folder.
 
 1. Open `start_here.m` in MATLAB R2024b.
-2. Leave `number_of_steps = 10000`, `backend = 'cpu'`, and `number_of_threads = 1` for the Figure 1 settings.
+2. Leave `number_of_steps = 2000`, `backend = 'cpu'`, and `number_of_threads = 1` for the supplied medium-mesh example. Its final prescribed displacement is -0.1 mm.
 3. Press **Run**. The mesh is supplied; no Abaqus license is needed for this MATLAB example.
 4. Open `student_results/matlab_load_cmod.csv` for crack opening and load, and `verified_state.mat` for the saved numerical arrays.
 
 Set `show_figures = false` when measuring computing time. Set `run_material_test = true` to run the short material check instead of a structural simulation. The GPU option requires Parallel Computing Toolbox and a supported GPU; CPU is the default. Results have a separate folder so the paper's archived data remain available.
 
-`start_here.m` explicitly sets the size, displacement, regularization, thread, and backend controls used by this example. Material constants are listed near the top of `solver_main_3pb.m`. The entry script passes settings to that solver; there is one implementation of the numerical solver.
+`start_here.m` explicitly sets the mesh, displacement, regularization, equivalent-strain option, thread and backend controls. The example uses Oliver width and modified von Mises equivalent strain. Material constants are listed near the top of `solver_main_3pb.m`. The entry script passes settings to that solver; there is one implementation of the numerical solver.
 
 ## Units and variables
 
@@ -46,13 +46,19 @@ The old-damage equilibrium solve and the subsequent damage calculation are disti
 
 For each triangle, project its three shape-function gradients onto the maximum-principal-strain direction `n`. The width is `h = 2 / sum(abs(gradN * n))`. The softening parameter is then `eps_f = eps0/2 + GF/(h*ft)`. The history is `max(kappa_old, equivalent_strain)`, and damage cannot decrease on unloading.
 
-The width changes with direction. Replacing it with the fixed reference width provides the paper's control calculation. The structural mesh study then shows how the two choices affect the load-CMOD response for one bending geometry.
+The width changes with direction. The current manuscript compares it with `h = sqrt(2*A)`, where `A` is the area of each triangle. This area width follows element size but does not change with the strain direction. The two choices are compared on the same coarse, medium and fine meshes. A constant-width option remains only to reproduce older archives.
+
+The default damage driver is modified von Mises equivalent strain. The `rankine` option uses the largest positive principal strain, including the plane-stress out-of-plane component. It does not use the compression/tension strength ratio. The coarse-mesh comparison shows a formulation difference; it does not establish which option better matches experiments.
 
 ## CPU, hybrid GPU, and Abaqus
 
 Read the CPU branch first. The optional `gpu_damage_point` function is the scalar version of the same damage formula. `gpuArray.arrayfun` evaluates it across elements. Global sparse assembly and factorization remain on the CPU, so this is a hybrid implementation.
 
-MATLAB's eight-thread setting is a limit for supported numerical libraries. It is not eight independent simulations. Abaqus uses eight SMP threads, initializes the gradient table before material calls, and uses the same mesh and material parameters. Its equilibrium algorithm differs from MATLAB's sequential update.
+The area-width and maximum-positive-principal-strain options are verified on CPU. GPU requests for these options are rejected until that path is tested. The hybrid kernel retains the existing modified-von-Mises formulation.
+
+MATLAB's eight-thread setting is a limit for supported numerical libraries. It is not eight independent simulations. Abaqus can use SMP threads and initializes the gradient table before material calls. The completed medium/fine manuscript comparisons use the same exact mesh, 2,000 fixed increments and -0.1 mm final prescribed displacement in each pair. Abaqus's equilibrium algorithm differs from MATLAB's sequential update.
+
+The original baseline and coarse fixed Abaqus cases stopped during convergence; their partial histories are preserved. The baseline 20,000-increment retry also failed, with 5,175 accepted increments recorded in `.sta`; its diagnostic record is in `reproducibility/fixed_increment_retry/baseline/`. The coarse 4,000-increment retry is running and is not yet a completed comparison. A complete MATLAB history does not imply that every point meets Abaqus's equilibrium criterion, and failed fixed cases are not replaced by adaptive histories.
 
 ## What can reproduce exactly?
 
@@ -60,14 +66,14 @@ With identical inputs, software, backend, and numerical settings, saved numerica
 
 Different CPU/GPU arithmetic can produce small floating-point differences. GPU and CPU curves are checked using declared tolerances, not promised to match bit for bit. Runtime, memory use, video compression, file timestamps, MAT-file headers, and image/PDF metadata are not exact numerical outputs.
 
-For archived paper figures, use `plot_verified_figures.py` and `rebuild_3d_figures.py`. Keep the 10,000-step history for Figure 1. The separate 2,000-step hardware study has different settings and does not replace it.
+For the current manuscript figures, use `plot_current_figures.py`. It reads the completed fixed-increment extension and the supplied 3D sources. The editable numerical flowchart is in `figure_sources/damage_update_flowchart.tex`. Earlier baseline and hardware-study figure scripts remain archive replay tools.
 
 For the Fortran material routine, follow the seven steps in
 [UMAT_GUIDE.md](UMAT_GUIDE.md). The guide explains how total strain,
 crack-band width, damage and stress are calculated, and why the secant
 matrix can lead to additional Abaqus iterations.
 
-Run `verify_paper_figures.py --workspace C:/runs/figure_replay` with Python
+Run `verify_current_figures.py --workspace C:/runs/figure_replay` with Python
 to check all manuscript figure assets in a separate folder. The three-mesh
 pure-tension comparison uses the completed published-geometry archive;
 mixed-mode damage images remain qualitative.
@@ -109,15 +115,15 @@ The production code evaluates many element matrices together. `sparse` adds cont
 1. `start_here.m`: choose a run and find its output folder.
 2. `solver_main_3pb.m`: read the numbered sections, then `load_mesh`, `precompute_T3`, `assemble_K` and `damage_update`.
 3. `UMAT_GUIDE.md`: match the MATLAB material variables to the Fortran variables.
-4. `MESH_STUDY.md`: understand the mesh choices and constant-width control before running the study.
-5. `SCALING_STUDY.md`: understand the measured scopes before using threads or the hybrid GPU.
-6. `plot_verified_figures.py`: see how saved numerical arrays become plots. This script does not solve the model.
+4. `MESH_STUDY.md` and `COMPARISON_EXTENSION.md`: understand the mesh, width and fixed-increment choices before running the study.
+5. `ABAQUS_TIMING_SCOPE.md`: understand the timer limits. `SCALING_STUDY.md` describes optional earlier hardware observations.
+6. `plot_current_figures.py`: see how saved numerical arrays become current manuscript plots. This script does not solve the model.
 
-The `run_*.py` scripts organise simulations. The `analyze_*.py` scripts read saved results. The `plot_*.py` scripts draw figures. The `audit_umat.py` and `verify_paper_figures.py` scripts check material responses and figure reproduction. Exact commands are in `REPRODUCE.md`.
+The `run_*.py` scripts organise simulations. The `analyze_*.py` scripts read saved results. The `plot_*.py` scripts draw figures. `run_material_examples.py` checks the ten material examples; `verify_current_figures.py` checks current figure reconstruction. Exact commands are in `REPRODUCE.md`.
 
 ## Reading the 3D examples
 
-`Noor mohammad/Mesh/damage_static.m` reads a mesh prefix and an `opts` structure. A structure groups named settings such as `E`, `GF` and `nIncr`. The local helper uses a supplied setting when it exists and otherwise uses the default. Read material, loading and convergence settings before the element calculations.
+The panel helper `Noor mohammad/Mesh/damage_static.m` reads a mesh prefix and an `opts` structure. Nooru-Mohamed is the source benchmark attribution. A structure groups named settings such as `E`, `GF` and `nIncr`. The local helper uses a supplied setting when it exists and otherwise uses the default. Read material, loading and convergence settings before the element calculations. The pure-tension case and the qualitative mixed-mode panel use different loading controls and notch geometry.
 
 `Torsion/working/run_torsion.m` sets the material and loading geometry, then passes its `opts` structure to the 3D calculation. Three-dimensional strain and stiffness arrays are larger than in the triangle example. Read the 2D example first. The mixed-mode and torsion damage fields have the validation limits described in `VALIDATION_SCOPE.md`.
 

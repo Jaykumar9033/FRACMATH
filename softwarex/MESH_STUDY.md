@@ -1,51 +1,49 @@
-# Controlled 2D mesh and regularization study
+# Bending mesh and regularization study
 
 ## Purpose
 
-This study answers two manuscript questions:
+The current study asks how bending load-CMOD curves change with mesh density and with crack-band width, and whether MATLAB/Abaqus responses agree when the mesh and prescribed increment schedule match. Structural dissipation is not a reported manuscript result.
 
-1. How sensitive is the 2D load-CMOD response to mesh refinement when the direction-dependent Oliver crack-band width is used?
-2. Do MATLAB and Abaqus/UMAT give comparable structural responses on the same controlled meshes?
+## Exact mesh family
 
-The manuscript does **not** use dissipation as a study result.
+Coarse, medium and fine meshes are retained under `reproducibility/mesh_study/` and copied with hashes into `reproducibility/fixed_increment_extension/`. Geometry, support nodes, loading strip and CMOD nodes are preserved. Each current width-study pair uses the same mesh, material parameters, 2,000 fixed increments and final prescribed displacement of -0.1 mm.
 
-## Mesh family
+## Width choices
 
-Three exported meshes are retained under `reproducibility/mesh_study/`: coarse, medium and fine. Geometry, support locations, loading strip and CMOD measurement points are checked so that only mesh density and the selected regularization treatment change.
+- `oliver`: project the triangle's shape-function gradients onto its maximum-principal-strain direction. The width is `h = 2 / sum(abs(gradN * n))`.
+- `area`: use `h = sqrt(2*A)` separately for every triangle, where A is its area in square millimetres.
 
-## MATLAB cases
+The area width follows element size but does not change with strain direction. Oliver width accounts for direction and element geometry. Both enter the same bending softening calibration, `eps_f = eps0/2 + GF/(h*ft)`.
 
-For each mesh, two MATLAB responses are retained:
+A constant 1.25 mm control is retained only for historical archive replay; it is not the current manuscript width comparison.
 
-- `oliver`: the projected crack-band width is computed from element shape-function gradients and the current principal-strain direction;
-- `fixed`: a constant reference width of 1.25 mm is used as a control.
+## Completed MATLAB results
 
-The main response quantity is load versus crack-mouth opening displacement (CMOD). Additional raw diagnostic files written by the solver are preserved but are not used in the manuscript discussion.
+| Mesh | Oliver peak load (N) | Area-width peak load (N) |
+| --- | ---: | ---: |
+| Coarse | 4193.718 | 4113.115 |
+| Medium | 4205.029 | 4122.738 |
+| Fine | 4458.989 | 4399.661 |
 
-## Abaqus cases
+The peak-load spread is 6.19% for Oliver and 6.80% for area width. These observations support a numerical sensitivity discussion for this geometry; they do not establish general mesh independence or select a universally better width.
 
-The Abaqus cases use the same exported mesh family and the corresponding UMAT. The analysis script checks that the Oliver gradient table is loaded for the expected number of elements and reads the extracted load-CMOD histories.
+## Fixed-increment Abaqus comparison
 
-## Analysis
+Medium and fine Abaqus cases complete 2,000 fixed increments on the exact corresponding MATLAB meshes, to the same -0.1 mm endpoint. ODB times and loading displacement are checked rather than inferred from row count. The current response plots use these completed cases.
 
-From the package root run:
+The original coarse 2,000-increment and baseline 10,000-increment Abaqus jobs failed during convergence. Their partial curves and logs are preserved. The baseline 20,000-increment retry also failed after 5,175 accepted increments recorded in `.sta`; its logs and exact MATLAB reference are retained in `reproducibility/fixed_increment_retry/baseline/`. The coarse 4,000-increment retry is running and requires final verification before use as a complete comparison. There is no adaptive substitution.
 
-```text
-python analyze_mesh_study.py --workspace reproducibility/mesh_study
+## Reconstruct the current plots
+
+From the repository root:
+
+```powershell
+python softwarex/plot_current_figures.py --output C:/runs/current_figures
+python softwarex/verify_current_figures.py --workspace C:/runs/current_figure_check
 ```
 
-The script checks response validity, mesh/BC consistency, peak load, peak CMOD, post-update residuals, increment sensitivity and MATLAB-Abaqus peak differences. It rebuilds:
-
-- `figures/mesh_study_overview.pdf`
-- `figures/mesh_study_overview.png`
-
-The four panels show:
-
-(a) MATLAB with Oliver regularization;
-(b) MATLAB with fixed width;
-(c) Abaqus/UMAT with Oliver regularization;
-(d) fine-mesh MATLAB-Abaqus response comparison.
+Read `COMPARISON_EXTENSION.md` before starting fresh simulations. The original `analyze_mesh_study.py` and four-panel `mesh_study_overview` assets belong to the archived Oliver/constant-width study.
 
 ## Interpretation
 
-This is a controlled numerical sensitivity study for one benchmark geometry. It does not prove general mesh independence, and it does not use structural dissipation as a manuscript conclusion.
+MATLAB updates damage after solving with its preceding state and records the post-update residual. Abaqus performs nonlinear equilibrium iterations with the UMAT's secant matrix. Identical mesh and fixed increments improve comparability but do not make the nonlinear algorithms or accuracy criteria identical. Runtime and peak differences must be interpreted with those limits.

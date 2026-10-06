@@ -1,0 +1,5 @@
+{
+  "maximum_reference_coordinate_difference_mm": 5.499267565767241e-07,
+  "connectivity_equal": true,
+  "reason": "Saved original MATLAB baseline mesh coordinates are rounded relative to full-precision Abaqus mesh. Existing baseline fixed20k retry uses fresh MATLAB results on the exact job mesh; do not relax the exact-mesh analyzer to hide this difference."
+}
