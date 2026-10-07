@@ -18,6 +18,10 @@ C    - This file removes small matrix loops in the stress/tangent update.
 C    - Use *DEPVAR, n=2 for fastest output: STATEV(1)=kappa, STATEV(2)=omega.
 C      If n>=4, STATEV(3)=h and STATEV(4)=Oliver flag are stored for checking.
 C=======================================================================
+C  Paper notation: kappa_0=EPS0; equivalent strain=EQ;
+C  epsilon_f=EF; h=H; G_F=GF; nu=ANU; k=FCFT.
+C  KAPPA=STATEV(1); OMEGA=STATEV(2).
+C  See softwarex/NOTATION.md for shared symbol definitions.
       SUBROUTINE UMAT(STRESS, STATEV, DDSDDE, SSE, SPD, SCD,
      1  RPL, DDSDDT, DRPLDE, DRPLDT,
      2  STRAN, DSTRAN, TIME, DTIME, TEMP, DTEMP, PREDEF, DPRED,

@@ -146,8 +146,8 @@ manuscript comparison suite. [MESH_STUDY.md](../softwarex/MESH_STUDY.md) and
 
 ## Softening calibration in the 3D examples
 
-The bending and torsion solvers use `eps_f = kappa0/2 + GF/(h*ft)` and the
-exponential denominator `eps_f - kappa0`. This calibration includes the
+The bending and torsion solvers use the paper formula `epsilon_f = kappa_0/2 + G_F/(h*f_t)` and the
+exponential denominator `epsilon_f - kappa_0`. This calibration includes the
 elastic contribution in the specified uniaxial work. The panel solver uses
 `beta = ft*h/GF` with
 `omega = 1 - (kappa0/kappa)*exp(-beta*(kappa-kappa0))` above onset, calibrating
@@ -155,3 +155,7 @@ the post-onset tail. These are separately stated energy conventions; their
 parameter values must not be interchanged when reproducing the examples.
 The qualitative mixed-mode illustration and the pure-tension mesh study
 are distinct panel cases, with Nooru-Mohamed retained as the benchmark source.
+
+## Shared notation
+
+See [Symbols and code names](../softwarex/NOTATION.md) for the common definitions used in the paper, flowchart, MATLAB and UMAT.

@@ -44,7 +44,7 @@ The old-damage equilibrium solve and the subsequent damage calculation are disti
 
 ## How crack-band regularization enters the code
 
-For each triangle, project its three shape-function gradients onto the maximum-principal-strain direction `n`. The width is `h = 2 / sum(abs(gradN * n))`. The softening parameter is then `eps_f = eps0/2 + GF/(h*ft)`. The history is `max(kappa_old, equivalent_strain)`, and damage cannot decrease on unloading.
+For each triangle, project its three shape-function gradients onto the maximum-principal-strain direction `n`. The width is `h = 2 / sum(abs(gradN * n))`. The softening parameter is then `ef_e = p.eps0/2 + p.GF/(h_oliver*p.ft)` (before the numerical lower bound). The history is `max(kappa_old, equivalent_strain)`, and damage cannot decrease on unloading.
 
 The width changes with direction. The current manuscript compares it with `h = sqrt(2*A)`, where `A` is the area of each triangle. This area width follows element size but does not change with the strain direction. The two choices are compared on the same coarse, medium and fine meshes. A constant-width option remains only to reproduce older archives.
 
@@ -134,3 +134,7 @@ The panel helper `Noor mohammad/Mesh/damage_static.m` reads a mesh prefix and an
 - No live plot: check `show_figures`; numerical outputs can still be saved.
 - Different settings give a different curve: record the mesh, material, increments and backend before comparing outputs.
 - A slow run: first use CPU and headless output. Timing depends on hardware; it is not an exact reproduction target.
+
+## Shared notation
+
+See [Symbols and code names](NOTATION.md) for the common definitions used in the paper, flowchart, MATLAB and UMAT.

@@ -27,6 +27,12 @@ function solver_main_3pb()
 %   The CPU path is the default. GPU statements are optional and use the
 %   same constitutive law. See softwarex/BEGINNER_GUIDE.md for array sizes.
 
+% Paper/flowchart notation: omega=damage; kappa=strain history.
+% kappa_0=p.eps0; tilde epsilon=eq_s; epsilon_f=ef_e; h=h_oliver.
+% G_F=p.GF; paper increment m=main-loop step.
+% Engineering shear gamma_xy is twice tensor shear epsilon_xy.
+% See softwarex/NOTATION.md for the common symbol definitions.
+
 clc;
 fprintf('==== MATLAB CDM 3PB solver: vectorized sequential secant update ====\n');
 
