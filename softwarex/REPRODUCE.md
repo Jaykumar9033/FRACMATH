@@ -6,7 +6,7 @@ Commands below are run from the repository root. Use fresh folders for numerical
 
 Open `softwarex/start_here.m` and press Run. It selects the supplied medium mesh, 2,000 fixed increments, -0.1 mm final displacement, Oliver width, modified von Mises equivalent strain and one CPU thread. Outputs are saved separately in `softwarex/student_results`.
 
-Read `BEGINNER_GUIDE.md` before changing a setting. Historical beginner and baseline archives use different schedules and are not the current Figure 1 reference.
+Read `BEGINNER_GUIDE.md` before changing a setting. Historical beginner and baseline archives use different schedules and are not the current bending reference.
 
 ## 2. Material-point consistency
 
