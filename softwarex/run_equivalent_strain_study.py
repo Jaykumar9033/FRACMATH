@@ -132,7 +132,7 @@ def plot(workspace,output,summary=None):
     if not summary['all_execution_checks_passed']:
         raise ValueError('Only fully checked cases can be plotted')
     styles={'modified_mises':('#2166a5','-'),
-            'rankine_stress':('#7b3294',':')}
+            'rankine_stress':('#cc503e','--')}
     curves={}
     # The immutable archive also contains optional drivers outside Figure 4.
     for mode in LABELS:
@@ -153,18 +153,21 @@ def plot(workspace,output,summary=None):
             markers.append(int(index));last=experiment[index,1]
     markers=sorted(set(markers+[int(np.argmax(experiment[:,2]))]))
     output.mkdir(parents=True,exist_ok=True)
-    with plt.rc_context({'font.size':11,'pdf.fonttype':42}):
-        fig,ax=plt.subplots(figsize=(8.4,5.2),layout='constrained')
+    with plt.rc_context({'font.family':'DejaVu Sans','font.size':13,'axes.labelsize':14,'axes.labelweight':'bold','pdf.fonttype':42}):
+        fig,ax=plt.subplots(figsize=(6.0,4.2),layout='constrained')
         for mode,label in LABELS.items():
             values=curves[mode];color,line=styles[mode]
             # Preserve the chronological loading sequence.
-            ax.plot(values[:,0],values[:,1]/1000,label=label,color=color,linestyle=line,linewidth=2)
+            ax.plot(values[:,0],values[:,1]/1000,label=label,color=color,linestyle=line,linewidth=2.3)
             peak=np.argmax(values[:,1]);ax.plot(values[peak,0],values[peak,1]/1000,'o',color=color,markersize=4)
         ax.plot(experiment[:,1],experiment[:,2],color='#444444',linewidth=1,
                 marker='o',markerfacecolor='white',markeredgewidth=1,
                 markersize=4.5,markevery=markers,label='Experiment (digitized)',zorder=1)
         ax.set(xlabel='CMOD [mm]',ylabel='Load [kN]',xlim=(0,upper_cmod),ylim=(0,None))
         ax.spines[['top','right']].set_visible(False);ax.grid(alpha=.18)
+        ax.tick_params(width=1.2)
+        for tick in ax.get_xticklabels()+ax.get_yticklabels():
+            tick.set_fontweight('bold')
         ax.legend(frameon=False,fontsize=10,loc='upper right')
         for extension in ('png','pdf'):
             fig.savefig(output/('equivalent_strain_comparison.'+extension),dpi=300)
