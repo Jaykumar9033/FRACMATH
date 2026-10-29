@@ -1,22 +1,14 @@
-# FRACMATH Smoke Checks
+# Package smoke checks
 
-This folder contains lightweight checks for users before running the full MATLAB, Abaqus, and plotting workflows.
+These checks read current medium-mesh inputs and matched MATLAB/Abaqus histories. They check connectivity, complete finite histories, reference peaks and the presence of current 3D verification and timing records. They do not run structural simulations.
 
-The smoke check verifies that key manuscript assets, benchmark input files,
-result files, and documentation files are present and readable. It does not
-replace the full reproducibility workflow in `REPRODUCIBILITY.md`.
-
-From the repository root, run:
+From the repository root in MATLAB:
 
 ```matlab
 addpath('tests')
 run_smoke_checks
 ```
 
-Expected result:
+Expected output: `FRACMATH smoke checks passed.`
 
-```text
-FRACMATH smoke checks passed.
-```
-
-The full benchmark simulations remain documented in `REPRODUCIBILITY.md`.
+Use [REPRODUCIBILITY.md](../REPRODUCIBILITY.md) for numerical verification and figure reconstruction.

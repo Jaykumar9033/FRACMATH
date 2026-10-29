@@ -40,7 +40,7 @@ refer to the same labels. Use the supplied builder and archived input hashes.
 - The original material test checks tensile/compressive strain mapping,
   unloading/reloading and projected width, including 16
   rotated cases.
-- The manuscript uses ten explained material states and links the actual UMAT without altering it. The larger audits are optional developer records.
+- The manuscript uses ten explained material states and links the actual UMAT without altering it. The submission includes the ten manuscript examples.
   An independent NumPy tensor eigensolve and deviatoric norm supply reference
   values. The actual MATLAB damage functions are copied verbatim into a
   material-point caller. Multiaxial states, previous damage/history,
@@ -50,7 +50,7 @@ refer to the same labels. Use the supplied builder and archived input hashes.
   not a proof of a consistent tangent or universal structural convergence.
 - The completed medium/fine structural comparisons use the same exact paired meshes, 2,000 fixed increments and -0.1 mm final displacement. Actual ODB history times and loading displacement are checked. Matching the increment schedule does not make MATLAB and Abaqus equilibrium accuracy identical.
 - Original baseline 10,000-increment and coarse 2,000-increment fixed Abaqus runs stopped during convergence. Their converged histories and logs are preserved. The baseline 20,000-increment retry also failed after 5,174 converged increments (failure during attempt 5,175); its diagnostic logs and exact MATLAB reference are in `reproducibility/fixed_increment_retry/baseline/`. The coarse 4,000-increment comparison completed and passed exact-mesh, schedule, loading-coverage and finite-history checks. There is no adaptive substitution or NO STOP acceptance override.
-- Earlier CPU1/CPU8 adaptive-increment studies and their solution counts remain optional archive records. The separately profiled diagnostic reproduces its paired unprofiled response and mesh hashes; it is not the current fixed-increment timing observation.
+- The five-configuration scaling study has its own meshes, controls and timing scopes; see `SCALING_STUDY.md`.
 
 See `reproducibility/material_examples/README.md` for inputs, replay and compilation commands.
 
@@ -84,7 +84,3 @@ factorization require concepts beyond introductory MATLAB. The beginner
 guide explains their array dimensions; rewriting them as a different solver
 would require new numerical verification. Start with the CPU example and
 use the array-size table while reading the element operations.
-
-## Batch timing and history checks
-
-The optional [material-point precision archive](reproducibility/umat_precision/README.md) contains additional states and timing batches for developer auditing. It is not needed for the manuscript verification path, and its batch elapsed time is not an Abaqus job-phase measurement.

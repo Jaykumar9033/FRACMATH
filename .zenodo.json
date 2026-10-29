@@ -1,7 +1,7 @@
 {
-  "title": "FRACMATH: Vectorized continuum damage simulation with hybrid GPU computing, crack-band regularization and an Abaqus UMAT",
+  "title": "FRACMATH: A vectorized MATLAB framework for crack-band regularized continuum damage with hybrid GPU implementation",
   "upload_type": "software",
-  "description": "FRACMATH provides vectorized MATLAB scalar continuum damage simulation, direction-dependent Oliver crack-band regularization, a hybrid GPU backend with CPU sparse assembly and factorization, and an Abaqus plane-stress UMAT. Current SoftwareX companions include ten representative MATLAB-UMAT material examples, completed exact-mesh fixed-increment medium/fine bending comparisons, a three-mesh element-area versus Oliver-width study, and a two-driver CPU equivalent-strain comparison (modified von Mises and Rankine stress) with a digitized published load-CMOD trace for the same nominal beam dimensions. Three completed 3D pure-tension meshes provide a numerical mesh-consistency check; mixed-mode and torsion fields are qualitative demonstrations. The bending overlay uses attributed published graphic data; it is not a complete material calibration, and no experimental 3D validation is claimed. Original fixed-increment convergence failures are preserved as diagnostics. Separate message-file solver timers, UMAT timers and native assembly profiles have explicitly limited scopes; they do not form a complete Abaqus wall-time partition. Earlier hardware observations remain optional archives. This metadata retains the v1.1.1 numerical-core archive identity; current companions must also be cited by their exact repository commit.",
+  "description": "FRACMATH provides vectorized MATLAB continuum damage calculations with crack-band regularization, a hybrid CPU-GPU implementation and an Abaqus plane-stress UMAT. The SoftwareX package contains source code, meshes, ten material-point checks, matched three-point bending comparisons, width and equivalent-strain studies, current 3D pure-tension and mixed-mode verification, illustrative damage fields and five-configuration timing records. Saved results and plotting scripts support reproduction. Earlier mixed-mode images are identified separately from the completed current calculation. Cite the exact repository commit; the earlier numerical-core DOI identifies a separate archive.",
   "creators": [
     {
       "name": "Mavani, Jaykumar",
@@ -16,7 +16,7 @@
   ],
   "access_right": "open",
   "license": "mit",
-  "version": "1.1.1",
+  "version": "current",
   "keywords": [
     "fracture mechanics",
     "continuum damage mechanics",
@@ -33,6 +33,11 @@
       "identifier": "https://github.com/Jaykumar9033/FRACMATH",
       "relation": "isSupplementTo",
       "scheme": "url"
+    },
+    {
+      "identifier": "10.5281/zenodo.23138595",
+      "relation": "isRelatedTo",
+      "scheme": "doi"
     }
   ]
 }

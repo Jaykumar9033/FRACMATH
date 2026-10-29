@@ -1,373 +1,0 @@
-vtune: Warning: Microarchitecture performance insights will not be available. Make sure the sampling driver is installed and enabled on your system.
-vtune: Warning: To collect microarchitecture performance insights, run the product as administrator.
-vtune: Collection started. To stop the collection, either press CTRL-C or enter from another console window: vtune -r C:\Users\jmavani\Documents\Codex\2026-09-29\new-chat\work\abaqus_symbols_profile_2026_10_04\vtune_result -command stop.
-vtune: Warning: PulseEvent API used in the target application may prevent data collection. See the Troubleshooting help topic for more details.
-vtune: Warning: PulseEvent API used in the target application may prevent data collection. See the Troubleshooting help topic for more details.
-vtune: Warning: Failed to get the application thread context: A device attached to the system is not functioning.
-.
-Collection has stopped.
-vtune: Collection stopped.
-vtune: Using result path `C:\Users\jmavani\Documents\Codex\2026-09-29\new-chat\work\abaqus_symbols_profile_2026_10_04\vtune_result'
-vtune: Executing actions  0 %                                                  vtune: Executing actions  0 % Finalizing results                               vtune: Executing actions  0 % Finalizing the result                            vtune: Executing actions  0 % Clearing the database                            vtune: Executing actions  7 % Clearing the database                            vtune: Executing actions  7 % Loading raw data to the database                 vtune: Executing actions  7 % Loading 'systemcollector-48724-CCEE-D5H7BX04.collvtune: Executing actions 12 % Loading 'systemcollector-48724-CCEE-D5H7BX04.collvtune: Executing actions 12 % Loading '100444-121336.0.trace' file             vtune: Executing actions 12 % Loading '100444-125788.0.trace' file             vtune: Executing actions 12 % Loading '100444-69196.0.trace' file              vtune: Executing actions 12 % Loading '100684-133596.0.trace' file             vtune: Executing actions 12 % Loading '103108-138944.0.trace' file             vtune: Executing actions 12 % Loading '103988-106396.0.trace' file             vtune: Executing actions 12 % Loading '107748-92612.0.trace' file              vtune: Executing actions 12 % Loading '108676-123048.0.trace' file             vtune: Executing actions 12 % Loading '110440-47604.0.trace' file              vtune: Executing actions 12 % Loading '111304-25372.0.trace' file              vtune: Executing actions 12 % Loading '113184-130376.0.trace' file             vtune: Executing actions 12 % Loading '115148-93316.0.trace' file              vtune: Executing actions 12 % Loading '119448-128676.0.trace' file             vtune: Executing actions 12 % Loading '121336-111304.0.trace' file             vtune: Executing actions 12 % Loading '121336-127568.0.trace' file             vtune: Executing actions 12 % Loading '121336-137492.0.trace' file             vtune: Executing actions 12 % Loading '121336-50300.0.trace' file              vtune: Executing actions 12 % Loading '121336-66372.0.trace' file              vtune: Executing actions 12 % Loading '122080-54656.0.trace' file              vtune: Executing actions 12 % Loading '124320-136972.0.trace' file             vtune: Executing actions 12 % Loading '125360-123896.0.trace' file             vtune: Executing actions 12 % Loading '127664-128908.0.trace' file             vtune: Executing actions 12 % Loading '129204-93872.0.trace' file              vtune: Executing actions 12 % Loading '129516-99848.0.trace' file              vtune: Executing actions 12 % Loading '130376-100444.0.trace' file             vtune: Executing actions 12 % Loading '130932-57540.0.trace' file              vtune: Executing actions 12 % Loading '133596-102036.0.trace' file             vtune: Executing actions 12 % Loading '133596-103108.0.trace' file             vtune: Executing actions 12 % Loading '133596-103988.0.trace' file             vtune: Executing actions 12 % Loading '133596-104332.0.trace' file             vtune: Executing actions 12 % Loading '133596-104928.0.trace' file             vtune: Executing actions 12 % Loading '133596-107748.0.trace' file             vtune: Executing actions 12 % Loading '133596-108676.0.trace' file             vtune: Executing actions 12 % Loading '133596-110440.0.trace' file             vtune: Executing actions 12 % Loading '133596-112880.0.trace' file             vtune: Executing actions 12 % Loading '133596-115148.0.trace' file             vtune: Executing actions 12 % Loading '133596-119448.0.trace' file             vtune: Executing actions 12 % Loading '133596-122080.0.trace' file             vtune: Executing actions 12 % Loading '133596-124224.0.trace' file             vtune: Executing actions 12 % Loading '133596-124320.0.trace' file             vtune: Executing actions 12 % Loading '133596-125360.0.trace' file             vtune: Executing actions 12 % Loading '133596-127664.0.trace' file             vtune: Executing actions 12 % Loading '133596-129088.0.trace' file             vtune: Executing actions 12 % Loading '133596-129204.0.trace' file             vtune: Executing actions 12 % Loading '133596-129516.0.trace' file             vtune: Executing actions 12 % Loading '133596-130932.0.trace' file             vtune: Executing actions 12 % Loading '133596-131920.0.trace' file             vtune: Executing actions 12 % Loading '133596-13552.0.trace' file              vtune: Executing actions 12 % Loading '133596-139076.0.trace' file             vtune: Executing actions 12 % Loading '133596-139564.0.trace' file             vtune: Executing actions 12 % Loading '133596-48588.0.trace' file              vtune: Executing actions 12 % Loading '133596-59420.0.trace' file              vtune: Executing actions 12 % Loading '133596-83260.0.trace' file              vtune: Executing actions 12 % Loading '133596-88864.0.trace' file              vtune: Executing actions 12 % Loading '133596-91076.0.trace' file              vtune: Executing actions 12 % Loading '133596-93540.0.trace' file              vtune: Executing actions 12 % Loading '133596-94604.0.trace' file              vtune: Executing actions 12 % Loading '133596-94824.0.trace' file              vtune: Executing actions 12 % Loading '133596-98948.0.trace' file              vtune: Executing actions 12 % Loading '133596-99032.0.trace' file              vtune: Executing actions 12 % Loading '13552-112256.0.trace' file              vtune: Executing actions 12 % Loading '139076-8172.0.trace' file               vtune: Executing actions 12 % Loading '25372-102156.0.trace' file              vtune: Executing actions 12 % Loading '25372-131808.0.trace' file              vtune: Executing actions 12 % Loading '25372-137244.0.trace' file              vtune: Executing actions 12 % Loading '50300-97960.0.trace' file               vtune: Executing actions 12 % Loading '59420-134600.0.trace' file              vtune: Executing actions 12 % Loading '66372-121684.0.trace' file              vtune: Executing actions 12 % Loading '80908-113184.0.trace' file              vtune: Executing actions 12 % Loading '80908-140168.0.trace' file              vtune: Executing actions 12 % Loading '83260-112404.0.trace' file              vtune: Executing actions 12 % Loading '88864-9628.0.trace' file                vtune: Executing actions 12 % Loading '91076-35832.0.trace' file               vtune: Executing actions 12 % Loading '92612-80908.0.trace' file               vtune: Executing actions 12 % Loading '94824-131680.0.trace' file              vtune: Executing actions 12 % Loading '98948-104676.0.trace' file              vtune: Executing actions 12 % Loading 'userapicollector-97960-52ddd624.trace' fvtune: Executing actions 12 % Loading 'userapicollector-99032-30ff7f45.trace' fvtune: Executing actions 12 % Loading 100444-121336.0.pytrace                  vtune: Executing actions 12 % Loading 100444-121336.0.pytrace: processing symbo
-vtune: Error: Failed to start python files parser for 100444-121336.0.pytrace
-vtune: Executing actions 12 % Loading 107748-92612.0.pytrace                   vtune: Executing actions 12 % Loading 107748-92612.0.pytrace: processing symbol
-vtune: Error: Failed to start python files parser for 107748-92612.0.pytrace
-vtune: Executing actions 12 % Loading 130376-100444.0.pytrace                  vtune: Executing actions 12 % Loading 130376-100444.0.pytrace: processing symbo
-vtune: Error: Failed to start python files parser for 130376-100444.0.pytrace
-vtune: Executing actions 12 % Loading 92612-80908.0.pytrace                    vtune: Executing actions 12 % Loading 92612-80908.0.pytrace: processing symbols
-vtune: Error: Failed to start python files parser for 92612-80908.0.pytrace
-vtune: Error: Cannot load data file `C:\Users\jmavani\Documents\Codex\2026-09-29\new-chat\work\abaqus_symbols_profile_2026_10_04\vtune_result\data.0\133596-102036.0.trace' (Data file is corrupted).
-vtune: Error: Cannot load data file `C:\Users\jmavani\Documents\Codex\2026-09-29\new-chat\work\abaqus_symbols_profile_2026_10_04\vtune_result\data.0\userapicollector-99032-30ff7f45.trace' (Data file is corrupted).
-vtune: Executing actions 12 % Updating precomputed scalar metrics              vtune: Executing actions 14 % Updating precomputed scalar metrics              vtune: Executing actions 14 % Processing profile metrics and debug information vtune: Executing actions 19 % Processing profile metrics and debug information vtune: Executing actions 19 % Setting data model parameters                    vtune: Executing actions 19 % Resolving module symbols                         
-vtune: Warning: Cannot locate file `<frozen importlib._bootstrap>'.
-vtune: Warning: Cannot locate file `<frozen importlib._bootstrap_external>'.
-vtune: Warning: Cannot locate file `SMAPylModules\SMAPylDriverPy.m\src\driverStandard.py'.
-vtune: Warning: Cannot locate file `SMAPyrModules\SMAPyrUtilsPy.m\src\osutils.py'.
-vtune: Warning: Cannot locate file `SMAPyrModules\SMAPyrUtilsPy.m\src\i18n.py'.
-vtune: Warning: Cannot locate file `SMAPyrModules\SMAPyrUtiPy.m\src\uti.py'.
-vtune: Warning: Cannot locate file `SMAPyrModules\SMAPyrUtiPy.m\src\utiinternal.py'.
-vtune: Warning: Cannot locate file `SMAPyrModules\SMAPyrUtiPy.m\src\uticty.py'.
-vtune: Warning: Cannot locate file `SMAPyrModules\SMAPyrUtiPy.m\src\utiSpawn.py'.
-vtune: Warning: Cannot locate file `SMAPyrModules\SMAPyrUtiPy.m\src\utiSpawnImpl.py'.
-vtune: Warning: Cannot locate file `SMAPyrModules\SMAPyrUtilsPy.m\src\miscUtils.py'.
-vtune: Warning: Cannot locate file `SMAPylModules\SMAPylDriverPy.m\src\validateMPI.py'.
-vtune: Warning: Cannot locate file `SMAPylModules\SMAPylDriverPy.m\src\driverUtils.py'.
-vtune: Warning: Cannot locate file `SMAPylModules\SMAPylDriverPy.m\src\driverAnalysis.py'.
-vtune: Warning: Cannot locate file `SMAPylModules\SMAPylDriverPy.m\src\driverEnv.py'.
-vtune: Warning: Cannot locate file `SMAPyrModules\SMAPyrUtilsPy.m\src\simFileCleaner.py'.
-vtune: Warning: Cannot locate file `SMAPylModules\SMAPylDriverPy.m\src\driverLm.py'.
-vtune: Warning: Cannot locate file `SMAPylModules\SMAPylDriverPy.m\src\driverSharedLibrary.py'.
-vtune: Warning: Cannot locate file `SMAPylModules\SMAPylDriverPy.m\src\driverPre.py'.
-vtune: Warning: Cannot locate file `SMAPylModules\SMAPylDriverPy.m\src\driverPhase.py'.
-vtune: Warning: Cannot locate file `SMAPylModules\SMAPylDriverPy.m\src\driverStd.py'.
-vtune: Warning: Cannot locate file `SMAPyaModules\SMAPyaDriverPy.m\src\cae.py'.
-vtune: Warning: Cannot locate file `SMAPylModules\SMAPylDriverPy.m\src\application.py'.
-vtune: Warning: Cannot locate file `SMAPylModules\SMAPylDriverPy.m\src\analysis.py'.
-vtune: Warning: Cannot locate file `SMAPylModules\SMAPylDriverPy.m\src\information.py'.
-vtune: Warning: Cannot locate file `SMAPylModules\SMAPylDriverPy.m\src\driverInformation.py'.
-vtune: Warning: Cannot locate file `SMAPylModules\SMAPylDriverPy.m\src\driverQueues.py'.
-vtune: Warning: Cannot locate file `SMAPylModules\SMAPylDriverPy.m\src\smaWorkXml.py'.
-vtune: Warning: Cannot locate file `SMAPyrModules\SMAPyrInpPy.m\src\inpParser.py'.
-vtune: Warning: Cannot locate file `SMAPyrModules\SMAPyrInpPy.m\src\inpParserCty.py'.
-vtune: Warning: Cannot locate file `SMAPython\SMAPytLibPy.m\src\site.py'.
-vtune: Warning: Cannot locate file `[Dynamic Code]'.
-vtune: Warning: Cannot locate file `<string>'.
-vtune: Warning: Cannot locate file `SMAPylModules\SMAPylDriverPy.m\src\symbolicConstants.py'.
-vtune: Warning: Cannot locate file `SMAPyaModules\SMAPyaDriverPy.m\src\driverUtilsCae.py'.
-vtune: Warning: Cannot locate file `run_3pb_abaqus_OLIVER_T3_FAST.py'.
-vtune: Warning: Cannot locate file `SMAPyaModules\SMAPyaAbqPy.m\src\caeModules.py'.
-vtune: Warning: Cannot locate file `SMAPyaModules\SMAPyaMatPy.m\src\evaluateMaterial.py'.
-vtune: Warning: Cannot locate file `SMAPyaModules\SMAPyaAbqPy.m\src\_symConstCacheInit.py'.
-vtune: Warning: Cannot locate file `SMAPyaModules\SMAPyaAbqPy.m\src\methodCallback.py'.
-vtune: Warning: Cannot locate file `SMAPyaModules\SMAPyaAbqPy.m\src\jobInit.py'.
-vtune: Warning: Cannot locate file `SMAPyaModules\SMAPyaAbqPy.m\src\inpMerge.py'.
-vtune: Executing actions 19 % Resolving information for `Newtonsoft.Json.dll'  vtune: Executing actions 19 % Resolving information for `Microsoft.PowerShell.Cvtune: Executing actions 19 % Resolving information for `simFileCleaner.py'    vtune: Executing actions 19 % Resolving information for `driverUtils.py'       
-vtune: Warning: Cannot locate debugging information for file `C:\Users\jmavani\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\Newtonsoft.Json.dll'.
-vtune: Executing actions 19 % Resolving information for `symbolicConstantsCache
-vtune: Warning: Cannot locate debugging information for file `C:\Users\jmavani\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\Microsoft.PowerShell.Commands.Utility.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\symbolicConstantsCache.pyd'.
-vtune: Warning: Cannot locate debugging information for file `C:\Users\jmavani\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\System.Management.Automation.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\Users\jmavani\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\System.Collections.Concurrent.dll'.
-vtune: Executing actions 19 % Resolving information for `tbbmalloc.dll'        
-vtune: Warning: Cannot locate debugging information for file `C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\tbbmalloc.dll'.
-vtune: Executing actions 19 % Resolving information for `site.py'              vtune: Executing actions 19 % Resolving information for `_symConstCacheInit.py'
-vtune: Warning: Cannot locate debugging information for file `C:\Users\jmavani\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\System.Private.CoreLib.dll'.
-vtune: Executing actions 19 % Resolving information for `ABQSMAEqsSolCore.dll' vtune: Executing actions 19 % Resolving information for `dxcore.dll'           
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAEqsSolCore.dll'.
-vtune: Executing actions 19 % Resolving information for `ntlanman.dll'         vtune: Executing actions 19 % Resolving information for `ABQSMACcoAttributesGuivtune: Executing actions 19 % Resolving information for `Windows.System.Profile
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\SYSTEM32\dxcore.dll'.
-vtune: Executing actions 19 % Resolving information for `overrides.py'         
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMACcoAttributesGuiCommon.dll'.
-vtune: Executing actions 19 % Resolving information for `abaqus_v6.env'        vtune: Executing actions 19 % Resolving information for `miscUtils.py'         vtune: Executing actions 19 % Resolving information for `bcrypt.dll'           vtune: Executing actions 19 % Resolving information for `_multiarray_umath.cp31vtune: Executing actions 19 % Resolving information for `ifx.exe'              vtune: Executing actions 19 % Resolving information for `libmmd.dll'           
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\Windows.System.Profile.PlatformDiagnosticsAndUsageDataSettings.dll'.
-vtune: Executing actions 19 % Resolving information for `ABQSMAInpFlattener.dll
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\ntlanman.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\bcrypt.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\libmmd.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAInpFlattener.dll'.
-vtune: Executing actions 19 % Resolving information for `ittnotify_collector.dlvtune: Executing actions 19 % Resolving information for `ABQSMAStsSlvUtils.dll'
-vtune: Warning: Cannot locate debugging information for file `C:\Program Files (x86)\Intel\oneAPI\vtune\2025.0\bin64\runtime\ittnotify_collector.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAStsSlvUtils.dll'.
-vtune: Executing actions 19 % Resolving information for `wtsapi32.DLL'         
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\SYSTEM32\wtsapi32.DLL'.
-vtune: Executing actions 19 % Resolving information for `ABQSMARomDiagEx.dll'  vtune: Executing actions 19 % Resolving information for `ABQSMAGraphNativeCore.
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMARomDiagEx.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAGraphNativeCore.dll'.
-vtune: Executing actions 19 % Resolving information for `ABQSMAStaCore.dll'    vtune: Executing actions 19 % Resolving information for `ntdll.dll'            vtune: Executing actions 19 % Resolving information for `System.Management.Auto
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\SYSTEM32\ntdll.dll'.
-vtune: Executing actions 19 % Resolving information for `smaWorkXml.py'        vtune: Executing actions 19 % Resolving information for `libffi-7.dll'         vtune: Executing actions 19 % Resolving information for `utiinternal.py'       vtune: Executing actions 19 % Resolving information for `py3k.py'              vtune: Executing actions 19 % Resolving information for `sre_compile.py'       vtune: Executing actions 19 % Resolving information for `reg.exe'              vtune: Executing actions 19 % Resolving information for `pre.exe'              
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\system32\reg.exe'.
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\pre.exe'.
-vtune: Executing actions 19 % Resolving information for `ABQSMABasCoreUtils.dllvtune: Executing actions 19 % Resolving information for `ABQSMAMetCore.dll'    
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMABasCoreUtils.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAMetCore.dll'.
-vtune: Executing actions 19 % Resolving information for `xfortcom.exe'         vtune: Executing actions 19 % Resolving information for `analysis.py'          vtune: Executing actions 19 % Resolving information for `ntdll.dll'            vtune: Executing actions 19 % Resolving information for `mswsock.dll'          
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\SysWOW64\ntdll.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\mswsock.dll'.
-vtune: Executing actions 20 % Resolving information for `mswsock.dll'          vtune: Executing actions 20 % Resolving information for `driverStandard.py'    vtune: Executing actions 20 % Resolving information for `driverUtilsCae.py'    vtune: Executing actions 20 % Resolving information for `ABQSMAIomCore.dll'    vtune: Executing actions 20 % Resolving information for `System.Private.CoreLib
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAIomCore.dll'.
-vtune: Executing actions 20 % Resolving information for `ABQSMAInbVwrPyUtils.dlvtune: Executing actions 20 % Resolving information for `wbemprox.dll'         
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAStaCore.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAInbVwrPyUtils.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\system32\wbem\wbemprox.dll'.
-vtune: Executing actions 20 % Resolving information for `ABQSMACntMainModule.dl
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMACntMainModule.dll'.
-vtune: Executing actions 20 % Resolving information for `amsi.dll'             vtune: Executing actions 20 % Resolving information for `ABQSMAVmoVwrModKer.dll
-vtune: Warning: Cannot locate debugging information for file `C:\Users\jmavani\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\System.Linq.Expressions.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\SYSTEM32\amsi.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\Users\jmavani\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\System.Threading.Tasks.Parallel.dll'.
-vtune: Executing actions 20 % Resolving information for `libifcoremd.dll'      vtune: Executing actions 20 % Resolving information for `mkl_intel_thread.2.dllvtune: Executing actions 20 % Resolving information for `<frozen importlib._boo
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAVmoVwrModKer.dll'.
-vtune: Executing actions 20 % Resolving information for `cmd.exe'              vtune: Executing actions 20 % Resolving information for `cmd.exe'              
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\system32\cmd.exe'.
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\SYSTEM32\cmd.exe'.
-vtune: Warning: Cannot locate debugging information for file `C:\Users\jmavani\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\Microsoft.PowerShell.ConsoleHost.dll'.
-vtune: Executing actions 20 % Resolving information for `iertutil.dll'         vtune: Executing actions 20 % Resolving information for `Microsoft.PowerShell.C
-vtune: Warning: Cannot locate debugging information for file `C:\Users\jmavani\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\Microsoft.PowerShell.Commands.Management.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\SYSTEM32\iertutil.dll'.
-vtune: Executing actions 20 % Resolving information for `USER32.dll'           
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\USER32.dll'.
-vtune: Executing actions 20 % Resolving information for `ABQSMAOdbAttrEO.dll'  vtune: Executing actions 20 % Resolving information for `ABQSMAObjSimObjectsModvtune: Executing actions 20 % Resolving information for `ABQSMAAbuGeom.dll'    
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAObjSimObjectsMod.dll'.
-vtune: Executing actions 20 % Resolving information for `driverLm.py'          vtune: Executing actions 20 % Resolving information for `ABQSMACkeAttributesIntvtune: Executing actions 20 % Resolving information for `odbMaterial.pyd'      
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAAbuGeom.dll'.
-vtune: Executing actions 20 % Resolving information for `ABQSMAAbuBasicUtils.dlvtune: Executing actions 20 % Resolving information for `ABQSMACmiCaeModule.dllvtune: Executing actions 20 % Resolving information for `ABQSMAVmoVwrOopKer.dll
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAOdbAttrEO.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\odbMaterial.pyd'.
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAAbuBasicUtils.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMACkeAttributesIntObj.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMACmiCaeModule.dll'.
-vtune: Executing actions 20 % Resolving information for `[Dynamic Code]'       
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAVmoVwrOopKer.dll'.
-vtune: Executing actions 20 % Resolving information for `ABQSMACkeCaeKerProceduvtune: Executing actions 20 % Resolving information for `_ctypes.pyd'          
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\tools\SMApy\python3.10\DLLs\_ctypes.pyd'.
-vtune: Executing actions 20 % Resolving information for `__init__.py'          vtune: Executing actions 20 % Resolving information for `re.py'                
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMACkeCaeKerProcedures.dll'.
-vtune: Executing actions 20 % Resolving information for `SMALauncher.exe'      
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\SMALauncher.exe'.
-vtune: Executing actions 20 % Resolving information for `ABQSMAUzlZlib.dll'    
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAUzlZlib.dll'.
-vtune: Warning: Cannot locate file `C:\Users\jmavani\AppData\Local\Temp\jmavani_Gregoire_3PB_121336\standardU.dll'.
-vtune: Executing actions 20 % Resolving information for `standardU.dll'        vtune: Executing actions 20 % Resolving information for `abaqus_v6.env'        vtune: Executing actions 20 % Resolving information for `ABQSMABasXmlParser.dll
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMABasXmlParser.dll'.
-vtune: Executing actions 20 % Resolving information for `WININET.dll'          vtune: Executing actions 20 % Resolving information for `__init__.py'          vtune: Executing actions 20 % Resolving information for `licensing.env'        vtune: Executing actions 20 % Resolving information for `ABQSMASglSimXmlFndLib.
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\SYSTEM32\WININET.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMASglSimXmlFndLib.dll'.
-vtune: Executing actions 20 % Resolving information for `methodCallback.py'    vtune: Executing actions 20 % Resolving information for `gdi32full.dll'        vtune: Executing actions 20 % Resolving information for `ABQSMAAspSupport.dll' 
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\gdi32full.dll'.
-vtune: Executing actions 20 % Resolving information for `SMAPython.exe'        
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\SMAPython.exe'.
-vtune: Executing actions 20 % Resolving information for `bcryptPrimitives.dll' 
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAAspSupport.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\bcryptPrimitives.dll'.
-vtune: Executing actions 20 % Resolving information for `run_3pb_abaqus_OLIVER_vtune: Executing actions 20 % Resolving information for `__init__.py'          vtune: Executing actions 20 % Resolving information for `utiSpawn.py'          vtune: Executing actions 20 % Resolving information for `platform.py'          vtune: Executing actions 20 % Resolving information for `ABQSMASimContainers.dl
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMASimContainers.dll'.
-vtune: Executing actions 20 % Resolving information for `ABQSMAOdbDdbOdb.dll'  vtune: Executing actions 20 % Resolving information for `__init__.py'          
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAOdbDdbOdb.dll'.
-vtune: Executing actions 20 % Resolving information for `custom_v6.env'        vtune: Executing actions 20 % Resolving information for `System.IO.Pipes.dll'  
-vtune: Warning: Cannot locate debugging information for file `C:\Users\jmavani\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\System.IO.Pipes.dll'.
-vtune: Executing actions 20 % Resolving information for `ABQSMAStsOprMod.dll'  
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAStsOprMod.dll'.
-vtune: Executing actions 20 % Resolving information for `mkl_avx2.2.dll'       vtune: Executing actions 20 % Resolving information for dangling locations     
-vtune: Warning: Cannot locate file `C:\Users\jmavani\AppData\Local\Temp\jmavani_Gregoire_3PB_121336\standard.exe'.
-vtune: Executing actions 20 % Resolving information for `standard.exe'         vtune: Executing actions 20 % Resolving information for `System.Linq.dll'      
-vtune: Warning: Cannot locate debugging information for file `C:\Users\jmavani\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\System.Linq.dll'.
-vtune: Executing actions 20 % Resolving information for `nvgpucomp64.dll'      vtune: Executing actions 20 % Resolving information for `WINTRUST.dll'         vtune: Executing actions 20 % Resolving information for `minidom.py'           
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\WINTRUST.dll'.
-vtune: Executing actions 20 % Resolving information for `uticty.py'            vtune: Executing actions 20 % Resolving information for `cae.py'               vtune: Executing actions 20 % Resolving information for `ABQDMP_Core.dll'      vtune: Executing actions 20 % Resolving information for `System.Collections.Con
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQDMP_Core.dll'.
-vtune: Executing actions 20 % Resolving information for `ABQSMAInkModelDatabasevtune: Executing actions 20 % Resolving information for `MpOav.dll'            vtune: Executing actions 21 % Resolving information for `MpOav.dll'            
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAInkModelDatabase.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.26080.4-0\MpOav.dll'.
-vtune: Executing actions 21 % Resolving information for `vswhere.exe'          
-vtune: Warning: Cannot locate debugging information for file `C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe'.
-vtune: Executing actions 21 % Resolving information for `<frozen importlib._boovtune: Executing actions 21 % Resolving information for `DNSAPI.dll'           vtune: Executing actions 21 % Resolving information for `cmdext.dll'           vtune: Executing actions 21 % Resolving information for `ABQSMAFsmShared.dll'  
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\SYSTEM32\DNSAPI.dll'.
-vtune: Executing actions 21 % Resolving information for `ABQSMACkeAttributesNoR
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\SYSTEM32\cmdext.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAFsmShared.dll'.
-vtune: Executing actions 21 % Resolving information for `combase.dll'          
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMACkeAttributesNoRegionIntObj.dll'.
-vtune: Executing actions 21 % Resolving information for `evaluateMaterial.py'  vtune: Executing actions 21 % Resolving information for `hostfxr.dll'          
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\SysWOW64\combase.dll'.
-vtune: Executing actions 21 % Resolving information for `p9np.dll'             vtune: Executing actions 21 % Resolving information for `ABQSMABasShared.dll'  vtune: Executing actions 21 % Resolving information for `ABQSMACgiCaeModuleGeomvtune: Executing actions 21 % Resolving information for `VCRUNTIME140.dll'     
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\DriverStore\FileRepository\nv_dispwi.inf_amd64_b9ead98da9a85944\nvgpucomp64.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\Users\jmavani\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\hostfxr.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\p9np.dll'.
-vtune: Executing actions 21 % Resolving information for `Microsoft.PowerShell.C
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMACgiCaeModuleGeom.dll'.
-vtune: Executing actions 21 % Resolving information for `driverSharedLibrary.pyvtune: Executing actions 21 % Resolving information for `ABQSMAEqsDirSolverUtilvtune: Executing actions 21 % Resolving information for `ABQSMAAncAdbModule.dll
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMABasShared.dll'.
-vtune: Finalization may slow down when loading files from the symbol server specified in the project properties.
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\SYSTEM32\VCRUNTIME140.dll'.
-vtune: Warning: Cannot locate debugging information for file `c:\simulia\estproducts\2024\win_b64\code\bin\ABQSMAEqsDirSolverUtilsMod.dll'.
-vtune: Executing actions 21 % Resolving information for `caeModules.py'        vtune: Executing actions 21 % Resolving information for `pwsh.dll'             
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAAncAdbModule.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\Users\jmavani\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\pwsh.dll'.
-vtune: Executing actions 21 % Resolving information for `ABQSMAEliLicenseModule
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAEliLicenseModule.dll'.
-vtune: Warning: Cannot locate file `pincrt.dll'.
-vtune: Executing actions 21 % Resolving information for `pincrt.dll'           vtune: Executing actions 21 % Resolving information for `ABQSMAEqsDirSolverMod.
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAEqsDirSolverMod.dll'.
-vtune: Executing actions 21 % Resolving information for `ABQSMABasGenericsLib.d
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMABasGenericsLib.dll'.
-vtune: Executing actions 21 % Resolving information for `ABQSMAAmmSrmCore.dll' 
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAAmmSrmCore.dll'.
-vtune: Executing actions 21 % Resolving information for `mpi_config.env'       vtune: Executing actions 21 % Resolving information for `davclnt.dll'          vtune: Executing actions 21 % Resolving information for `ABQSMAInkVwrKer.dll'  
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\davclnt.dll'.
-vtune: Executing actions 21 % Resolving information for `pickle.py'            
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAInkVwrKer.dll'.
-vtune: Executing actions 21 % Resolving information for `sre_parse.py'         vtune: Executing actions 21 % Resolving information for `System.Linq.Expressionvtune: Executing actions 21 % Resolving information for `symbolicConstants.py' vtune: Executing actions 21 % Resolving information for `amplxe_samplingmrte_cl
-vtune: Warning: Cannot locate debugging information for file `C:\Program Files (x86)\Intel\oneAPI\vtune\2025.0\bin64\amplxe_samplingmrte_clrprof_1.0.dll'.
-vtune: Executing actions 21 % Resolving information for `CRYPT32.dll'          vtune: Executing actions 21 % Resolving information for `combase.dll'          
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\CRYPT32.dll'.
-vtune: Executing actions 21 % Resolving information for `ABQSMAPreCore.dll'    
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\combase.dll'.
-vtune: Executing actions 21 % Resolving information for `driverStd.py'         vtune: Executing actions 21 % Resolving information for `ABQcaeK.exe'          
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQcaeK.exe'.
-vtune: Executing actions 21 % Resolving information for `inpParserCty.py'      vtune: Executing actions 21 % Resolving information for `ABQSMAOdbCore.dll'    vtune: Executing actions 21 % Resolving information for `driverEnv.py'         vtune: Executing actions 21 % Resolving information for `link.exe'             vtune: Executing actions 21 % Resolving information for `win32u.dll'           
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAOdbCore.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\bin\HostX64\x64\link.exe'.
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\win32u.dll'.
-vtune: Executing actions 21 % Resolving information for `doskey.exe'           
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAPreCore.dll'.
-vtune: Executing actions 21 % Resolving information for `JS0LCC.dll'           
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\system32\doskey.exe'.
-vtune: Executing actions 21 % Resolving information for `imp.py'               vtune: Executing actions 21 % Resolving information for `System.Threading.Tasks
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\JS0LCC.dll'.
-vtune: Executing actions 21 % Resolving information for `ABQSMAStsShare.dll'   
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAStsShare.dll'.
-vtune: Executing actions 21 % Resolving information for `mkl_rt.2.dll'         vtune: Executing actions 21 % Resolving information for `tpsstool.dll'         
-vtune: Warning: Cannot locate debugging information for file `C:\Program Files (x86)\Intel\oneAPI\vtune\2025.0\bin64\tpsstool.dll'.
-vtune: Executing actions 21 % Resolving information for `mkl_sequential.2.dll' vtune: Executing actions 21 % Resolving information for `pwsh.exe'             
-vtune: Warning: Cannot locate debugging information for file `C:\Users\jmavani\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\pwsh.exe'.
-vtune: Executing actions 21 % Resolving information for `subprocess.py'        vtune: Executing actions 21 % Resolving information for `RPCRT4.dll'           vtune: Executing actions 21 % Resolving information for `ABQSMAShaShared-D.dll'
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\RPCRT4.dll'.
-vtune: Executing actions 21 % Resolving information for `KERNELBASE.dll'       
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\KERNELBASE.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAShaShared-D.dll'.
-vtune: Executing actions 21 % Resolving information for `SSPICLI.DLL'          
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\SYSTEM32\SSPICLI.DLL'.
-vtune: Executing actions 21 % Resolving information for `SMAEqsDirSolverSymmetr
-vtune: Warning: Cannot locate debugging information for file `c:\simulia\estproducts\2024\win_b64\code\bin\SMAEqsDirSolverSymmetric.exe'.
-vtune: Executing actions 21 % Resolving information for `string.py'            vtune: Executing actions 21 % Resolving information for `osutils.py'           vtune: Executing actions 21 % Resolving information for `fastprox.dll'         vtune: Executing actions 21 % Resolving information for `copy.py'              vtune: Executing actions 21 % Resolving information for `uti.py'               vtune: Executing actions 21 % Resolving information for `utiSpawnImpl.py'      vtune: Executing actions 21 % Resolving information for `ncryptsslp.dll'       vtune: Executing actions 21 % Resolving information for `application.py'       
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\system32\wbem\fastprox.dll'.
-vtune: Executing actions 21 % Resolving information for `MPR.dll'              
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\system32\ncryptsslp.dll'.
-vtune: Executing actions 21 % Resolving information for `Gregoire_3PB.com'     
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\SYSTEM32\MPR.dll'.
-vtune: Executing actions 22 % Resolving information for `Gregoire_3PB.com'     vtune: Executing actions 22 % Resolving information for `fnmatch.py'           vtune: Executing actions 22 % Resolving information for `nlansp_c.dll'         vtune: Executing actions 22 % Resolving information for `ABQSMAPyqOdbApiModule.vtune: Executing actions 22 % Resolving information for `mkl_core.2.dll'       vtune: Executing actions 22 % Resolving information for `ABQSMASimInterface.DLL
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\system32\nlansp_c.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAPyqOdbApiModule.dll'.
-vtune: Executing actions 22 % Resolving information for `multiarray.py'        vtune: Executing actions 22 % Resolving information for `IPHLPAPI.DLL'         vtune: Executing actions 22 % Resolving information for `ABQSMASrvBasic.dll'   
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMASimInterface.DLL'.
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\SYSTEM32\IPHLPAPI.DLL'.
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMASrvBasic.dll'.
-vtune: Executing actions 22 % Resolving information for `MSWSOCK.dll'          
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\SYSTEM32\MSWSOCK.dll'.
-vtune: Executing actions 22 % Resolving information for `ABQSMACgaCaeModKerGeomvtune: Executing actions 22 % Resolving information for `WINSTA.dll'           
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\SYSTEM32\WINSTA.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMACgaCaeModKerGeomLow.dll'.
-vtune: Executing actions 22 % Resolving information for `ncrypt.dll'           
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\SYSTEM32\ncrypt.dll'.
-vtune: Executing actions 22 % Resolving information for `kernel32.dll'         
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\SysWOW64\kernel32.dll'.
-vtune: Executing actions 22 % Resolving information for `ABQSMARfmInterface.dllvtune: Executing actions 22 % Resolving information for `ABQSMAInkGraphicsPrint
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMARfmInterface.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAInkGraphicsPrinting.dll'.
-vtune: Executing actions 22 % Resolving information for `WS2_32.dll'           vtune: Executing actions 22 % Resolving information for `imagehlp.dll'         vtune: Executing actions 22 % Resolving information for `nvoglv64.dll'         vtune: Executing actions 22 % Resolving information for `ABQSMACkeInputFileWrit
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\WS2_32.dll'.
-vtune: Executing actions 22 % Resolving information for `KERNEL32.DLL'         vtune: Executing actions 22 % Resolving information for `OPENGL32.dll'         
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\imagehlp.dll'.
-vtune: Executing actions 22 % Resolving information for `driverInformation.py' 
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMACkeInputFileWriter.dll'.
-vtune: Executing actions 22 % Resolving information for `urlmon.dll'           vtune: Executing actions 22 % Resolving information for `ABQSMABasAlloc.dll'   
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\DriverStore\FileRepository\nv_dispwi.inf_amd64_b9ead98da9a85944\nvoglv64.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\KERNEL32.DLL'.
-vtune: Executing actions 22 % Resolving information for `fpp.exe'              
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\SYSTEM32\OPENGL32.dll'.
-vtune: Executing actions 22 % Resolving information for `advapi32.dll'         vtune: Executing actions 22 % Resolving information for `genericpath.py'       vtune: Executing actions 22 % Resolving information for `win32wnet.pyd'        
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\SYSTEM32\urlmon.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMABasAlloc.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\advapi32.dll'.
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\tools\SMApy\python3.10\lib\site-packages\win32\win32wnet.pyd'.
-vtune: Executing actions 22 % Resolving information for `clrjit.dll'           
-vtune: Warning: Cannot locate debugging information for file `C:\Users\jmavani\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\clrjit.dll'.
-vtune: Executing actions 22 % Resolving information for `ucrtbase.dll'         vtune: Executing actions 22 % Resolving information for `information.py'       vtune: Executing actions 22 % Resolving information for `shutil.py'            
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\ucrtbase.dll'.
-vtune: Executing actions 22 % Resolving information for `schannel.DLL'         vtune: Executing actions 22 % Resolving information for `ABQSMASimInterface.dll
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\system32\schannel.DLL'.
-vtune: Executing actions 22 % Resolving information for `inpMerge.py'          vtune: Executing actions 22 % Resolving information for `bit_generator.cp310-wi
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMASimInterface.dll'.
-vtune: Executing actions 22 % Resolving information for `ABQSMAAspDiagExtractor
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAAspDiagExtractor.dll'.
-vtune: Executing actions 22 % Resolving information for `driverQueues.py'      vtune: Executing actions 22 % Resolving information for `i18n.py'              vtune: Executing actions 22 % Resolving information for `ABQSMAPybPyoModule.dll
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAPybPyoModule.dll'.
-vtune: Executing actions 22 % Resolving information for `eliT_DriverLM.exe'    
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\eliT_DriverLM.exe'.
-vtune: Executing actions 22 % Resolving information for `ABQSMASglSharedLib.dll
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMASglSharedLib.dll'.
-vtune: Executing actions 22 % Resolving information for `<string>'             vtune: Executing actions 22 % Resolving information for `coreclr.dll'          
-vtune: Warning: Cannot locate debugging information for file `C:\Users\jmavani\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\coreclr.dll'.
-vtune: Executing actions 22 % Resolving information for `ABQSMASimPoolManager.d
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMASimPoolManager.dll'.
-vtune: Executing actions 22 % Resolving information for `eliT_CheckLicense.exe'vtune: Executing actions 22 % Resolving information for `driverAnalysis.py'    
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\eliT_CheckLicense.exe'.
-vtune: Executing actions 22 % Resolving information for `DiagnosticDataSettings
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\DiagnosticDataSettings.dll'.
-vtune: Executing actions 22 % Resolving information for `NSI.dll'              vtune: Executing actions 22 % Resolving information for `driverPhase.py'       
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\NSI.dll'.
-vtune: Executing actions 22 % Resolving information for `hostpolicy.dll'       
-vtune: Warning: Cannot locate debugging information for file `C:\Users\jmavani\.cache\codex-runtimes\codex-primary-runtime\dependencies\native\powershell\hostpolicy.dll'.
-vtune: Executing actions 22 % Resolving information for `python310.dll'        vtune: Executing actions 22 % Resolving information for `driverPre.py'         
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\python310.dll'.
-vtune: Executing actions 22 % Resolving information for `MPCLIENT.DLL'         
-vtune: Warning: Cannot locate debugging information for file `C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.26080.4-0\MPCLIENT.DLL'.
-vtune: Executing actions 22 % Resolving information for `jobInit.py'           vtune: Executing actions 22 % Resolving information for `mtrand.cp310-win_amd64vtune: Executing actions 22 % Resolving information for `wkscli.dll'           
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\wkscli.dll'.
-vtune: Executing actions 22 % Resolving information for `mswsock.dll'          
-vtune: Warning: Cannot locate debugging information for file `C:\Windows\system32\mswsock.dll'.
-vtune: Executing actions 22 % Resolving information for `ABQSMAInbVwrMduCom.dll
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAInbVwrMduCom.dll'.
-vtune: Executing actions 22 % Resolving information for `ABQSMAMsgCommModules.d
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAMsgCommModules.dll'.
-vtune: Executing actions 22 % Resolving information for `__init__.py'          vtune: Executing actions 22 % Resolving information for `_add_newdocs_scalars.pvtune: Executing actions 22 % Resolving information for `validateMPI.py'       vtune: Executing actions 22 % Resolving information for `mkl_core.2.dll'       vtune: Executing actions 22 % Resolving information for `SMAEqsDirInterMod.dll'
-vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\SMAEqsDirInterMod.dll'.
-vtune: Executing actions 22 % Resolving information for `inpParser.py'         vtune: Executing actions 23 % Resolving information for `inpParser.py'         vtune: Executing actions 23 % Resolving bottom user stack information          vtune: Executing actions 23 % Resolving thread name information                vtune: Executing actions 24 % Resolving thread name information                vtune: Executing actions 24 % Resolving call target names for dynamic code     vtune: Executing actions 25 % Resolving call target names for dynamic code     vtune: Executing actions 25 % Resolving interrupt name information             vtune: Executing actions 26 % Resolving interrupt name information             vtune: Executing actions 26 % Processing profile metrics and debug information vtune: Executing actions 27 % Processing profile metrics and debug information vtune: Executing actions 28 % Processing profile metrics and debug information vtune: Executing actions 29 % Processing profile metrics and debug information vtune: Executing actions 30 % Processing profile metrics and debug information vtune: Executing actions 30 % Setting data model parameters                    vtune: Executing actions 30 % Precomputing frequently used data                vtune: Executing actions 30 % Precomputing frequently used data                vtune: Executing actions 31 % Precomputing frequently used data                vtune: Executing actions 33 % Precomputing frequently used data                vtune: Executing actions 34 % Precomputing frequently used data                vtune: Executing actions 36 % Precomputing frequently used data                vtune: Executing actions 36 % Updating precomputed scalar metrics              vtune: Executing actions 37 % Updating precomputed scalar metrics              vtune: Executing actions 37 % Discarding redundant overtime data               vtune: Executing actions 39 % Discarding redundant overtime data               vtune: Executing actions 39 % Saving the result                                vtune: Executing actions 41 % Saving the result                                vtune: Executing actions 42 % Saving the result                                vtune: Executing actions 49 % Saving the result                                vtune: Executing actions 50 % Saving the result                                vtune: Executing actions 50 % Generating a report                              vtune: Executing actions 50 % Setting data model parameters                    vtune: Executing actions 75 % Setting data model parameters                    vtune: Executing actions 75 % Generating a report                              Elapsed Time: 334.596s
-    CPU Time: 261.529s
-        Effective Time: 236.507s
-        Spin Time: 25.023s
-        Overhead Time: 0s
-    Total Thread Count: 210
-    Paused Time: 0s
-
-Top Hotspots
-Function               Module             CPU Time  % of CPU Time(%)
----------------------  -----------------  --------  ----------------
-WaitForSingleObjectEx  KERNELBASE.dll      18.517s              7.1%
-ReadFile               KERNELBASE.dll      17.841s              6.8%
-std_elgene_solid       ABQSMAStaCore.dll    7.375s              2.8%
-func@0x1812a0c30       ABQSMAStaCore.dll    6.730s              2.6%
-std_matgen_general     ABQSMAStaCore.dll    5.822s              2.2%
-[Others]               N/A                205.243s             78.5%
-Collection and Platform Info
-    Application Command Line: cmd.exe "/d" "/c" "C:\SIMULIA\Commands\abaqus.BAT" "cae" "noGUI=run_3pb_abaqus_OLIVER_T3_FAST.py" 
-    Operating System: Microsoft Windows 10
-    Computer Name: CCEE-D5H7BX04.colleges.ad.unm.edu
-    Result Size: 126.4 MB 
-    Collection start time: 19:58:41 04/10/2026 UTC
-    Collection stop time: 20:04:16 04/10/2026 UTC
-    Collector Type: User-mode sampling and tracing
-    CPU
-        Name: Intel(R) microarchitecture code named Raptorlake-DT
-        Frequency: 1.997 GHz
-        Logical CPU Count: 32
-        Cache Allocation Technology
-            Level 2 capability: not detected
-            Level 3 capability: not detected
-
-If you want to skip descriptions of detected performance issues in the report,
-enter: vtune -report summary -report-knob show-issues=false -r <my_result_dir>.
-Alternatively, you may view the report in the csv format: vtune -report
-<report_name> -format=csv.
-vtune: Executing actions 100 % Generating a report                             vtune: Executing actions 100 % done                                            

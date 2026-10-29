@@ -137,8 +137,8 @@ gradient table before material calls. The secant tangent may need many
 iterations during localization. The current matched medium/fine comparisons
 use one computational thread in each program.
 
-[SCALING_STUDY.md](../softwarex/SCALING_STUDY.md) specifies the optional
-archived size/mesh/hardware protocol with its own source hashes, response
+[SCALING_STUDY.md](../softwarex/SCALING_STUDY.md) specifies the manuscript
+size/mesh/hardware protocol with its own source hashes, response
 checks and timing scopes. Older baseline, constant-width and
 adaptive-increment records remain archive evidence; they are not the current
 manuscript comparison suite. [MESH_STUDY.md](../softwarex/MESH_STUDY.md) and
@@ -146,15 +146,9 @@ manuscript comparison suite. [MESH_STUDY.md](../softwarex/MESH_STUDY.md) and
 
 ## Softening calibration in the 3D examples
 
-The bending and torsion solvers use the paper formula `epsilon_f = kappa_0/2 + G_F/(h*f_t)` and the
-exponential denominator `epsilon_f - kappa_0`. This calibration includes the
-elastic contribution in the specified uniaxial work. The panel solver uses
-`beta = ft*h/GF` with
-`omega = 1 - (kappa0/kappa)*exp(-beta*(kappa-kappa0))` above onset, calibrating
-the post-onset tail. These are separately stated energy conventions; their
-parameter values must not be interchanged when reproducing the examples.
-The qualitative mixed-mode illustration and the pure-tension mesh study
-are distinct panel cases, with Nooru-Mohamed retained as the benchmark source.
+Current three-point bending, pure-tension, mixed-mode and torsion calculations use `epsilon_f = kappa_0/2 + G_F/(h*f_t)` and the exponential denominator `epsilon_f - kappa_0`, with `kappa_0 = f_t/E`. This includes elastic and post-peak tensile work. Current Nooru-Mohamed sources and verification are in `softwarex/reproducibility/unified_softening_20261014/`.
+
+Earlier mixed-mode image sources under `Noor mohammad/Mesh` use a post-onset calibration. They remain separate qualitative illustrations and are not the completed current calculation.
 
 ## Shared notation
 

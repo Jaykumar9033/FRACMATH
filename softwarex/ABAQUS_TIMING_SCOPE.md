@@ -34,16 +34,6 @@ The completed coarse 4,000-increment pair records MATLAB 410.99 s load-loop time
 
 The original baseline/coarse fixed jobs and the baseline 20,000-increment retry failed. The retry ODB confirms 5,174 converged increments; reported attempt 5,175 failed. These incomplete runs are diagnostics and are excluded from completed timing comparisons. Their records remain under `reproducibility/fixed_increment_retry/baseline/`.
 
-## Optional earlier diagnostics
+## Interpretation
 
-The earlier adaptive-increment baseline reports 832 s wall time, 100.15 s summed sparse-solver time and a 731.85 s remainder. These values remain an archival observation; they are not the current manuscript timing-table values.
-
-Optional developer diagnostic commands, source snapshots, response comparisons and logs are in [the measurement archive](reproducibility/abaqus_phase_timing/README.md). These archived diagnostics are separate from the manuscript timing table and are not used to allocate its assembly or material times. A subsequent [seven-block UMAT rerun](reproducibility/abaqus_phase_timing/blocks/README.md) measures the available source blocks. Its response checks pass, but clock effects prevent precise uninstrumented block percentages. It does not reveal the unavailable built-in assembly boundaries.
-
-A complete phase allocation would require a vendor-supported detailed performance report or sufficiently complete instrumentation of the internal routines. A more detailed sampling profile can improve attribution, but it remains an estimate rather than the directly measured MATLAB elapsed breakdown. Replacing built-in elements with a user element would change the implementation being benchmarked and would not measure the current built-in assembly path.
-
-Official documentation consulted: [Abaqus Output Guide](https://docs.software.vt.edu/abaqusv2025/English/SIMACAEOUTRefMap/simaout-c-ov.htm), [Generating diagnostic information](https://docs.software.vt.edu/abaqusv2025/English/SIMACAECAERefMap/simacae-c-outgenerate.htm), and [User subroutines and utilities](https://docs.software.vt.edu/abaqusv2025/English/SIMACAESUBRefMap/simasub-c-subroutineover.htm). These describe output and user-subroutine interfaces; they do not establish that the unavailable full timing partition has been measured.
-
-## External batch timing
-
-The [standalone batch benchmark](reproducibility/umat_precision/README.md) places high-resolution timers outside 14.24-million-call batches of the unchanged UMAT. This avoids per-call clock intrusion but includes driver work and cached synthetic inputs. It is distinct from in-job Abaqus timings and does not isolate assembly or exact block percentages.
+The unallocated Abaqus remainder must not be presented as assembly or material time. Development-only instrumented and profiler studies are not part of this submission package and do not contribute to reported timings. Completed job message files and timing summaries remain available.

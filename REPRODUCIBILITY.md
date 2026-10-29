@@ -35,7 +35,7 @@ Figure 4 includes the published experimental 100 mm beam trace stored in [experi
 python softwarex/run_material_examples.py --workspace softwarex/reproducibility/material_examples --check
 ```
 
-This rechecks the ten saved states. Fresh compilation and MATLAB execution require an empty output folder and the software listed above; omit `--check` for that workflow. Larger material audits remain optional historical records.
+This rechecks the ten saved states. Fresh compilation and MATLAB execution require an empty output folder and the software listed above; omit `--check` for that workflow. The ten saved examples are the manuscript material verification set.
 
 ## Fixed-increment structural studies
 
@@ -45,13 +45,13 @@ Original fixed baseline/coarse failures are retained. The baseline 20,000-increm
 
 ## 3D examples
 
-The three-mesh pure-tension archive is `softwarex/reproducibility/nooru_25mm_mesh_study/`. It supports numerical mesh consistency. The mixed-mode panel and imposed-twist torsion fields are qualitative demonstrations. No experimental 3D curve or Abaqus torsion response is claimed. Nooru-Mohamed remains the benchmark author attribution.
+The three-mesh pure-tension archive is `softwarex/reproducibility/unified_softening_20261014/mesh_study/`. It supports numerical mesh consistency. The mixed-mode panel and imposed-twist torsion fields are qualitative demonstrations. No experimental 3D curve or Abaqus torsion response is claimed. Nooru-Mohamed remains the benchmark author attribution.
 
 ## Timing interpretation
 
 MATLAB measures assembly, factorization, backsolve, damage and remaining load-loop work. Abaqus `.msg` gives combined sparse-solver time and solution counts. The remainder of the Abaqus wall time is not assembly alone. MATLAB values are saved reference observations; the fixed-increment Abaqus timings are separate fresh observations and include analysis/output.
 
-Separate material-call timers and native profiles are described in [ABAQUS_TIMING_SCOPE.md](softwarex/ABAQUS_TIMING_SCOPE.md). They do not provide complete Abaqus assembly wall time. Earlier repeated hardware observations are retained as optional records; no full sparse GPU result is claimed.
+Separate material-call timers and native profiles are described in [ABAQUS_TIMING_SCOPE.md](softwarex/ABAQUS_TIMING_SCOPE.md). They do not provide complete Abaqus assembly wall time. The five-configuration timing study and all three observations are retained; no full sparse GPU result is claimed.
 
 ## Numerical equality
 

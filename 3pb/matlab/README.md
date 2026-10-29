@@ -1,4 +1,4 @@
-﻿# MATLAB 2D 3PB solver
+ï»¿# MATLAB 2D 3PB solver
 
 This folder contains the MATLAB implementation of the 2D notched three-point bending continuum damage benchmark.
 
@@ -51,7 +51,7 @@ The solver expects these files in `Gregoire_3PB/`:
 | `Gregoire_3PB/results/matlab_timing.txt` | Timing and peak-load information |
 | `Gregoire_3PB/results/matlab_step_diagnostics.csv` | Per-step timing, iteration count, and post-damage residual (new runs) |
 | `Gregoire_3PB/results/matlab_oliver_bandwidth_history.csv` | Oliver bandwidth history |
-| `../../softwarex/figures/load_cmod_verified.png` | Verified response figure, generated from preserved result states |
+| `../../softwarex/figures/figure1_fixed_advanced.png` | Current matched response figure, generated from the comparison archive |
 
 ## Notes
 
@@ -59,6 +59,6 @@ The solver expects these files in `Gregoire_3PB/`:
 - The default material and solver parameters are defined near the top of `solver_main_3pb.m`.
 - Keep the working folder at `3pb/matlab` because paths are relative.
 - Set `FRACMATH_SELFTEST=1` for the material-point energy check, `FRACMATH_HEADLESS=1` for no live figure/video, and `FRACMATH_STEPS=1000` or `10000` for step count.
-- A new run overwrites `Gregoire_3PB/results`. Preserved 1,000- and 10,000-step histories are in `softwarex/reproducibility/`.
-- The solver equilibrates the old damage state and updates damage once per load step. Its reported post-update free-DOF residual is nonzero, so the 1,000- and 10,000-step curves differ.
+- A direct run overwrites `Gregoire_3PB/results`. Use `softwarex/start_here.m` for the current medium-mesh example with a separate output folder.
+- The solver equilibrates the old damage state and updates damage once per load step. Its reported post-update free-DOF residual can be nonzero, so the increment size affects the response.
 - Set `FRACMATH_CASE_DIR` to another mesh folder to keep the preserved case outputs untouched. The [implementation walkthrough](../../doc/implementation_walkthrough.md) maps each load-step stage to the functions in the solver.

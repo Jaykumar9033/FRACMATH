@@ -4,7 +4,7 @@ import shutil
 import subprocess
 from pathlib import Path
 from audit_umat import prepare, check
-from run_umat_precision import command_file
+from umat_build import command_file
 
 
 def main():

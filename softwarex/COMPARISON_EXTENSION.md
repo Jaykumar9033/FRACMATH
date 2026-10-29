@@ -40,7 +40,7 @@ Preparation alone does not execute a solver. Exact Oliver references are copied 
 
 The current coarse-mesh CPU comparison uses two damage drivers: modified von Mises and Rankine stress. Figure 4 shows load versus CMOD. All use the same mesh, 2,000 fixed increments, Oliver width formula, tensile onset and exponential energy calibration. These are scalar-driver alternatives within the same damage update, not complete independently calibrated concrete models. Only modified von Mises uses fc/ft. See [EQUIVALENT_STRAIN_STUDY.md](EQUIVALENT_STRAIN_STUDY.md) for formulas, checks and reproduction commands.
 
-The two exponential calibrations are worked implementation examples for students and researchers. Following their equations and source code shows how a softening parameter enters the damage update and what must change when another law is implemented. The bending calibration includes elastic and post-peak tensile work; the panel helper calibrates the post-peak contribution. A comparison between these forms requires a common fracture-energy convention. The matched MATLAB-Abaqus bending pairs use the same law and calibration.
+Current three-point bending, pure-tension, mixed-mode and torsion sources use the same total-tensile-work calibration, `epsilon_f = epsilon_0/2 + G_F/(h*f_t)`, with `epsilon_0 = f_t/E`. Earlier mixed-mode images retained for qualitative illustration use an earlier calibration and are identified separately. Current 3D sources and checks are in `reproducibility/unified_softening_20261014/`.
 
 ## UMAT and performance interpretation
 

@@ -66,7 +66,7 @@ With identical inputs, software, backend, and numerical settings, saved numerica
 
 Different CPU/GPU arithmetic can produce small floating-point differences. GPU and CPU curves are checked using declared tolerances, not promised to match bit for bit. Runtime, memory use, video compression, file timestamps, MAT-file headers, and image/PDF metadata are not exact numerical outputs.
 
-For the current manuscript figures, use `plot_current_figures.py`. It reads the completed fixed-increment extension and the supplied 3D sources. The editable numerical flowchart is in `figure_sources/damage_update_flowchart.tex`. Earlier baseline and hardware-study figure scripts remain archive replay tools.
+For the current manuscript figures, use `plot_current_figures.py`. It reads the completed fixed-increment extension and the supplied 3D sources. The editable numerical flowchart is in `figure_sources/damage_update_flowchart.tex`. Use `SCALING_STUDY.md` for the timing-chart reproduction commands.
 
 For the Fortran material routine, follow the seven steps in
 [UMAT_GUIDE.md](UMAT_GUIDE.md). The guide explains how total strain,
@@ -116,7 +116,7 @@ The production code evaluates many element matrices together. `sparse` adds cont
 2. `solver_main_3pb.m`: read the numbered sections, then `load_mesh`, `precompute_T3`, `assemble_K` and `damage_update`.
 3. `UMAT_GUIDE.md`: match the MATLAB material variables to the Fortran variables.
 4. `MESH_STUDY.md` and `COMPARISON_EXTENSION.md`: understand the mesh, width and fixed-increment choices before running the study.
-5. `ABAQUS_TIMING_SCOPE.md`: understand the timer limits. `SCALING_STUDY.md` describes optional earlier hardware observations.
+5. `ABAQUS_TIMING_SCOPE.md`: understand the timer limits. `SCALING_STUDY.md` describes the manuscript five-configuration timing comparison.
 6. `plot_current_figures.py`: see how saved numerical arrays become current manuscript plots. This script does not solve the model.
 
 The `run_*.py` scripts organise simulations. The `analyze_*.py` scripts read saved results. The `plot_*.py` scripts draw figures. `run_material_examples.py` checks the ten material examples; `verify_current_figures.py` checks current figure reconstruction. Exact commands are in `REPRODUCE.md`.

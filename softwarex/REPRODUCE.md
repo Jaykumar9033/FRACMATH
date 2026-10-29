@@ -66,7 +66,7 @@ The current coarse-mesh CPU comparison uses two damage drivers: modified von Mis
 ## 6. 3D numerical examples
 
 ```powershell
-python softwarex/analyze_nooru_mesh_study.py --workspace softwarex/reproducibility/nooru_25mm_mesh_study --require-all
+python softwarex/analyze_nooru_mesh_study.py --workspace softwarex/reproducibility/unified_softening_20261014/mesh_study --require-all
 ```
 
 This checks the three completed pure-tension histories. It is a mesh-consistency/equilibrium check, not experimental validation. The mixed-mode panel archive `reproducibility/nooru_proportional/` supplies qualitative damage illustrations. Its loading and notch geometry differ from the pure-tension case. Preserve Nooru-Mohamed's benchmark attribution.
@@ -79,10 +79,9 @@ MATLAB records load-loop assembly, factorization, backsolve, damage and remainin
 
 Matching fixed increments does not match the nonlinear algorithms. MATLAB records a residual after its damage update; Abaqus converges through equilibrium iterations with a secant material matrix. See `VALIDATION_SCOPE.md` and `ABAQUS_TIMING_SCOPE.md`.
 
-## Optional archives
+## Submission records
 
-Earlier adaptive-increment histories, constant-width controls, larger material audits, hardware scaling and partial timing profiles remain available for traceability. The original equivalent-strain execution archive retains five completed runs; the current figure selects three load-CMOD histories from it. Original source snapshots and checksums are retained. These archives are not replacements for current fixed-increment response figures. `plot_verified_figures.py` and `verify_paper_figures.py` replay earlier figure sets; use the `current` scripts above for the present manuscript.
-
+Use the current figure scripts above. Development-only profiles, larger UMAT audits and superseded figure replays are not included. Current reference data, input/source snapshots, convergence diagnostics and the three-observation timing study are retained.
 
 ## Updated 3D softening and completed mixed-mode continuation (21 October 2026)
 

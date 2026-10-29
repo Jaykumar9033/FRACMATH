@@ -1,51 +1,28 @@
-# FRACMATH study and reproduction package
+# SoftwareX reproduction package
 
-This folder contains the software companions for the FRACMATH SoftwareX article: study runners, saved histories, source snapshots and figure reconstruction tools. Use the current `main` branch and record the exact commit. Earlier release packages identify archival core versions.
+This folder contains study runners, reference results, figure sources and plotting scripts for the current FRACMATH manuscript. Start with `start_here.m`. [REPRODUCE.md](REPRODUCE.md) gives the full run sequence; record the exact repository commit.
 
-## Study sequence
+## Guides
 
-1. **Material examples:** ten prescribed strain states compare MATLAB, the actual Abaqus UMAT and an independent reference. The permitted difference is `2e-10 + 2e-10 * abs(reference_value)`. These are material-point checks, not one-element structural analyses.
-2. **Fixed-increment bending:** medium and fine meshes have completed MATLAB/Abaqus responses at 2,000 fixed increments to -0.1 mm. Each paired comparison uses the exact same mesh. MATLAB and Abaqus still use different nonlinear equilibrium procedures.
-3. **Width comparison:** coarse, medium and fine MATLAB responses compare Oliver's directional width with `h = sqrt(2*A)`, where A is each triangle's area. A constant width is not used in the current manuscript plots.
-4. **Damage-driver comparison:** The current coarse-mesh CPU comparison uses modified von Mises and Rankine stress. Figure 4 shows load versus CMOD. All use the same mesh, 2,000 fixed increments, Oliver width formula, tensile onset and exponential energy calibration. These are scalar-driver alternatives within the same damage update, not complete independently calibrated concrete models. Only modified von Mises uses fc/ft. See [EQUIVALENT_STRAIN_STUDY.md](EQUIVALENT_STRAIN_STUDY.md) for formulas, checks and reproduction commands.
-5. **3D MATLAB examples:** the separate pure-tension study checks three-mesh numerical consistency. The mixed-mode panel and torsion fields are qualitative demonstrations. No experimental 3D curve or Abaqus torsion solution is claimed.
-6. **Timing:** saved MATLAB load-loop components and separate fixed-increment Abaqus analysis records describe the measured work. Partial UMAT/native profiles do not identify complete assembly wall time.
+- [BEGINNER_GUIDE.md](BEGINNER_GUIDE.md): first run, units, arrays and solver sequence.
+- [NOTATION.md](NOTATION.md): manuscript symbols and code names.
+- [COMPARISON_EXTENSION.md](COMPARISON_EXTENSION.md): matched three-point bending and width studies.
+- [EQUIVALENT_STRAIN_STUDY.md](EQUIVALENT_STRAIN_STUDY.md): two equivalent-strain definitions.
+- [SCALING_STUDY.md](SCALING_STUDY.md): five computing configurations and repeated timings.
+- [UMAT_GUIDE.md](UMAT_GUIDE.md): material update and Abaqus connection.
+- [ABAQUS_TIMING_SCOPE.md](ABAQUS_TIMING_SCOPE.md): what the timers measure.
+- [VALIDATION_SCOPE.md](VALIDATION_SCOPE.md): supported conclusions and limitations.
 
-## Main entry points
+## Reference records
 
-| File or folder | Purpose |
-| --- | --- |
-| `start_here.m` | Medium-mesh, 2,000-step MATLAB example |
-| `BEGINNER_GUIDE.md` | Units, array sizes, settings and calculation sequence |
-| `reproducibility/2d/` | MATLAB bending solver and supplied inputs |
-| `reproducibility/abaqus/` | Abaqus model builder and plane-stress UMAT |
-| `reproducibility/material_examples/` | Ten explained material-point examples |
-| `reproducibility/fixed_increment_extension/` | Current fixed-increment, area-width and strain-driver records |
-| `reproducibility/equivalent_strain_study/` | Preserved five-run execution archive; two responses selected for current Figure 4 |
-| `reproducibility/experimental_2d/` | Published 100 mm beam graphic vertices, source provenance and comparison limits |
-| `extract_published_beam_curve.py` | Recover the experimental trace from the native author figure |
-| `reproducibility/mesh_study/` | Exact mesh family and optional original study records |
-| `reproducibility/nooru_25mm_mesh_study/` | Three pure-tension meshes and histories |
-| `reproducibility/nooru_proportional/` | Qualitative mixed-mode panel records |
-| `plot_current_figures.py` | Draw current manuscript assets from saved outputs |
-| `verify_current_figures.py` | Rebuild and compare those assets in a separate folder |
-| `figure_sources/damage_update_flowchart.tex` | Editable native LaTeX/TikZ numerical flowchart |
-| `REPRODUCE.md` | Short reproduction workflow |
-| `VALIDATION_SCOPE.md` | Supported conclusions and limitations |
+The root [README](../README.md#reproduce-the-manuscript) maps results to their records. `reproducibility/2d` and `reproducibility/abaqus` supply executable sources and inputs. `mesh_study` supplies exact mesh resources. `fixed_increment_extension` and `fixed_increment_retry` retain completed comparisons and convergence diagnostics.
 
-## Execution status and archives
+Current pure-tension records are in `reproducibility/unified_softening_20261014/mesh_study`. Completed mixed-mode continuation, the accepted restart, sources, final states and half-step checks are in `reproducibility/unified_softening_20261014/mixed_mode_solver_20261021`. Add `softwarex` to the MATLAB path and call `run_mixed_mode_continuation(workspace,true)` in a fresh writable workspace.
 
-The original baseline 10,000-increment and coarse 2,000-increment fixed Abaqus runs stopped during convergence. Their partial histories and logs remain available. The baseline 20,000-increment retry also failed, with 5,174 converged increments (failure during attempt 5,175); its diagnostic logs and exact MATLAB reference are in `reproducibility/fixed_increment_retry/baseline/`. The coarse 4,000-increment comparison completed and passed exact-mesh, schedule, loading-coverage and finite-history checks. There is no adaptive substitution in the current fixed-increment curves.
+Earlier mixed-mode images in `figure_sources/nooru` and `reproducibility/nooru_proportional` use an earlier calibration. They remain qualitative illustrations, separate from the completed current calculation. Torsion fields are illustrative; Abaqus torsion files supply geometry and mesh resources.
 
-The larger `umat_audit`/`umat_precision` records, adaptive histories, constant-width controls and repeated scaling timings remain optional archives. They retain their original inputs and counts. The paper's material suite is ten examples. The stopped full sparse GPU experiment is not a complete result; the optional hybrid backend keeps sparse assembly/factorization on the CPU.
+`plot_current_figures.py` reconstructs response and damage figures; `verify_current_figures.py` checks them in a separate folder. The timing figure uses `plot_timing_repeats.py`; see `SCALING_STUDY.md`. Editable flowchart source is in `figure_sources/damage_update_flowchart.tex`.
 
-Nooru-Mohamed is retained as the panel benchmark source attribution. Descriptive headings distinguish mixed-mode panel fields from pure-tension mesh responses.
+Published beam-curve vertices and attribution are in `reproducibility/experimental_2d`. They are recovered graphic data, not raw laboratory measurements. No material fitting or experimental 3D validation is claimed.
 
-Figure 4(b) overlays the two selected numerical load-CMOD curves with the published experimental 100 mm beam trace from Grassl et al. (2012). The nominal dimensions match; exact experimental notch width, loading control and replicate identity are unverified. The markers are published graphic vertices, not raw laboratory samples or points generated from simulation. No material fitting is performed. See [experimental_2d](reproducibility/experimental_2d/README.md).
-
-See `REPRODUCE.md` for commands and `UMAT_GUIDE.md` for the secant material matrix.
-
-
-## Corrected mixed-mode solver
-
-The completed total-tensile-work mixed-mode continuation and half-step check are documented in [REPRODUCE.md](REPRODUCE.md#updated-3d-softening-and-completed-mixed-mode-continuation-21-october-2026). Run `run_mixed_mode_continuation(workspace,true)` in MATLAB using a separate writable workspace. The public study includes the accepted restart, source, final states, response histories, and numerical verification summary. Earlier archived mixed-mode images remain separate from these completed new results.
+Development-only profiles, larger UMAT audits and superseded replay studies have been removed. Source code and evidence used by the current manuscript remain available.
