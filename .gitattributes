@@ -1,0 +1,38 @@
+*.odb filter=lfs diff=lfs merge=lfs -text
+
+# Preserve tested scientific data bytes and published SHA256 checks across OSes.
+softwarex/reproducibility/mesh_study/** -text
+
+softwarex/reproducibility/experimental_3d/** -text
+
+softwarex/reproducibility/scaling_study/** -text
+softwarex/reproducibility/timing_repeats/** -text
+softwarex/reproducibility/nooru_25mm_coarse/** -text whitespace=cr-at-eol
+softwarex/reproducibility/nooru_proportional/response_history.csv -text
+softwarex/reproducibility/abaqus_profile/** -text
+softwarex/reproducibility/beginner_entry_check/** -text
+softwarex/reproducibility/nooru_25mm_mesh_study/** -text
+softwarex/reproducibility/nooru_proportional_strict/** -text
+softwarex/reproducibility/umat_audit/** -text
+softwarex/reproducibility/figure_replay/** -text
+
+softwarex/reproducibility/abaqus_phase_timing/** -text
+
+softwarex/reproducibility/umat_precision/** -text
+
+# Preserve the ten published material examples and their verification hashes.
+softwarex/reproducibility/material_examples/** -text whitespace=cr-at-eol
+
+# Preserve fixed-increment inputs, source snapshots and numerical evidence.
+softwarex/reproducibility/fixed_increment_extension/** -text -whitespace
+softwarex/reproducibility/fixed_increment_retry/** -text -whitespace
+softwarex/reproducibility/current_figure_replay/** -text whitespace=cr-at-eol
+
+# Preserve the five-driver execution snapshots and numerical evidence.
+softwarex/reproducibility/equivalent_strain_study*/** -text -whitespace
+
+# Preserve digitized published numerical facts and source-calibration hashes.
+softwarex/reproducibility/experimental_2d/** -text -whitespace
+
+# Preserve numerical source snapshots and verified data bytes.
+softwarex/reproducibility/unified_softening_20261014/** -text -whitespace

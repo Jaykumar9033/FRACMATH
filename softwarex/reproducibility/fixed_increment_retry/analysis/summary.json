@@ -1,0 +1,95 @@
+{
+  "execution_checks_complete": false,
+  "physical_validation_claim": false,
+  "source_sha256": {
+    "analyze_comparison_extension.py": "47227420065714d3edde86848eb75d5bccc67a906b1849c77315f3af54cf8446",
+    "cdm_umat_2d_OLIVER_T3_FAST.for": "4ed5577a0cf71c45efd3a1cbd67e687c46e3d44ffbb4abb4de1773157ca2e5a5",
+    "run_3pb_abaqus_OLIVER_T3_FAST.py": "674b10fe6eb672931dd16c8f3b32cdb9d0b63ac7ca0221aa1899555455945936",
+    "run_comparison_extension.py": "aa244a0eb010a5a0a362b96d79c22a17ec34bba49048374493e087859eac0070",
+    "solver_main_3pb.m": "136cfd0e9bb30be451970823ee0b5b102697996b9841ab8bad298ffa6ce10e61"
+  },
+  "cases": {
+    "baseline": {
+      "steps": 20000,
+      "final_displacement_mm": -0.2,
+      "reference_source": "C:\\Users\\jmavani\\Documents\\FRACMATH_fixed_retry_20261005\\baseline\\reference_matlab_oliver",
+      "oliver": {
+        "passed_execution_checks": true,
+        "steps": 20000,
+        "peak_load_N": 4012.529,
+        "peak_cmod_mm": 0.0256333,
+        "final_cmod_mm": 0.3177035,
+        "maximum_post_damage_relative_residual": 0.001821706771,
+        "peak_post_damage_relative_residual": 0.001175245894,
+        "regularization": "oliver",
+        "equivalent_strain": "modified_mises",
+        "interpretation": "Old-damage equilibrium passes; post-damage residual is reported separately."
+      },
+      "abaqus": {
+        "passed_execution_checks": false,
+        "error": "Fixed-increment Abaqus job did not complete",
+        "adaptive_fallback": false,
+        "execution_record": {
+          "status": "failed_preserved_no_adaptive_fallback",
+          "started_utc": "2026-10-06T03:35:15.102193+00:00",
+          "fixed_steps": 20000,
+          "adaptive_fallback": false,
+          "launch_elapsed_s": 1816.226090400014,
+          "error": "Fixed-increment analysis did not complete; inspect .msg/.sta"
+        }
+      }
+    },
+    "coarse": {
+      "steps": 4000,
+      "final_displacement_mm": -0.1,
+      "reference_source": "C:\\Users\\jmavani\\Documents\\FRACMATH_fixed_retry_20261005\\coarse\\reference_matlab_oliver",
+      "oliver": {
+        "passed_execution_checks": true,
+        "steps": 4000,
+        "peak_load_N": 4156.569,
+        "peak_cmod_mm": 0.02707504,
+        "final_cmod_mm": 0.1521772,
+        "maximum_post_damage_relative_residual": 0.005995771612,
+        "peak_post_damage_relative_residual": 0.003510040477,
+        "regularization": "oliver",
+        "equivalent_strain": "modified_mises",
+        "interpretation": "Old-damage equilibrium passes; post-damage residual is reported separately."
+      },
+      "abaqus": {
+        "passed_execution_checks": true,
+        "fixed_increments": 4000,
+        "maximum_history_time_error": 2.95639037695139e-08,
+        "maximum_displacement_error_mm": 3.719329844109609e-09,
+        "final_displacement_mm": -0.10000000149011612,
+        "final_cmod_mm": 0.15221290598856285,
+        "peak_load_N": 4116.424011230469,
+        "peak_cmod_mm": 0.026597841642796993,
+        "adaptive_increments": false,
+        "no_stop": false,
+        "time_tolerance": 1e-07,
+        "displacement_tolerance_mm": 2e-08
+      },
+      "abaqus_versus_oliver": {
+        "reference_peak_N": 4156.569,
+        "comparison_peak_N": 4116.424011230469,
+        "peak_difference_percent": -0.9658203381089466,
+        "common_cmod_range_mm": [
+          1.1597544471442234e-05,
+          0.1521772
+        ],
+        "curve_rms_N": 35.37715776882857,
+        "curve_rms_percent_reference_peak": 0.8511144111604682
+      }
+    }
+  },
+  "errors": [
+    "baseline/abaqus: Fixed-increment Abaqus job did not complete"
+  ],
+  "limitations": [
+    "Matching increments does not make the nonlinear algorithms identical.",
+    "MATLAB updates damage after solving at the previous damage state.",
+    "Rankine changes the multiaxial damage surface; fc/ft has no role in that option."
+  ],
+  "comparison_policy": "Same exact mesh, fixed increment count and displacement endpoint; different nonlinear algorithms.",
+  "status": "incomplete_or_requires_review"
+}

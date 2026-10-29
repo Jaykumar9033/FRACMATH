@@ -1,0 +1,36 @@
+[
+  {
+    "mesh": "medium",
+    "matlab_s": {
+      "total": 337.3,
+      "assembly": 63.38,
+      "factorization": 227.54,
+      "damage": 8.97,
+      "backsolve": 36.12,
+      "other": 1.2900000000000205
+    },
+    "abaqus_s": {
+      "analysis_wall": 2843.0,
+      "summed_solver_elapsed": 296.538,
+      "unallocated_remainder": 2546.462
+    },
+    "solver_entries": 6225
+  },
+  {
+    "mesh": "fine",
+    "matlab_s": {
+      "total": 967.09,
+      "assembly": 153.19,
+      "factorization": 681.3,
+      "damage": 21.26,
+      "backsolve": 108.08,
+      "other": 3.2600000000001046
+    },
+    "abaqus_s": {
+      "analysis_wall": 4538.0,
+      "summed_solver_elapsed": 593.399,
+      "unallocated_remainder": 3944.601
+    },
+    "solver_entries": 7566
+  }
+]

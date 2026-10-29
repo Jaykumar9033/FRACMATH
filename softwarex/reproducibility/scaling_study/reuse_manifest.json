@@ -1,0 +1,190 @@
+{
+  "prior_source_manifest": {
+    "utc": "2026-10-02T19:06:16.502479+00:00",
+    "pilot": false,
+    "sizes": {
+      "small": 1.0,
+      "large": 2.0
+    },
+    "absolute_mesh_scales": {
+      "coarse": 2.0,
+      "medium": 1.0,
+      "fine": 0.75
+    },
+    "configurations": {
+      "matlab_cpu1": [
+        1,
+        "cpu"
+      ],
+      "matlab_cpu8": [
+        8,
+        "cpu"
+      ],
+      "matlab_gpu_hybrid": [
+        1,
+        "gpu_hybrid"
+      ],
+      "abaqus_cpu1": [
+        1,
+        null
+      ],
+      "abaqus_cpu8": [
+        8,
+        null
+      ]
+    },
+    "steps": 2000,
+    "base_final_displacement_mm": -0.1,
+    "thickness_mm": {
+      "small": 50,
+      "large": 100
+    },
+    "precision": "double",
+    "source_sha256": {
+      "solver_main_3pb.m": "4dfee8c75abcc588b761ab4653bd59bcca57fc829b9e1a0184ef35248c111e81",
+      "run_3pb_abaqus_OLIVER_T3_FAST.py": "baf72b56c4a3af5fcbd4d2391dcdb55a2f5e9672c026cee78c48b0bde9dc47b2",
+      "cdm_umat_2d_OLIVER_T3_FAST.for": "4ed5577a0cf71c45efd3a1cbd67e687c46e3d44ffbb4abb4de1773157ca2e5a5"
+    },
+    "scope": "Sequential single-process runs. GPU element/damage calculations with CPU sparse assembly/factorization. MATLAB 8-thread library limit; Abaqus 8-thread SMP."
+  },
+  "reused": [
+    {
+      "case": "small/coarse/abaqus_cpu1",
+      "origin": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\scaling_controlled_study\\small\\coarse\\abaqus_cpu1",
+      "reason": "Same MATLAB source or Abaqus default-control branch; extended controls only apply to previously uncompleted large medium/fine Abaqus cases.",
+      "completed_sha256": "3a2088c331aebdf97aed45b6ba8d9cfec6961166983e85312da01523f719c52d"
+    },
+    {
+      "case": "small/coarse/abaqus_cpu8",
+      "origin": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\scaling_controlled_study\\small\\coarse\\abaqus_cpu8",
+      "reason": "Same MATLAB source or Abaqus default-control branch; extended controls only apply to previously uncompleted large medium/fine Abaqus cases.",
+      "completed_sha256": "34c3741e247217e24dc5c4cfbfa79aad6229fe04b55faf69bb161367baf6d766"
+    },
+    {
+      "case": "small/coarse/matlab_cpu1",
+      "origin": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\scaling_controlled_study\\small\\coarse\\matlab_cpu1",
+      "reason": "Same MATLAB source or Abaqus default-control branch; extended controls only apply to previously uncompleted large medium/fine Abaqus cases.",
+      "completed_sha256": "524f4e919fdc50607adca87a9a7410f896af2268be3a5d8c094c2a381afde021"
+    },
+    {
+      "case": "small/coarse/matlab_cpu8",
+      "origin": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\scaling_controlled_study\\small\\coarse\\matlab_cpu8",
+      "reason": "Same MATLAB source or Abaqus default-control branch; extended controls only apply to previously uncompleted large medium/fine Abaqus cases.",
+      "completed_sha256": "968b17e9765523790be975c9191060cdf4a436ebddd1e82be0f5d8c472bd4625"
+    },
+    {
+      "case": "small/coarse/matlab_gpu_hybrid",
+      "origin": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\scaling_controlled_study\\small\\coarse\\matlab_gpu_hybrid",
+      "reason": "Same MATLAB source or Abaqus default-control branch; extended controls only apply to previously uncompleted large medium/fine Abaqus cases.",
+      "completed_sha256": "0b06f5313039654572a9842811290901622d5c4fce356b85bc862890bd584476"
+    },
+    {
+      "case": "small/medium/abaqus_cpu1",
+      "origin": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\scaling_controlled_study\\small\\medium\\abaqus_cpu1",
+      "reason": "Same MATLAB source or Abaqus default-control branch; extended controls only apply to previously uncompleted large medium/fine Abaqus cases.",
+      "completed_sha256": "af533156dba548d9f81eb5ddd8055e97fe16d3b3a6b49414c63b79427b78ccb9"
+    },
+    {
+      "case": "small/medium/abaqus_cpu8",
+      "origin": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\scaling_controlled_study\\small\\medium\\abaqus_cpu8",
+      "reason": "Same MATLAB source or Abaqus default-control branch; extended controls only apply to previously uncompleted large medium/fine Abaqus cases.",
+      "completed_sha256": "7cb33e94613584d72101222479ec06374d26f4da9226c89406ab8ca5e1792068"
+    },
+    {
+      "case": "small/medium/matlab_cpu1",
+      "origin": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\scaling_controlled_study\\small\\medium\\matlab_cpu1",
+      "reason": "Same MATLAB source or Abaqus default-control branch; extended controls only apply to previously uncompleted large medium/fine Abaqus cases.",
+      "completed_sha256": "8935046146b635e8c6d3eb4069912b12dc9dd7fcdeab56b29c511368f75bf8c3"
+    },
+    {
+      "case": "small/medium/matlab_cpu8",
+      "origin": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\scaling_controlled_study\\small\\medium\\matlab_cpu8",
+      "reason": "Same MATLAB source or Abaqus default-control branch; extended controls only apply to previously uncompleted large medium/fine Abaqus cases.",
+      "completed_sha256": "629ff530647687a7d78eca9ab3cd5f2c52ade1e1c0039f70005b8f6f61af3a4f"
+    },
+    {
+      "case": "small/medium/matlab_gpu_hybrid",
+      "origin": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\scaling_controlled_study\\small\\medium\\matlab_gpu_hybrid",
+      "reason": "Same MATLAB source or Abaqus default-control branch; extended controls only apply to previously uncompleted large medium/fine Abaqus cases.",
+      "completed_sha256": "169a75fddc5919234f142ca1493d9945683b8fcf31cf2a8325d3a6f335c7a84e"
+    },
+    {
+      "case": "small/fine/abaqus_cpu1",
+      "origin": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\scaling_controlled_study\\small\\fine\\abaqus_cpu1",
+      "reason": "Same MATLAB source or Abaqus default-control branch; extended controls only apply to previously uncompleted large medium/fine Abaqus cases.",
+      "completed_sha256": "b377efc7bd822a9fdd31a2a08689949047fa2389a34b22ffe8696c82841533e9"
+    },
+    {
+      "case": "small/fine/abaqus_cpu8",
+      "origin": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\scaling_controlled_study\\small\\fine\\abaqus_cpu8",
+      "reason": "Same MATLAB source or Abaqus default-control branch; extended controls only apply to previously uncompleted large medium/fine Abaqus cases.",
+      "completed_sha256": "1dacec99f5d443ffa7305eaf079017b659222d4954af091d31c7f48d22639c31"
+    },
+    {
+      "case": "small/fine/matlab_cpu1",
+      "origin": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\scaling_controlled_study\\small\\fine\\matlab_cpu1",
+      "reason": "Same MATLAB source or Abaqus default-control branch; extended controls only apply to previously uncompleted large medium/fine Abaqus cases.",
+      "completed_sha256": "fd928ef3a7598b0f7e0265ed871d9e35fa597180e9c32439cf8b8697064f210f"
+    },
+    {
+      "case": "small/fine/matlab_cpu8",
+      "origin": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\scaling_controlled_study\\small\\fine\\matlab_cpu8",
+      "reason": "Same MATLAB source or Abaqus default-control branch; extended controls only apply to previously uncompleted large medium/fine Abaqus cases.",
+      "completed_sha256": "d60725d451aa8f223cd75260aefc80db397f96317497669b6a5b1c7f29986942"
+    },
+    {
+      "case": "small/fine/matlab_gpu_hybrid",
+      "origin": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\scaling_controlled_study\\small\\fine\\matlab_gpu_hybrid",
+      "reason": "Same MATLAB source or Abaqus default-control branch; extended controls only apply to previously uncompleted large medium/fine Abaqus cases.",
+      "completed_sha256": "50e1aa7789780cd83c004cd2d41dcd0ed9bd1a957dcc8ea73deadc5685263d9e"
+    },
+    {
+      "case": "large/coarse/abaqus_cpu1",
+      "origin": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\scaling_controlled_study\\large\\coarse\\abaqus_cpu1",
+      "reason": "Same MATLAB source or Abaqus default-control branch; extended controls only apply to previously uncompleted large medium/fine Abaqus cases.",
+      "completed_sha256": "82eb2899cbc06cf5561976ead02ddb8164092478f84ccba670f9ecec7c922960"
+    },
+    {
+      "case": "large/coarse/abaqus_cpu8",
+      "origin": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\scaling_controlled_study\\large\\coarse\\abaqus_cpu8",
+      "reason": "Same MATLAB source or Abaqus default-control branch; extended controls only apply to previously uncompleted large medium/fine Abaqus cases.",
+      "completed_sha256": "39f6066ea0d9d6aea060e080489d144e3750a3d968a18a85835deb04b5fde566"
+    },
+    {
+      "case": "large/coarse/matlab_cpu1",
+      "origin": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\scaling_controlled_study\\large\\coarse\\matlab_cpu1",
+      "reason": "Same MATLAB source or Abaqus default-control branch; extended controls only apply to previously uncompleted large medium/fine Abaqus cases.",
+      "completed_sha256": "96b2d204512b42bfc6f94ce31d90eebc2f5ad26668a84abc2ab6b8f16beb7804"
+    },
+    {
+      "case": "large/coarse/matlab_cpu8",
+      "origin": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\scaling_controlled_study\\large\\coarse\\matlab_cpu8",
+      "reason": "Same MATLAB source or Abaqus default-control branch; extended controls only apply to previously uncompleted large medium/fine Abaqus cases.",
+      "completed_sha256": "316851b09bd69f2899f52fa5f20345b9a1248624380ee70725df3ff6a674d8ef"
+    },
+    {
+      "case": "large/coarse/matlab_gpu_hybrid",
+      "origin": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\scaling_controlled_study\\large\\coarse\\matlab_gpu_hybrid",
+      "reason": "Same MATLAB source or Abaqus default-control branch; extended controls only apply to previously uncompleted large medium/fine Abaqus cases.",
+      "completed_sha256": "df6d290504b0c2ce4df3b3682fa20c07559778a21c017e0b6d9aec0e5754f382"
+    },
+    {
+      "case": "large/medium/matlab_cpu1",
+      "origin": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\scaling_controlled_study\\large\\medium\\matlab_cpu1",
+      "reason": "Same MATLAB source or Abaqus default-control branch; extended controls only apply to previously uncompleted large medium/fine Abaqus cases.",
+      "completed_sha256": "324a63cb3cbd8a0a115be8587419978211f99890fe4956690d64e1954f11915b"
+    },
+    {
+      "case": "large/medium/matlab_cpu8",
+      "origin": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\scaling_controlled_study\\large\\medium\\matlab_cpu8",
+      "reason": "Same MATLAB source or Abaqus default-control branch; extended controls only apply to previously uncompleted large medium/fine Abaqus cases.",
+      "completed_sha256": "3b1d39505e6a4abd4dc03e00ee7a00063d3ee6e71760041e35d1492b24f495d3"
+    },
+    {
+      "case": "large/medium/matlab_gpu_hybrid",
+      "origin": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\scaling_controlled_study\\large\\medium\\matlab_gpu_hybrid",
+      "reason": "Same MATLAB source or Abaqus default-control branch; extended controls only apply to previously uncompleted large medium/fine Abaqus cases.",
+      "completed_sha256": "59bc64cf524b9a3fc163cf341847f1662306e48d5caf410b158f5e1eabef4a66"
+    }
+  ]
+}

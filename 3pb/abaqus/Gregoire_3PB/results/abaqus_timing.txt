@@ -1,0 +1,6 @@
+Gregoire 3PB job: Gregoire_3PB.odb
+Peak load:  3999.14 N
+CMOD@peak:  0.025401 mm
+Rows:       1137
+Solver wall-clock (submit->done): 849.35 s
+Abaqus WALLCLOCK (.msg/.dat):     832.00 s (Gregoire_3PB.msg)

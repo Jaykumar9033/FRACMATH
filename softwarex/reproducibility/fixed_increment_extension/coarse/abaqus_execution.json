@@ -1,0 +1,8 @@
+{
+  "status": "failed_preserved_no_adaptive_fallback",
+  "started_utc": "2026-10-06T00:27:41.592732+00:00",
+  "fixed_steps": 2000,
+  "adaptive_fallback": false,
+  "launch_elapsed_s": 311.3430093000643,
+  "error": "Fixed-increment analysis did not complete; inspect .msg/.sta"
+}

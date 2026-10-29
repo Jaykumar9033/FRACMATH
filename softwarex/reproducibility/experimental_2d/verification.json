@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "vertices": 3206,
+  "peak_load_kN": 4.496153846153846,
+  "peak_CMOD_mm": 0.02913793103448276,
+  "scope": "Recovered published experimental graphic trace; not raw measurement samples."
+}

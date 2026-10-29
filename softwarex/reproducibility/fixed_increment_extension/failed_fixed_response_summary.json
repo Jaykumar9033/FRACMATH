@@ -1,0 +1,24 @@
+[
+  {
+    "case": "baseline",
+    "prescribed_steps": 10000,
+    "converged_steps": 2597,
+    "normalized_time": 0.2597000002861023,
+    "last_load_N": 2855.2672119140625,
+    "last_cmod_mm": 0.06197375641204417,
+    "last_displacement_mm": -0.05194000154733658,
+    "error": "FIXED TIME INCREMENT IS TOO LARGE",
+    "status": "partial_failed_not_completed"
+  },
+  {
+    "case": "coarse",
+    "prescribed_steps": 2000,
+    "converged_steps": 281,
+    "normalized_time": 0.1404999941587448,
+    "last_load_N": 2568.7212524414062,
+    "last_cmod_mm": 0.007620305404998362,
+    "last_displacement_mm": -0.014050000347197056,
+    "error": "FIXED TIME INCREMENT IS TOO LARGE",
+    "status": "partial_failed_not_completed"
+  }
+]

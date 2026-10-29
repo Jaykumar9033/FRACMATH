@@ -1,0 +1,24 @@
+MATLAB 3PB solver
+MATLAB version: 24.2.0.2923080 (R2024b) Update 6
+Computational threads: 1
+Peak load:    4147.42 N
+CMOD@peak:    0.026479 mm
+Solver wall-clock: 459.34 s
+End-to-end:        459.34 s   (incl. live fig + video)
+Visualization:     0.00 s
+  assembly:   88.19 s  (19.2%)
+  factorization: 310.24 s  (67.5%)
+  damage:     11.45 s  (2.5%)
+  solve:      47.78 s  (10.4%)
+MATLAB allocated memory delta: 127.7 MB
+Peak process working set: 1217.3 MB
+Regularization: oliver (fixed reference width 1.25 mm)
+Final prescribed displacement: -1.000000000e-01 mm
+Mesh:         25042 CPS3, 25534 DOFs
+Load steps:   4000
+Old-damage steps converged: 4000 / 4000
+Peak free-DOF residual / reaction: 3.636597e-03
+Maximum free-DOF residual / reaction: 8.323810e-03
+Oliver h mean final: 1.565800e+00 mm
+Oliver h min final:  5.699370e-01 mm
+Oliver h max final:  4.852580e+00 mm

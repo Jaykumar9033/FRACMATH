@@ -1,0 +1,115 @@
+vtune: Warning: Microarchitecture performance insights will not be available. Make sure the sampling driver is installed and enabled on your system.
+vtune: Warning: To collect microarchitecture performance insights, run the product as administrator.
+vtune: Collection started. To stop the collection, either press CTRL-C or enter from another console window: vtune -r C:\Users\jmavani\Documents\Codex\2026-09-29\new-chat\work\abaqus_native_profile_2026_10_04\vtune_result -command stop.
+vtune: Warning: PulseEvent API used in the target application may prevent data collection. See the Troubleshooting help topic for more details.
+vtune: Collection detached.
+vtune: Collection stopped.
+vtune: Using result path `C:\Users\jmavani\Documents\Codex\2026-09-29\new-chat\work\abaqus_native_profile_2026_10_04\vtune_result'
+vtune: Executing actions  0 %                                                  vtune: Executing actions  0 % Finalizing results                               vtune: Executing actions  0 % Finalizing the result                            vtune: Executing actions  0 % Clearing the database                            vtune: Executing actions  7 % Clearing the database                            vtune: Executing actions  7 % Loading raw data to the database                 vtune: Executing actions  7 % Loading 'systemcollector-111020-CCEE-D5H7BX04.colvtune: Executing actions 12 % Loading 'systemcollector-111020-CCEE-D5H7BX04.colvtune: Executing actions 12 % Loading '108092-111084.0.trace' file             vtune: Executing actions 12 % Updating precomputed scalar metrics              vtune: Executing actions 14 % Updating precomputed scalar metrics              vtune: Executing actions 14 % Processing profile metrics and debug information vtune: Executing actions 19 % Processing profile metrics and debug information vtune: Executing actions 19 % Setting data model parameters                    vtune: Executing actions 19 % Resolving module symbols                         vtune: Executing actions 19 % Resolving information for `napinsp.dll'          vtune: Executing actions 19 % Resolving information for `MSWSOCK.dll'          vtune: Executing actions 19 % Resolving information for `nlansp_c.dll'         vtune: Executing actions 19 % Resolving information for `ABQSMARfmInterface.dllvtune: Executing actions 19 % Resolving information for `ABQSMAEqsSolCore.dll' 
+vtune: Warning: Cannot locate debugging information for file `C:\Windows\system32\napinsp.dll'.
+vtune: Executing actions 19 % Resolving information for `ABQSMAOdbDdbOdb.dll'  
+vtune: Warning: Cannot locate debugging information for file `C:\Windows\SYSTEM32\MSWSOCK.dll'.
+vtune: Warning: Cannot locate file `C:\Users\jmavani\AppData\Local\Temp\jmavani_Gregoire_3PB_108092\standardU.dll'.
+vtune: Executing actions 19 % Resolving information for `standardU.dll'        vtune: Executing actions 19 % Resolving information for `USER32.dll'           vtune: Executing actions 19 % Resolving information for `ABQSMASrvBasic.dll'   vtune: Executing actions 19 % Resolving information for `win32u.dll'           
+vtune: Warning: Cannot locate debugging information for file `C:\Windows\system32\nlansp_c.dll'.
+vtune: Executing actions 19 % Resolving information for `ABQSMAStsSlvUtils.dll'
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMARfmInterface.dll'.
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAEqsSolCore.dll'.
+vtune: Executing actions 19 % Resolving information for `libifcoremd.dll'      
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAOdbDdbOdb.dll'.
+vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\USER32.dll'.
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMASrvBasic.dll'.
+vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\win32u.dll'.
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAStsSlvUtils.dll'.
+vtune: Executing actions 19 % Resolving information for `SMAEqsDirInterMod.dll'vtune: Executing actions 19 % Resolving information for `ABQSMABasAlloc.dll'   
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\SMAEqsDirInterMod.dll'.
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMABasAlloc.dll'.
+vtune: Executing actions 20 % Resolving information for `ABQSMABasAlloc.dll'   
+vtune: Warning: Cannot locate file `pincrt.dll'.
+vtune: Executing actions 20 % Resolving information for `pincrt.dll'           vtune: Executing actions 20 % Resolving information for `ABQSMAEliLicenseModule
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAEliLicenseModule.dll'.
+vtune: Executing actions 20 % Resolving information for `ABQSMARomDiagEx.dll'  vtune: Executing actions 20 % Resolving information for `WS2_32.dll'           
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMARomDiagEx.dll'.
+vtune: Executing actions 20 % Resolving information for `ABQSMAAmmSrmCore.dll' 
+vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\WS2_32.dll'.
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAAmmSrmCore.dll'.
+vtune: Executing actions 20 % Resolving information for `ABQSMACntMainModule.dlvtune: Executing actions 20 % Resolving information for `libmmd.dll'           vtune: Executing actions 20 % Resolving information for `ABQSMAOdbCore.dll'    vtune: Executing actions 20 % Resolving information for `ABQSMAStsOprMod.dll'  vtune: Executing actions 20 % Resolving information for `ABQSMAEqsDirSolverMod.
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMACntMainModule.dll'.
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\libmmd.dll'.
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAStsOprMod.dll'.
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAEqsDirSolverMod.dll'.
+vtune: Executing actions 20 % Resolving information for `ABQSMAAspDiagExtractorvtune: Executing actions 20 % Resolving information for `ABQSMASimInterface.dllvtune: Executing actions 20 % Resolving information for `VCRUNTIME140.dll'     vtune: Executing actions 20 % Resolving information for `ucrtbase.dll'         
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAOdbCore.dll'.
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAAspDiagExtractor.dll'.
+vtune: Executing actions 21 % Resolving information for `ucrtbase.dll'         
+vtune: Finalization may slow down when loading files from the symbol server specified in the project properties.
+vtune: Warning: Cannot locate debugging information for file `C:\Windows\SYSTEM32\VCRUNTIME140.dll'.
+vtune: Executing actions 21 % Resolving information for `ABQSMAMsgCommModules.dvtune: Executing actions 21 % Resolving information for `ABQSMABasCoreUtils.dllvtune: Executing actions 21 % Resolving information for `ABQSMAAbuBasicUtils.dlvtune: Executing actions 21 % Resolving information for `ABQSMAAspSupport.dll' 
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMASimInterface.dll'.
+vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\ucrtbase.dll'.
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAMsgCommModules.dll'.
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMABasCoreUtils.dll'.
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAAbuBasicUtils.dll'.
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAAspSupport.dll'.
+vtune: Executing actions 21 % Resolving information for `ABQSMABasGenericsLib.d
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMABasGenericsLib.dll'.
+vtune: Executing actions 21 % Resolving information for `KERNEL32.DLL'         vtune: Executing actions 21 % Resolving information for `ABQSMAFsmShared.dll'  
+vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\KERNEL32.DLL'.
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAFsmShared.dll'.
+vtune: Executing actions 21 % Resolving information for dangling locations     vtune: Executing actions 21 % Resolving information for `ABQSMAIomCore.dll'    
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAIomCore.dll'.
+vtune: Warning: Cannot locate file `C:\Users\jmavani\AppData\Local\Temp\jmavani_Gregoire_3PB_108092\standard.exe'.
+vtune: Executing actions 21 % Resolving information for `standard.exe'         vtune: Executing actions 21 % Resolving information for `ntdll.dll'            vtune: Executing actions 21 % Resolving information for `ABQSMAStsShare.dll'   vtune: Executing actions 21 % Resolving information for `tpsstool.dll'         
+vtune: Warning: Cannot locate debugging information for file `C:\Windows\SYSTEM32\ntdll.dll'.
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAStsShare.dll'.
+vtune: Executing actions 21 % Resolving information for `ABQSMAShaShared-D.dll'
+vtune: Warning: Cannot locate debugging information for file `C:\Program Files (x86)\Intel\oneAPI\vtune\2025.0\bin64\tpsstool.dll'.
+vtune: Executing actions 22 % Resolving information for `ABQSMAShaShared-D.dll'vtune: Executing actions 22 % Resolving information for `ABQDMP_Core.dll'      vtune: Executing actions 22 % Resolving information for `ABQSMABasShared.dll'  
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQDMP_Core.dll'.
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAShaShared-D.dll'.
+vtune: Executing actions 22 % Resolving information for `KERNELBASE.dll'       
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMABasShared.dll'.
+vtune: Executing actions 22 % Resolving information for `ABQSMAAncAdbModule.dll
+vtune: Warning: Cannot locate debugging information for file `C:\Windows\System32\KERNELBASE.dll'.
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAAncAdbModule.dll'.
+vtune: Executing actions 22 % Resolving information for `DNSAPI.dll'           
+vtune: Warning: Cannot locate debugging information for file `C:\Windows\SYSTEM32\DNSAPI.dll'.
+vtune: Executing actions 22 % Resolving information for `ABQSMAStaCore.dll'    
+vtune: Warning: Cannot locate debugging information for file `C:\SIMULIA\EstProducts\2024\win_b64\code\bin\ABQSMAStaCore.dll'.
+vtune: Executing actions 23 % Resolving information for `ABQSMAStaCore.dll'    vtune: Executing actions 23 % Resolving bottom user stack information          vtune: Executing actions 23 % Resolving thread name information                vtune: Executing actions 24 % Resolving thread name information                vtune: Executing actions 24 % Resolving call target names for dynamic code     vtune: Executing actions 25 % Resolving call target names for dynamic code     vtune: Executing actions 25 % Resolving interrupt name information             vtune: Executing actions 26 % Resolving interrupt name information             vtune: Executing actions 26 % Processing profile metrics and debug information vtune: Executing actions 28 % Processing profile metrics and debug information vtune: Executing actions 29 % Processing profile metrics and debug information vtune: Executing actions 30 % Processing profile metrics and debug information vtune: Executing actions 30 % Setting data model parameters                    vtune: Executing actions 30 % Precomputing frequently used data                vtune: Executing actions 30 % Precomputing frequently used data                vtune: Executing actions 31 % Precomputing frequently used data                vtune: Executing actions 33 % Precomputing frequently used data                vtune: Executing actions 34 % Precomputing frequently used data                vtune: Executing actions 36 % Precomputing frequently used data                vtune: Executing actions 36 % Updating precomputed scalar metrics              vtune: Executing actions 37 % Updating precomputed scalar metrics              vtune: Executing actions 37 % Discarding redundant overtime data               vtune: Executing actions 39 % Discarding redundant overtime data               vtune: Executing actions 39 % Saving the result                                vtune: Executing actions 41 % Saving the result                                vtune: Executing actions 42 % Saving the result                                vtune: Executing actions 50 % Saving the result                                vtune: Executing actions 50 % Generating a report                              vtune: Executing actions 50 % Setting data model parameters                    vtune: Executing actions 75 % Setting data model parameters                    vtune: Executing actions 75 % Generating a report                              Elapsed Time: 155.286s
+    CPU Time: 139.314s
+        Effective Time: 134.033s
+        Spin Time: 5.281s
+        Overhead Time: 0s
+    Total Thread Count: 7
+    Paused Time: 0s
+
+Top Hotspots
+Function                                      Module             CPU Time  % of CPU Time(%)
+--------------------------------------------  -----------------  --------  ----------------
+ReadFile                                      KERNELBASE.dll      12.719s              9.1%
+std_elgene_solid                              ABQSMAStaCore.dll    3.388s              2.4%
+func@0x1812a0c30                              ABQSMAStaCore.dll    3.272s              2.3%
+std_matgen_general                            ABQSMAStaCore.dll    3.051s              2.2%
+admC_RecordTable_Accessor::GetRecordBufferId  ABQSMAIomCore.dll    2.839s              2.0%
+[Others]                                      N/A                114.045s             81.9%
+Collection and Platform Info
+    Operating System: Microsoft Windows 10
+    Computer Name: CCEE-D5H7BX04.colleges.ad.unm.edu
+    Result Size: 23.9 MB 
+    Collection start time: 20:10:10 04/10/2026 UTC
+    Collection stop time: 20:12:45 04/10/2026 UTC
+    Collector Type: User-mode sampling and tracing
+    CPU
+        Name: Intel(R) microarchitecture code named Raptorlake-DT
+        Frequency: 1.997 GHz
+        Logical CPU Count: 32
+        Cache Allocation Technology
+            Level 2 capability: not detected
+            Level 3 capability: not detected
+
+If you want to skip descriptions of detected performance issues in the report,
+enter: vtune -report summary -report-knob show-issues=false -r <my_result_dir>.
+Alternatively, you may view the report in the csv format: vtune -report
+<report_name> -format=csv.
+vtune: Executing actions 100 % Generating a report                             vtune: Executing actions 100 % done                                            

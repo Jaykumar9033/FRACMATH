@@ -1,0 +1,7 @@
+{
+  "return_code": 0,
+  "launch_elapsed_s": 138.55055389995687,
+  "criterion": "mazars",
+  "stage": "solve",
+  "status": "executed_needs_verification"
+}

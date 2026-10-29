@@ -1,0 +1,36 @@
+==== MATLAB CDM 3PB solver: vectorized sequential secant update ====
+  mesh: 28477 nodes, 56216 CPS3 elements, 56954 DOFs
+  step    u(mm)   load(kN)    CMOD(mm)   dmax    iter
+     1   0.0001      0.009     0.00002   0.000     2
+     2   0.0001      0.019     0.00005   0.000     2
+     3   0.0002      0.028     0.00007   0.000     2
+   100   0.0050      0.946     0.00229   0.587     2
+   200   0.0100      1.850     0.00485   0.913     2
+   300   0.0150      2.658     0.00801   0.963     2
+   400   0.0200      3.343     0.01187   0.981     2
+   500   0.0250      3.895     0.01644   0.990     2
+   600   0.0300      4.256     0.02201   0.996     2
+   700   0.0350      4.398     0.02874   0.998     2
+   800   0.0400      4.289     0.03680   0.999     2
+   900   0.0450      3.898     0.04639   1.000     2
+  1000   0.0500      3.381     0.05677   1.000     2
+  1100   0.0550      2.880     0.06722   1.000     2
+  1200   0.0600      2.437     0.07749   1.000     2
+  1300   0.0650      2.052     0.08759   1.000     2
+  1400   0.0700      1.766     0.09720   1.000     2
+  1500   0.0750      1.519     0.10668   1.000     2
+  1600   0.0800      1.300     0.11608   1.000     2
+  1700   0.0850      1.135     0.12517   1.000     2
+  1800   0.0900      1.000     0.13412   1.000     2
+  1900   0.0950      0.888     0.14294   1.000     2
+  2000   0.1000      0.796     0.15165   1.000     2
+  wrote C:\Users\jmavani\Documents\FRACMATH_comparison_extension_20261005\fine\matlab_area\matlab_load_cmod.csv
+  wrote C:\Users\jmavani\Documents\FRACMATH_comparison_extension_20261005\fine\matlab_area\matlab_oliver_bandwidth_history.csv
+  wrote C:\Users\jmavani\Documents\FRACMATH_comparison_extension_20261005\fine\matlab_area\matlab_step_diagnostics.csv
+  wrote C:\Users\jmavani\Documents\FRACMATH_comparison_extension_20261005\fine\matlab_area\matlab_timing.txt
+
+==== summary ====
+  peak load : 4399.66 N at CMOD = 0.0296 mm
+  wall-clock: 647.1 s  (asm 107.6, dam 14.8, solve 71.3)
+  allocated memory delta: 224.5 MB
+  output -> C:\Users\jmavani\Documents\FRACMATH_comparison_extension_20261005\fine\matlab_area/

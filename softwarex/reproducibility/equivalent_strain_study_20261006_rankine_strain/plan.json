@@ -1,0 +1,34 @@
+{
+  "created_utc": "2026-10-06T18:12:58.197243+00:00",
+  "steps": 2000,
+  "final_displacement_mm": -0.1,
+  "regularization": "oliver",
+  "backend": "cpu",
+  "threads": 1,
+  "size_scale": 1,
+  "criteria": {
+    "modified_mises": "Modified von Mises",
+    "rankine": "Rankine (strain)",
+    "mazars": "Mazars",
+    "rankine_stress": "Rankine (stress)",
+    "smooth_rankine_stress": "Smooth Rankine (stress)"
+  },
+  "mesh_source": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\FRACMATH-github\\softwarex\\reproducibility\\fixed_increment_extension\\coarse\\Gregoire_3PB\\matlab_mesh",
+  "mesh_sha256": {
+    "cmod1.txt": "5b677464f4941a4c274964d723bf47e3cd7cdcb5d53379a3b7176f0c456cf9a0",
+    "cmod2.txt": "8ce88a8842c1584e3d6871e84e166e3b513c3ce2a9da6166760c7af1645dea29",
+    "elements.txt": "8476b18c86632cc259f6cd224c61ab1f8763090d01ad0468c29c332c76b45998",
+    "left_nodes.txt": "d91a915db080736443c7b2fa55b70a31d2e4cddb9182844bb91e04897b9d4598",
+    "mesh_metadata.json": "479ebcff6a9c29db9ad332e41024b6aca4db43f182b1c26316f0d6c9788375aa",
+    "nodes.txt": "700339bcbd676d0dd31244a9500f83a61a2121151a379da80e42c90879c5256e",
+    "right_nodes.txt": "df4e26a04a444901b95afef44e4a96cfae34690fff2ad2c66389c70079cdff2b",
+    "top_nodes.txt": "901f85305a102f5aec9b6a395866f23e5666c710f03b2daf4716dba13f915b35"
+  },
+  "source_sha256": {
+    "analyze_comparison_extension.py": "47227420065714d3edde86848eb75d5bccc67a906b1849c77315f3af54cf8446",
+    "run_comparison_extension.py": "0828351915dc1b876f737fed6a130c86c40410df084a272161255f46c36c048c",
+    "run_equivalent_strain_study.py": "41c44a5e9fb71632ad3e31fe1f3201daaefa091b2a2c3a56cbf89641ea747c9d",
+    "solver_main_3pb.m": "95ca5bb7ab7a0aff4efd48c19f93c7bcf7a2eb3e3387b51b2c50f0039e12b2f2"
+  },
+  "scope": "Damage-driver sensitivity with the same exponential law, tensile onset, energy convention and mesh; not full Mazars/Rankine concrete models."
+}

@@ -1,0 +1,23 @@
+{
+  "pid": 123392,
+  "status": "completed_needs_review",
+  "stage": "analyze",
+  "completed": [
+    "material_oliver_modified_mises",
+    "material_area_modified_mises",
+    "material_oliver_rankine",
+    "matlab"
+  ],
+  "failed": [
+    {
+      "stage": "abaqus",
+      "log": "C:\\Users\\jmavani\\Documents\\FRACMATH_comparison_extension_20261005\\abaqus_controller.log"
+    },
+    {
+      "stage": "analyze",
+      "log": "C:\\Users\\jmavani\\Documents\\FRACMATH_comparison_extension_20261005\\analyze_controller.log"
+    }
+  ],
+  "started_utc": "2026-10-06T00:10:58Z",
+  "finished_utc": "2026-10-06T02:56:43Z"
+}

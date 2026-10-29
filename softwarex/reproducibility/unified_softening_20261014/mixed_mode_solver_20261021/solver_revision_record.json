@@ -1,0 +1,21 @@
+{
+  "status": "completed and numerically checked",
+  "material_law": "omega = 1 - kappa0/kappa * exp(-(kappa-kappa0)/(eps_f-kappa0)); eps_f = kappa0/2 + GF/(h*ft)",
+  "material_parameters": {
+    "E_MPa": 29000,
+    "nu": 0.2,
+    "ft_MPa": 3,
+    "GF_N_per_mm": 0.11,
+    "k": 10
+  },
+  "unchanged_acceptance_tolerance": 1e-06,
+  "physical_boundary_path": "uy_top = 0.5*lambda; ux_left = +0.15*lambda; ux_right = -0.15*lambda (mm)",
+  "continuation_coordinate": "h0*n0.T*strain(element 8038)*n0; h0 and n0 fixed only in the continuation coordinate, not in the damage law",
+  "restart": "accepted increment 126 from mixed_mode_retry_20261015; lambda=0.06479207469357384",
+  "tangent": "analytical derivative of equivalent strain and current Oliver width; active loading/history/cap branches",
+  "tangent_verification": "1000 damaging element states, maximum normwise relative derivative error 1.30e-9",
+  "step_refinement": "independent step_factor=0.5 run from the same accepted restart",
+  "scope": "Numerical continuation of the proportional illustrative model; no claim of experimental mixed-mode validation.",
+  "source_sha256": "e68858d5e23a2f58359293dd7759f6fc2735216b9a8d7c31b265c6429e0c05fc",
+  "verification": "verification_summary.json"
+}

@@ -1,0 +1,13 @@
+{
+  "source": "C:\\Users\\jmavani\\Documents\\Codex\\2026-09-29\\new-chat\\work\\FRACMATH-github\\softwarex\\reproducibility\\unified_softening_20261014\\damage_static.m",
+  "source_sha256": "f4bbf306d178e4dc419b77dcb9851f14fabc87e05da645627d50af9cbbca5019",
+  "functions": [
+    "material_scale",
+    "precompute_TET4_vectorized",
+    "oliver_bandwidth_TET4",
+    "eqv_strain_modified_vm_vec",
+    "max_principal_strain_direction_vec"
+  ],
+  "retains_damage_history": true,
+  "scope": "Local TET4 mapping, direction, projected width, finite-interval softening integral and unloading checks; rotating-direction irreversibility additionally checked for state-history source. Not structural mesh convergence."
+}

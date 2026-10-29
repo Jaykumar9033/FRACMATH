@@ -1,0 +1,88 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=12mm]{geometry}
+\usepackage{amsmath,amssymb,tikz,caption,graphicx}
+\usetikzlibrary{arrows.meta,positioning,calc,shapes.geometric}
+\pagestyle{empty}
+\begin{document}
+\begin{center}{\large\bfseries FRACMATH: numerical damage update}\end{center}
+The modified von Mises equivalent-strain function used in the diagram is
+\[
+\begin{aligned}
+\widetilde\varepsilon_{\mathrm{mvM}}(I_1,J_2)&=\frac{k-1}{2k(1-2\nu)}I_1+
+\frac{1}{2k}\sqrt{\left(\frac{k-1}{1-2\nu}\right)^2I_1^2+\frac{12k}{(1+\nu)^2}J_2},\\
+k&=f_c/f_t.
+\end{aligned}
+\]
+\begin{figure}[!htb]
+\centering
+\resizebox{!}{0.66\textheight}{%
+\begin{tikzpicture}[
+  font=\small,
+  process/.style={draw=blue!45!black,fill=blue!3,rounded corners=3pt,
+    line width=0.7pt,text width=6.6cm,align=center,inner sep=6pt},
+  material/.style={process,draw=teal!55!black,fill=teal!4},
+  line/.style={-{Stealth[length=2mm]},line width=0.8pt,draw=blue!45!black},
+  note/.style={font=\footnotesize,align=center,text width=6.6cm},
+  node distance=5mm]
+\node[font=\bfseries,text=blue!45!black] (globaltitle) at (0,0) {GLOBAL DISPLACEMENT STEP};
+\node[font=\bfseries,text=teal!55!black] (localtitle) at (7.55,0) {ELEMENT DAMAGE UPDATE};
+\node[process,below=5mm of globaltitle] (input) {\textbf{1. Read and precompute}\\
+Mesh, boundary sets, $E,\nu,f_t,f_c,G_F$\\
+$\mathbf B_e$, $A_e$, $\nabla N_a$, $\mathbf K_e^0$, $\varepsilon_0=f_t/E$\\
+Initialize $\kappa_e^0=0$, $d_e^0=0$};
+\node[process,below=of input] (load) {\textbf{2. Prescribe increment $m$}\\
+$u_p^m=(m/N)\,u_{\mathrm{final}}$\\
+Retain $\kappa_e^{m-1}$ and $d_e^{m-1}$};
+\node[process,below=of load] (solve) {\textbf{3. Assemble and solve at retained damage}\\
+$\mathbf K^-=\operatorname{assemble}\!\left[(1-d_e^{m-1})\mathbf K_e^0\right]$\\
+$\mathbf K^-_{ff}\mathbf u_f^m=-\mathbf K^-_{fp}\mathbf u_p^m$\\
+CPU sparse factorization and backsolve};
+\node[process,below=of solve] (dispatch) {\textbf{4. Evaluate all element states}\\
+$\boldsymbol\varepsilon_{V,e}^m=\mathbf B_e\mathbf u_e^m$\\
+Vectorized CPU arrays or hybrid GPU kernel\\
+Apply the material update shown at right};
+\node[material,below=5mm of localtitle] (strain) {\textbf{A. Recover principal strains}\\
+$\boldsymbol\varepsilon=\begin{bmatrix}\varepsilon_{xx}&\gamma_{xy}/2\\\gamma_{xy}/2&\varepsilon_{yy}\end{bmatrix}$\\
+In-plane eigenvalues $e_1\geq e_2$,\\
+$e_3=-\nu(e_1+e_2)/(1-\nu)$};
+\node[material,below=of strain] (equivalent) {\textbf{B. Calculate the damage driver}\\
+$I_1=e_1+e_2+e_3$\\
+$J_2=\big[(e_1-e_2)^2+(e_2-e_3)^2+(e_3-e_1)^2\big]/6$\\
+$\widetilde\varepsilon=\max(0,\widetilde\varepsilon_{\mathrm{mvM}}(I_1,J_2))$\\
+$\kappa_e^m=\max(\kappa_e^{m-1},\widetilde\varepsilon)$};
+\node[material,below=of equivalent] (width) {\textbf{C. Set the crack-band width}\\
+$\theta=\tfrac12\operatorname{atan2}(\gamma_{xy},\varepsilon_{xx}-\varepsilon_{yy})$\\
+$\mathbf n=(\cos\theta,\sin\theta)$\\
+$h_e=2/\sum_{a=1}^3|\nabla N_a\!\cdot\!\mathbf n|$\\
+$\varepsilon_{f,e}=\max\!\left(\varepsilon_0/2+G_F/(h_e f_t),\varepsilon_0+10^{-12}\right)$};
+\node[material,below=of width] (damage) {\textbf{D. Apply the damage law}\\
+$\widehat{d}_e=0$ when $\kappa_e^m\leq\varepsilon_0$, otherwise\\
+$\widehat{d}_e=1-\dfrac{\varepsilon_0}{\kappa_e^m}
+\exp\!\left[-\dfrac{\kappa_e^m-\varepsilon_0}{\varepsilon_{f,e}-\varepsilon_0}\right]$\\
+$d_e^m=\min\!\left(d_{\max},\max(0,d_e^{m-1},\widehat{d}_e)\right)$};
+\node[material,below=of damage] (stress) {\textbf{E. Return the current material state}\\
+$\boldsymbol\sigma_{V,e}^m=(1-d_e^m)\mathbf D_0\boldsymbol\varepsilon_{V,e}^m$\\
+Save $\kappa_e^m,d_e^m,h_e$\\
+Abaqus UMAT returns $\mathbf D_{\mathrm{sec}}=(1-d_e^m)\mathbf D_0$};
+\node[process,below=14mm of dispatch] (reaction) {\textbf{5. Reassemble, record and advance}\\
+$\mathbf K^+=\operatorname{assemble}\!\left[(1-d_e^m)\mathbf K_e^0\right]$\\
+$\mathbf r^+=\mathbf K^+\mathbf u^m$\\
+Save load, CMOD, damage, timings and residual\\
+Cache $\mathbf K^+$ for step $m+1$};
+\node[note,below=5mm of reaction] (residual) {$\eta_m=\|\mathbf r_f^+\|_2/\max(\|\mathbf r_p^+\|_2,1~\mathrm N)$\\
+MATLAB records this post-update imbalance,\\
+Abaqus controls its own equilibrium iterations.};
+\draw[line] (input)--(load);
+\draw[line] (load)--(solve);
+\draw[line] (solve)--(dispatch);
+\draw[line] (strain)--(equivalent);
+\draw[line] (equivalent)--(width);
+\draw[line] (width)--(damage);
+\draw[line] (damage)--(stress);
+\draw[line] (dispatch.east)--++(3mm,0) |- (strain.west);
+\draw[line] (stress.west)--++(-3mm,0) |- (reaction.east);
+\draw[line] (reaction.west)--++(-5mm,0) |- node[pos=0.25,rotate=90,above,font=\scriptsize] {next prescribed step} (load.west);
+\end{tikzpicture}}
+\caption{2D solution procedure and element damage update. Here $N$ counts increments, $\mathbf u$ is the nodal displacement vector, and $u_{\mathrm{final}}$ is the final imposed displacement. The matrix $\mathbf B_e$ maps element displacements to engineering strain; $\mathbf K_e^0$ is undamaged element stiffness. Superscripts $-$ and $+$ identify stiffness before and after the damage update. The internal force vector is $\mathbf r^+=\mathbf K^+\mathbf u$; subscripts $f$ and $p$ identify free and prescribed degrees of freedom. The relative imbalance $\eta_m$ compares free-force and reaction magnitudes with a 1~N lower bound. The Euclidean norm $\|\mathbf v\|_2=\sqrt{\sum_i v_i^2}$ gives vector magnitude. The angle $\theta$ defines the crack normal, and $\operatorname{atan2}$ is the two-argument inverse tangent. Trial damage is $\widehat{d}_e$; the UMAT returns secant stiffness $\mathbf D_{\mathrm{sec}}$. Code-name mappings are given in \texttt{NOTATION.md}.}
+\end{figure}
+\end{document}

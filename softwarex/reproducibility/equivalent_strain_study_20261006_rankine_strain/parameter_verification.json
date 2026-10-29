@@ -1,0 +1,27 @@
+{
+  "modified_mises": {
+    "parameters_match": true,
+    "final_loading_verified": true,
+    "post_damage_residual": 0.01131573407
+  },
+  "rankine": {
+    "parameters_match": true,
+    "final_loading_verified": true,
+    "post_damage_residual": 0.01818579026
+  },
+  "mazars": {
+    "parameters_match": true,
+    "final_loading_verified": true,
+    "post_damage_residual": 0.01081587682
+  },
+  "rankine_stress": {
+    "parameters_match": true,
+    "final_loading_verified": true,
+    "post_damage_residual": 0.01205219072
+  },
+  "smooth_rankine_stress": {
+    "parameters_match": true,
+    "final_loading_verified": true,
+    "post_damage_residual": 0.01106194778
+  }
+}

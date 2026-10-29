@@ -1,0 +1,109 @@
+{
+  "scope": "Native Standard process only; samples after attach, excluding initial startup. Separate 2,000-increment serial solve.",
+  "response_arrays_exactly_equal": true,
+  "response_rows": 2001,
+  "mesh_sha256": {
+    "nodes.txt": "2bbf84826371618fb707c7d9cbb396d38853be046f315c03bcc60d758a214a47",
+    "elements.txt": "b738499b7d081ef2816ecc2393f46842e9e4b117b710218ef243f687ee2f476e",
+    "top_nodes.txt": "55ceb15690290a82458cba28191e162be4b826e87db438c0b4bd6d7a6bd6ea42",
+    "left_nodes.txt": "d91a915db080736443c7b2fa55b70a31d2e4cddb9182844bb91e04897b9d4598",
+    "right_nodes.txt": "df4e26a04a444901b95afef44e4a96cfae34690fff2ad2c66389c70079cdff2b",
+    "cmod1.txt": "5b677464f4941a4c274964d723bf47e3cd7cdcb5d53379a3b7176f0c456cf9a0",
+    "cmod2.txt": "8ce88a8842c1584e3d6871e84e166e3b513c3ce2a9da6166760c7af1645dea29"
+  },
+  "user_library_self_sampled_CPU_time_s": 1.917316,
+  "explicitly_named_assembly_self_sampled_CPU_time_s": 2.873473,
+  "standard_process_total_sampled_CPU_time_s": 139.313998,
+  "selected_self_samples": [
+    {
+      "function": "SMAStaDirAssembledOperators::AssembleElements",
+      "module": "ABQSMAStaCore.dll",
+      "sampled_CPU_time_s": 2.106996
+    },
+    {
+      "function": "[standardU.dll]",
+      "module": "standardU.dll",
+      "sampled_CPU_time_s": 1.917316
+    },
+    {
+      "function": "SMAEqsDirAssembledOperators::Assemble",
+      "module": "ABQSMAEqsDirSolverMod.dll",
+      "sampled_CPU_time_s": 0.471626
+    },
+    {
+      "function": "SMAEqsDirAssembledOperators::AssembleSupernode",
+      "module": "ABQSMAEqsDirSolverMod.dll",
+      "sampled_CPU_time_s": 0.264065
+    },
+    {
+      "function": "assemblekernel",
+      "module": "ABQSMAEqsDirSolverMod.dll",
+      "sampled_CPU_time_s": 0.030786
+    }
+  ],
+  "solver_elapsed_time_s": 15.620000000000001,
+  "solver_passes": 3184,
+  "limitations": [
+    "Self samples exclude time in callees; unknown symbols remain unallocated.",
+    "standardU.dll contains UMAT, helper routines and external-database initialization.",
+    "Named assembly self samples are a lower bound on identifiable assembly work, not a complete phase timer.",
+    "Sampled CPU-time estimates and Abaqus CPU/elapsed timers have different scopes and are not summed or rescaled.",
+    "Separate fresh profile; requested symbols are reported only if recovered. Not an unprofiled benchmark observation."
+  ],
+  "debug_symbols_requested": true,
+  "user_pdb_preserved": true,
+  "resolved_user_functions": [
+    "[standardU.dll]"
+  ],
+  "collection_warning_lines": [
+    "vtune: Warning: Microarchitecture performance insights will not be available. Make sure the sampling driver is installed and enabled on your system.",
+    "vtune: Warning: To collect microarchitecture performance insights, run the product as administrator.",
+    "vtune: Warning: PulseEvent API used in the target application may prevent data collection. See the Troubleshooting help topic for more details.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\Windows\\system32\\napinsp.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\Windows\\SYSTEM32\\MSWSOCK.dll'.",
+    "vtune: Warning: Cannot locate file `C:\\Users\\jmavani\\AppData\\Local\\Temp\\jmavani_Gregoire_3PB_108092\\standardU.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\Windows\\system32\\nlansp_c.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\ABQSMARfmInterface.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\ABQSMAEqsSolCore.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\ABQSMAOdbDdbOdb.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\Windows\\System32\\USER32.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\ABQSMASrvBasic.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\Windows\\System32\\win32u.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\ABQSMAStsSlvUtils.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\SMAEqsDirInterMod.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\ABQSMABasAlloc.dll'.",
+    "vtune: Warning: Cannot locate file `pincrt.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\ABQSMAEliLicenseModule.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\ABQSMARomDiagEx.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\Windows\\System32\\WS2_32.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\ABQSMAAmmSrmCore.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\ABQSMACntMainModule.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\libmmd.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\ABQSMAStsOprMod.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\ABQSMAEqsDirSolverMod.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\ABQSMAOdbCore.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\ABQSMAAspDiagExtractor.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\Windows\\SYSTEM32\\VCRUNTIME140.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\ABQSMASimInterface.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\Windows\\System32\\ucrtbase.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\ABQSMAMsgCommModules.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\ABQSMABasCoreUtils.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\ABQSMAAbuBasicUtils.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\ABQSMAAspSupport.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\ABQSMABasGenericsLib.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\Windows\\System32\\KERNEL32.DLL'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\ABQSMAFsmShared.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\ABQSMAIomCore.dll'.",
+    "vtune: Warning: Cannot locate file `C:\\Users\\jmavani\\AppData\\Local\\Temp\\jmavani_Gregoire_3PB_108092\\standard.exe'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\Windows\\SYSTEM32\\ntdll.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\ABQSMAStsShare.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\Program Files (x86)\\Intel\\oneAPI\\vtune\\2025.0\\bin64\\tpsstool.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\ABQDMP_Core.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\ABQSMAShaShared-D.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\ABQSMABasShared.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\Windows\\System32\\KERNELBASE.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\ABQSMAAncAdbModule.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\Windows\\SYSTEM32\\DNSAPI.dll'.",
+    "vtune: Warning: Cannot locate debugging information for file `C:\\SIMULIA\\EstProducts\\2024\\win_b64\\code\\bin\\ABQSMAStaCore.dll'."
+  ]
+}

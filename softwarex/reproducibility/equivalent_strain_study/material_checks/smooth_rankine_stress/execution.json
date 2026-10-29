@@ -1,0 +1,7 @@
+{
+  "return_code": 0,
+  "launch_elapsed_s": 7.659534799866378,
+  "criterion": "smooth_rankine_stress",
+  "stage": "checks",
+  "status": "executed_needs_verification"
+}

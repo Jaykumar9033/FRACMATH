@@ -1,0 +1,21 @@
+{
+  "production_umat_unchanged": true,
+  "independent_material_checks": true,
+  "cases": 824,
+  "timing_configurations": 30,
+  "timing_observations": 90,
+  "all_repeat_response_checks_passed": true,
+  "figure_labels_unique": true,
+  "all_internal_references_resolve": true,
+  "all_bibliography_entries_cited": true,
+  "current_figures": 5,
+  "limitations_preserved": [
+    "UMAT secant matrix is not a consistent evolving-damage tangent.",
+    "Standalone material batches are not in-job Abaqus phases.",
+    "No complete assembly wall timing.",
+    "Mixed-mode and torsion fields are qualitative.",
+    "Experimental pure-tension errors and digitization uncertainty remain disclosed.",
+    "A 0.99 damage band is not an open crack."
+  ],
+  "scope": "Review of current manuscript claims against named completed evidence; no claim of universal bug-free behavior or editorial acceptance."
+}

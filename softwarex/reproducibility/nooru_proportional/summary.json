@@ -1,0 +1,11 @@
+{
+  "history_sha256": "241835045b3cb6b34b19d8eac9dabe9d47e8f7aa9012652df645bcec383c7abe",
+  "recorded_increments": 900,
+  "equilibrium_tolerance": 1e-06,
+  "increments_above_tolerance": 894,
+  "maximum_relative_residual": 1.0,
+  "final_relative_residual": 0.0011169800072377,
+  "interpretation": "Diagnostic only; no experimental validation or converged response claim.",
+  "normal_recorded_peak_kN": 18.960929591846202,
+  "shear_recorded_maximum_kN": 26.0290949311518
+}

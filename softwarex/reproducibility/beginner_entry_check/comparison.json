@@ -1,0 +1,68 @@
+{
+  "steps": 10000,
+  "comparisons": {
+    "nodes": {
+      "exactly_equal": true,
+      "maximum_absolute_difference": 0.0
+    },
+    "elems": {
+      "exactly_equal": true,
+      "maximum_absolute_difference": 0.0
+    },
+    "omega": {
+      "exactly_equal": true,
+      "maximum_absolute_difference": 0.0
+    },
+    "kappa": {
+      "exactly_equal": true,
+      "maximum_absolute_difference": 0.0
+    },
+    "u": {
+      "exactly_equal": true,
+      "maximum_absolute_difference": 0.0
+    },
+    "CMOD": {
+      "exactly_equal": true,
+      "maximum_absolute_difference": 0.0
+    },
+    "F": {
+      "exactly_equal": true,
+      "maximum_absolute_difference": 0.0
+    },
+    "RelRes": {
+      "exactly_equal": true,
+      "maximum_absolute_difference": 0.0
+    },
+    "snap_peak.u": {
+      "exactly_equal": true,
+      "maximum_absolute_difference": 0.0
+    },
+    "snap_peak.omega": {
+      "exactly_equal": true,
+      "maximum_absolute_difference": 0.0
+    },
+    "snap_peak.load": {
+      "exactly_equal": true,
+      "maximum_absolute_difference": 0.0
+    },
+    "snap_pp.u": {
+      "exactly_equal": true,
+      "maximum_absolute_difference": 0.0
+    },
+    "snap_pp.omega": {
+      "exactly_equal": true,
+      "maximum_absolute_difference": 0.0
+    },
+    "snap_pp.load": {
+      "exactly_equal": true,
+      "maximum_absolute_difference": 0.0
+    }
+  },
+  "all_numerical_arrays_exactly_equal": true,
+  "graphics": "Disabled only for the headless check; numerical settings unchanged.",
+  "original_entry_sha256": "6c08ef01d522fe761983984d8c84da9afcdef06cb266da6c8dbc28501b249dd7",
+  "tested_entry_sha256": "bded1a9a22752ea7da4ea645474acef74e67cba1561e6a39044fbfca0eec5eec",
+  "reference_state_sha256": "ea80296537ad39b46ca4bd9817cfdb1260a511a938a587394cc3ba1693ed8b80",
+  "tested_state_sha256": "7f81232717edd0b1739e9457921d568832ad2fb0c220a3dc2abcc09006b07649",
+  "timing_scope": "Numerical verification with other validation jobs active; not a benchmark observation."
+}

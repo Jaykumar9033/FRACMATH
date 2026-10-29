@@ -1,0 +1,10 @@
+{
+  "modified_mises": {
+    "identical_saved_curve": true,
+    "maximum_absolute_difference": 0.0
+  },
+  "rankine": {
+    "identical_saved_curve": true,
+    "maximum_absolute_difference": 0.0
+  }
+}

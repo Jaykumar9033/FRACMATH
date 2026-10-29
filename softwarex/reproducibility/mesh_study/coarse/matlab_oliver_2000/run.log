@@ -1,0 +1,36 @@
+==== MATLAB CDM 3PB solver: vectorized sequential secant update ====
+  mesh: 7343 nodes, 14313 CPS3 elements, 14686 DOFs
+  step    u(mm)   load(kN)    CMOD(mm)   dmax    iter
+     1   0.0001      0.010     0.00002   0.000     2
+     2   0.0001      0.020     0.00005   0.000     2
+     3   0.0002      0.029     0.00007   0.000     2
+   100   0.0050      0.975     0.00234   0.426     2
+   200   0.0100      1.901     0.00499   0.844     2
+   300   0.0150      2.718     0.00828   0.933     2
+   400   0.0200      3.391     0.01235   0.975     2
+   500   0.0250      3.887     0.01732   0.991     2
+   600   0.0300      4.147     0.02348   0.996     2
+   700   0.0350      4.169     0.03082   0.998     2
+   800   0.0400      3.929     0.03952   0.999     2
+   900   0.0450      3.469     0.04941   0.999     2
+  1000   0.0500      2.970     0.05966   1.000     2
+  1100   0.0550      2.563     0.06956   1.000     2
+  1200   0.0600      2.201     0.07936   1.000     2
+  1300   0.0650      1.894     0.08897   1.000     2
+  1400   0.0700      1.626     0.09846   1.000     2
+  1500   0.0750      1.403     0.10778   1.000     2
+  1600   0.0800      1.220     0.11692   1.000     2
+  1700   0.0850      1.071     0.12589   1.000     2
+  1800   0.0900      0.949     0.13473   1.000     2
+  1900   0.0950      0.848     0.14347   1.000     2
+  2000   0.1000      0.762     0.15214   1.000     2
+  wrote C:\Users\jmavani\Documents\Codex\2026-09-29\new-chat\work\simulations\mesh_study\coarse\matlab_oliver_2000\matlab_load_cmod.csv
+  wrote C:\Users\jmavani\Documents\Codex\2026-09-29\new-chat\work\simulations\mesh_study\coarse\matlab_oliver_2000\matlab_oliver_bandwidth_history.csv
+  wrote C:\Users\jmavani\Documents\Codex\2026-09-29\new-chat\work\simulations\mesh_study\coarse\matlab_oliver_2000\matlab_step_diagnostics.csv
+  wrote C:\Users\jmavani\Documents\Codex\2026-09-29\new-chat\work\simulations\mesh_study\coarse\matlab_oliver_2000\matlab_timing.txt
+
+==== summary ====
+  peak load : 4193.72 N at CMOD = 0.0279 mm
+  wall-clock: 150.9 s  (asm 30.8, dam 3.3, solve 13.3)
+  peak RAM  : 115.2 MB
+  output -> C:\Users\jmavani\Documents\Codex\2026-09-29\new-chat\work\simulations\mesh_study\coarse\matlab_oliver_2000/

@@ -1,0 +1,11 @@
+{
+  "status": "verified_complete",
+  "pid": 49604,
+  "criteria": [
+    "modified_mises",
+    "elastic_energy",
+    "mazars",
+    "rankine_stress",
+    "smooth_rankine_stress"
+  ]
+}

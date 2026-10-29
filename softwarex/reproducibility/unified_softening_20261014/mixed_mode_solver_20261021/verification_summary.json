@@ -1,0 +1,27 @@
+{
+  "completed": true,
+  "boundary_endpoint": {
+    "lambda": 1.0,
+    "top_displacement_mm": 0.5,
+    "left_displacement_mm": 0.15,
+    "right_displacement_mm": -0.15
+  },
+  "restart_accepted_increments": 126,
+  "continuation": {
+    "accepted_steps": 183,
+    "max_relative_force_residual": 9.773420473553688e-07,
+    "final_signed_vertical_reaction_N": -2762.5709913970722
+  },
+  "half_step": {
+    "accepted_steps": 384,
+    "max_relative_force_residual": 9.882932858102847e-07,
+    "final_signed_vertical_reaction_N": -2768.9030251045615
+  },
+  "force_refinement_max_difference_over_restart_force": 0.0019077822266907443,
+  "analytical_tangent_max_relative_error": 1.297686369730278e-09,
+  "energy_check_scope": "half-step continuation from the saved restart to the endpoint",
+  "energy_balance_relative_error": 0.0018221392607676156,
+  "damage_non_decreasing": true,
+  "calibration": "total tensile work including elastic work; no material-parameter changes",
+  "validation_scope": "numerical checks of this prescribed proportional loading case; not experimental validation"
+}

@@ -1,0 +1,7 @@
+{
+  "all_five_parameter_checks_passed": true,
+  "steps": 2000,
+  "final_displacement_mm": -0.1,
+  "regularization": "oliver",
+  "backend": "cpu"
+}

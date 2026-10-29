@@ -1,0 +1,7 @@
+{
+  "return_code": 0,
+  "launch_elapsed_s": 138.99569149990566,
+  "criterion": "modified_mises",
+  "stage": "solve",
+  "status": "executed_needs_verification"
+}

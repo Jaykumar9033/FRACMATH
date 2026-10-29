@@ -1,0 +1,7 @@
+{
+  "return_code": 0,
+  "launch_elapsed_s": 142.02529040002264,
+  "criterion": "elastic_energy",
+  "stage": "solve",
+  "status": "executed_needs_verification"
+}

@@ -1,0 +1,6 @@
+{
+  "launch_elapsed_s": 39.02627635002136,
+  "standard_sampled_peak_working_set_MB": null,
+  "sampling_interval_s": 1,
+  "scope": "Abaqus standard.exe descendant processes only; excludes CAE"
+}

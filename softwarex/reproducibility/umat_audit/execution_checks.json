@@ -1,0 +1,7 @@
+{
+  "material_energy_test_return_code": 0,
+  "matlab_smoke_test_return_code": 0,
+  "missing_gradient_test_return_code": 1,
+  "missing_gradient_message": "UMAT ERROR: missing Oliver gradients, NOEL=4",
+  "executed_date": "2026-10-04"
+}

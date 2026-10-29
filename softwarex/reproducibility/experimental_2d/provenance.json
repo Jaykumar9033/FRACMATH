@@ -1,0 +1,88 @@
+{
+  "description": "Published experimental graphic vertices recovered from a native vector figure; not original laboratory data or identified replicate tests.",
+  "authors": [
+    "Peter Grassl",
+    "David Gregoire",
+    "Laura Rojas Solano",
+    "Gilles Pijaudier-Cabot"
+  ],
+  "source_title": "Meso-scale modelling of the size effect on the fracture process zone of concrete",
+  "source_arxiv_version": "1107.2311v2, 20 March 2012",
+  "author_page": "https://petergrassl.com/publications/gragresol12/",
+  "source_bundle_url": "https://arxiv.org/src/1107.2311v2",
+  "source_bundle_sha256": "083d8adb129d036fc5cf4ff2b3d999aead8e9e989f135890c388f77d769e339e",
+  "figure_file": "figLCmodCompSN.pdf",
+  "figure_file_sha256": "f33148db8d5b1215cc340965238c0dfdc20fa9c3ce0c312274b9fcdecf7877ff",
+  "paper_figure": "Figure 5; manuscript PDF page 16",
+  "paper_journal_doi": "10.1016/j.ijsolstr.2012.03.023",
+  "original_experiment": "Gregoire, Rojas-Solano and Pijaudier-Cabot; manuscript cited as 2011 submitted for publication, subsequently published in 2013, DOI10.1002/nag.2180.",
+  "legend_series": "experiments 100 mm",
+  "graphic_style": "black dash-dot: [15 15 5 15] 0 d; line width 2.5 graphic units; no model circles or numerical error bars",
+  "source_style_operations_before_selected_block": [
+    "0 g",
+    "[ 5 7.5 ] 0 d",
+    "2.5 w",
+    "[ ] 0 d",
+    "[ 5 7.5 ] 0 d",
+    "[ 15 15 5 15 ] 0 d",
+    "[ ] 0 d",
+    "[ 15 15 5 15 ] 0 d"
+  ],
+  "path_selection": "All m/l path vertices after (experiments 100 mm)Tj and before (model 200 mm)Tj, excluding first legend sample at y=2018.5.",
+  "continuous_trace_count": 1,
+  "continuous_stroke_batches": 49,
+  "duplicate_batch_endpoints_removed": 48,
+  "graphic_vertex_count": 3206,
+  "experimental_replicate_identity": "not specified by this figure; do not call it an individual replicate or experimental mean",
+  "axis_calibration": {
+    "x0": 550,
+    "x1": 3450,
+    "CMOD0_mm": 0,
+    "CMOD1_mm": 0.5,
+    "y0": 320,
+    "y1": 2400,
+    "load0_kN": 0,
+    "load1_kN": 14
+  },
+  "geometry": {
+    "depth_mm": 100,
+    "thickness_mm": 50,
+    "support_span_mm": 250,
+    "overall_length_mm": 350,
+    "notch_depth_mm": 20,
+    "notch_depth_ratio": 0.2,
+    "experimental_notch_width_mm": "not specified in accessible author source; thin metal casting plate described",
+    "CMOD_location": "horizontal relative displacement across points A and B at notch mouth"
+  },
+  "geometry_provenance": "Section3, Figure3 (geometry.pdf): d=100mm, t=.05m; span2.5d and end overhangs.5d; Figure5 a=.2.",
+  "loading_control": "Experimental control is not verified in the accessible selected source; its meso-scale analyses are CMOD-controlled, while FRACMATH uses prescribed load-point displacement.",
+  "material_match": "FRACMATH material values are numerical inputs, not all verified measured values for the selected original experiment; no parameter refit performed here.",
+  "graphic_coordinate_grid_units": 0.5,
+  "half_grid_equivalent_load_kN": 0.0016826923076923078,
+  "precision_scope": "These values describe vector quantization only, not measurement accuracy, statistical uncertainty or raw sampling resolution.",
+  "CMOD_range_mm": [
+    0.00017241379310344826,
+    0.33629310344827584
+  ],
+  "peak": {
+    "load_kN": 4.496153846153846,
+    "CMOD_mm": 0.02913793103448276,
+    "graphic_vertex_index": 593
+  },
+  "licence": "arXiv non-exclusive distribution licence; not a CC0 or software-code licence. Do not redistribute original PDF/image as part of software under an assumed open licence.",
+  "data_file_sha256": "eeb333c3d2c81a82d1767766807a1f436ce51294c7f19c4dcaefacd5d92fd2cb",
+  "checks": {
+    "exact_bundle_figure_match": true,
+    "one_continuous_trace": true,
+    "all_graphic_vertices_finite": true,
+    "all_vertices_inside_plot_box": true,
+    "legend_removed": true,
+    "model_and_error_bars_excluded": true
+  },
+  "half_grid_equivalent_CMOD_mm": 4.3103448275862066e-05,
+  "related_material_background": {
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4981122/",
+    "citation": "Gregoire et al.2015, DOI10.1002/nag.2363, Table3 and Section5.1",
+    "values": "Mean E37GPa,nu.21,fc42.3MPa,ft3.9MPa; same formulation as2013 cited, but not selected FN100 original batch proof."
+  }
+}

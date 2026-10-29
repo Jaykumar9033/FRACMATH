@@ -1,0 +1,36 @@
+==== MATLAB CDM 3PB solver: vectorized sequential secant update ====
+  mesh: 28477 nodes, 56216 CPS3 elements, 56954 DOFs
+  step    u(mm)   load(kN)    CMOD(mm)   dmax    iter
+     1   0.0000      0.005     0.00001   0.000     2
+     2   0.0001      0.009     0.00002   0.000     2
+     3   0.0001      0.014     0.00003   0.000     2
+   200   0.0050      0.946     0.00229   0.596     2
+   400   0.0100      1.849     0.00486   0.917     2
+   600   0.0150      2.652     0.00804   0.967     2
+   800   0.0200      3.324     0.01197   0.986     2
+  1000   0.0250      3.668     0.01767   0.998     2
+  1200   0.0300      3.410     0.02648   1.000     2
+  1400   0.0350      2.647     0.03798   1.000     2
+  1600   0.0400      1.942     0.04946   1.000     2
+  1800   0.0450      1.420     0.06026   1.000     2
+  2000   0.0500      1.110     0.07002   1.000     2
+  2200   0.0550      0.874     0.07948   1.000     2
+  2400   0.0600      0.713     0.08856   1.000     2
+  2600   0.0650      0.597     0.09738   1.000     2
+  2800   0.0700      0.504     0.10612   1.000     2
+  3000   0.0750      0.427     0.11479   1.000     2
+  3200   0.0800      0.366     0.12337   1.000     2
+  3400   0.0850      0.318     0.13188   1.000     2
+  3600   0.0900      0.278     0.14034   1.000     2
+  3800   0.0950      0.246     0.14875   1.000     2
+  4000   0.1000      0.220     0.15712   1.000     2
+  wrote C:\Users\jmavani\Documents\Codex\2026-09-29\new-chat\work\simulations\mesh_study\fine\matlab_fixed_4000\matlab_load_cmod.csv
+  wrote C:\Users\jmavani\Documents\Codex\2026-09-29\new-chat\work\simulations\mesh_study\fine\matlab_fixed_4000\matlab_oliver_bandwidth_history.csv
+  wrote C:\Users\jmavani\Documents\Codex\2026-09-29\new-chat\work\simulations\mesh_study\fine\matlab_fixed_4000\matlab_step_diagnostics.csv
+  wrote C:\Users\jmavani\Documents\Codex\2026-09-29\new-chat\work\simulations\mesh_study\fine\matlab_fixed_4000\matlab_timing.txt
+
+==== summary ====
+  peak load : 3680.29 N at CMOD = 0.0194 mm
+  wall-clock: 1202.6 s  (asm 201.2, dam 26.3, solve 133.6)
+  allocated memory delta: 225.7 MB
+  output -> C:\Users\jmavani\Documents\Codex\2026-09-29\new-chat\work\simulations\mesh_study\fine\matlab_fixed_4000/

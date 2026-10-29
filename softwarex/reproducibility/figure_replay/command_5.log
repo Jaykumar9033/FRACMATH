@@ -1,0 +1,55 @@
+{
+  "experimental_peak_N": 19852.9412,
+  "accepted": [
+    {
+      "mesh": "coarse",
+      "nodes": 7276,
+      "elements": 35917,
+      "dofs": 21828,
+      "accepted_increments": 608,
+      "rejected_trials": 8,
+      "peak_N": 16641.5363498946,
+      "peak_gauge_mm": 0.009333333333333332,
+      "peak_error_percent": -16.175965151729766,
+      "curve_NRMSE_percent": 9.274104358196471,
+      "max_equilibrium_residual": 8.91741364008742e-07,
+      "max_gauge_constraint_error_mm": 1.2390262427164345e-15,
+      "verified_solver_sha256": "23ab8d9d0ec38d364e1124e5a679f497950d34afa18e5b7c57fccaf74fcc299d"
+    },
+    {
+      "mesh": "medium",
+      "nodes": 18180,
+      "elements": 94525,
+      "dofs": 54540,
+      "accepted_increments": 606,
+      "rejected_trials": 6,
+      "peak_N": 16399.7201241454,
+      "peak_gauge_mm": 0.009000000000000001,
+      "peak_error_percent": -17.3940024355414,
+      "curve_NRMSE_percent": 9.25293544540814,
+      "max_equilibrium_residual": 9.84202107508116e-07,
+      "max_gauge_constraint_error_mm": 9.420090575640305e-16,
+      "verified_solver_sha256": "23ab8d9d0ec38d364e1124e5a679f497950d34afa18e5b7c57fccaf74fcc299d"
+    },
+    {
+      "mesh": "fine",
+      "nodes": 28258,
+      "elements": 144791,
+      "dofs": 84774,
+      "accepted_increments": 601,
+      "rejected_trials": 1,
+      "peak_N": 16526.0723767823,
+      "peak_gauge_mm": 0.009333333333333336,
+      "peak_error_percent": -16.757561460050564,
+      "curve_NRMSE_percent": 9.086158366134182,
+      "max_equilibrium_residual": 6.36441477764525e-07,
+      "max_gauge_constraint_error_mm": 7.155734338404329e-16,
+      "verified_solver_sha256": "23ab8d9d0ec38d364e1124e5a679f497950d34afa18e5b7c57fccaf74fcc299d"
+    }
+  ],
+  "excluded": [],
+  "completed_meshes": 3,
+  "peak_mesh_spread_percent": 1.4635621770761735,
+  "medium_fine_curve_RMS_difference_percent_of_fine_peak": 0.3466560865347666,
+  "scope": "One pure-tension geometry with published 25 mm notches; three prescribed mesh seeds, local gauges and unchanged material parameters. Target bisections retain equilibrium tolerances. Does not establish general 3D mesh or orientation independence."
+}

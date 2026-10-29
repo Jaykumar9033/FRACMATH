@@ -1,0 +1,131 @@
+{
+  "all_execution_checks_passed": true,
+  "cases": {
+    "modified_mises": {
+      "passed_execution_checks": true,
+      "steps": 2000,
+      "peak_load_N": 4193.718,
+      "peak_cmod_mm": 0.02786444,
+      "final_cmod_mm": 0.1521367,
+      "maximum_post_damage_relative_residual": 0.01131573407,
+      "peak_post_damage_relative_residual": 0.006529279451,
+      "regularization": "oliver",
+      "equivalent_strain": "modified_mises",
+      "interpretation": "Old-damage equilibrium passes; post-damage residual is reported separately.",
+      "independent_material_states": 10,
+      "maximum_equivalent_strain_error": 9.486769009248164e-20,
+      "maximum_uniaxial_energy_relative_error": 1.77639955831508e-06,
+      "relative_to_modified_mises": {
+        "reference_peak_N": 4193.718,
+        "comparison_peak_N": 4193.718,
+        "peak_difference_percent": 0.0,
+        "common_cmod_range_mm": [
+          2.319509e-05,
+          0.1521367
+        ],
+        "curve_rms_N": 0.0,
+        "curve_rms_percent_reference_peak": 0.0
+      }
+    },
+    "rankine": {
+      "passed_execution_checks": true,
+      "steps": 2000,
+      "peak_load_N": 4681.483,
+      "peak_cmod_mm": 0.02643724,
+      "final_cmod_mm": 0.14249,
+      "maximum_post_damage_relative_residual": 0.01818579026,
+      "peak_post_damage_relative_residual": 0.01000702468,
+      "regularization": "oliver",
+      "equivalent_strain": "rankine",
+      "interpretation": "Old-damage equilibrium passes; post-damage residual is reported separately.",
+      "independent_material_states": 10,
+      "maximum_equivalent_strain_error": 0.0,
+      "maximum_uniaxial_energy_relative_error": 1.77639955846927e-06,
+      "relative_to_modified_mises": {
+        "reference_peak_N": 4193.718,
+        "comparison_peak_N": 4681.483,
+        "peak_difference_percent": 11.630848807669002,
+        "common_cmod_range_mm": [
+          2.319509e-05,
+          0.14249
+        ],
+        "curve_rms_N": 447.52627418282293,
+        "curve_rms_percent_reference_peak": 10.671348769345554
+      }
+    },
+    "mazars": {
+      "passed_execution_checks": true,
+      "steps": 2000,
+      "peak_load_N": 4689.405,
+      "peak_cmod_mm": 0.02323034,
+      "final_cmod_mm": 0.01258024,
+      "maximum_post_damage_relative_residual": 0.01081587682,
+      "peak_post_damage_relative_residual": 0.004809449643,
+      "regularization": "oliver",
+      "equivalent_strain": "mazars",
+      "interpretation": "Old-damage equilibrium passes; post-damage residual is reported separately.",
+      "independent_material_states": 10,
+      "maximum_equivalent_strain_error": 0.0,
+      "maximum_uniaxial_energy_relative_error": 1.77639955846927e-06,
+      "relative_to_modified_mises": {
+        "reference_peak_N": 4193.718,
+        "comparison_peak_N": 4689.405,
+        "peak_difference_percent": 11.819750398095435,
+        "curve_rms_status": "CMOD reversal requires explicit branch comparison"
+      }
+    },
+    "rankine_stress": {
+      "passed_execution_checks": true,
+      "steps": 2000,
+      "peak_load_N": 4780.586,
+      "peak_cmod_mm": 0.02635935,
+      "final_cmod_mm": 0.1491213,
+      "maximum_post_damage_relative_residual": 0.01205219072,
+      "peak_post_damage_relative_residual": 0.01074161599,
+      "regularization": "oliver",
+      "equivalent_strain": "rankine_stress",
+      "interpretation": "Old-damage equilibrium passes; post-damage residual is reported separately.",
+      "independent_material_states": 10,
+      "maximum_equivalent_strain_error": 6.00120553851436e-21,
+      "maximum_uniaxial_energy_relative_error": 1.77639955846927e-06,
+      "relative_to_modified_mises": {
+        "reference_peak_N": 4193.718,
+        "comparison_peak_N": 4780.586,
+        "peak_difference_percent": 13.993978612772734,
+        "common_cmod_range_mm": [
+          2.319509e-05,
+          0.1491213
+        ],
+        "curve_rms_N": 414.93817757531366,
+        "curve_rms_percent_reference_peak": 9.894279433555468
+      }
+    },
+    "smooth_rankine_stress": {
+      "passed_execution_checks": true,
+      "steps": 2000,
+      "peak_load_N": 4772.79,
+      "peak_cmod_mm": 0.02921914,
+      "final_cmod_mm": 0.1496395,
+      "maximum_post_damage_relative_residual": 0.01106194778,
+      "peak_post_damage_relative_residual": 0.007037592163,
+      "regularization": "oliver",
+      "equivalent_strain": "smooth_rankine_stress",
+      "interpretation": "Old-damage equilibrium passes; post-damage residual is reported separately.",
+      "independent_material_states": 10,
+      "maximum_equivalent_strain_error": 8.48698626315554e-21,
+      "maximum_uniaxial_energy_relative_error": 1.77639955846927e-06,
+      "relative_to_modified_mises": {
+        "reference_peak_N": 4193.718,
+        "comparison_peak_N": 4772.79,
+        "peak_difference_percent": 13.80808151621068,
+        "common_cmod_range_mm": [
+          2.319509e-05,
+          0.1496395
+        ],
+        "curve_rms_N": 458.39198902270005,
+        "curve_rms_percent_reference_peak": 10.930443797668325
+      }
+    }
+  },
+  "scope": "Damage-driver sensitivity with the same exponential law, tensile onset, energy convention and mesh; not full Mazars/Rankine concrete models."
+}
