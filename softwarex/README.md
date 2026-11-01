@@ -21,7 +21,9 @@ Current pure-tension records are in `reproducibility/unified_softening_20261014/
 
 Earlier mixed-mode images in `figure_sources/nooru` and `reproducibility/nooru_proportional` use an earlier calibration. They remain qualitative illustrations, separate from the completed current calculation. Torsion fields are illustrative; Abaqus torsion files supply geometry and mesh resources.
 
-`plot_current_figures.py` reconstructs response and damage figures; `verify_current_figures.py` checks them in a separate folder. The timing figure uses `plot_timing_repeats.py`; see `SCALING_STUDY.md`. Editable flowchart source is in `figure_sources/damage_update_flowchart.tex`.
+`plot_current_figures.py` reconstructs response, damage and boundary-condition figures; `verify_current_figures.py` checks them in a separate folder. `export_timing_table.py` exports the current manuscript timing table from the three saved observations; see `SCALING_STUDY.md`. The earlier timing chart is an auxiliary visualization. Editable flowchart source is in `figure_sources/damage_update_flowchart.tex`.
+
+`figure_sources/plot_nooru_boundary_conditions.py` draws the actual mixed-mode mesh and boundary node sets as a 2D front projection. It checks the prescribed displacements against both completed continuation solutions and saves PNG and vector PDF files. The plotting workflow also updates the `nooru_BC_2D.png` compatibility copy.
 
 Published beam-curve vertices and attribution are in `reproducibility/experimental_2d`. They are recovered graphic data, not raw laboratory measurements. No material fitting or experimental 3D validation is claimed.
 

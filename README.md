@@ -56,7 +56,7 @@ python softwarex/plot_current_figures.py --output C:/runs/current_figures
 python softwarex/verify_current_figures.py --workspace C:/runs/current_figure_check
 ```
 
-[SCALING_STUDY.md](softwarex/SCALING_STUDY.md) gives the timing-chart commands. The editable flowchart is `softwarex/figure_sources/damage_update_flowchart.tex`.
+[SCALING_STUDY.md](softwarex/SCALING_STUDY.md) gives the timing-table export and optional plotting commands. The editable flowchart is `softwarex/figure_sources/damage_update_flowchart.tex`. The mixed-mode front view is generated from the actual TET4 mesh and boundary-node sets by `softwarex/figure_sources/plot_nooru_boundary_conditions.py`; it verifies the prescribed displacements against both completed saved solutions.
 
 ## Interpretation
 

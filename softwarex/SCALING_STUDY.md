@@ -99,4 +99,12 @@ python softwarex/plot_timing_repeats.py --summary C:/runs/timing_repeats/analysi
 
 ## Current manuscript presentation
 
-The manuscript includes the five-configuration timing bar chart from figures/scaling_timings.pdf, covering both specimen sizes and all three meshes. Its caption identifies medians of three observations, observed minimum--maximum ranges, and the different MATLAB load-loop and Abaqus analysis/output scopes. The matched fixed-increment component table remains a separate comparison.
+The manuscript presents all five computing configurations in a table. Each entry gives the median of three observations and the observed minimum--maximum range. MATLAB load-loop time and Abaqus analysis/output time have different scopes; they do not establish a direct cross-program speed ranking. The matched fixed-increment component table is a separate comparison.
+
+Export the table directly from the saved timing observations:
+
+```powershell
+python softwarex/export_timing_table.py --output C:/runs/scaling_table.tex
+```
+
+For a local manuscript, add `--check-manuscript C:/path/to/manuscript.tex` to verify the complete table against the saved data. All 30 configuration/case combinations are checked against their three individual observations. The earlier bar chart remains available as an optional visualization; it is not a figure in the current manuscript.

@@ -1,17 +1,22 @@
-\begin{table}[htbp]
+\begin{table}[!htbp]
 \centering\small
-\caption{Size/mesh computing study: median time in seconds from three sequential observations per setting. MATLAB covers the load loop; Abaqus covers analysis and output. The data archive contains the observed ranges. GPU denotes the hybrid backend.}
-\label{tab:scaling}
-\begin{tabular}{llrrrrrr}
-\hline
-Size & Mesh & DOFs & MAT 1 & MAT 8 & MAT GPU & ABA 1 & ABA 8 \\
-\hline
-Small & coarse & 3,772 & 31.3 & 33.8 & 38.5 & 158 & 234 \\
-Small & medium & 14,686 & 131.2 & 144.0 & 146.1 & 832 & 403 \\
-Small & fine & 25,534 & 232.3 & 251.8 & 255.0 & 1667 & 691 \\
-Large & coarse & 14,686 & 127.6 & 140.0 & 147.0 & 819 & 398 \\
-Large & medium & 56,954 & 598.9 & 639.6 & 626.4 & 4380 & 1586 \\
-Large & fine & 101,088 & 1155.5 & 1206.0 & 1193.9 & 8548 & 2947 \\
-\hline
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{@{}llrrrrrr@{}}
+\toprule
+& & & \multicolumn{3}{c}{MATLAB} & \multicolumn{2}{c}{Abaqus} \\
+\cmidrule(lr){4-6}\cmidrule(lr){7-8}
+Size & Mesh & DOFs & CPU1 & CPU8 & Hybrid GPU & CPU1 & CPU8 \\
+\midrule
+Small & coarse & 3,772 & \shortstack[r]{31.3\\(29.9--39.9)} & \shortstack[r]{33.8\\(33.4--42.3)} & \shortstack[r]{38.5\\(38.1--61.5)} & \shortstack[r]{158\\(154--160)} & \shortstack[r]{234\\(229--239)} \\[3pt]
+Small & medium & 14,686 & \shortstack[r]{131.2\\(128.6--133.9)} & \shortstack[r]{144.0\\(142.9--145.3)} & \shortstack[r]{146.1\\(139.1--146.3)} & \shortstack[r]{832\\(830--837)} & \shortstack[r]{403\\(400--405)} \\[3pt]
+Small & fine & 25,534 & \shortstack[r]{232.3\\(227.8--235.7)} & \shortstack[r]{251.8\\(250.6--261.1)} & \shortstack[r]{255.0\\(250.4--256.7)} & \shortstack[r]{1667\\(1666--1671)} & \shortstack[r]{691\\(686--693)} \\[3pt]
+\midrule
+Large & coarse & 14,686 & \shortstack[r]{127.6\\(126.9--132.1)} & \shortstack[r]{140.0\\(138.7--141.5)} & \shortstack[r]{147.0\\(145.2--147.1)} & \shortstack[r]{819\\(813--826)} & \shortstack[r]{398\\(390--407)} \\[3pt]
+Large & medium & 56,954 & \shortstack[r]{598.9\\(598.0--599.1)} & \shortstack[r]{639.6\\(636.7--642.9)} & \shortstack[r]{626.4\\(624.5--631.9)} & \shortstack[r]{4380\\(4350--4393)} & \shortstack[r]{1586\\(1583--1607)} \\[3pt]
+Large & fine & 101,088 & \shortstack[r]{1155.5\\(1101.5--1156.6)} & \shortstack[r]{1206.0\\(1132.9--1221.3)} & \shortstack[r]{1193.9\\(1192.1--1198.2)} & \shortstack[r]{8548\\(8403--8590)} & \shortstack[r]{2947\\(2943--2954)} \\[3pt]
+\bottomrule
 \end{tabular}
+\caption{Measured times in seconds for the five computing configurations. Each entry gives the median, with the observed minimum--maximum range in parentheses, from three runs. CPU1 and CPU8 denote one and eight computational threads; GPU denotes the hybrid CPU--GPU implementation. MATLAB times cover the load loop, and Abaqus times cover analysis and output. The ranges are not confidence intervals. This study uses its own increment controls and is separate from the matched fixed-increment comparisons in Table~\ref{tab:fixed-timing}. Differences in timing scope and equilibrium procedures prevent a direct ranking of program speed.}
+\label{tab:scaling}
 \end{table}

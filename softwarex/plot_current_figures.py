@@ -180,6 +180,8 @@ def three_dimensional_figures(output):
         commands.append([sys.executable, str(PACKAGE / "analyze_nooru_mesh_study.py"),
                          "--workspace", str(PACKAGE / "reproducibility/unified_softening_20261014/mesh_study"),
                          "--require-all", "--output", str(report)])
+        commands.append([sys.executable, str(PACKAGE / "figure_sources/plot_nooru_boundary_conditions.py"),
+                         "--output", str(output)])
         for command in commands:
             result = subprocess.run(command, capture_output=True, text=True)
             if result.returncode:
@@ -187,7 +189,8 @@ def three_dimensional_figures(output):
         for suffix in ("png", "pdf"):
             shutil.copyfile(report / ("nooru_tension_mesh_comparison." + suffix),
                             output / ("nooru_tension_comparison." + suffix))
-    for filename in ("nooru_BC_2D.png", "torsion.png"):
+    shutil.copyfile(output / "nooru_boundary_conditions.png", output / "nooru_BC_2D.png")
+    for filename in ("torsion.png",):
         shutil.copyfile(PACKAGE / "figure_sources/static" / filename, output / filename)
 
 

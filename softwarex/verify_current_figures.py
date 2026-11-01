@@ -28,8 +28,9 @@ GENERATED = (
     "equivalent_strain_comparison.png", "equivalent_strain_comparison.pdf",
     "nooru_tension_comparison.png", "nooru_tension_comparison.pdf",
     "nooru_damage_evolution_shared_bar.png", "torsion_damage_evolution_shared_bar.png",
+    "nooru_boundary_conditions.png", "nooru_boundary_conditions.pdf", "nooru_BC_2D.png",
 )
-STATIC = ("nooru_BC_2D.png", "torsion.png")
+STATIC = ("torsion.png",)
 
 
 def pixels(path):
@@ -85,7 +86,17 @@ def main():
     if r"\begin{tikzpicture}" not in source or r"\end{tikzpicture}" not in source:
         raise ValueError("Native damage-update TikZ source is missing its figure environment")
     passed = all(item.get("identical_pixels", item.get("identical_archived_source_bytes")) for item in checks)
+    boundary = json.loads((rebuilt / "nooru_boundary_conditions_verification.json").read_text())
+    boundary_verified = (
+        boundary["view"] == "2D front projection only"
+        and set(boundary["saved_final_state_checks"]) == {"continuation_full", "continuation_refined"}
+        and all(value["maximum_error_mm"] < 1e-12
+                for case in boundary["saved_final_state_checks"].values()
+                for name, value in case.items() if name != "z_pin")
+    )
+    passed = passed and boundary_verified
     report = {"passed": passed, "assets": checks,
+              "boundary_conditions_verified_against_both_saved_solutions": boundary_verified,
               "scope": "Current archived-data figure reproduction; numerical solver validation and native TikZ compilation are separate checks.",
               "removed_adaptive_figures_checked": False,
               "native_flowchart": {"source": "softwarex/figure_sources/damage_update_flowchart.tex",
