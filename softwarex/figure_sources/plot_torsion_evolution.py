@@ -23,7 +23,7 @@ from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 ROOT = Path(__file__).resolve().parents[1]
 STEPS = (21,41,61,69,80,100,120,140)  # increments stored in the state cache
 SHOW = (41,61,69,80,100,140)  # increments drawn in panels (f-k)
-LETTERS = 'fghijk'
+LETTERS = 'efghij'
 PEAK = 69
 THETA_END, N_INC = .003, 140
 DMIN = .95  # same colour map, limits and threshold as Figure 5
@@ -296,7 +296,7 @@ def damage_panel(ax,q,t,damage,text,nt,elev=ELEV,azim=AZIM,zoom=1.12):
         v = plot_xyz(q)
         add_faces(ax,v,surface,facecolors=shaded(CMAP(NORM(values)),v,surface,elev,azim),edgecolors='none',linewidths=0)
     else:
-        ax.text2D(.5,.36,'No element with $d\\geq%.2f$\n(max. $d$ = %.2f)'%(DMIN,damage.max()),
+        ax.text2D(.5,.36,'No element with $d\\geqslant%.2f$\n(max. $d$ = %.2f)'%(DMIN,damage.max()),
                   transform=ax.transAxes,ha='center',va='center',fontsize=6.8,color='#555555',zorder=10,
                   bbox=dict(fc='white',ec='none',pad=1.2,alpha=.9))
     seen,hidden = split_box_edges(elev,azim)
@@ -349,9 +349,8 @@ def main():
     ax = fig.add_axes([.73,b+.20*h,.26,h*.68]);peak = torque_panel(ax,curve)
     label(ax,'(b) Torque-rotation',-.32,1.16)
     b,h = row(1)
-    for k,(x0,w,draw,text) in enumerate(((0,.37,lambda a: plan_view(a,nt),'(c) Top view'),
-                                         (.375,.37,lambda a: elevation_view(a,nt),'(d) Side view'),
-                                         (.765,.235,end_view,'(e) Rotated end'))):
+    for k,(x0,w,draw,text) in enumerate(((0,.49,lambda a: plan_view(a,nt),'(c) Top view'),
+                                         (.51,.49,lambda a: elevation_view(a,nt),'(d) Side view'))):
         ax = fig.add_axes([x0,b,w,h*.9]);draw(ax);ax.set_anchor('N')
         ax.text(.02 if k<2 else 0,1.0,text,transform=ax.transAxes,fontsize=8.5,weight='bold',va='bottom')
     for i,step in enumerate(SHOW):
@@ -360,7 +359,7 @@ def main():
         text = '(%s) inc. %d%s, $\\theta$ = %.2f mrad'%(LETTERS[i],step,' (peak)' if step==PEAK else '',data['theta'][k]*1e3)
         damage_panel(ax,q,t,data['damage'][k],text,nt,zoom=1.36)
     b,h = row(4);last = data['damage'][STEPS.index(140)]
-    views = (('(l) inc. 140, top view',90,-90,1.32),('(m) inc. 140, side view',0,-90,1.32),('(n) inc. 140, opposite side',ELEV,AZIM+180,1.3))
+    views = (('(k) inc. 140, top view',90,-90,1.32),('(l) inc. 140, side view',0,-90,1.32),('(m) inc. 140, opposite side',ELEV,AZIM+180,1.3))
     for i,(text,el,az,zm) in enumerate(views):
         ax = fig.add_axes([i/3,b,1/3,h],projection='3d',computed_zorder=False)
         damage_panel(ax,q,t,last,text,nt,el,az,zm)
@@ -370,7 +369,7 @@ def main():
     cb = fig.colorbar(plt.cm.ScalarMappable(norm=NORM,cmap=CMAP),cax=cax,orientation='horizontal',ticks=ticks)
     cb.ax.set_xticklabels(['%.2f'%v for v in ticks])
     cb.ax.tick_params(labelsize=7,length=2,pad=1)
-    cax.set_title('Damage $d$, faces of elements with $d\\geq%.2f$'%DMIN,fontsize=7.5,pad=2)
+    cax.set_title('Damage $d$, faces of elements with $d\\geqslant%.2f$'%DMIN,fontsize=7.5,pad=2)
     for ext in ('png','pdf'):
         fig.savefig(args.output/('figure6_torsion_multiview.'+ext),dpi=400)
     plt.close(fig)

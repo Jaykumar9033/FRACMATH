@@ -29,42 +29,42 @@
   "torque_csv_sha256": "aa8408bfff0841899143c65b6bd3d8a9838039784d0fa36453915c884760a68d",
   "panels": [
     {
-      "panel": "f",
+      "panel": "e",
       "step": 41,
       "theta_rad": 0.0008785714285714286,
       "maximum_damage": 0.9844957297628742,
       "elements_shown": 418
     },
     {
-      "panel": "g",
+      "panel": "f",
       "step": 61,
       "theta_rad": 0.0013071428571428572,
       "maximum_damage": 0.9971961629490912,
       "elements_shown": 1415
     },
     {
-      "panel": "h",
+      "panel": "g",
       "step": 69,
       "theta_rad": 0.0014785714285714287,
       "maximum_damage": 0.9987625032064631,
       "elements_shown": 1980
     },
     {
-      "panel": "i",
+      "panel": "h",
       "step": 80,
       "theta_rad": 0.0017142857142857142,
       "maximum_damage": 0.9996612374336475,
       "elements_shown": 2830
     },
     {
-      "panel": "j",
+      "panel": "i",
       "step": 100,
       "theta_rad": 0.002142857142857143,
       "maximum_damage": 0.999973996042387,
       "elements_shown": 4377
     },
     {
-      "panel": "k",
+      "panel": "j",
       "step": 140,
       "theta_rad": 0.003,
       "maximum_damage": 0.999999,

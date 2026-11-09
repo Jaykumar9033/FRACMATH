@@ -43,7 +43,7 @@ Vectorized CPU arrays or hybrid GPU kernel\\
 Apply the material update shown at right};
 \node[material,below=5mm of localtitle] (strain) {\textbf{A. Recover principal strains}\\
 $\boldsymbol\varepsilon=\begin{bmatrix}\varepsilon_{xx}&\gamma_{xy}/2\\\gamma_{xy}/2&\varepsilon_{yy}\end{bmatrix}$\\
-In-plane eigenvalues $e_1\geq e_2$,\\
+In-plane eigenvalues $e_1\geqslant e_2$,\\
 $e_3=-\nu(e_1+e_2)/(1-\nu)$};
 \node[material,below=of strain] (equivalent) {\textbf{B. Calculate the damage driver}\\
 $I_1=e_1+e_2+e_3$\\
@@ -56,7 +56,7 @@ $\mathbf n=(\cos\theta,\sin\theta)$\\
 $h_e=2/\sum_{a=1}^3|\nabla N_a\!\cdot\!\mathbf n|$\\
 $\varepsilon_{f,e}=\max\!\left(\varepsilon_0/2+G_F/(h_e f_t),\varepsilon_0+10^{-12}\right)$};
 \node[material,below=of width] (damage) {\textbf{D. Apply the damage law}\\
-$\widehat{d}_e=0$ when $\kappa_e^j\leq\varepsilon_0$, otherwise\\
+$\widehat{d}_e=0$ when $\kappa_e^j\leqslant\varepsilon_0$, otherwise\\
 $\widehat{d}_e=1-\dfrac{\varepsilon_0}{\kappa_e^j}
 \exp\!\left[-\dfrac{\kappa_e^j-\varepsilon_0}{\varepsilon_{f,e}-\varepsilon_0}\right]$\\
 $d_e^j=\min\!\left(d_{\max},\max(0,d_e^{j-1},\widehat{d}_e)\right)$};
