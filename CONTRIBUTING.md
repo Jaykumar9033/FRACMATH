@@ -34,5 +34,4 @@ Small documentation fixes can be proposed directly in a pull request. For solver
 
 Contributions will be acknowledged according to their role and scope. If you
 use FRACMATH in research, please cite the software metadata in `CITATION.cff`.
-The existing `v1.0.0` Zenodo DOI identifies an earlier implementation. Cite a
-new version DOI and the SoftwareX article when they are published.
+The Zenodo DOI in `CITATION.cff` identifies the earlier numerical-core archive. Cite the exact current Git commit and the SoftwareX article when it is published.

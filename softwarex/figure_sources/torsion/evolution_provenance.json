@@ -1,0 +1,16 @@
+{
+  "torque_history_error_relative_to_reference_peak": 3.410048675132334e-05,
+  "maximum_damage_history_absolute_error": 3.350803967627769e-09,
+  "peak_element_damage_maximum_absolute_error": 3.174049911791599e-11,
+  "reference_response_sha256": "aa8408bfff0841899143c65b6bd3d8a9838039784d0fa36453915c884760a68d",
+  "figure_scope": "Current final Figure 6; six damage increments and three final views on the undeformed mesh.",
+  "reference_torque_curve": "torque_rotation_reference.csv",
+  "state_cache_sha256": "d0c3dbdee37f917719c0b37e853c2f6ff6b22178106f6522d1e11a4963bd525e",
+  "display_threshold": 0.95,
+  "color_limits": [
+    0.95,
+    1
+  ],
+  "colormap": "turbo",
+  "note": "The torque panel uses the saved original reference curve. Recovered damage arrays come from the replay; reported differences are numerical provenance, not a new equilibrium-validation claim."
+}

@@ -30,15 +30,15 @@ k&=f_c/f_t.
 Mesh, boundary sets, $E,\nu,f_t,f_c,G_F$\\
 $\mathbf B_e$, $A_e$, $\nabla N_a$, $\mathbf K_e^0$, $\varepsilon_0=f_t/E$\\
 Initialize $\kappa_e^0=0$, $d_e^0=0$};
-\node[process,below=of input] (load) {\textbf{2. Prescribe increment $m$}\\
-$u_p^m=(m/N)\,u_{\mathrm{final}}$\\
-Retain $\kappa_e^{m-1}$ and $d_e^{m-1}$};
+\node[process,below=of input] (load) {\textbf{2. Prescribe increment $j$}\\
+$u_p^j=(j/N)\,u_{\mathrm{final}}$\\
+Retain $\kappa_e^{j-1}$ and $d_e^{j-1}$};
 \node[process,below=of load] (solve) {\textbf{3. Assemble and solve at retained damage}\\
-$\mathbf K^-=\operatorname{assemble}\!\left[(1-d_e^{m-1})\mathbf K_e^0\right]$\\
-$\mathbf K^-_{ff}\mathbf u_f^m=-\mathbf K^-_{fp}\mathbf u_p^m$\\
+$\mathbf K^-=\operatorname{assemble}\!\left[(1-d_e^{j-1})\mathbf K_e^0\right]$\\
+$\mathbf K^-_{ff}\mathbf u_f^j=-\mathbf K^-_{fp}\mathbf u_p^j$\\
 CPU sparse factorization and backsolve};
 \node[process,below=of solve] (dispatch) {\textbf{4. Evaluate all element states}\\
-$\boldsymbol\varepsilon_{V,e}^m=\mathbf B_e\mathbf u_e^m$\\
+$\boldsymbol\varepsilon_{V,e}^j=\mathbf B_e\mathbf u_e^j$\\
 Vectorized CPU arrays or hybrid GPU kernel\\
 Apply the material update shown at right};
 \node[material,below=5mm of localtitle] (strain) {\textbf{A. Recover principal strains}\\
@@ -49,27 +49,27 @@ $e_3=-\nu(e_1+e_2)/(1-\nu)$};
 $I_1=e_1+e_2+e_3$\\
 $J_2=\big[(e_1-e_2)^2+(e_2-e_3)^2+(e_3-e_1)^2\big]/6$\\
 $\widetilde\varepsilon=\max(0,\widetilde\varepsilon_{\mathrm{mvM}}(I_1,J_2))$\\
-$\kappa_e^m=\max(\kappa_e^{m-1},\widetilde\varepsilon)$};
+$\kappa_e^j=\max(\kappa_e^{j-1},\widetilde\varepsilon)$};
 \node[material,below=of equivalent] (width) {\textbf{C. Set the crack-band width}\\
 $\theta=\tfrac12\operatorname{atan2}(\gamma_{xy},\varepsilon_{xx}-\varepsilon_{yy})$\\
 $\mathbf n=(\cos\theta,\sin\theta)$\\
 $h_e=2/\sum_{a=1}^3|\nabla N_a\!\cdot\!\mathbf n|$\\
 $\varepsilon_{f,e}=\max\!\left(\varepsilon_0/2+G_F/(h_e f_t),\varepsilon_0+10^{-12}\right)$};
 \node[material,below=of width] (damage) {\textbf{D. Apply the damage law}\\
-$\widehat{d}_e=0$ when $\kappa_e^m\leq\varepsilon_0$, otherwise\\
-$\widehat{d}_e=1-\dfrac{\varepsilon_0}{\kappa_e^m}
-\exp\!\left[-\dfrac{\kappa_e^m-\varepsilon_0}{\varepsilon_{f,e}-\varepsilon_0}\right]$\\
-$d_e^m=\min\!\left(d_{\max},\max(0,d_e^{m-1},\widehat{d}_e)\right)$};
+$\widehat{d}_e=0$ when $\kappa_e^j\leq\varepsilon_0$, otherwise\\
+$\widehat{d}_e=1-\dfrac{\varepsilon_0}{\kappa_e^j}
+\exp\!\left[-\dfrac{\kappa_e^j-\varepsilon_0}{\varepsilon_{f,e}-\varepsilon_0}\right]$\\
+$d_e^j=\min\!\left(d_{\max},\max(0,d_e^{j-1},\widehat{d}_e)\right)$};
 \node[material,below=of damage] (stress) {\textbf{E. Return the current material state}\\
-$\boldsymbol\sigma_{V,e}^m=(1-d_e^m)\mathbf D_0\boldsymbol\varepsilon_{V,e}^m$\\
-Save $\kappa_e^m,d_e^m,h_e$\\
-Abaqus UMAT returns $\mathbf D_{\mathrm{sec}}=(1-d_e^m)\mathbf D_0$};
+$\boldsymbol\sigma_{V,e}^j=(1-d_e^j)\mathbf D_0\boldsymbol\varepsilon_{V,e}^j$\\
+Save $\kappa_e^j,d_e^j,h_e$\\
+Abaqus UMAT returns $\mathbf D_{\mathrm{sec}}=(1-d_e^j)\mathbf D_0$};
 \node[process,below=14mm of dispatch] (reaction) {\textbf{5. Reassemble, record and advance}\\
-$\mathbf K^+=\operatorname{assemble}\!\left[(1-d_e^m)\mathbf K_e^0\right]$\\
-$\mathbf r^+=\mathbf K^+\mathbf u^m$\\
+$\mathbf K^+=\operatorname{assemble}\!\left[(1-d_e^j)\mathbf K_e^0\right]$\\
+$\mathbf r^+=\mathbf K^+\mathbf u^j$\\
 Save load, CMOD, damage, timings and residual\\
-Cache $\mathbf K^+$ for step $m+1$};
-\node[note,below=5mm of reaction] (residual) {$\eta_m=\|\mathbf r_f^+\|_2/\max(\|\mathbf r_p^+\|_2,1~\mathrm N)$\\
+Cache $\mathbf K^+$ for step $j+1$};
+\node[note,below=5mm of reaction] (residual) {$\eta_j=\|\mathbf r_f^+\|_2/\max(\|\mathbf r_p^+\|_2,1~\mathrm N)$\\
 MATLAB records this post-update imbalance,\\
 Abaqus controls its own equilibrium iterations.};
 \draw[line] (input)--(load);
@@ -83,6 +83,6 @@ Abaqus controls its own equilibrium iterations.};
 \draw[line] (stress.west)--++(-3mm,0) |- (reaction.east);
 \draw[line] (reaction.west)--++(-5mm,0) |- node[pos=0.25,rotate=90,above,font=\scriptsize] {next prescribed step} (load.west);
 \end{tikzpicture}}
-\caption{2D solution procedure and element damage update. Here $N$ counts increments, $\mathbf u$ is the nodal displacement vector, and $u_{\mathrm{final}}$ is the final imposed displacement. The matrix $\mathbf B_e$ maps element displacements to engineering strain; $\mathbf K_e^0$ is undamaged element stiffness. Superscripts $-$ and $+$ identify stiffness before and after the damage update. The internal force vector is $\mathbf r^+=\mathbf K^+\mathbf u$; subscripts $f$ and $p$ identify free and prescribed degrees of freedom. The relative imbalance $\eta_m$ compares free-force and reaction magnitudes with a 1~N lower bound. The Euclidean norm $\|\mathbf v\|_2=\sqrt{\sum_i v_i^2}$ gives vector magnitude. The angle $\theta$ defines the crack normal, and $\operatorname{atan2}$ is the two-argument inverse tangent. Trial damage is $\widehat{d}_e$; the UMAT returns secant stiffness $\mathbf D_{\mathrm{sec}}$. Code-name mappings are given in \texttt{NOTATION.md}.}
+\caption{2D solution procedure and element damage update. Here $N$ counts increments, $\mathbf u$ is the nodal displacement vector, and $u_{\mathrm{final}}$ is the final imposed displacement. The matrix $\mathbf B_e$ maps element displacements to engineering strain; $\mathbf K_e^0$ is undamaged element stiffness. Superscripts $-$ and $+$ identify stiffness before and after the damage update. The internal force vector is $\mathbf r^+=\mathbf K^+\mathbf u$; subscripts $f$ and $p$ identify free and prescribed degrees of freedom. The relative imbalance $\eta_j$ compares free-force and reaction magnitudes with a 1~N lower bound. The Euclidean norm $\|\mathbf v\|_2=\sqrt{\sum_i v_i^2}$ gives vector magnitude. The angle $\theta$ defines the crack normal, and $\operatorname{atan2}$ is the two-argument inverse tangent. Trial damage is $\widehat{d}_e$; the UMAT returns secant stiffness $\mathbf D_{\mathrm{sec}}$. Code-name mappings are given in \texttt{NOTATION.md}.}
 \end{figure}
 \end{document}

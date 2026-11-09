@@ -5,13 +5,13 @@ title: "FRACMATH: A vectorized MATLAB framework for crack-band regularized conti
 authors:
   - family-names: Mavani
     given-names: Jaykumar
-    email: jaymavani9033@gmail.com
+    email: jmavani@unm.edu
   - family-names: Pathirage
     given-names: Madura
     email: mpathirage@unm.edu
 repository-code: "https://github.com/Jaykumar9033/FRACMATH"
 version: "current"
-date-released: "2026-10-29"
+date-released: "2026-11-08"
 license: MIT
 keywords:
   - fracture mechanics

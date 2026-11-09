@@ -47,6 +47,7 @@ Lengths are in mm, forces in N, stresses in MPa and fracture energy in N/mm. Eac
 | Current pure-tension mesh study | `unified_softening_20261014/mesh_study/` |
 | Completed mixed-mode continuation and half-step check | `unified_softening_20261014/mixed_mode_solver_20261021/` |
 | Earlier qualitative mixed-mode images | `nooru_proportional/`; panels in `softwarex/figure_sources/nooru/` |
+| Final torsion geometry, torque and six-increment damage figure | `../figure_sources/torsion/` (see reproduction guide) |
 | Five computing configurations, three timing observations | `scaling_study/` and `timing_repeats/` |
 
 Reconstruct response and damage figures from saved data:
@@ -71,3 +72,5 @@ All five timing configurations are retained. MATLAB load-loop time and Abaqus an
 The code is [MIT licensed](LICENSE). [CITATION.cff](CITATION.cff) describes the current package; cite its exact commit. [DOI 10.5281/zenodo.23138595](https://doi.org/10.5281/zenodo.23138595) identifies the earlier numerical-core archive, not the current submission package.
 
 Use [GitHub Issues](https://github.com/Jaykumar9033/FRACMATH/issues) for questions. See [CONTRIBUTING.md](CONTRIBUTING.md) for contributions.
+
+Code support: [Jaykumar Mavani](mailto:jmavani@unm.edu). The paper corresponding author remains Madura Pathirage. The final torsion figure is reproduced from saved numerical arrays, using the code and data described in [REPRODUCE.md](softwarex/REPRODUCE.md#final-manuscript-figure-6).

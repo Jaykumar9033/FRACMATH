@@ -60,3 +60,15 @@ Use the recorded mesh, material law, increment schedule and backend when compari
 ## Two equivalent-strain definitions
 
 [The study guide](softwarex/EQUIVALENT_STRAIN_STUDY.md) describes modified von Mises and Rankine stress. The selected completed runs use one exact coarse mesh, Oliver width and 2,000 fixed increments. The UMAT and hybrid GPU kernel retain the default modified-von-Mises definition.
+
+## Final manuscript Figure 6
+
+The final figure is generated from numerical arrays by `softwarex/figure_sources/plot_torsion_evolution.py`. It contains original geometry and boundary-condition drawings, the reference torque-rotation curve, damage at increments 41, 61, 69, 80, 100 and 140, and three views at increment 140. The saved cache also retains increments 21 and 120. Dimensions are in mm; geometry is undeformed. Figure 6 uses the same turbo color map, 0.95-1.00 limits and d >= 0.95 display threshold as Figure 5.
+
+```powershell
+python softwarex/figure_sources/plot_torsion_evolution.py --output C:/runs/current_figures
+```
+
+The inputs are `softwarex/figure_sources/torsion/evolution_states.npz` and `torque_rotation_reference.csv`. No MATLAB rerun is required to reconstruct the figure. `evolution_provenance.json` records the state-cache hash and replay differences. The torque panel uses the original reference curve; recovered damage arrays are retained explicitly. The replay torque differs from the reference by at most 0.00341005% of its peak; the maximum damage-history difference is 3.35e-9 and the peak element-damage difference is 3.17e-11. These are provenance diagnostics, not additional equilibrium or experimental validation.
+
+For vertically stacked tetrahedron-face blocks, element owners must be tiled in the same block order. This mapping is corrected in the plotting script and native MATLAB visualization helpers. The material equations and structural increment controls are unchanged. Earlier purple-background raster panels and the supplied published geometry illustration are not used in the final manuscript.

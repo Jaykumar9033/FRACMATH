@@ -27,10 +27,10 @@ GENERATED = (
     "area_versus_oliver.png", "area_versus_oliver.pdf",
     "equivalent_strain_comparison.png", "equivalent_strain_comparison.pdf",
     "nooru_tension_comparison.png", "nooru_tension_comparison.pdf",
-    "nooru_damage_evolution_shared_bar.png", "torsion_damage_evolution_shared_bar.png",
+    "nooru_damage_evolution_shared_bar.png", "figure6_torsion_multiview.png", "figure6_torsion_multiview.pdf",
     "nooru_boundary_conditions.png", "nooru_boundary_conditions.pdf", "nooru_BC_2D.png",
 )
-STATIC = ("torsion.png",)
+STATIC = ()
 
 
 def pixels(path):

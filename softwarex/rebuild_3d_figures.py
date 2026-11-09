@@ -53,30 +53,10 @@ def nooru():
 
 
 def torsion():
-    files = sorted((SOURCES / "torsion").glob("Job-1_StaticFast_mod_vm_LIVE_snap_inc_*.png"))
-    assert len(files) == 8, f"Expected 8 torsion panels, found {len(files)}"
-    # Sample the original MATLAB color bar to retain its exact display palette.
-    key = np.asarray(Image.open(files[0]).convert("RGB"))
-    sampled = key[20:780, 1090, :][::-1]
-    cmap = colors.ListedColormap(sampled[np.linspace(0, len(sampled)-1, 256).astype(int)] / 255)
-    fig = plt.figure(figsize=(9.0, 6.65), dpi=300, facecolor="white")
-    grid = fig.add_gridspec(3, 3, left=.01, right=.865, bottom=.025,
-                            top=.975, wspace=.025, hspace=.045)
-    for i, path in enumerate(files):
-        ax = fig.add_subplot(grid[i//3, i%3])
-        source = Image.open(path).convert("RGB")
-        ax.imshow(source.crop((42, 68, 1045, 782)), interpolation="nearest")
-        ax.set_axis_off()
-        inc = int(re.search(r"inc_(\d+)", path.name).group(1))
-        panel_label(ax, f"({LETTERS[i]}) {inc}")
-    cax = fig.add_axes([.90, .095, .034, .81])
-    sm = plt.cm.ScalarMappable(norm=colors.Normalize(0, 1), cmap=cmap)
-    cb = fig.colorbar(sm, cax=cax, ticks=[0,.2,.4,.6,.8,1.0])
-    cb.ax.tick_params(labelsize=13, length=6, width=1)
-    cb.set_label(r"Damage $\omega$", fontsize=16, labelpad=14)
-    fig.savefig(OUT / "torsion_damage_evolution_shared_bar.png", dpi=300,
-                facecolor="white")
-    plt.close(fig)
+    import subprocess
+    import sys
+    subprocess.run([sys.executable, str(SOURCES / "plot_torsion_evolution.py"),
+                    "--output", str(OUT)], check=True)
 
 
 if __name__ == "__main__":

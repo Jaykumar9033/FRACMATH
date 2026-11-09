@@ -800,7 +800,7 @@ end
 
 function [extFaces,extOwner] = external_hull(T)
     allF = [T(:,[1 2 3]); T(:,[1 2 4]); T(:,[1 3 4]); T(:,[2 3 4])];
-    own = repelem((1:size(T,1)).',4,1);
+    own = repmat((1:size(T,1)).',4,1);
     sF = sort(allF,2);
     [uf,~,ic] = unique(sF,'rows');
     cnt = accumarray(ic,1);
@@ -839,7 +839,7 @@ function update_live_3d(ax,hHull,hCrack,p,U,defscale,T,De,thr,extFaces,extOwner)
         set(hCrack,'Visible','off');
     else
         faces_hd = [T(hi,[1 2 3]); T(hi,[1 2 4]); T(hi,[1 3 4]); T(hi,[2 3 4])];
-        own = repelem(hi,4,1);
+        own = repmat(hi,4,1);
         sF = sort(faces_hd,2);
         [uf,~,ic] = unique(sF,'rows');
         cnt = accumarray(ic,1);
@@ -961,7 +961,7 @@ function save_peak_damage_image(prefix,peak,p,T,extFaces,extOwner,defscale,cam_v
         if isempty(hi), hi = find(De >= max(0.50,max(De)-0.05)); end
         if ~isempty(hi)
             faces_hd = [T(hi,[1 2 3]); T(hi,[1 2 4]); T(hi,[1 3 4]); T(hi,[2 3 4])];
-            own = repelem(hi,4,1);
+            own = repmat(hi,4,1);
             sF = sort(faces_hd,2);
             [uf,~,ic] = unique(sF,'rows');
             cnt = accumarray(ic,1);

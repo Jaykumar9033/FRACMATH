@@ -28,3 +28,5 @@ Earlier mixed-mode images in `figure_sources/nooru` and `reproducibility/nooru_p
 Published beam-curve vertices and attribution are in `reproducibility/experimental_2d`. They are recovered graphic data, not raw laboratory measurements. No material fitting or experimental 3D validation is claimed.
 
 Development-only profiles, larger UMAT audits and superseded replay studies have been removed. Source code and evidence used by the current manuscript remain available.
+
+The final Figure 6 uses the native mesh, reference torque curve and saved increment arrays; see the final-figure instructions in [REPRODUCE.md](REPRODUCE.md). The native MATLAB face-to-element visualization mapping has also been corrected.

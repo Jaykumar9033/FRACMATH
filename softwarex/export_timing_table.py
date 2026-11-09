@@ -52,13 +52,13 @@ def make_table(summary, baseline):
                 values = [format(row[field], precision)
                           for field in ("median_s", "minimum_s", "maximum_s")]
                 cells.append(r"\shortstack[r]{" + values[0] + r"\\("
-                             + values[1] + "--" + values[2] + ")}")
+                             + values[1] + "-" + values[2] + ")}")
             lines.append(" & ".join(cells) + r" \\[3pt]")
         if size == "small":
             lines.append(r"\midrule")
     lines.extend([
         r"\bottomrule", r"\end{tabular}",
-        r"\caption{Measured times in seconds for the five computing configurations. Each entry gives the median, with the observed minimum--maximum range in parentheses, from three runs. CPU1 and CPU8 denote one and eight computational threads; GPU denotes the hybrid CPU--GPU implementation. MATLAB times cover the load loop, and Abaqus times cover analysis and output. The ranges are not confidence intervals. This study uses its own increment controls and is separate from the matched fixed-increment comparisons in Table~\ref{tab:fixed-timing}. Differences in timing scope and equilibrium procedures prevent a direct ranking of program speed.}",
+        r"\caption{Measured times in seconds for the five computing configurations. Each entry gives the median, with the observed minimum-maximum range in parentheses, from three runs. CPU1 and CPU8 denote one and eight computational threads; GPU denotes the hybrid CPU-GPU implementation. MATLAB times cover all loading increments, and Abaqus times cover analysis and output. The ranges are not confidence intervals. This study uses its own increment controls and is separate from the matched fixed-increment comparisons in Table~\ref{tab:fixed-timing}. Differences in timing scope and equilibrium procedures prevent a direct ranking of program speed.}",
         r"\label{tab:scaling}", r"\end{table}",
     ])
     return "\n".join(lines) + "\n"

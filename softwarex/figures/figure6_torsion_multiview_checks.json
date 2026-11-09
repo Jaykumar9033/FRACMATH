@@ -1,0 +1,74 @@
+{
+  "specimen_mm": [
+    400,
+    100,
+    100
+  ],
+  "notch": {
+    "depth_mm": 50.0,
+    "width_mm": 5.0,
+    "inclination_deg": 45.0,
+    "centre_from_rotated_end_mm": 200.0
+  },
+  "boundary_conditions": {
+    "fixed_end": "x = max: u_x = u_y = u_z = 0",
+    "rotated_end": "x = min: u_x = 0, u_y = -theta (z - z_c), u_z = theta (y - y_c)",
+    "theta_end_rad": 0.003,
+    "increments": 140
+  },
+  "peak_torque_increment": 69,
+  "colormap": "turbo",
+  "color_limits": [
+    0.95,
+    1
+  ],
+  "display_threshold": 0.95,
+  "geometry": "undeformed",
+  "display_axes": "plot = (X, 100 - Z, Y), a proper rotation of local (X, Y, Z)",
+  "state_cache_sha256": "d0c3dbdee37f917719c0b37e853c2f6ff6b22178106f6522d1e11a4963bd525e",
+  "torque_csv_sha256": "aa8408bfff0841899143c65b6bd3d8a9838039784d0fa36453915c884760a68d",
+  "panels": [
+    {
+      "panel": "f",
+      "step": 41,
+      "theta_rad": 0.0008785714285714286,
+      "maximum_damage": 0.9844957297628742,
+      "elements_shown": 418
+    },
+    {
+      "panel": "g",
+      "step": 61,
+      "theta_rad": 0.0013071428571428572,
+      "maximum_damage": 0.9971961629490912,
+      "elements_shown": 1415
+    },
+    {
+      "panel": "h",
+      "step": 69,
+      "theta_rad": 0.0014785714285714287,
+      "maximum_damage": 0.9987625032064631,
+      "elements_shown": 1980
+    },
+    {
+      "panel": "i",
+      "step": 80,
+      "theta_rad": 0.0017142857142857142,
+      "maximum_damage": 0.9996612374336475,
+      "elements_shown": 2830
+    },
+    {
+      "panel": "j",
+      "step": 100,
+      "theta_rad": 0.002142857142857143,
+      "maximum_damage": 0.999973996042387,
+      "elements_shown": 4377
+    },
+    {
+      "panel": "k",
+      "step": 140,
+      "theta_rad": 0.003,
+      "maximum_damage": 0.999999,
+      "elements_shown": 5942
+    }
+  ]
+}

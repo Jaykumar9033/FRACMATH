@@ -108,3 +108,15 @@ Choose a fresh writable workspace. The entry point copies the mesh, accepted res
 The constitutive width still follows the current principal-strain direction. A fixed local projection is used only as a continuation coordinate; the physical proportional boundary-displacement ratio is retained. The endpoint is imposed exactly. History is committed only after convergence and checked again afterward. The completed reference histories and verification summary are in `reproducibility/unified_softening_20261014/mixed_mode_solver_20261021`.
 
 Both reference runs satisfy the original `1e-6` relative equilibrium tolerance. The largest vertical-force difference between the resumed curves is 0.191% of the force at the restart; the half-step energy-balance mismatch over the resumed path is 0.182%. These are numerical checks of the specified illustrative model, not experimental validation. The earlier fixed-target mixed-mode attempts remain failed attempts and are not relabeled as completed results.
+
+## Final manuscript Figure 6
+
+The final figure is generated from numerical arrays by `softwarex/figure_sources/plot_torsion_evolution.py`. It contains original geometry and boundary-condition drawings, the reference torque-rotation curve, damage at increments 41, 61, 69, 80, 100 and 140, and three views at increment 140. The saved cache also retains increments 21 and 120. Dimensions are in mm; geometry is undeformed. Figure 6 uses the same turbo color map, 0.95-1.00 limits and d >= 0.95 display threshold as Figure 5.
+
+```powershell
+python softwarex/figure_sources/plot_torsion_evolution.py --output C:/runs/current_figures
+```
+
+The inputs are `softwarex/figure_sources/torsion/evolution_states.npz` and `torque_rotation_reference.csv`. No MATLAB rerun is required to reconstruct the figure. `evolution_provenance.json` records the state-cache hash and replay differences. The torque panel uses the original reference curve; recovered damage arrays are retained explicitly. The replay torque differs from the reference by at most 0.00341005% of its peak; the maximum damage-history difference is 3.35e-9 and the peak element-damage difference is 3.17e-11. These are provenance diagnostics, not additional equilibrium or experimental validation.
+
+For vertically stacked tetrahedron-face blocks, element owners must be tiled in the same block order. This mapping is corrected in the plotting script and native MATLAB visualization helpers. The material equations and structural increment controls are unchanged. Earlier purple-background raster panels and the supplied published geometry illustration are not used in the final manuscript.

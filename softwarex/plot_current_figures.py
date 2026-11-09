@@ -190,8 +190,6 @@ def three_dimensional_figures(output):
             shutil.copyfile(report / ("nooru_tension_mesh_comparison." + suffix),
                             output / ("nooru_tension_comparison." + suffix))
     shutil.copyfile(output / "nooru_boundary_conditions.png", output / "nooru_BC_2D.png")
-    for filename in ("torsion.png",):
-        shutil.copyfile(PACKAGE / "figure_sources/static" / filename, output / filename)
 
 
 def main():
