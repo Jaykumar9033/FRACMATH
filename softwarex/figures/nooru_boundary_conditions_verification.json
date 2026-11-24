@@ -1,0 +1,145 @@
+{
+  "view": "2D front projection only",
+  "mesh_folder": "C:\\Users\\jmavani\\OneDrive - University of New Mexico\\Desktop\\spftwareX\\SoftwareX_submission\\reproducibility\\unified_softening_20261014\\mixed_mode_solver_20261021",
+  "nodes": 3933,
+  "tetrahedra": 18927,
+  "dimensions_mm": [
+    200,
+    200,
+    50
+  ],
+  "notch_depth_mm": 20,
+  "notch_width_mm": 5,
+  "mesh_volume_mm3": 1990000.0,
+  "top_final_uy_mm": 0.5,
+  "upper_left_final_ux_mm": 0.15,
+  "lower_right_final_ux_mm": -0.15,
+  "bottom_uy_mm": 0,
+  "out_of_plane_restraint": "u_z=0 at the first node with minimum z; black diamond",
+  "saved_final_state_checks": {
+    "continuation_full": {
+      "top": {
+        "component": "y",
+        "target_mm": 0.5,
+        "maximum_error_mm": 0.0
+      },
+      "bottom": {
+        "component": "y",
+        "target_mm": 0,
+        "maximum_error_mm": 0.0
+      },
+      "left": {
+        "component": "x",
+        "target_mm": 0.15,
+        "maximum_error_mm": 0.0
+      },
+      "right": {
+        "component": "x",
+        "target_mm": -0.15,
+        "maximum_error_mm": 0.0
+      },
+      "z_pin": {
+        "row_index": 2,
+        "xyz_mm": [
+          20.0,
+          -7.5,
+          0.0
+        ],
+        "uz_mm": 0.0
+      }
+    },
+    "continuation_refined": {
+      "top": {
+        "component": "y",
+        "target_mm": 0.5,
+        "maximum_error_mm": 0.0
+      },
+      "bottom": {
+        "component": "y",
+        "target_mm": 0,
+        "maximum_error_mm": 0.0
+      },
+      "left": {
+        "component": "x",
+        "target_mm": 0.15,
+        "maximum_error_mm": 0.0
+      },
+      "right": {
+        "component": "x",
+        "target_mm": -0.15,
+        "maximum_error_mm": 0.0
+      },
+      "z_pin": {
+        "row_index": 2,
+        "xyz_mm": [
+          20.0,
+          -7.5,
+          0.0
+        ],
+        "uz_mm": 0.0
+      }
+    }
+  },
+  "loading": "Proportional prescribed displacements, not applied forces.",
+  "node_sets": {
+    "top": {
+      "nodes": 126,
+      "min_xyz": [
+        0.0,
+        90.0,
+        0.0
+      ],
+      "max_xyz": [
+        200.0,
+        90.0,
+        50.0
+      ]
+    },
+    "bottom": {
+      "nodes": 126,
+      "min_xyz": [
+        0.0,
+        -110.0,
+        0.0
+      ],
+      "max_xyz": [
+        200.0,
+        -110.0,
+        50.0
+      ]
+    },
+    "left": {
+      "nodes": 66,
+      "min_xyz": [
+        0.0,
+        -7.5,
+        0.0
+      ],
+      "max_xyz": [
+        0.0,
+        90.0,
+        50.0
+      ]
+    },
+    "right": {
+      "nodes": 66,
+      "min_xyz": [
+        200.0,
+        -110.0,
+        0.0
+      ],
+      "max_xyz": [
+        200.0,
+        -12.5,
+        50.0
+      ]
+    }
+  },
+  "mesh_sha256": {
+    "Job-1_bottom_nodes.txt": "2f6c8aa2144cdaaea68cf911f2249a5e41b53605c9c9da06aa1b04be06063832",
+    "Job-1_left_nodes.txt": "13028df51902dcd077e59a3122f07f9592a1e996dc81beaa487a9a7fde3dc0fd",
+    "Job-1_nodes.txt": "5f36d9213c40f2e4af7a9eab8ca993e0b981567ca30d375688adf25af53002e5",
+    "Job-1_right_nodes.txt": "ed39f8715c90410bb28f93be00e4f56bd724b3e021cedff7567b9021d34b398a",
+    "Job-1_top_nodes.txt": "033e83d39256422fa22458138df61ece834a291e1a2fe0fadb1a8b04cf91e90a"
+  }
+}

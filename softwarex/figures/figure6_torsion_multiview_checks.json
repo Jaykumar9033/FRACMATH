@@ -17,6 +17,13 @@
     "increments": 140
   },
   "peak_torque_increment": 69,
+  "virtual_cut_increment_140": {
+    "cut_area_mm2": 16475.555331434007,
+    "cut_area_fraction_d_ge_threshold": 0.8617676408760423,
+    "cut_area_fraction_d_ge_0.5": 0.9563927045525633,
+    "elements_rotated_end_half": 105091,
+    "elements_fixed_end_half": 105590
+  },
   "colormap": "turbo",
   "color_limits": [
     0.95,

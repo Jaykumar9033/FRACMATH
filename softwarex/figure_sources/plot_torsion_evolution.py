@@ -261,16 +261,17 @@ def end_view(ax):
 def torque_panel(ax,curve):
     th = curve['theta_rad']*1e3;T = curve['Torque_Nmm']/1e6
     ax.plot(th,T,color='#2b5d8a',lw=1.3,zorder=2)
-    for s,letter in zip(SHOW,LETTERS):
+    offsets = [(-6,6),(-12,9),(0,18),(10,9),(7,5),(-4,7)]
+    for s,letter,offset in zip(SHOW,LETTERS,offsets):
         i = s-1;peak = s==PEAK
         ax.plot(th[i],T[i],'o',ms=5.5 if peak else 4,mfc=LOADED if peak else 'white',mec=LOADED if peak else '#2b5d8a',mew=1,zorder=3)
-        ax.annotate(letter,(th[i],T[i]),xytext=(0,5),textcoords='offset points',ha='center',fontsize=6.5)
+        ax.annotate(letter,(th[i],T[i]),xytext=offset,textcoords='offset points',ha='center',fontsize=6.5)
     i = int(np.argmax(T))
-    ax.annotate('peak, inc. %d'%(i+1),(th[i],T[i]),xytext=(16,-16),textcoords='offset points',fontsize=6.8,color=LOADED,
+    ax.annotate('Peak\nIncrement %d'%(i+1),(th[i],T[i]),xytext=(.55,.33),textcoords='axes fraction',fontsize=6.5,color=LOADED,ha='left',va='center',
                 arrowprops=dict(arrowstyle='-',color=LOADED,lw=.5))
     ax.set_xlabel(r'End rotation $\theta$ [mrad]',fontsize=7.5,labelpad=1)
     ax.set_ylabel('Torque $T$ [kN m]',fontsize=7.5,labelpad=1)
-    ax.set_xlim(0,3.05);ax.set_ylim(0,T.max()*1.22)
+    ax.set_xlim(0,3.05);ax.set_ylim(0,T.max()*1.38)
     ax.tick_params(labelsize=7,length=2.5,pad=1.5);ax.grid(alpha=.25,lw=.4)
     for s in ('top','right'): ax.spines[s].set_visible(False)
     return int(i+1)
@@ -306,6 +307,67 @@ def damage_panel(ax,q,t,damage,text,nt,elev=ELEV,azim=AZIM,zoom=1.12):
     ax.text2D(.03,.98,text,transform=ax.transAxes,fontsize=7.2,va='top',linespacing=1.15)
 
 
+def virtual_cut(q,t,damage):
+    """Split the mesh into two halves along the weakest surface through the
+    damage band: a minimum cut between the two end faces, where crossing a face
+    costs its area times (1-d)^2. Returns the rotated-end side and the share of
+    cut area that passes through elements with d >= DMIN."""
+    import scipy.sparse as sp
+    from scipy.sparse.csgraph import maximum_flow,breadth_first_order
+    faces = np.concatenate([np.sort(t[:,ids],axis=1) for ids in ([0,1,2],[0,1,3],[0,2,3],[1,2,3])])
+    owners = np.tile(np.arange(len(t)),4)
+    unique,inverse = np.unique(faces,axis=0,return_inverse=True);inverse = inverse.ravel()
+    order = np.argsort(inverse,kind='stable');a,o = inverse[order],owners[order]
+    k = np.flatnonzero(a[1:]==a[:-1]);A,B,F = o[k],o[k+1],unique[a[k]]
+    area = .5*np.linalg.norm(np.cross(q[F[:,1]]-q[F[:,0]],q[F[:,2]]-q[F[:,0]]),axis=1)
+    dmax = np.maximum(damage[A],damage[B])
+    cap = np.maximum(1,np.round(1000*area*(1-dmax)**2)).astype(np.int32)
+    cx = q[t,0].mean(axis=1);n = len(t);src,snk = np.flatnonzero(cx<5),np.flatnonzero(cx>395)
+    rows = np.concatenate([A,B,np.full(len(src),n),snk]);cols = np.concatenate([B,A,src,np.full(len(snk),n+1)])
+    caps = np.concatenate([cap,cap,np.full(len(src)+len(snk),10**8)]).astype(np.int32)
+    G = sp.csr_matrix((caps,(rows,cols)),shape=(n+2,n+2))
+    R = G-maximum_flow(G,n,n+1).flow.tocsr();R.data = (R.data>0).astype(np.int32);R.eliminate_zeros()
+    side = np.zeros(n+2,bool);side[breadth_first_order(R,n,directed=True,return_predecessors=False)] = True
+    side = side[:n];cut = side[A]!=side[B]
+    assert 0<side.sum()<n and side[src].all() and not side[snk].any()
+    return side,{'cut_area_mm2':float(area[cut].sum()),
+                 'cut_area_fraction_d_ge_threshold':float(area[cut&(dmax>=DMIN)].sum()/area[cut].sum()),
+                 'cut_area_fraction_d_ge_0.5':float(area[cut&(dmax>=.5)].sum()/area[cut].sum()),
+                 'elements_rotated_end_half':int(side.sum()),'elements_fixed_end_half':int((~side).sum())}
+
+
+def yaw(v,deg,centre=(50.,50.)):
+    """Rotate plot points about a vertical axis through centre (x,y)."""
+    a = np.radians(deg);c,s = np.cos(a),np.sin(a);x,y = v[:,0]-centre[0],v[:,1]-centre[1]
+    return np.column_stack([centre[0]+c*x-s*y,centre[1]+s*x+c*y,v[:,2]])
+
+
+def halves_panel(ax,q,t,damage,side,elev=28,azim=-60,zoom=1.12,yaw_b=0.):
+    """Both halves stood on end with the crack face up, like a broken test
+    specimen. Each half is placed by a proper rotation, so nothing is mirrored."""
+    outer = {tuple(f) for f in np.sort(boundary(t)[0],axis=1)}
+    # a crack face takes the larger damage of the two elements it separates
+    all_faces = np.concatenate([np.sort(t[:,ids],axis=1) for ids in ([0,1,2],[0,1,3],[0,2,3],[1,2,3])])
+    unique,inverse = np.unique(all_faces,axis=0,return_inverse=True)
+    face_d = np.zeros(len(unique));np.maximum.at(face_d,inverse.ravel(),np.tile(damage,4))
+    lookup = {tuple(f):v for f,v in zip(unique,face_d)}
+    placements = ((side,lambda p: np.column_stack([p[:,1],p[:,2],p[:,0]]),0.),
+                  (~side,lambda p: yaw(np.column_stack([p[:,1],100-p[:,2],400-p[:,0]]),yaw_b),185.))
+    for mask,rotate,shift in placements:
+        idx = np.flatnonzero(mask);faces,owners = boundary(t[idx])
+        sorted_faces = [tuple(f) for f in np.sort(faces,axis=1)]
+        crack = np.array([f not in outer for f in sorted_faces])
+        d = np.array([lookup[f] for f in sorted_faces])
+        colour = np.tile(matplotlib.colors.to_rgba('#d6d9dc'),(len(faces),1))
+        colour[crack&(d>=DMIN)] = CMAP(NORM(d[crack&(d>=DMIN)]))
+        colour[crack&(d<DMIN)] = matplotlib.colors.to_rgba('#7d7f82')
+        v = rotate(q)+np.array([shift,0,0])
+        add_faces(ax,v,faces,facecolors=shaded(colour,v,faces,elev,azim,ambient=.6),edgecolors='none',linewidths=0)
+    ax.set(xlim=(-10,280),ylim=(-90,190),zlim=(0,330));ax.set_box_aspect((290,280,330),zoom=zoom)
+    ax.view_init(elev=elev,azim=azim);ax.set_proj_type('ortho');ax.set_axis_off()
+    ax.set_facecolor((1,1,1,0))
+
+
 # ---------------------------------------------------------------- data
 def load_states(folder,cache):
     if folder:
@@ -337,8 +399,8 @@ def main():
     curve = np.genfromtxt(args.torque,delimiter=',',names=True);assert len(curve)==N_INC
     plt.rcParams.update({'font.family':'DejaVu Sans','font.size':8,'savefig.facecolor':'white','mathtext.fontset':'dejavusans'})
 
-    fig = plt.figure(figsize=(6.6,9.2),facecolor='white')
-    H = [1.95,1.2,1.12,1.12,.95,.3];tot = sum(H)
+    fig = plt.figure(figsize=(6.6,9.7),facecolor='white')
+    H = [1.8,1.05,1.05,1.05,.9,.34,1.75];tot = sum(H)
     def row(k):
         h = H[k]/tot;return 1-sum(H[:k+1])/tot,h
     b,h = row(0)
@@ -363,6 +425,17 @@ def main():
     for i,(text,el,az,zm) in enumerate(views):
         ax = fig.add_axes([i/3,b,1/3,h],projection='3d',computed_zorder=False)
         damage_panel(ax,q,t,last,text,nt,el,az,zm)
+    b,h = row(6)
+    side,cut = virtual_cut(q,t,last)
+    fig.text(.02,b+h*.97,'(n) Simulated halves, inc. 140',fontsize=8,weight='bold',va='top')
+    fig.text(.52,b+h*.97,'(o) Schematic of separated halves',fontsize=8,weight='bold',va='top')
+    ax = fig.add_axes([.0,b+h*.03,.42,h*.84],projection='3d',computed_zorder=False)
+    halves_panel(ax,q,t,last,side,zoom=1.3,yaw_b=90)  # right half turned to face like the schematic
+    fig.text(.405,b+h*.08,'cut along the\ndamage band\n\ngrey crack face:\n$d<%.2f$'%DMIN,
+             fontsize=6.3,ha='left',va='bottom',color='#555555',linespacing=1.15)
+    ax = fig.add_axes([.52,b+.02*h,.46,h*.85])
+    ax.imshow(plt.imread(ROOT/'figures/torsion_separated_halves_schematic.png'))
+    ax.set_axis_off()
     b,h = row(5)
     cax = fig.add_axes([.27,b+h*.30,.46,h*.26])
     ticks = np.linspace(DMIN,1,6)
@@ -385,7 +458,7 @@ def main():
               'boundary_conditions':{'fixed_end':'x = max: u_x = u_y = u_z = 0',
                                      'rotated_end':'x = min: u_x = 0, u_y = -theta (z - z_c), u_z = theta (y - y_c)',
                                      'theta_end_rad':THETA_END,'increments':N_INC},
-              'peak_torque_increment':peak,'colormap':'turbo','color_limits':[DMIN,1],'display_threshold':DMIN,
+              'peak_torque_increment':peak,'virtual_cut_increment_140':cut,'colormap':'turbo','color_limits':[DMIN,1],'display_threshold':DMIN,
               'geometry':'undeformed','display_axes':'plot = (X, 100 - Z, Y), a proper rotation of local (X, Y, Z)',
               'state_cache_sha256':hashlib.sha256(args.cache.read_bytes()).hexdigest(),
               'torque_csv_sha256':hashlib.sha256(args.torque.read_bytes()).hexdigest(),'panels':panels}

@@ -77,19 +77,21 @@ def front_view(ax, p, surface, sets):
                 markeredgecolor=COLORS["bottom"], markeredgewidth=.8)
         ax.plot([x-5, x+5], [-126, -126], color=COLORS["bottom"], lw=1.2)
     ax.text(100, 134, r"$u_y=+0.50$ mm", color=COLORS["top"],
-            ha="center", fontsize=16, weight="bold")
+            ha="center", fontsize=16, weight="normal")
     ax.text(-47, 42, r"$u_x=+0.15$ mm", color=COLORS["left"],
             ha="center", va="center", rotation=90, fontsize=15)
     ax.text(247, -63, r"$u_x=-0.15$ mm", color=COLORS["right"],
             ha="center", va="center", rotation=90, fontsize=15)
-    ax.text(100, -137, r"$u_y=0$", color=COLORS["bottom"],
-            ha="center", fontsize=16)
+    ax.text(100, -140, r"$u_y=0$", color=COLORS["bottom"],
+            ha="center", va="top", fontsize=16, weight="normal")
     for label, tip, text in [("Left notch", (10, -10), (47, 27)),
                               ("Right notch", (190, -10), (108, -47))]:
         ax.annotate(label, xy=tip, xytext=text, fontsize=12.5,
                     bbox=dict(facecolor="white", edgecolor="none", pad=1),
                     arrowprops=dict(arrowstyle="->", color="#333333", lw=.9))
-    ax.set(xlim=(-62, 263), ylim=(-150, 153), xlabel="x (mm)", ylabel="y (mm)")
+    ax.set(xlim=(-62, 263), ylim=(-168, 153), xlabel="x (mm)", ylabel="y (mm)")
+    ax.xaxis.label.set_fontweight("normal")
+    ax.yaxis.label.set_fontweight("normal")
     ax.set_aspect("equal")
     ax.set_xticks([0, 50, 100, 150, 200])
     ax.set_yticks([-100, -50, 0, 50, 100])
